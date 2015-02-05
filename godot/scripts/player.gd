@@ -10,7 +10,6 @@ extends RigidBody
 const ANIM_FLOOR = 0
 const ANIM_AIR_UP = 1
 const ANIM_AIR_DOWN = 2
-#const CHAR_SCALE = Vector3(0.3,0.3,0.3)
 
 var facing_dir = Vector3(1, 0, 0)
 var movement_dir = Vector3()
@@ -20,11 +19,11 @@ var jumping=false
 var turn_speed=80
 var keep_jump_inertia = true
 var air_idle_deaccel = false
-var accel=19.0
+var accel=21.0
 var deaccel=14.0
 var sharp_turn_threshhold = 140
 
-var max_speed=8.1
+var max_speed=13.0
 var on_floor = false
 
 #var prev_shoot = false
@@ -70,8 +69,8 @@ func _integrate_forces( state ):
 
 	var anim = ANIM_FLOOR
 
-	var up = -g.normalized() # (up is against gravity)
-	var vv = up.dot(lv) # vertical velocity
+	var up = -g.normalized()# (up is against gravity)
+	var vv = up.dot(lv) * 0.884  # vertical velocity
 	var hv = lv - (up*vv) # horizontal velocity
 
 
@@ -187,7 +186,7 @@ func _integrate_forces( state ):
 		last_floor_velocity = floor_velocity
 	else:
 
-		if (on_floor) :
+		if (on_floor):
 
 			#if (keep_jump_inertia):
 			#	lv += last_floor_velocity
@@ -204,7 +203,6 @@ func _integrate_forces( state ):
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk",hspeed / max_speed)
 
 	get_node("AnimationTreePlayer").transition_node_set_current("state",anim)
-#	get_node("AnimationTreePlayer").blend2_node_set_amount("gun",min(shoot_blend,1.0))
 #	state.set_angular_velocity(Vector3())
 
 
