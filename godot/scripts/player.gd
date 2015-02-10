@@ -70,7 +70,7 @@ func _integrate_forces( state ):
 	var anim = ANIM_FLOOR
 
 	var up = -g.normalized()# (up is against gravity)
-	var vv = up.dot(lv) * 0.884  # vertical velocity
+	var vv = up.dot(lv) * 2  # vertical velocity
 	var hv = lv - (up*vv) # horizontal velocity
 
 
