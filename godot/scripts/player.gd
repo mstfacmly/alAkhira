@@ -11,7 +11,9 @@ const ANIM_FLOOR = 0
 const ANIM_AIR_UP = 1
 const ANIM_AIR_DOWN = 2
 
-var facing_dir = Vector3(1, 0, 0)
+const CHAR_SCALE = Vector3(1,1,1)
+
+var facing_dir = Vector3(0, 0, 0)
 var movement_dir = Vector3()
 
 var jumping=false
@@ -60,7 +62,7 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):
 func _integrate_forces( state ):
 
 	var lv = state.get_linear_velocity() # linear velocity
-	var g = state.get_total_gravity()
+	var g = state.get_total_gravity() * 2.186
 	var delta = state.get_step()
 	var d = 1.0 - delta*state.get_total_density()
 	if (d<0):
@@ -69,8 +71,8 @@ func _integrate_forces( state ):
 
 	var anim = ANIM_FLOOR
 
-	var up = -g.normalized()# (up is against gravity)
-	var vv = up.dot(lv) * 2  # vertical velocity
+	var up = -g.normalized() #(up is against gravity)
+	var vv = up.dot(lv)  # vertical velocity
 	var hv = lv - (up*vv) # horizontal velocity
 
 
@@ -140,12 +142,12 @@ func _integrate_forces( state ):
 		var facing_mesh=-mesh_xform.basis[0].normalized()
 		facing_mesh = (facing_mesh - up*facing_mesh.dot(up)).normalized()
 		facing_mesh = adjust_facing(facing_mesh,target_dir,delta,1.0/hspeed*turn_speed,up)
-		var m3 = Matrix3(-facing_mesh,up,-facing_mesh.cross(up).normalized()) #.scaled( CHAR_SCALE )
+		var m3 = Matrix3(-facing_mesh,up,-facing_mesh.cross(up).normalized()).scaled( CHAR_SCALE )
 
 		get_node("armature").set_transform(Transform(m3,mesh_xform.origin))
 
 		if (not jumping and jump_attempt):
-			vv = 7.0
+			vv = 11
 			jumping = true
 			#get_node("sfx").play("jump")
 	else:
