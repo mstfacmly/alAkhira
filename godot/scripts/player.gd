@@ -13,7 +13,7 @@ const ANIM_AIR_DOWN = 2
 
 const CHAR_SCALE = Vector3(1,1,1)
 
-var facing_dir = Vector3(0, 0, 0)
+var facing_dir = Vector3(0, 0, -1)
 var movement_dir = Vector3()
 
 var jumping=false
@@ -138,13 +138,14 @@ func _integrate_forces( state ):
 
 		hv = hdir*hspeed
 
-		var mesh_xform = get_node("armature").get_transform()
-		var facing_mesh=-mesh_xform.basis[0].normalized()
+		var mesh = get_node("armature").get_node("Skeleton").get_node("az")
+		var mesh_xform = mesh.get_transform()
+		var facing_mesh= -mesh_xform.basis[0].normalized()
 		facing_mesh = (facing_mesh - up*facing_mesh.dot(up)).normalized()
-		facing_mesh = adjust_facing(facing_mesh,target_dir,delta,1.0/hspeed*turn_speed,up)
-		var m3 = Matrix3(-facing_mesh,up,-facing_mesh.cross(up).normalized()).scaled( CHAR_SCALE )
+		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0/hspeed*turn_speed, up)
+		var m3 = Matrix3(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled( CHAR_SCALE )
 
-		get_node("armature").set_transform(Transform(m3,mesh_xform.origin))
+		mesh.set_transform(Transform().looking_at(facing_dir, up))
 
 		if (not jumping and jump_attempt):
 			vv = 11
