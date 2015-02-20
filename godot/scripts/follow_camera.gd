@@ -7,18 +7,42 @@ extends Camera
 
 var collision_exception=[]
 export var min_distance=0.5
-export var max_distance=21.0
+export var max_distance=2.0
 export var angle_v_adjust=0.0
 export var autoturn_ray_aperture=25
-export var autoturn_speed=30
+export var autoturn_speed=25
 var max_height = 7.0
-var min_height = 0.5
+var min_height = 0
+
+var mouseposlast = Input.get_mouse_pos()
+var orbitrate = 300.0			# the rate the camera orbits the target when the mouse is moved
+var turn = Vector2( 0.0, 0.0 )
+var rising = 0.0							# the rate at which the look at point is rising
+
+var pos = get_global_transform().origin
+var up = Vector3(0,1,0)
+var target
+
+func _input(ev):
+	# If the mouse has been moved
+	if (ev.type==InputEvent.MOUSE_MOTION):
+		var mousedelta = (mouseposlast - ev.pos)	# calculate the delta change from the last mouse movement
+		turn += mousedelta / orbitrate				# scale the mouse delta to a useful value
+		mouseposlast = ev.pos		# record the last position of the mouse
+		
+		recalculate_camera()
+		
+func recalculate_camera():
+	# calculate the camera position as it orbits a sphere about the target
+	pos.x = max_distance * -sin(turn.x) * cos(turn.y)
+	pos.y = max_distance * -sin(turn.y)
+	pos.z = -max_distance * cos(turn.x) * cos(turn.y)
+	# set the position of the camera in its orbit and point it at the target
+	look_at_from_pos(pos,target,up)
 
 func _fixed_process(dt):
-	var target  = get_parent().get_global_transform().origin
-	var pos = get_global_transform().origin
-	var up = Vector3(0,1,0)
-	
+	var target = get_parent().get_global_transform().origin
+
 	var delta = pos - target
 	
 	#regular delta follow
@@ -39,7 +63,6 @@ func _fixed_process(dt):
 	#check autoturn
 	
 	var ds = PhysicsServer.space_get_direct_state( get_world().get_space() )
-	
 	
 	var col_left = ds.intersect_ray(target,target+Matrix3(up,deg2rad(autoturn_ray_aperture)).xform(delta),collision_exception)
 	var col = ds.intersect_ray(target,target+delta,collision_exception)
@@ -71,9 +94,19 @@ func _fixed_process(dt):
 	t.basis = Matrix3(t.basis[0],deg2rad(angle_v_adjust)) * t.basis
 	set_transform(t)
 	
-	
+
+# processed every frame
+func _process(delta):
+	# if the point the camera is looking at is moving because a mouse button was pressed
+	if (rising != 0.0):
+		target.y += rising * delta
+		
+		# recalculate the camera position and direction
+		recalculate_camera()
 
 func _ready():
+
+	target = get_parent().get_global_transform().origin
 
 #find collision exceptions for ray
 	var node = self
@@ -85,8 +118,12 @@ func _ready():
 			node=node.get_parent()
 	# Initalization here
 	set_fixed_process(true)
+	set_process(true)
+	set_process_input(true)
+	Input.set_mouse_mode(2)
 	#this detaches the camera transform from the parent spatial node
 	set_as_toplevel(true)
+
 
 	
 	
