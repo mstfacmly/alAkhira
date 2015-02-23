@@ -28,6 +28,8 @@ var sharp_turn_threshhold = 140
 var max_speed=13.0
 var on_floor = false
 
+var JS
+
 #var prev_shoot = false
 
 var last_floor_velocity = Vector3()
@@ -93,18 +95,18 @@ func _integrate_forces( state ):
 			onfloor = true
 			floor_velocity = state.get_contact_collider_velocity_at_pos(i)
 			break
-
+	
 
 	var dir = Vector3() #where does the player intend to walk to
 	var cam_xform = get_node("target/camera").get_global_transform()
 
-	if (Input.is_action_pressed("move_forward")):
+	if (JS.get_digital("leftstick_up") or Input.is_action_pressed("move_forward")):
 		dir+=-cam_xform.basis[2]
-	if (Input.is_action_pressed("move_backwards")):
+	if (JS.get_digital("leftstick_down") or Input.is_action_pressed("move_backwards")):
 		dir+=cam_xform.basis[2]
-	if (Input.is_action_pressed("move_left")):
+	if (JS.get_digital("leftstick_left") or Input.is_action_pressed("move_left")):
 		dir+=-cam_xform.basis[0]
-	if (Input.is_action_pressed("move_right")):
+	if (JS.get_digital("leftstick_right") or Input.is_action_pressed("move_right")):
 		dir+=cam_xform.basis[0]
 
 	var jump_attempt = Input.is_action_pressed("jump")
@@ -213,4 +215,5 @@ func _ready():
 
 	# Initalization here
 	get_node("AnimationTreePlayer").set_active(true)
+	JS = get_node("/root/SUTjoystick")
 	pass
