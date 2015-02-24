@@ -6,23 +6,23 @@ extends Spatial
 
 var phys = []
 var spi = []
-var curr = 'spi'
+var curr = 'phys'
 
 func _ready():
 	
 	traverse(get_children())
 	
 	#initialize on spi
-	toggle(phys, spi)
+	toggle(spi, phys)
 	set_process_input(true)
 		
 	pass
 
 func _input(ev):
-	if Input.is_action_pressed('magic') && curr != 'spi':
+	if Input.is_action_pressed('magic') and Input.is_action_pressed('attack') && curr != 'spi':
 		toggle(phys, spi)
 		curr = 'spi'
-	elif Input.is_action_pressed('attack') && curr !='phys':
+	elif Input.is_action_pressed('magic') and Input.is_action_pressed('attack') && curr !='phys':
 		toggle(spi, phys)
 		curr = 'phys'
 
