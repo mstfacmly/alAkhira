@@ -1,5 +1,13 @@
 *.blend1
 *.blend2
 ignore
+<<<<<<< HEAD
 .fscache
 ~*
+=======
+*.fscache
+~*
+.*
+ignore
+*.fscache
+>>>>>>> fb0a6a7... switch _phys and _spi with Z and X keys
