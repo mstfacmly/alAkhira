@@ -7,9 +7,11 @@ extends Spatial
 var phys = []
 var spi = []
 var curr = 'phys'
+var JS
 
 func _ready():
 	
+	JS = get_node("/root/SUTjoystick")
 	traverse(get_children())
 	
 	#initialize on spi
@@ -19,10 +21,15 @@ func _ready():
 	pass
 
 func _input(ev):
-	if Input.is_action_pressed('magic') and Input.is_action_pressed('attack') && curr != 'spi':
+#	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
+	
+
+	if (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or
+	 (Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr != 'spi':
 		toggle(phys, spi)
 		curr = 'spi'
-	elif Input.is_action_pressed('magic') and Input.is_action_pressed('attack') && curr !='phys':
+	elif (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or 
+	(Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr !='phys':
 		toggle(spi, phys)
 		curr = 'phys'
 

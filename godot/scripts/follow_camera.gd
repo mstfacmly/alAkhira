@@ -11,17 +11,19 @@ export var max_distance=7.0
 export var angle_v_adjust=0.0
 export var autoturn_ray_aperture=25
 export var autoturn_speed=25
-var max_height = 11.0
-var min_height = 0
+var max_height = 7.0
+var min_height = -3
 
 var mouseposlast = Input.get_mouse_pos()
-var orbitrate = 300.0	# the rate the camera orbits the target when the mouse is moved
+var orbitrate = 720.0	# the rate the camera orbits the target when the mouse is moved
 var turn = Vector2(0.0,0.0)
 
 var pos = get_global_transform().origin		# camera pos
 var target									# look-at target (az)
 var up = Vector3(0.0,1.0,0.0)
 var distance
+
+var JS
 
 func _input(ev):
 	# If the mouse has been moved
@@ -30,8 +32,18 @@ func _input(ev):
 		turn += mousedelta / orbitrate				# scale the mouse delta to a useful value
 		mouseposlast = ev.pos		# record the last position of the mouse
 		recalculate_camera()
-	elif (ev.is_action("ui_cancel")):
-		OS.get_main_loop().quit()
+	if (JS.get_digital("rs_up")):
+		turn.y -= 0.025
+		recalculate_camera()
+	if (JS.get_digital("rs_down")):
+		turn.y += 0.025
+		recalculate_camera()
+	if (JS.get_digital("rs_left")):	
+		turn.x += 0.025
+		recalculate_camera()
+	if (JS.get_digital("rs_right")):	
+		turn.x -= 0.025
+		recalculate_camera()
 		
 		
 func recalculate_camera():
@@ -98,6 +110,8 @@ func _fixed_process(dt):
 func _ready():
 	target = get_parent().get_global_transform().origin
 	distance = pos.distance_squared_to(target) * 2
+	JS = get_node("/root/SUTjoystick")
+	
 #find collision exceptions for ray
 	var node = self
 	while(node):
