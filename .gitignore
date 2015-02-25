@@ -1,5 +1,6 @@
 *.blend1
 *.blend2
+<<<<<<< HEAD
 ignore
 <<<<<<< HEAD
 .fscache
@@ -11,3 +12,11 @@ ignore
 ignore
 *.fscache
 >>>>>>> fb0a6a7... switch _phys and _spi with Z and X keys
+=======
+~*
+.*
+ignore
+.fscache
+*.dae
+*.pck
+>>>>>>> ae16c95... collission and uv tweaks
