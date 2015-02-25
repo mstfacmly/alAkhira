@@ -26,24 +26,45 @@ var distance
 var JS
 
 func _input(ev):
+
+	var axis_value
+	var joy_num
+	var cur_joy
+
+	cur_joy = JS.get_device_number()
+	
+	if joy_num!= cur_joy:
+		joy_num = cur_joy
+
 	# If the mouse has been moved
 	if (ev.type==InputEvent.MOUSE_MOTION):
 		var mousedelta = (mouseposlast - ev.pos)	# calculate the delta change from the last mouse movement
 		turn += mousedelta / orbitrate				# scale the mouse delta to a useful value
 		mouseposlast = ev.pos		# record the last position of the mouse
 		recalculate_camera()
-	if (JS.get_digital("rs_up")):
-		turn.y -= 0.025
+
+	elif (ev.type==InputEvent.JOYSTICK_MOTION):
+		for axis in [3]:
+			axis_value = Input.get_joy_axis(joy_num,axis)
+			var joyaxis = (axis_value / 100) * 5# + (axis_value / 25)
+			turn.x += joyaxis
+			print(joyaxis,'x')
+		for axis in [4]:
+			axis_value = Input.get_joy_axis(joy_num,axis)
+			var joyaxis = (axis_value / 100) * 5# + (axis_value / 25)
+			turn.y += -joyaxis
+			print(joyaxis,'y')
 		recalculate_camera()
-	if (JS.get_digital("rs_down")):
-		turn.y += 0.025
-		recalculate_camera()
-	if (JS.get_digital("rs_left")):	
-		turn.x += 0.025
-		recalculate_camera()
-	if (JS.get_digital("rs_right")):	
-		turn.x -= 0.025
-		recalculate_camera()
+#	elif (JS.get_digital("rs_up")):
+#		turn.y -= -0.0257
+#	elif (JS.get_digital("rs_down")):
+#		turn.y += -0.0257
+#	elif (JS.get_digital("rs_left")):	
+#		turn.x += 0.0257
+#	elif (JS.get_digital("rs_right")):	
+#		turn.x -= 0.0257
+
+#	recalculate_camera()
 		
 		
 func recalculate_camera():
