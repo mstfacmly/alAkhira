@@ -10,7 +10,6 @@ var curr = 'phys'
 var JS
 
 func _ready():
-	
 	JS = get_node("/root/SUTjoystick")
 	traverse(get_children())
 	
@@ -22,16 +21,18 @@ func _ready():
 
 func _input(ev):
 #	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
-	
-
 	if (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or
 	 (Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr != 'spi':
 		toggle(phys, spi)
 		curr = 'spi'
+		get_node("env").environment.fx_set_param(26, '0.11')
+		get_node("env").environment.fx_set_param(6, '7')
 	elif (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or 
 	(Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr !='phys':
 		toggle(spi, phys)
 		curr = 'phys'
+		get_node("env").environment.fx_set_param(26, '0.99')
+		get_node("env").environment.fx_set_param(6, '0.7')
 
 #switch from a to b
 func toggle(a, b):
