@@ -21,6 +21,7 @@ func _ready():
 
 func _input(ev):
 #	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
+		
 	if (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or
 	 (Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr != 'spi':
 		toggle(phys, spi)
