@@ -33,7 +33,7 @@ func _input(ev):
 		toggle(spi, phys)
 		curr = 'phys'
 		get_node("env").environment.fx_set_param(26, '0.99')
-		get_node("env").environment.fx_set_param(6, '0.7')
+		get_node("env").environment.fx_set_param(6, '0.42')
 
 #switch from a to b
 func toggle(a, b):
