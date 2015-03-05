@@ -26,7 +26,7 @@ func _input(ev):
 	 (Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr != 'spi':
 		toggle(phys, spi)
 		curr = 'spi'
-		get_node("env").environment.fx_set_param(26, '0.11')
+		get_node("env").environment.fx_set_param(26, '0.33')
 		get_node("env").environment.fx_set_param(6, '7')
 	elif (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or 
 	(Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr !='phys':
