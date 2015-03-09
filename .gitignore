@@ -19,4 +19,8 @@ ignore
 .fscache
 *.dae
 *.pck
+<<<<<<< HEAD
 >>>>>>> ae16c95... collission and uv tweaks
+=======
+*.orig
+>>>>>>> 4d645f0... experiment with slopes
