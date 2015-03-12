@@ -75,6 +75,7 @@ func recalculate_camera():
 	
 	look_at_from_pos(pos,target,up)
 
+
 func _fixed_process(dt):
 	var target = get_parent().get_global_transform().origin
 	var delta = pos - target

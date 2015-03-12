@@ -79,7 +79,6 @@ func _fixed_process(delta):
 		attempts-=1
 
 	if (on_floor and floor_velocity!=Vector3()):
-		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target.dot(hdir))) > sharp_turn_threshhold
 		move(floor_velocity*delta)
 	
 	

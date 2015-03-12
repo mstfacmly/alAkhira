@@ -18,7 +18,7 @@ func _ready():
 	get_envs(get_node('env'))
 	traverse(get_children())
 	
-	#initialize on spi
+	#initialize on phys
 	toggle(spi, phys)
 	override_mat(spi, overlay_mat)
 	get_node('env').set_environment(environment.phys)
