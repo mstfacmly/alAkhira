@@ -16,11 +16,15 @@ ignore
 ~*
 .*
 ignore
-.fscache
+*.fscache
 *.dae
 *.pck
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> ae16c95... collission and uv tweaks
 =======
 *.orig
 >>>>>>> 4d645f0... experiment with slopes
+=======
+*.orig
+>>>>>>> 80ac821... tweaked forest params
