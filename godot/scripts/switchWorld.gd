@@ -42,7 +42,7 @@ func _input(ev):
 		override_mat(spi, overlay_mat)
 		curr = 'phys'
 		get_node('env').set_environment(environment.phys)
-	elif curr == 'phys' and (JS.get_digital("action_3") or Input.is_action_pressed('magic')) and overlay != 'spi':
+	elif curr == 'phys' and (JS.get_digital("bump_left") or Input.is_action_pressed('magic')) and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
 	elif curr == 'phys' and overlay == 'spi':

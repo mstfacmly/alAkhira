@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+blender/
+music/
+reference/
+text/
+>>>>>>> 9816ee4... tweak spi values, peek button assign
 *.blend1
 *.blend2
 <<<<<<< HEAD
