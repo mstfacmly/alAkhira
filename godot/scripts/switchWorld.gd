@@ -1,4 +1,4 @@
-
+    
 extends Spatial
 
 # NOTE: this scripts assumes that every _phys and _spir node has only children of the 
@@ -28,9 +28,9 @@ func _ready():
 	pass
 
 func _input(ev):
-#	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
+#	if (JS.get_digital("bump_left") or (Input.is_action_pressed('cast')) && curr != 'spi':
 		
-	if curr == 'phys' and (JS.get_digital("bump_left") or Input.is_action_pressed('magic')) and overlay != 'spi':
+	if curr == 'phys' and (JS.get_digital("bump_left") or Input.is_action_pressed('cast')) and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
 	elif curr == 'phys' and overlay == 'spi':
@@ -38,13 +38,13 @@ func _input(ev):
 		overlay = 'none'	
 		
 	if (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or
-	 (Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr != 'spi':
+	 (Input.is_action_pressed('cast')) and Input.is_action_pressed('attack')) && curr != 'spi':
 		toggle(phys, spi)
 		override_mat(spi, null)
 		curr = 'spi'
 		get_node('env').set_environment(environment.spi)
 	elif (JS.get_digital("bump_left") and (JS.get_digital("action_3")) or 
-	(Input.is_action_pressed('magic')) and Input.is_action_pressed('attack')) && curr !='phys':
+	(Input.is_action_pressed('cast')) and Input.is_action_pressed('attack')) && curr !='phys':
 		toggle(spi, phys)
 		override_mat(spi, overlay_mat)
 		curr = 'phys'
