@@ -8,13 +8,19 @@ extends KinematicBody
 var g = -9.8
 var vel = Vector3()
 const MAX_SPEED = 13
+<<<<<<< HEAD
+const JUMP_SPEED = 7
+=======
 const JUMP_SPEED = -9.8 /2.487
+>>>>>>> origin
 const ACCEL= 2
 const DEACCEL= 14
 const MAX_SLOPE_ANGLE = 30
 
 var JS
 
+<<<<<<< HEAD
+=======
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transition a change of direction
 
 	var n = p_target # normal
@@ -38,6 +44,7 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 
+>>>>>>> origin
 func _fixed_process(delta):
 
 	var dir = Vector3() #where does the player intend to walk to
@@ -114,7 +121,10 @@ func _fixed_process(delta):
 func _ready():
 	# Initalization here
 	set_fixed_process(true)
+<<<<<<< HEAD
+=======
 	adjust_facing()
+>>>>>>> origin
 	JS = get_node("/root/SUTjoystick")
 	pass
 

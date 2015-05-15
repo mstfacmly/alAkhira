@@ -1,9 +1,10 @@
-
 extends Camera
 
 # member variables here, example:
 # var a=2
 # var b="textvar"
+# follow_camera code from platformer 3d demo, orbit cam code from Godot community "Rook"
+# with help from romulox_x, thc202 and adolson
 
 var collision_exception=[]
 export var min_distance=0.5
@@ -15,88 +16,50 @@ var max_height = 7.0
 var min_height = -3
 
 var mouseposlast = Input.get_mouse_pos()
-var orbitrate = 720.0	# the rate the camera orbits the target when the mouse is moved
+var orbitrate = 720.0						#camera orbit rate around target
 var turn = Vector2(0.0,0.0)
 
 var pos = get_global_transform().origin		# camera pos
-var target									# look-at target (az)
+var target									# look-at target
 var up = Vector3(0.0,1.0,0.0)
 var distance
 
 var JS
 
 func _input(ev):
-
-	var axis_value
-	var joy_num
-	var cur_joy
-
-	cur_joy = JS.get_device_number()
-	
-	if joy_num!= cur_joy:
-		joy_num = cur_joy
-
 	# If the mouse has been moved
 	if (ev.type==InputEvent.MOUSE_MOTION):
-		var mousedelta = (mouseposlast - ev.pos)	# calculate the delta change from the last mouse movement
-		turn += mousedelta / orbitrate				# scale the mouse delta to a useful value
-		mouseposlast = ev.pos		# record the last position of the mouse
-		recalculate_camera()
+		var mousedelta = (mouseposlast - ev.pos)	# calculate delta change from last mouse movement
+		turn += mousedelta / orbitrate				# scale mouse delta to useful value
+		mouseposlast = ev.pos						# record last mouse pos
 
-	elif (ev.type==InputEvent.JOYSTICK_MOTION):
-		for axis in [3]:
-			axis_value = Input.get_joy_axis(joy_num,axis)
-			var joyaxis = (axis_value / 100) * 5# + (axis_value / 25)
-			turn.x += joyaxis
-			print(joyaxis,'x')
-		for axis in [4]:
-			axis_value = Input.get_joy_axis(joy_num,axis)
-			var joyaxis = (axis_value / 100) * 5# + (axis_value / 25)
-			turn.y += -joyaxis
-			print(joyaxis,'y')
-		recalculate_camera()
-#	elif (JS.get_digital("rs_up")):
-#		turn.y -= -0.0257
-#	elif (JS.get_digital("rs_down")):
-#		turn.y += -0.0257
-#	elif (JS.get_digital("rs_left")):	
-#		turn.x += 0.0257
-#	elif (JS.get_digital("rs_right")):	
-#		turn.x -= 0.0257
-
-#	recalculate_camera()
-		
-		
 func recalculate_camera():
+	var distance = pos.distance_squared_to(target) * 2
 	# calculate the camera position as it orbits a sphere about the target
 	pos.x = distance * -sin(turn.x) * cos(turn.y)
 	pos.y = distance * -sin(turn.y)
 	pos.z = -distance * cos(turn.x) * cos(turn.y)
-	
-	look_at_from_pos(pos,target,up)
 
 
 func _fixed_process(dt):
+	recalculate_camera()
 	var target = get_parent().get_global_transform().origin
 	var delta = pos - target
-	
 	#regular delta follow
-	
+
 	#check ranges
-	
 	if (delta.length() < min_distance):
 		delta = delta.normalized() * min_distance
 	elif (delta.length() > max_distance):
 		delta = delta.normalized() * max_distance
-	
+
 	#check upper and lower height
 	if ( delta.y > max_height):
 		delta.y = max_height
 	if ( delta.y < min_height):
 		delta.y = min_height
-		
+
 	#check autoturn
-	
 	var ds = PhysicsServer.space_get_direct_state( get_world().get_space() )
 	
 	var col_left = ds.intersect_ray(target,target+Matrix3(up,deg2rad(autoturn_ray_aperture)).xform(delta),collision_exception)
@@ -118,16 +81,19 @@ func _fixed_process(dt):
 	
 	#apply lookat
 	if (delta==Vector3()):
-		delta = (pos - target).normalized() * 0.0001
+		delta = (pos - target).normalized() * 0.01
 
 	pos = target + delta
-	
 	look_at_from_pos(pos,target,up)
 
 	#turn a little up or down
 	var t = get_transform()
 	t.basis = Matrix3(t.basis[0],deg2rad(angle_v_adjust)) * t.basis
 	set_transform(t)
+
+	#joystick control
+	turn.y -= JS.get_analog("rs_ver") * distance / (orbitrate * 1.5)
+	turn.x -= JS.get_analog("rs_hor") * distance / (orbitrate / 2.5)
 
 func _ready():
 	target = get_parent().get_global_transform().origin
