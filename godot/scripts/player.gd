@@ -2,10 +2,10 @@
 extends RigidBody
 
 
-const ANIM_FLOOR = 0
-const ANIM_SPRINT = 1
-const ANIM_AIR_UP = 2
-const ANIM_AIR_DOWN = 3
+const FLOOR = 0
+const SPRINT = 1
+const AIR_UP = 2
+const AIR_DOWN = 3
 const RUN_AIR_UP = 4
 const RUN_AIR_DOWN = 5
 
@@ -66,14 +66,14 @@ func _integrate_forces(state):
 	
 	lv += delta * g #apply gravity
 
-	var anim = ANIM_FLOOR
+	var anim = FLOOR
 
 	var up = -g.normalized() #(up is against gravity)
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
 	var hv = lv - (up*vv) # horizontal velocity
 
 	if hv.length() >= 11.555 :
-		anim = ANIM_SPRINT
+		anim = SPRINT
 	else:
 		pass
 
@@ -160,12 +160,12 @@ func _integrate_forces(state):
 			if hspeed > 9 :
 				anim = RUN_AIR_UP
 			else :
-				anim = ANIM_AIR_UP
+				anim = AIR_UP
 		elif vv < 0 :
 			if hspeed >= 10 and vv < -g.length() / 2:
 				anim = RUN_AIR_DOWN
 			else :
-				anim = ANIM_AIR_DOWN
+				anim = AIR_DOWN
 	
 		if dir.length() > 0.1 :
 			hv += target_dir * (accel * 0.2) * delta

@@ -15,7 +15,7 @@ export var autoturn_speed=25
 var max_height = 7.0
 var min_height = -3
 
-#var mouseposlast = get_viewport().get_mouse_pos()
+var mouseposlast = Input.get_mouse_speed()
 var orbitrate = 720.0						#camera orbit rate around target
 var turn = Vector2(0.0,0.0)
 
@@ -29,7 +29,7 @@ var JS
 func _input(ev):
 	# If the mouse has been moved
 	if (ev.type==InputEvent.MOUSE_MOTION):
-		var mouseposlast = get_viewport().get_mouse_pos()
+		#var mouseposlast = get_viewport().get_mouse_pos()
 		var mousedelta = (mouseposlast - ev.pos)	# calculate delta change from last mouse movement
 		turn += mousedelta / orbitrate				# scale mouse delta to useful value
 		mouseposlast = ev.pos						# record last mouse pos
