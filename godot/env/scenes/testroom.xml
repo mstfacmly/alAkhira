@@ -57,7 +57,7 @@
 				<bool> True </bool>
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
-					<string> "3D" </string>
+					<string> "Script" </string>
 					<string> "__editor_plugin_states__" </string>
 					<dictionary  shared="false">
 						<string> "2D" </string>
@@ -109,7 +109,7 @@
 							<array  len="4" shared="false">
 								<dictionary  shared="false">
 									<string> "distance" </string>
-									<real> 1.96721 </real>
+									<real> 23.729988 </real>
 									<string> "listener" </string>
 									<bool> True </bool>
 									<string> "pos" </string>
@@ -119,9 +119,9 @@
 									<string> "use_orthogonal" </string>
 									<bool> False </bool>
 									<string> "x_rot" </string>
-									<real> 0.183296 </real>
+									<real> 0.020796 </real>
 									<string> "y_rot" </string>
-									<real> -1.224994 </real>
+									<real> -0.987493 </real>
 								</dictionary>
 								<dictionary  shared="false">
 									<string> "distance" </string>
@@ -355,8 +355,6 @@
 						<int> 0 </int>
 					</dictionary>
 					<string> "__editor_show_subtree" </string>
-					<bool> True </bool>
-					<string> "_editor_collapsed" </string>
 					<bool> True </bool>
 				</dictionary>
 				<resource  resource_type="PackedScene" path="./testroom.scn">  </resource>

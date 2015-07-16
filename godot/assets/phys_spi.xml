@@ -41,7 +41,7 @@
 		<bool name="fog/bg"> True </bool>
 		<bool name="bcs/enabled"> True </bool>
 		<real name="bcs/brightness"> 1.11 </real>
-		<real name="bcs/contrast"> 1.16 </real>
+		<real name="bcs/contrast"> 1.21 </real>
 		<real name="bcs/saturation"> 0.01 </real>
 		<bool name="srgb/enabled"> True </bool>
 
@@ -400,7 +400,7 @@
 			<string> "values" </string>
 			<array  len="2" shared="false">
 				<real> 1.11 </real>
-				<real> 1.16 </real>
+				<real> 1.21 </real>
 			</array>
 		</dictionary>
 		<string name="tracks/22/type"> "value" </string>
@@ -527,11 +527,11 @@
 							<array  len="4" shared="false">
 								<dictionary  shared="false">
 									<string> "distance" </string>
-									<real> 4 </real>
+									<real> 6.347497 </real>
 									<string> "listener" </string>
 									<bool> True </bool>
 									<string> "pos" </string>
-									<vector3> 1.17867, 4.80415, 4.92427 </vector3>
+									<vector3> 1.85574, 0.212794, 4.92427 </vector3>
 									<string> "use_environment" </string>
 									<bool> False </bool>
 									<string> "use_orthogonal" </string>

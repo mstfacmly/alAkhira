@@ -23,7 +23,7 @@ var keep_jump_inertia = true
 var air_idle_deaccel = true
 var max_speed = 11.0
 var accel = 21.0
-var deaccel = 14.0
+var deaccel = 33.0
 var sharp_turn_threshhold = 100
 var hspeed = 0
 
