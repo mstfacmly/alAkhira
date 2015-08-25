@@ -180,12 +180,13 @@
 						<string> "Script" </string>
 						<dictionary  shared="false">
 							<string> "current" </string>
-							<int> 0 </int>
+							<int> 1 </int>
 							<string> "sources" </string>
-							<array  len="3" shared="false">
+							<array  len="4" shared="false">
 								<string> "res://scripts/follow_camera.gd" </string>
 								<string> "res://scripts/player.gd" </string>
 								<string> "res://scripts/switchWorld.gd" </string>
+								<string> "res://scripts/SUTjoystick.gd" </string>
 							</array>
 						</dictionary>
 					</dictionary>
