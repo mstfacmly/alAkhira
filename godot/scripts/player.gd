@@ -83,6 +83,8 @@ func _integrate_forces(state):
 
 	if hv.length() >= 11.555 :
 		anim = SPRINT
+	elif hv.length() <= 5.555 and hv.length() >= 1 :
+		anim = WALK
 	else:
 		pass
 
@@ -98,6 +100,8 @@ func _integrate_forces(state):
 	var dir = Vector3() #where does the player intend to walk to
 	
 	var cam_xform = get_node("target/camera").get_global_transform()
+
+# Composite axis on Joystick create errors in movement, will need to be fixed later
 
 	if (JS.get_analog("ls_up") or Input.is_action_pressed("move_forward")):
 		dir+=-cam_xform.basis[2]
@@ -248,14 +252,14 @@ func _process(delta):
 	axis_value = abs(axis_value)
 
 #	if y >= 0.9 or x >=0.9:
-	if axis_value >= 0.86:
+	if axis_value >= 0.87:
 		run_speed = 11
 	else:
 		run_speed = 4.5
 
 #	print('X',x)
 #	print('Y',y)
-#	print(axis_value)
+	print("AXIS",axis_value)
 #	print(run_speed)
 
 func _ready():
