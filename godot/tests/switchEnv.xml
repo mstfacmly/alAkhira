@@ -1,0 +1,1453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resource_file type="PackedScene" subresource_count="16" version="1.0" version_name="Godot Engine v1.0.stable.custom_build">
+	<ext_resource path="res://env/materials/rock.mtl" type="Material"></ext_resource>
+	<ext_resource path="res://chars/sui.xml" type="PackedScene"></ext_resource>
+	<ext_resource path="res://assets/ui.xml" type="PackedScene"></ext_resource>
+	<ext_resource path="res://player/az.xml" type="PackedScene"></ext_resource>
+	<resource type="Environment" path="local://1">
+		<bool name="ambient_light/enabled"> True </bool>
+		<color name="ambient_light/color"> 0.341176, 0.552941, 0.658824, 0.305882 </color>
+		<real name="ambient_light/energy"> 0.33 </real>
+		<bool name="fxaa/enabled"> False </bool>
+		<int name="background/mode"> 2 </int>
+		<color name="background/color"> 0, 0.109572, 0.189699, 0.240371 </color>
+		<nil name="background/texture">  </nil>
+		<nil name="background/cubemap">  </nil>
+		<real name="background/energy"> 0.5 </real>
+		<real name="background/scale"> 1 </real>
+		<real name="background/glow"> 0.1 </real>
+		<nil name="background/canvas_max_layer">  </nil>
+		<bool name="glow/enabled"> True </bool>
+		<int name="glow/blur_passes"> 1 </int>
+		<int name="glow/blur_scale"> 1 </int>
+		<int name="glow/blur_strength"> 1 </int>
+		<int name="glow/blur_blend_mode"> 1 </int>
+		<real name="glow/bloom"> 0.42 </real>
+		<real name="glow/bloom_treshold"> 0.21 </real>
+		<bool name="dof_blur/enabled"> True </bool>
+		<int name="dof_blur/blur_passes"> 4 </int>
+		<real name="dof_blur/begin"> 7 </real>
+		<real name="dof_blur/range"> 13 </real>
+		<bool name="hdr/enabled"> False </bool>
+		<real name="hdr/tonemapper"> 0 </real>
+		<real name="hdr/exposure"> 0.4 </real>
+		<real name="hdr/white"> 1 </real>
+		<real name="hdr/glow_treshold"> 0.95 </real>
+		<real name="hdr/glow_scale"> 0.2 </real>
+		<real name="hdr/min_luminance"> 0.4 </real>
+		<real name="hdr/max_luminance"> 8 </real>
+		<real name="hdr/exposure_adj_speed"> 0.5 </real>
+		<bool name="fog/enabled"> True </bool>
+		<real name="fog/begin"> 40 </real>
+		<color name="fog/begin_color"> 0.521569, 0.541176, 0.337255, 1 </color>
+		<color name="fog/end_color"> 0.197215, 0.20452, 0.111383, 1 </color>
+		<real name="fog/attenuation"> 0.420444 </real>
+		<bool name="fog/bg"> True </bool>
+		<bool name="bcs/enabled"> True </bool>
+		<real name="bcs/brightness"> 1.11 </real>
+		<real name="bcs/contrast"> 0.99 </real>
+		<real name="bcs/saturation"> 0.99 </real>
+		<bool name="srgb/enabled"> False </bool>
+
+	</resource>
+	<resource type="Animation" path="local://2">
+		<string name="resource/name"> "PhysToSpir" </string>
+		<real name="length"> 0.3 </real>
+		<bool name="loop"> False </bool>
+		<real name="step"> 0.05 </real>
+		<string name="tracks/0/type"> "value" </string>
+		<node_path name="tracks/0/path"> ".:environment:ambient_light/color" </node_path>
+		<int name="tracks/0/interp"> 1 </int>
+		<dictionary name="tracks/0/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<color> 0.341176, 0.552941, 0.658824, 0.305882 </color>
+				<color> 0.341176, 0.552941, 0.658824, 0.305882 </color>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/1/type"> "value" </string>
+		<node_path name="tracks/1/path"> ".:environment:ambient_light/energy" </node_path>
+		<int name="tracks/1/interp"> 1 </int>
+		<dictionary name="tracks/1/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.33 </real>
+				<real> 0.33 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/2/type"> "value" </string>
+		<node_path name="tracks/2/path"> ".:environment:background/color" </node_path>
+		<int name="tracks/2/interp"> 1 </int>
+		<dictionary name="tracks/2/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<color> 0, 0.109572, 0.189699, 0.240371 </color>
+				<color> 0.0409916, 0.0687675, 0.0890793, 0.637861 </color>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/3/type"> "value" </string>
+		<node_path name="tracks/3/path"> ".:environment:background/energy" </node_path>
+		<int name="tracks/3/interp"> 1 </int>
+		<dictionary name="tracks/3/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.5 </real>
+				<real> 0.5 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/4/type"> "value" </string>
+		<node_path name="tracks/4/path"> ".:environment:background/scale" </node_path>
+		<int name="tracks/4/interp"> 1 </int>
+		<dictionary name="tracks/4/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 1 </real>
+				<real> 1 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/5/type"> "value" </string>
+		<node_path name="tracks/5/path"> ".:environment:background/glow" </node_path>
+		<int name="tracks/5/interp"> 1 </int>
+		<dictionary name="tracks/5/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.1 </real>
+				<real> 0.72 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/6/type"> "value" </string>
+		<node_path name="tracks/6/path"> ".:environment:glow/blur_passes" </node_path>
+		<int name="tracks/6/interp"> 1 </int>
+		<dictionary name="tracks/6/keys" shared="false">
+			<string> "cont" </string>
+			<bool> False </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<int> 1 </int>
+				<int> 1 </int>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/7/type"> "value" </string>
+		<node_path name="tracks/7/path"> ".:environment:glow/blur_scale" </node_path>
+		<int name="tracks/7/interp"> 1 </int>
+		<dictionary name="tracks/7/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<int> 1 </int>
+				<real> 0.99 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/8/type"> "value" </string>
+		<node_path name="tracks/8/path"> ".:environment:glow/blur_strength" </node_path>
+		<int name="tracks/8/interp"> 1 </int>
+		<dictionary name="tracks/8/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<int> 1 </int>
+				<real> 0.99 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/9/type"> "value" </string>
+		<node_path name="tracks/9/path"> ".:environment:glow/blur_blend_mode" </node_path>
+		<int name="tracks/9/interp"> 1 </int>
+		<dictionary name="tracks/9/keys" shared="false">
+			<string> "cont" </string>
+			<bool> False </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<int> 1 </int>
+				<int> 0 </int>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/10/type"> "value" </string>
+		<node_path name="tracks/10/path"> ".:environment:glow/bloom" </node_path>
+		<int name="tracks/10/interp"> 1 </int>
+		<dictionary name="tracks/10/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.42 </real>
+				<real> 3.5 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/11/type"> "value" </string>
+		<node_path name="tracks/11/path"> ".:environment:glow/bloom_treshold" </node_path>
+		<int name="tracks/11/interp"> 1 </int>
+		<dictionary name="tracks/11/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.21 </real>
+				<real> 0.21 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/12/type"> "value" </string>
+		<node_path name="tracks/12/path"> ".:environment:dof_blur/blur_passes" </node_path>
+		<int name="tracks/12/interp"> 1 </int>
+		<dictionary name="tracks/12/keys" shared="false">
+			<string> "cont" </string>
+			<bool> False </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<int> 4 </int>
+				<int> 4 </int>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/13/type"> "value" </string>
+		<node_path name="tracks/13/path"> ".:environment:dof_blur/begin" </node_path>
+		<int name="tracks/13/interp"> 1 </int>
+		<dictionary name="tracks/13/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 7 </real>
+				<real> 5 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/14/type"> "value" </string>
+		<node_path name="tracks/14/path"> ".:environment:dof_blur/range" </node_path>
+		<int name="tracks/14/interp"> 1 </int>
+		<dictionary name="tracks/14/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 13 </real>
+				<real> 7 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/15/type"> "value" </string>
+		<node_path name="tracks/15/path"> ".:environment:fog/begin" </node_path>
+		<int name="tracks/15/interp"> 1 </int>
+		<dictionary name="tracks/15/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 40 </real>
+				<real> 14 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/16/type"> "value" </string>
+		<node_path name="tracks/16/path"> ".:environment:fog/begin_color" </node_path>
+		<int name="tracks/16/interp"> 1 </int>
+		<dictionary name="tracks/16/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<color> 0.521569, 0.541176, 0.337255, 1 </color>
+				<color> 0.109804, 0.150892, 0.203922, 1 </color>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/17/type"> "value" </string>
+		<node_path name="tracks/17/path"> ".:environment:fog/end_color" </node_path>
+		<int name="tracks/17/interp"> 1 </int>
+		<dictionary name="tracks/17/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<color> 0.197215, 0.20452, 0.111383, 1 </color>
+				<color> 0.337255, 0.425277, 0.537255, 1 </color>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/18/type"> "value" </string>
+		<node_path name="tracks/18/path"> ".:environment:fog/attenuation" </node_path>
+		<int name="tracks/18/interp"> 1 </int>
+		<dictionary name="tracks/18/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.420444 </real>
+				<real> 0.210222 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/19/type"> "value" </string>
+		<node_path name="tracks/19/path"> ".:environment:fog/bg" </node_path>
+		<int name="tracks/19/interp"> 1 </int>
+		<dictionary name="tracks/19/keys" shared="false">
+			<string> "cont" </string>
+			<bool> False </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<bool> True </bool>
+				<bool> True </bool>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/20/type"> "value" </string>
+		<node_path name="tracks/20/path"> ".:environment:bcs/brightness" </node_path>
+		<int name="tracks/20/interp"> 1 </int>
+		<dictionary name="tracks/20/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 1.11 </real>
+				<real> 1.11 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/21/type"> "value" </string>
+		<node_path name="tracks/21/path"> ".:environment:bcs/contrast" </node_path>
+		<int name="tracks/21/interp"> 1 </int>
+		<dictionary name="tracks/21/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.99 </real>
+				<real> 1.07 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+		<string name="tracks/22/type"> "value" </string>
+		<node_path name="tracks/22/path"> ".:environment:bcs/saturation" </node_path>
+		<int name="tracks/22/interp"> 1 </int>
+		<dictionary name="tracks/22/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<real> 0.99 </real>
+				<real> 0.66 </real>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 0.3 </real_array>
+		</dictionary>
+
+	</resource>
+	<resource type="BoxShape" path="local://3">
+		<vector3 name="extents"> 16.9052, 0.001, 1 </vector3>
+
+	</resource>
+	<resource type="FixedMaterial" path="local://4">
+		<bool name="flags/visible"> True </bool>
+		<bool name="flags/double_sided"> False </bool>
+		<bool name="flags/invert_faces"> False </bool>
+		<bool name="flags/unshaded"> False </bool>
+		<bool name="flags/on_top"> False </bool>
+		<bool name="flags/lightmap_on_uv2"> True </bool>
+		<bool name="flags/colarray_is_srgb"> True </bool>
+		<int name="params/blend_mode"> 0 </int>
+		<int name="params/depth_draw"> 1 </int>
+		<real name="params/line_width"> 0 </real>
+		<bool name="fixed_flags/use_alpha"> True </bool>
+		<bool name="fixed_flags/use_color_array"> False </bool>
+		<bool name="fixed_flags/use_point_size"> False </bool>
+		<bool name="fixed_flags/discard_alpha"> False </bool>
+		<bool name="fixed_flags/use_xy_normalmap"> False </bool>
+		<color name="params/diffuse"> 0.960681, 0.33037, 0.306194, 1 </color>
+		<color name="params/specular"> 1, 1, 1, 1 </color>
+		<color name="params/emission"> 0.200522, 0.312057, 0.125208, 1 </color>
+		<int name="params/specular_exp"> 40 </int>
+		<real name="params/detail_mix"> 1 </real>
+		<int name="params/normal_depth"> 1 </int>
+		<int name="params/shader"> 0 </int>
+		<real name="params/shader_param"> 0.5 </real>
+		<int name="params/glow"> 0 </int>
+		<real name="params/point_size"> 1 </real>
+		<transform name="uv_xform"> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
+		<resource name="textures/diffuse"></resource>		<int name="textures/diffuse_tc"> 0 </int>
+		<resource name="textures/detail"></resource>		<int name="textures/detail_tc"> 0 </int>
+		<resource name="textures/specular"></resource>		<int name="textures/specular_tc"> 0 </int>
+		<resource name="textures/emission"></resource>		<int name="textures/emission_tc"> 0 </int>
+		<resource name="textures/specular_exp"></resource>		<int name="textures/specular_exp_tc"> 0 </int>
+		<resource name="textures/glow"></resource>		<int name="textures/glow_tc"> 0 </int>
+		<resource name="textures/normal"></resource>		<int name="textures/normal_tc"> 0 </int>
+		<resource name="textures/shade_param"></resource>		<int name="textures/shade_param_tc"> 0 </int>
+
+	</resource>
+	<resource type="Mesh" path="local://5">
+		<dictionary name="surfaces/0" shared="false">
+			<string> "alphasort" </string>
+			<bool> False </bool>
+			<string> "morph_arrays" </string>
+			<array  len="0" shared="false">
+			</array>
+			<string> "material" </string>
+			<resource  resource_type="Material" path="res://env/materials/rock.mtl">  </resource>
+			<string> "name" </string>
+			<string> "terrain-rock" </string>
+			<string> "primitive" </string>
+			<int> 4 </int>
+			<string> "arrays" </string>
+			<array  len="9" shared="false">
+				<vector3_array  len="150"> 					-1.20524, -0.772412, 0.817002, -1.11239, -0.380104, 0.350556, -0.807819, -0.881861, 0.350556, -0.62617, -0.677973, -0.633956, -0.322855, -0.332885, -0.874923, -0.314924, -0.615569, -0.797459, 0.972068, -0.5477, -0.707361, 1.07463, -0.267748, -0.411625, 0.976263, -0.612837, -0.411625, 0.726423, -0.677973, 0.808854, 0.151073, -0.328797, 1.15477, 0.353441, -0.677973, 1.06311, -1.01954, 0.702381, 0.88411, -0.519541, 0.702381, 0.38411, -1.01954, 0.805638, 0.38411, 0.726423, -0.677973, 0.808854, 0.353441, -0.838322, 0.346482, 0.853441, -0.677973, 0.346482, -1.01954, 0.702381, 0.88411, -1.01954, 0.805638, 0.38411, -1.10826, 0.357293, 1.01207, -0.917853, 0.674379, -0.843703, -0.468697, 0.68838, -0.979797, -0.968697, 0.343291, -0.979797, 0.980459, 0.571738, -0.88185, 0.980459, 0.63706, -0.49887, 0.980459, 0.291971, -0.99887, 1.22921, 0.56023, 0.718003, 0.604835, 0.736602, 1.04222, 1.10484, 0.286217, 0.801057, 1.22921, 0.56023, 0.718003, 1.10484, 0.631306, 0.301057, 0.604835, 0.736602, 1.04222, -1.20524, -0.772412, 0.817002, -0.807819, -0.881861, 0.350556, -0.612391, -0.725193, 1.06719, -1.01954, 0.0122041, -0.11589, -0.968697, 0.343291, -0.479796, -1.01954, 0.0122041, -0.61589, -0.71497, -0.489553, -0.11589, -0.410399, -0.99131, -0.11589, -0.71497, -0.489553, -0.61589, -0.518284, -0.834642, -0.374923, -0.0195411, 0.0122041, -1.11589, 0.480459, 0.291971, -0.99887, 0.480459, 0.0122041, -1.11589, -0.0116097, -0.270481, -1.03843, -0.0036782, -0.553166, -0.960962, 0.48839, -0.270481, -1.03843, 0.484195, -0.550433, -0.834161, 1.1772, 0.0122041, -0.11589, 1.2032, 0.286217, 0.301057, 1.07883, 0.0122041, 0.38411, 1.07883, -0.332885, -0.11589, 0.980459, -0.677973, -0.11589, 0.980459, -0.332885, 0.38411, 0.853441, -0.677973, 0.346482, -0.424277, 0.020379, 1.50069, -0.721909, 0.36138, 1.1924, -0.810625, 0.0162915, 1.32036, -0.221909, -0.328797, 1.40903, -0.0195411, -0.677973, 1.31737, -0.608257, -0.332885, 1.2287, -0.612391, -0.725193, 1.06719, -0.0195411, 0.702381, -0.11589, 0.480459, 0.63706, -0.49887, -0.0195411, 0.702381, -0.61589, -0.519541, 0.805638, -0.11589, -1.01954, 0.908894, -0.11589, -0.519541, 0.805638, -0.61589, -0.968697, 0.791637, -0.479796, -0.0195411, -0.998671, -0.11589, -0.322855, -0.838322, -0.374923, -0.0116097, -0.775918, -0.538426, 0.480459, -0.838322, -0.11589, 0.980459, -0.677973, -0.11589, 0.48839, -0.615569, -0.538426, 0.976263, -0.612837, -0.411625, -1.01954, 0.908894, -0.11589, -0.968697, 0.791637, -0.479796, -1.01954, 0.460549, -0.11589, -1.10826, 0.460549, 0.51207, -1.19697, 0.0122041, 1.14003, -1.10826, 0.0122041, 0.51207, -1.20111, -0.380104, 0.978516, -0.0195411, 0.702381, -1.11589, 0.480459, 0.63706, -0.99887, -0.0195411, 0.357293, -1.11589, -0.519541, 0.357293, -1.11589, -1.01954, 0.0122041, -1.11589, -0.519541, 0.0122041, -1.11589, -0.822855, -0.332885, -0.874923, 0.980459, 0.702381, -0.11589, 1.10484, 0.631306, 0.301057, 1.07883, 0.357293, -0.11589, 0.980459, 0.357293, -0.61589, 0.980459, 0.0122041, -1.11589, 1.07883, 0.0122041, -0.61589, 0.976263, -0.267748, -0.911625, -0.0195411, 0.912973, 1.36644, -0.519541, 0.807677, 1.12528, -0.221909, 0.466676, 1.43356, 0.480459, 0.462588, 1.12528, 0.980459, 0.0122041, 0.88411, 0.278091, 0.0162915, 1.1924, 0.853441, -0.332885, 0.846482, 0.980459, 0.702381, -0.11589, 0.980459, 0.63706, -0.49887, 0.480459, 0.702381, -0.11589, 0.480459, 0.807677, 0.625275, -0.0195411, 0.912973, 1.36644, -0.0195411, 0.807677, 0.625275, -0.519541, 0.807677, 1.12528, -0.410399, -0.99131, -0.11589, -0.518284, -0.834642, -0.374923, -0.21497, -0.994991, -0.11589, -0.21497, -0.834642, 0.600739, -0.0195411, -0.677973, 1.31737, -0.0195411, -0.838322, 0.600739, 0.353441, -0.677973, 1.06311, -0.917853, 0.674379, -0.843703, -0.968697, 0.343291, -0.979797, -1.01954, 0.0122041, -1.11589, -0.822855, -0.332885, -0.874923, -0.62617, -0.677973, -0.633956, 0.980459, 0.571738, -0.88185, 0.980459, 0.291971, -0.99887, 0.980459, 0.0122041, -1.11589, 0.976263, -0.267748, -0.911625, 0.972068, -0.5477, -0.707361, 1.22921, 0.56023, 0.718003, 1.10484, 0.286217, 0.801057, 0.980459, 0.0122041, 0.88411, 0.853441, -0.332885, 0.846482, 0.726423, -0.677973, 0.808854, -1.01954, 0.702381, 0.88411, -1.10826, 0.357293, 1.01207, -1.19697, 0.0122041, 1.14003, -1.20111, -0.380104, 0.978516, -1.20524, -0.772412, 0.817002, 0.980459, 0.571738, -0.88185, 0.480459, 0.63706, -0.99887, -0.0195411, 0.702381, -1.11589, -0.468697, 0.68838, -0.979797, -0.917853, 0.674379, -0.843703, -0.62617, -0.677973, -0.633956, -0.314924, -0.615569, -0.797459, -0.0036782, -0.553166, -0.960962, 0.484195, -0.550433, -0.834161, 0.972068, -0.5477, -0.707361 </vector3_array>
+				<vector3_array  len="150"> 					-0.74, -0.63, 0.23, -0.914, -0.199, -0.35, -0.456, -0.869, -0.185, -0.576, -0.715, -0.393, -0.211, -0.426, -0.879, -0.261, -0.621, -0.737, 0.605, -0.68, -0.411, 0.968, -0.213, -0.133, 0.623, -0.761, -0.177, 0.564, -0.66, 0.493, 0.484, -0.066, 0.872, 0.465, -0.562, 0.682, -0.616, 0.706, 0.347, 0.03, 0.999, 0.029, -0.519, 0.836, 0.172, 0.564, -0.66, 0.493, 0.227, -0.961, 0.15, 0.666, -0.722, 0.182, -0.616, 0.706, 0.347, -0.519, 0.836, 0.172, -0.772, 0.386, 0.503, -0.644, 0.592, -0.483, -0.218, 0.729, -0.649, -0.773, 0.339, -0.534, 0.655, 0.593, -0.468, 0.707, 0.697, -0.119, 0.707, 0.273, -0.652, 0.841, 0.397, 0.367, 0.49, 0.632, 0.599, 0.782, -0.173, 0.597, 0.841, 0.397, 0.367, 0.711, 0.697, -0.093, 0.49, 0.632, 0.599, -0.74, -0.63, 0.23, -0.456, -0.869, -0.185, -0.2, -0.757, 0.619, -0.968, -0.185, -0.162, -0.994, 0.076, -0.07, -0.98, -0.194, -0, -0.822, -0.499, -0.269, -0.32, -0.926, -0.197, -0.876, -0.476, 0.055, -0.558, -0.791, -0.246, -0.008, -0.15, -0.988, 0.117, 0.198, -0.973, 0, 0.064, -0.998, -0.209, -0.263, -0.941, -0.077, -0.618, -0.782, 0.106, -0.43, -0.896, 0.144, -0.83, -0.537, 0.997, -0.046, -0.055, 0.998, -0.05, -0.029, 0.931, -0.314, 0.182, 0.96, -0.273, 0.056, 0.694, -0.718, -0.037, 0.924, -0.313, 0.216, 0.666, -0.722, 0.182, -0.119, -0.048, 0.991, -0.427, 0.371, 0.823, -0.422, -0.014, 0.905, 0.109, -0.192, 0.974, 0.209, -0.569, 0.793, -0.358, -0.394, 0.845, -0.2, -0.757, 0.619, 0.078, 0.996, -0.045, 0.065, 0.994, -0.085, 0.166, 0.986, -0, 0.201, 0.974, 0.099, -0.601, 0.797, -0.051, 0.039, 0.986, -0.164, -0.729, 0.614, -0.3, 0.114, -0.981, -0.149, -0.041, -0.87, -0.49, 0.104, -0.88, -0.462, 0.3, -0.934, -0.187, 0.694, -0.718, -0.037, 0.17, -0.926, -0.335, 0.623, -0.761, -0.177, -0.601, 0.797, -0.051, -0.729, 0.614, -0.3, -0.989, 0, -0.139, -0.989, 0.136, -0.043, -0.815, 0.041, 0.575, -0.989, 0.034, -0.14, -0.859, -0.185, 0.473, 0.1, 0.675, -0.731, 0.249, 0.691, -0.679, 0.115, 0, -0.993, -0.142, 0.207, -0.968, -0.695, -0.191, -0.692, 0, -0.299, -0.954, -0.587, -0.66, -0.466, 0.577, 0.799, -0.166, 0.711, 0.697, -0.093, 0.94, 0.268, -0.21, 0.986, 0.137, -0.094, 0.598, -0.032, -0.801, 0.979, 0.059, -0.193, 0.694, -0.43, -0.577, 0.071, 0.732, 0.676, -0.377, 0.822, 0.424, -0.036, 0.165, 0.985, 0.437, 0.004, 0.898, 0.726, -0.22, 0.65, 0.397, -0.142, 0.906, 0.708, -0.328, 0.624, 0.577, 0.799, -0.166, 0.707, 0.697, -0.119, 0, 0.988, -0.154, 0.155, 0.987, -0.035, 0.071, 0.732, 0.676, -0.069, 0.988, -0.14, -0.377, 0.822, 0.424, -0.32, -0.926, -0.197, -0.558, -0.791, -0.246, -0.018, -0.986, -0.158, -0.015, -0.975, 0.217, 0.209, -0.569, 0.793, 0.065, -0.973, 0.217, 0.465, -0.562, 0.682, -0.644, 0.592, -0.483, -0.773, 0.339, -0.534, -0.695, -0.191, -0.692, -0.587, -0.66, -0.466, -0.576, -0.715, -0.393, 0.655, 0.593, -0.468, 0.707, 0.273, -0.652, 0.598, -0.032, -0.801, 0.694, -0.43, -0.577, 0.605, -0.68, -0.411, 0.841, 0.397, 0.367, 0.782, -0.173, 0.597, 0.726, -0.22, 0.65, 0.708, -0.328, 0.624, 0.564, -0.66, 0.493, -0.616, 0.706, 0.347, -0.772, 0.386, 0.503, -0.815, 0.041, 0.575, -0.859, -0.185, 0.473, -0.74, -0.63, 0.23, 0.655, 0.593, -0.468, 0.249, 0.691, -0.679, 0.1, 0.675, -0.731, -0.218, 0.729, -0.649, -0.644, 0.592, -0.483, -0.576, -0.715, -0.393, -0.261, -0.621, -0.737, -0.077, -0.618, -0.782, 0.144, -0.83, -0.537, 0.605, -0.68, -0.411 </vector3_array>
+				<real_array  len="600"> 					-0.225266, 1.8475, -0.584559, -1, -0.658986, 5.52487, -1.81901, -1, -0.982351, 2.68399, -0.911597, -1, -0.127865, 1.78512, -0.818314, -1, -0.343638, 5.35257, -2.47283, -1, -0.157033, 2.89765, -0.758619, -1, 0.446369, 1.9423, 0.124816, -1, 1.36781, 5.80264, 0.564885, -1, 0.835694, 2.87262, 0.218769, -1, 1.73712, -0.0834109, -0.972749, -1, 5.20959, -0.38111, -2.90888, -1, 2.48432, -0.219724, -1.6644, -1, 1.95657, -0.0557118, -0.289374, -1, 5.86474, -0.172681, -0.902165, -1, 2.9242, -0.515691, -0.427063, -1, 0.576906, -0.15867, -1.90025, -1, 1.63254, -0.509874, -5.72772, -1, 0.794141, -0.000121601, -2.89222, -1, 0.242335, 0.928535, -0.281243, -1, 0.727205, 2.78601, -0.842211, -1, 0.727007, 2.7856, -0.843732, -1, 0.0519214, 0.913492, 0.40353, -1, 0.0265023, 2.7274, 1.2456, -1, 0.0227372, 2.7269, 1.24656, -1, 0, 0.983438, 0.181242, -1, 0, 2.97602, 0.352956, -1, 0, 2.97956, 0.297319, -1, 0.880728, -0.0742993, -0.467759, -1, 2.64363, -0.175376, -1.40689, -1, 2.64377, -0.166826, -1.40747, -1, 0.946977, -0.294636, -0.128158, -1, 2.84093, -0.883908, -0.384472, -1, 2.84093, -0.883908, -0.384472, -1, 0.27401, -0.212599, -0.937934, -1, 0.842065, -0.636779, -2.80795, -1, 0.822029, -0.637796, -2.8138, -1, -0.484122, 5.50883, -1.79722, -1, 0.567129, 5.66846, -1.85657, -1, -1.05539, 5.28682, -1.75667, -1, -2.46626, 5.13702, -1.79196, -1, -1.26481, 2.53969, -0.942989, -1, -2.82005, 4.94829, -1.87368, -1, -1.33059, 2.49982, -0.987355, -1, -0.248663, 5.66453, -0.729501, -1, -0.133698, 5.76412, 1.12635, -1, -0.08115, 5.65992, 0.365073, -1, -0.19957, 5.7872, -1.56847, -1, -0.140901, 2.72037, -1.13245, -1, -0.309057, 5.27488, -2.60062, -1, -0.226382, 2.38287, -1.80783, -1, 0.56463, 5.74891, 0.583075, -1, 0.312044, 5.68238, 0.620152, -1, 1.81295, 5.68061, 0.568737, -1, 1.59841, 5.754, 0.565296, -1, 0.879176, 2.85139, 0.287682, -1, 1.78576, 5.68383, 0.645728, -1, 1.03087, 2.80072, 0.305388, -1, 5.31669, -0.381384, -0.0225267, -1, 5.2444, -0.358164, 2.88079, -1, 5.43281, -0.300977, 2.52314, -1, 5.23594, -0.428412, -0.470506, -1, 2.68307, -0.217226, 0.186527, -1, 5.56586, -0.341606, 2.20708, -1, 2.81344, -0.167794, 1.02754, -1, 5.88106, -0.434875, -0.894328, -1, 5.90369, -0.463946, -0.915193, -1, 5.8479, -0.984508, -0.884961, -1, 5.83124, -1.11603, -0.860641, -1, 2.92661, -0.288335, -0.457514, -1, 5.86038, -0.354409, -0.901843, -1, 2.95244, 0.23489, -0.475667, -1, 1.38121, 1.05577, -5.41156, -1, 1.05295, 2.85008, -5.16606, -1, 1.18874, 2.83897, -5.14565, -1, 1.35084, 1.49085, -5.42612, -1, 0.772786, 0.729922, -2.72959, -1, 1.39899, 2.18484, -5.33272, -1, 0.720663, 0.671598, -2.83132, -1, 0.333128, 2.81995, -0.924563, -1, 0.136498, 2.83318, -0.976955, -1, 0.262003, 5.69616, -1.86504, -1, 0.856198, 5.64059, -1.75525, -1, 0.393083, 2.82669, -0.889136, -1, 0.452239, 5.69446, -1.82367, -1, 0.323365, 2.84088, -0.907417, -1, -0.0108268, 2.9072, 0.420551, -1, -0.0670536, 2.99881, -0.0156932, -1, -0.165888, 5.9949, -0.0234442, -1, -0.0400111, 5.72061, 1.26358, -1, -0.0594704, 2.72577, -0.15042, -1, -0.234997, 5.45352, -1.71475, -1, -0.169282, 2.45569, -1.71475, -1, -0.492424, 2.91822, 0.339968, -1, -0.728019, 2.88559, 0.378584, -1, -1.49869, 5.77212, 0.653102, -1, -0.760995, 5.87672, 0.518979, -1, -0.0771363, 2.9381, 0.250533, -1, -0.225536, 5.80986, 0.68024, -1, 0.528579, 2.93369, 0.322711, -1, 2.65236, -0.174165, -0.363363, -1, 2.56383, -0.208601, 1.54207, -1, 5.31273, -0.370879, 0.318605, -1, 5.37976, -0.370273, -2.62011, -1, 2.69669, -0.21338, -1.2922, -1, 5.45508, -0.440968, -2.45808, -1, 2.72287, -0.194769, -1.24346, -1, 2.92205, -0.343255, -0.439147, -1, 2.96233, -0.0796782, -0.467154, -1, 5.92521, -0.145855, -0.932968, -1, 5.80381, -0.950085, -0.850286, -1, 2.91057, -0.204587, -0.470284, -1, 5.89618, 0.275619, -0.99325, -1, 2.93506, 0.343785, -0.515189, -1, 0.78256, 0.0736118, -2.70823, -1, 0.454783, 1.51272, -2.54833, -1, 1.42435, 0.865344, -5.32765, -1, 1.74473, -1.27764, -5.59609, -1, 0.868557, -0.593087, -2.80849, -1, 1.78365, -1.14146, -5.61167, -1, 0.862286, -0.501543, -2.8293, -1, 0.189206, 1.88018, -0.647599, -1, 0.433365, 2.82198, -0.920355, -1, -0.797296, 2.59858, -0.90733, -1, -1.33221, 2.51097, -0.957072, -1, -0.44514, 0.845117, -0.29602, -1, -0.0335268, 1.92196, 0.378033, -1, 0, 2.76765, 1.15764, -1, -0.0813548, 2.68486, -0.47822, -1, -0.193885, 2.3889, -1.80368, -1, -0.0527791, 0.798483, -0.599699, -1, 0.0966268, 1.89178, 0.270854, -1, 1.04234, 2.79502, 0.303255, -1, 0.941878, 2.82635, 0.32096, -1, 1.03087, 2.80072, 0.305388, -1, 0.343624, 0.933574, 0.101796, -1, 1.73932, -0.154499, 0.969904, -1, 2.68056, -0.14956, 1.33872, -1, 2.74949, -0.165915, 1.17991, -1, 2.81375, -0.172207, 1.02586, -1, 0.936963, -0.0454381, 0.346461, -1, 1.9679, -0.154649, -0.305064, -1, 2.94136, -0.384268, -0.44804, -1, 2.93377, -0.245592, -0.45061, -1, 2.95302, 0.236585, -0.470927, -1, 0.981707, 0.0719197, -0.176294, -1, 0.331468, 0.951788, -1.72458, -1, 0.628282, 1.33288, -2.61315, -1, 0.64266, 1.16959, -2.65908, -1, 0.671746, 0.671516, -2.8449, -1, 0.19382, 0.223476, -0.955245, -1 </real_array>
+				<nil>  </nil>
+				<vector3_array  len="150"> 					0.414062, 0.904297, 0, 0.492188, 0.845703, 0, 0.416016, 0.816406, 0, 0.701172, 0.939453, 0, 0.75, 0.882812, 0, 0.708984, 0.884766, 0, 0.789062, 0.558594, 0, 0.837891, 0.509766, 0, 0.785156, 0.505859, 0, 0.341797, 0.558594, 0, 0.222656, 0.509766, 0, 0.263672, 0.560547, 0, 0.0429688, 0.886719, 0, 0.130859, 0.814453, 0, 0.0527344, 0.802734, 0, 0.513672, 0.396484, 0, 0.572266, 0.474609, 0, 0.597656, 0.398438, 0, 0.623047, 0.992188, 0, 0.664062, 0.914062, 0, 0.566406, 0.996094, 0, 0.908203, 0.984375, 0, 0.908203, 0.902344, 0, 0.855469, 0.990234, 0, 0.958984, 0.609375, 0, 0.972656, 0.542969, 0, 0.912109, 0.621094, 0, 0.417969, 0.361328, 0, 0.294922, 0.341797, 0, 0.394531, 0.40625, 0, 0.392578, 0.917969, 0, 0.378906, 0.84375, 0, 0.287109, 0.958984, 0, 0.412109, 0.685547, 0, 0.509766, 0.646484, 0, 0.400391, 0.585938, 0, 0.570312, 0.789062, 0, 0.636719, 0.746094, 0, 0.595703, 0.707031, 0, 0.494141, 0.759766, 0, 0.417969, 0.730469, 0, 0.519531, 0.677734, 0, 0.453125, 0.695312, 0, 0.800781, 0.826172, 0, 0.84375, 0.738281, 0, 0.800781, 0.738281, 0, 0.759766, 0.826172, 0, 0.716797, 0.826172, 0, 0.757812, 0.738281, 0, 0.716797, 0.744141, 0, 0.886719, 0.464844, 0, 0.9375, 0.396484, 0, 0.894531, 0.378906, 0, 0.835938, 0.458984, 0, 0.78125, 0.453125, 0, 0.839844, 0.371094, 0, 0.785156, 0.371094, 0, 0.101562, 0.464844, 0, 0.0800781, 0.414062, 0, 0.0566406, 0.46875, 0, 0.144531, 0.515625, 0, 0.1875, 0.568359, 0, 0.0976562, 0.519531, 0, 0.113281, 0.582031, 0, 0.21875, 0.742188, 0, 0.304688, 0.689453, 0, 0.230469, 0.65625, 0, 0.142578, 0.730469, 0, 0.0644531, 0.716797, 0, 0.152344, 0.642578, 0, 0.0839844, 0.654297, 0, 0.630859, 0.552734, 0, 0.658203, 0.603516, 0, 0.699219, 0.564453, 0, 0.658203, 0.472656, 0, 0.677734, 0.398438, 0, 0.724609, 0.488281, 0, 0.730469, 0.412109, 0, 0.705078, 0.837891, 0, 0.705078, 0.771484, 0, 0.636719, 0.8125, 0, 0.607422, 0.917969, 0, 0.513672, 1, 0, 0.541016, 0.894531, 0, 0.462891, 0.951172, 0, 0.908203, 0.822266, 0, 0.896484, 0.736328, 0, 0.855469, 0.822266, 0, 0.855469, 0.912109, 0, 0.806641, 1, 0, 0.804688, 0.912109, 0, 0.751953, 0.96875, 0, 0.990234, 0.478516, 0, 0.988281, 0.404297, 0, 0.939453, 0.470703, 0, 0.929688, 0.558594, 0, 0.867188, 0.638672, 0, 0.876953, 0.552734, 0, 0.830078, 0.597656, 0, 0.171875, 0.320312, 0, 0.113281, 0.341797, 0, 0.136719, 0.392578, 0, 0.271484, 0.384766, 0, 0.369141, 0.447266, 0, 0.236328, 0.457031, 0, 0.353516, 0.503906, 0, 0.371094, 0.769531, 0, 0.378906, 0.703125, 0, 0.294922, 0.755859, 0, 0.277344, 0.884766, 0, 0.179688, 1, 0, 0.201172, 0.871094, 0, 0.113281, 0.941406, 0, 0.611328, 0.609375, 0, 0.646484, 0.634766, 0, 0.621094, 0.580078, 0, 0.5, 0.546875, 0, 0.390625, 0.486328, 0, 0.511719, 0.519531, 0, 0.451172, 0.441406, 0, 0.705078, 0.705078, 0, 0.662109, 0.664062, 0, 0.619141, 0.623047, 0, 0.556641, 0.642578, 0, 0.492188, 0.662109, 0, 0.888672, 0.652344, 0, 0.841797, 0.652344, 0, 0.798828, 0.652344, 0, 0.757812, 0.65625, 0, 0.716797, 0.660156, 0, 0.986328, 0.332031, 0, 0.943359, 0.310547, 0, 0.900391, 0.291016, 0, 0.845703, 0.291016, 0, 0.789062, 0.291016, 0, 0.0546875, 0.367188, 0, 0.0351562, 0.417969, 0, 0.0136719, 0.472656, 0, 0.0273438, 0.533203, 0, 0.0429688, 0.59375, 0, 0.392578, 0.636719, 0, 0.316406, 0.603516, 0, 0.242188, 0.570312, 0, 0.171875, 0.582031, 0, 0.101562, 0.591797, 0, 0.681641, 0.658203, 0, 0.722656, 0.617188, 0, 0.767578, 0.578125, 0, 0.771484, 0.5, 0, 0.777344, 0.421875, 0 </vector3_array>
+				<nil>  </nil>
+				<nil>  </nil>
+				<nil>  </nil>
+				<int_array  len="576"> 					0, 2, 1, 3, 5, 4, 6, 8, 7, 9, 11, 10, 12, 14, 13, 15, 17, 16, 18, 20, 19, 21, 23, 22, 24, 26, 25, 27, 29, 28, 30, 32, 31, 33, 35, 34, 36, 38, 37, 36, 39, 38, 40, 42, 41, 43, 45, 44, 43, 46, 45, 47, 49, 48, 50, 52, 51, 50, 53, 52, 54, 56, 55, 57, 59, 58, 57, 60, 59, 61, 63, 62, 64, 66, 65, 64, 67, 66, 68, 70, 69, 71, 73, 72, 71, 74, 73, 75, 77, 76, 78, 80, 79, 78, 81, 80, 82, 84, 83, 85, 87, 86, 85, 88, 87, 89, 91, 90, 92, 94, 93, 92, 95, 94, 96, 98, 97, 99, 101, 100, 99, 102, 101, 103, 105, 104, 106, 108, 107, 106, 109, 108, 110, 112, 111, 113, 115, 114, 113, 116, 115, 117, 119, 118, 1, 39, 36, 1, 2, 39, 2, 40, 39, 4, 46, 43, 4, 5, 46, 5, 47, 46, 7, 53, 50, 7, 8, 53, 8, 54, 53, 10, 60, 57, 10, 11, 60, 11, 61, 60, 13, 67, 64, 13, 14, 67, 14, 68, 67, 16, 74, 71, 16, 17, 74, 17, 75, 74, 19, 81, 78, 19, 20, 81, 20, 82, 81, 22, 88, 85, 22, 23, 88, 23, 89, 88, 25, 95, 92, 25, 26, 95, 26, 96, 95, 28, 102, 99, 28, 29, 102, 29, 103, 102, 31, 109, 106, 31, 32, 109, 32, 110, 109, 34, 116, 113, 34, 35, 116, 35, 117, 116, 37, 121, 120, 37, 38, 121, 38, 122, 121, 38, 41, 122, 38, 39, 41, 39, 40, 41, 41, 123, 122, 41, 42, 123, 42, 124, 123, 44, 126, 125, 44, 45, 126, 45, 127, 126, 45, 48, 127, 45, 46, 48, 46, 47, 48, 48, 128, 127, 48, 49, 128, 49, 129, 128, 51, 131, 130, 51, 52, 131, 52, 132, 131, 52, 55, 132, 52, 53, 55, 53, 54, 55, 55, 133, 132, 55, 56, 133, 56, 134, 133, 58, 136, 135, 58, 59, 136, 59, 137, 136, 59, 62, 137, 59, 60, 62, 60, 61, 62, 62, 138, 137, 62, 63, 138, 63, 139, 138, 65, 141, 140, 65, 66, 141, 66, 142, 141, 66, 69, 142, 66, 67, 69, 67, 68, 69, 69, 143, 142, 69, 70, 143, 70, 144, 143, 72, 146, 145, 72, 73, 146, 73, 147, 146, 73, 76, 147, 73, 74, 76, 74, 75, 76, 76, 148, 147, 76, 77, 148, 77, 149, 148, 79, 37, 120, 79, 80, 37, 80, 36, 37, 80, 83, 36, 80, 81, 83, 81, 82, 83, 83, 1, 36, 83, 84, 1, 84, 0, 1, 86, 44, 125, 86, 87, 44, 87, 43, 44, 87, 90, 43, 87, 88, 90, 88, 89, 90, 90, 4, 43, 90, 91, 4, 91, 3, 4, 93, 51, 130, 93, 94, 51, 94, 50, 51, 94, 97, 50, 94, 95, 97, 95, 96, 97, 97, 7, 50, 97, 98, 7, 98, 6, 7, 100, 58, 135, 100, 101, 58, 101, 57, 58, 101, 104, 57, 101, 102, 104, 102, 103, 104, 104, 10, 57, 104, 105, 10, 105, 9, 10, 107, 65, 140, 107, 108, 65, 108, 64, 65, 108, 111, 64, 108, 109, 111, 109, 110, 111, 111, 13, 64, 111, 112, 13, 112, 12, 13, 114, 72, 145, 114, 115, 72, 115, 71, 72, 115, 118, 71, 115, 116, 118, 116, 117, 118, 118, 16, 71, 118, 119, 16, 119, 15, 16 </int_array>
+			</array>
+		</dictionary>
+		<aabb name="custom_aabb/custom_aabb"> 0, 0, 0, 0, 0, 0 </aabb>
+
+	</resource>
+	<resource type="FixedMaterial" path="local://6">
+		<bool name="flags/visible"> True </bool>
+		<bool name="flags/double_sided"> False </bool>
+		<bool name="flags/invert_faces"> False </bool>
+		<bool name="flags/unshaded"> False </bool>
+		<bool name="flags/on_top"> False </bool>
+		<bool name="flags/lightmap_on_uv2"> True </bool>
+		<bool name="flags/colarray_is_srgb"> True </bool>
+		<int name="params/blend_mode"> 0 </int>
+		<int name="params/depth_draw"> 1 </int>
+		<real name="params/line_width"> 0 </real>
+		<bool name="fixed_flags/use_alpha"> True </bool>
+		<bool name="fixed_flags/use_color_array"> False </bool>
+		<bool name="fixed_flags/use_point_size"> False </bool>
+		<bool name="fixed_flags/discard_alpha"> False </bool>
+		<bool name="fixed_flags/use_xy_normalmap"> False </bool>
+		<color name="params/diffuse"> 0.436324, 0.710772, 1, 1 </color>
+		<color name="params/specular"> 1, 1, 1, 1 </color>
+		<color name="params/emission"> 0.156603, 0.150209, 0.347208, 1 </color>
+		<int name="params/specular_exp"> 40 </int>
+		<real name="params/detail_mix"> 1 </real>
+		<int name="params/normal_depth"> 1 </int>
+		<int name="params/shader"> 0 </int>
+		<real name="params/shader_param"> 0.5 </real>
+		<int name="params/glow"> 0 </int>
+		<real name="params/point_size"> 1 </real>
+		<transform name="uv_xform"> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
+		<resource name="textures/diffuse"></resource>		<int name="textures/diffuse_tc"> 0 </int>
+		<resource name="textures/detail"></resource>		<int name="textures/detail_tc"> 0 </int>
+		<resource name="textures/specular"></resource>		<int name="textures/specular_tc"> 0 </int>
+		<resource name="textures/emission"></resource>		<int name="textures/emission_tc"> 0 </int>
+		<resource name="textures/specular_exp"></resource>		<int name="textures/specular_exp_tc"> 0 </int>
+		<resource name="textures/glow"></resource>		<int name="textures/glow_tc"> 0 </int>
+		<resource name="textures/normal"></resource>		<int name="textures/normal_tc"> 0 </int>
+		<resource name="textures/shade_param"></resource>		<int name="textures/shade_param_tc"> 0 </int>
+
+	</resource>
+	<resource type="Mesh" path="local://7">
+		<dictionary name="surfaces/0" shared="false">
+			<string> "alphasort" </string>
+			<bool> False </bool>
+			<string> "morph_arrays" </string>
+			<array  len="0" shared="false">
+			</array>
+			<string> "material" </string>
+			<resource  resource_type="Material" path="res://env/materials/rock.mtl">  </resource>
+			<string> "name" </string>
+			<string> "terrain-rock" </string>
+			<string> "primitive" </string>
+			<int> 4 </int>
+			<string> "arrays" </string>
+			<array  len="9" shared="false">
+				<vector3_array  len="150"> 					-1.20524, -0.772412, 0.817002, -1.11239, -0.380104, 0.350556, -0.807819, -0.881861, 0.350556, -0.62617, -0.677973, -0.633956, -0.322855, -0.332885, -0.874923, -0.314924, -0.615569, -0.797459, 0.972068, -0.5477, -0.707361, 1.07463, -0.267748, -0.411625, 0.976263, -0.612837, -0.411625, 0.726423, -0.677973, 0.808854, 0.151073, -0.328797, 1.15477, 0.353441, -0.677973, 1.06311, -1.01954, 0.702381, 0.88411, -0.519541, 0.702381, 0.38411, -1.01954, 0.805638, 0.38411, 0.726423, -0.677973, 0.808854, 0.353441, -0.838322, 0.346482, 0.853441, -0.677973, 0.346482, -1.01954, 0.702381, 0.88411, -1.01954, 0.805638, 0.38411, -1.10826, 0.357293, 1.01207, -0.917853, 0.674379, -0.843703, -0.468697, 0.68838, -0.979797, -0.968697, 0.343291, -0.979797, 0.980459, 0.571738, -0.88185, 0.980459, 0.63706, -0.49887, 0.980459, 0.291971, -0.99887, 1.22921, 0.56023, 0.718003, 0.604835, 0.736602, 1.04222, 1.10484, 0.286217, 0.801057, 1.22921, 0.56023, 0.718003, 1.10484, 0.631306, 0.301057, 0.604835, 0.736602, 1.04222, -1.20524, -0.772412, 0.817002, -0.807819, -0.881861, 0.350556, -0.612391, -0.725193, 1.06719, -1.01954, 0.0122041, -0.11589, -0.968697, 0.343291, -0.479796, -1.01954, 0.0122041, -0.61589, -0.71497, -0.489553, -0.11589, -0.410399, -0.99131, -0.11589, -0.71497, -0.489553, -0.61589, -0.518284, -0.834642, -0.374923, -0.0195411, 0.0122041, -1.11589, 0.480459, 0.291971, -0.99887, 0.480459, 0.0122041, -1.11589, -0.0116097, -0.270481, -1.03843, -0.0036782, -0.553166, -0.960962, 0.48839, -0.270481, -1.03843, 0.484195, -0.550433, -0.834161, 1.1772, 0.0122041, -0.11589, 1.2032, 0.286217, 0.301057, 1.07883, 0.0122041, 0.38411, 1.07883, -0.332885, -0.11589, 0.980459, -0.677973, -0.11589, 0.980459, -0.332885, 0.38411, 0.853441, -0.677973, 0.346482, -0.424277, 0.020379, 1.50069, -0.721909, 0.36138, 1.1924, -0.810625, 0.0162915, 1.32036, -0.221909, -0.328797, 1.40903, -0.0195411, -0.677973, 1.31737, -0.608257, -0.332885, 1.2287, -0.612391, -0.725193, 1.06719, -0.0195411, 0.702381, -0.11589, 0.480459, 0.63706, -0.49887, -0.0195411, 0.702381, -0.61589, -0.519541, 0.805638, -0.11589, -1.01954, 0.908894, -0.11589, -0.519541, 0.805638, -0.61589, -0.968697, 0.791637, -0.479796, -0.0195411, -0.998671, -0.11589, -0.322855, -0.838322, -0.374923, -0.0116097, -0.775918, -0.538426, 0.480459, -0.838322, -0.11589, 0.980459, -0.677973, -0.11589, 0.48839, -0.615569, -0.538426, 0.976263, -0.612837, -0.411625, -1.01954, 0.908894, -0.11589, -0.968697, 0.791637, -0.479796, -1.01954, 0.460549, -0.11589, -1.10826, 0.460549, 0.51207, -1.19697, 0.0122041, 1.14003, -1.10826, 0.0122041, 0.51207, -1.20111, -0.380104, 0.978516, -0.0195411, 0.702381, -1.11589, 0.480459, 0.63706, -0.99887, -0.0195411, 0.357293, -1.11589, -0.519541, 0.357293, -1.11589, -1.01954, 0.0122041, -1.11589, -0.519541, 0.0122041, -1.11589, -0.822855, -0.332885, -0.874923, 0.980459, 0.702381, -0.11589, 1.10484, 0.631306, 0.301057, 1.07883, 0.357293, -0.11589, 0.980459, 0.357293, -0.61589, 0.980459, 0.0122041, -1.11589, 1.07883, 0.0122041, -0.61589, 0.976263, -0.267748, -0.911625, -0.0195411, 0.912973, 1.36644, -0.519541, 0.807677, 1.12528, -0.221909, 0.466676, 1.43356, 0.480459, 0.462588, 1.12528, 0.980459, 0.0122041, 0.88411, 0.278091, 0.0162915, 1.1924, 0.853441, -0.332885, 0.846482, 0.980459, 0.702381, -0.11589, 0.980459, 0.63706, -0.49887, 0.480459, 0.702381, -0.11589, 0.480459, 0.807677, 0.625275, -0.0195411, 0.912973, 1.36644, -0.0195411, 0.807677, 0.625275, -0.519541, 0.807677, 1.12528, -0.410399, -0.99131, -0.11589, -0.518284, -0.834642, -0.374923, -0.21497, -0.994991, -0.11589, -0.21497, -0.834642, 0.600739, -0.0195411, -0.677973, 1.31737, -0.0195411, -0.838322, 0.600739, 0.353441, -0.677973, 1.06311, -0.917853, 0.674379, -0.843703, -0.968697, 0.343291, -0.979797, -1.01954, 0.0122041, -1.11589, -0.822855, -0.332885, -0.874923, -0.62617, -0.677973, -0.633956, 0.980459, 0.571738, -0.88185, 0.980459, 0.291971, -0.99887, 0.980459, 0.0122041, -1.11589, 0.976263, -0.267748, -0.911625, 0.972068, -0.5477, -0.707361, 1.22921, 0.56023, 0.718003, 1.10484, 0.286217, 0.801057, 0.980459, 0.0122041, 0.88411, 0.853441, -0.332885, 0.846482, 0.726423, -0.677973, 0.808854, -1.01954, 0.702381, 0.88411, -1.10826, 0.357293, 1.01207, -1.19697, 0.0122041, 1.14003, -1.20111, -0.380104, 0.978516, -1.20524, -0.772412, 0.817002, 0.980459, 0.571738, -0.88185, 0.480459, 0.63706, -0.99887, -0.0195411, 0.702381, -1.11589, -0.468697, 0.68838, -0.979797, -0.917853, 0.674379, -0.843703, -0.62617, -0.677973, -0.633956, -0.314924, -0.615569, -0.797459, -0.0036782, -0.553166, -0.960962, 0.484195, -0.550433, -0.834161, 0.972068, -0.5477, -0.707361 </vector3_array>
+				<vector3_array  len="150"> 					-0.74, -0.63, 0.23, -0.914, -0.199, -0.35, -0.456, -0.869, -0.185, -0.576, -0.715, -0.393, -0.211, -0.426, -0.879, -0.261, -0.621, -0.737, 0.605, -0.68, -0.411, 0.968, -0.213, -0.133, 0.623, -0.761, -0.177, 0.564, -0.66, 0.493, 0.484, -0.066, 0.872, 0.465, -0.562, 0.682, -0.616, 0.706, 0.347, 0.03, 0.999, 0.029, -0.519, 0.836, 0.172, 0.564, -0.66, 0.493, 0.227, -0.961, 0.15, 0.666, -0.722, 0.182, -0.616, 0.706, 0.347, -0.519, 0.836, 0.172, -0.772, 0.386, 0.503, -0.644, 0.592, -0.483, -0.218, 0.729, -0.649, -0.773, 0.339, -0.534, 0.655, 0.593, -0.468, 0.707, 0.697, -0.119, 0.707, 0.273, -0.652, 0.841, 0.397, 0.367, 0.49, 0.632, 0.599, 0.782, -0.173, 0.597, 0.841, 0.397, 0.367, 0.711, 0.697, -0.093, 0.49, 0.632, 0.599, -0.74, -0.63, 0.23, -0.456, -0.869, -0.185, -0.2, -0.757, 0.619, -0.968, -0.185, -0.162, -0.994, 0.076, -0.07, -0.98, -0.194, -0, -0.822, -0.499, -0.269, -0.32, -0.926, -0.197, -0.876, -0.476, 0.055, -0.558, -0.791, -0.246, -0.008, -0.15, -0.988, 0.117, 0.198, -0.973, 0, 0.064, -0.998, -0.209, -0.263, -0.941, -0.077, -0.618, -0.782, 0.106, -0.43, -0.896, 0.144, -0.83, -0.537, 0.997, -0.046, -0.055, 0.998, -0.05, -0.029, 0.931, -0.314, 0.182, 0.96, -0.273, 0.056, 0.694, -0.718, -0.037, 0.924, -0.313, 0.216, 0.666, -0.722, 0.182, -0.119, -0.048, 0.991, -0.427, 0.371, 0.823, -0.422, -0.014, 0.905, 0.109, -0.192, 0.974, 0.209, -0.569, 0.793, -0.358, -0.394, 0.845, -0.2, -0.757, 0.619, 0.078, 0.996, -0.045, 0.065, 0.994, -0.085, 0.166, 0.986, -0, 0.201, 0.974, 0.099, -0.601, 0.797, -0.051, 0.039, 0.986, -0.164, -0.729, 0.614, -0.3, 0.114, -0.981, -0.149, -0.041, -0.87, -0.49, 0.104, -0.88, -0.462, 0.3, -0.934, -0.187, 0.694, -0.718, -0.037, 0.17, -0.926, -0.335, 0.623, -0.761, -0.177, -0.601, 0.797, -0.051, -0.729, 0.614, -0.3, -0.989, 0, -0.139, -0.989, 0.136, -0.043, -0.815, 0.041, 0.575, -0.989, 0.034, -0.14, -0.859, -0.185, 0.473, 0.1, 0.675, -0.731, 0.249, 0.691, -0.679, 0.115, 0, -0.993, -0.142, 0.207, -0.968, -0.695, -0.191, -0.692, 0, -0.299, -0.954, -0.587, -0.66, -0.466, 0.577, 0.799, -0.166, 0.711, 0.697, -0.093, 0.94, 0.268, -0.21, 0.986, 0.137, -0.094, 0.598, -0.032, -0.801, 0.979, 0.059, -0.193, 0.694, -0.43, -0.577, 0.071, 0.732, 0.676, -0.377, 0.822, 0.424, -0.036, 0.165, 0.985, 0.437, 0.004, 0.898, 0.726, -0.22, 0.65, 0.397, -0.142, 0.906, 0.708, -0.328, 0.624, 0.577, 0.799, -0.166, 0.707, 0.697, -0.119, 0, 0.988, -0.154, 0.155, 0.987, -0.035, 0.071, 0.732, 0.676, -0.069, 0.988, -0.14, -0.377, 0.822, 0.424, -0.32, -0.926, -0.197, -0.558, -0.791, -0.246, -0.018, -0.986, -0.158, -0.015, -0.975, 0.217, 0.209, -0.569, 0.793, 0.065, -0.973, 0.217, 0.465, -0.562, 0.682, -0.644, 0.592, -0.483, -0.773, 0.339, -0.534, -0.695, -0.191, -0.692, -0.587, -0.66, -0.466, -0.576, -0.715, -0.393, 0.655, 0.593, -0.468, 0.707, 0.273, -0.652, 0.598, -0.032, -0.801, 0.694, -0.43, -0.577, 0.605, -0.68, -0.411, 0.841, 0.397, 0.367, 0.782, -0.173, 0.597, 0.726, -0.22, 0.65, 0.708, -0.328, 0.624, 0.564, -0.66, 0.493, -0.616, 0.706, 0.347, -0.772, 0.386, 0.503, -0.815, 0.041, 0.575, -0.859, -0.185, 0.473, -0.74, -0.63, 0.23, 0.655, 0.593, -0.468, 0.249, 0.691, -0.679, 0.1, 0.675, -0.731, -0.218, 0.729, -0.649, -0.644, 0.592, -0.483, -0.576, -0.715, -0.393, -0.261, -0.621, -0.737, -0.077, -0.618, -0.782, 0.144, -0.83, -0.537, 0.605, -0.68, -0.411 </vector3_array>
+				<real_array  len="600"> 					-0.225266, 1.8475, -0.584559, -1, -0.658986, 5.52487, -1.81901, -1, -0.982351, 2.68399, -0.911597, -1, -0.127865, 1.78512, -0.818314, -1, -0.343638, 5.35257, -2.47283, -1, -0.157033, 2.89765, -0.758619, -1, 0.446369, 1.9423, 0.124816, -1, 1.36781, 5.80264, 0.564885, -1, 0.835694, 2.87262, 0.218769, -1, 1.73712, -0.0834109, -0.972749, -1, 5.20959, -0.38111, -2.90888, -1, 2.48432, -0.219724, -1.6644, -1, 1.95657, -0.0557118, -0.289374, -1, 5.86474, -0.172681, -0.902165, -1, 2.9242, -0.515691, -0.427063, -1, 0.576906, -0.15867, -1.90025, -1, 1.63254, -0.509874, -5.72772, -1, 0.794141, -0.000121601, -2.89222, -1, 0.242335, 0.928535, -0.281243, -1, 0.727205, 2.78601, -0.842211, -1, 0.727007, 2.7856, -0.843732, -1, 0.0519214, 0.913492, 0.40353, -1, 0.0265023, 2.7274, 1.2456, -1, 0.0227372, 2.7269, 1.24656, -1, 0, 0.983438, 0.181242, -1, 0, 2.97602, 0.352956, -1, 0, 2.97956, 0.297319, -1, 0.880728, -0.0742993, -0.467759, -1, 2.64363, -0.175376, -1.40689, -1, 2.64377, -0.166826, -1.40747, -1, 0.946977, -0.294636, -0.128158, -1, 2.84093, -0.883908, -0.384472, -1, 2.84093, -0.883908, -0.384472, -1, 0.27401, -0.212599, -0.937934, -1, 0.842065, -0.636779, -2.80795, -1, 0.822029, -0.637796, -2.8138, -1, -0.484122, 5.50883, -1.79722, -1, 0.567129, 5.66846, -1.85657, -1, -1.05539, 5.28682, -1.75667, -1, -2.46626, 5.13702, -1.79196, -1, -1.26481, 2.53969, -0.942989, -1, -2.82005, 4.94829, -1.87368, -1, -1.33059, 2.49982, -0.987355, -1, -0.248663, 5.66453, -0.729501, -1, -0.133698, 5.76412, 1.12635, -1, -0.08115, 5.65992, 0.365073, -1, -0.19957, 5.7872, -1.56847, -1, -0.140901, 2.72037, -1.13245, -1, -0.309057, 5.27488, -2.60062, -1, -0.226382, 2.38287, -1.80783, -1, 0.56463, 5.74891, 0.583075, -1, 0.312044, 5.68238, 0.620152, -1, 1.81295, 5.68061, 0.568737, -1, 1.59841, 5.754, 0.565296, -1, 0.879176, 2.85139, 0.287682, -1, 1.78576, 5.68383, 0.645728, -1, 1.03087, 2.80072, 0.305388, -1, 5.31669, -0.381384, -0.0225267, -1, 5.2444, -0.358164, 2.88079, -1, 5.43281, -0.300977, 2.52314, -1, 5.23594, -0.428412, -0.470506, -1, 2.68307, -0.217226, 0.186527, -1, 5.56586, -0.341606, 2.20708, -1, 2.81344, -0.167794, 1.02754, -1, 5.88106, -0.434875, -0.894328, -1, 5.90369, -0.463946, -0.915193, -1, 5.8479, -0.984508, -0.884961, -1, 5.83124, -1.11603, -0.860641, -1, 2.92661, -0.288335, -0.457514, -1, 5.86038, -0.354409, -0.901843, -1, 2.95244, 0.23489, -0.475667, -1, 1.38121, 1.05577, -5.41156, -1, 1.05295, 2.85008, -5.16606, -1, 1.18874, 2.83897, -5.14565, -1, 1.35084, 1.49085, -5.42612, -1, 0.772786, 0.729922, -2.72959, -1, 1.39899, 2.18484, -5.33272, -1, 0.720663, 0.671598, -2.83132, -1, 0.333128, 2.81995, -0.924563, -1, 0.136498, 2.83318, -0.976955, -1, 0.262003, 5.69616, -1.86504, -1, 0.856198, 5.64059, -1.75525, -1, 0.393083, 2.82669, -0.889136, -1, 0.452239, 5.69446, -1.82367, -1, 0.323365, 2.84088, -0.907417, -1, -0.0108268, 2.9072, 0.420551, -1, -0.0670536, 2.99881, -0.0156932, -1, -0.165888, 5.9949, -0.0234442, -1, -0.0400111, 5.72061, 1.26358, -1, -0.0594704, 2.72577, -0.15042, -1, -0.234997, 5.45352, -1.71475, -1, -0.169282, 2.45569, -1.71475, -1, -0.492424, 2.91822, 0.339968, -1, -0.728019, 2.88559, 0.378584, -1, -1.49869, 5.77212, 0.653102, -1, -0.760995, 5.87672, 0.518979, -1, -0.0771363, 2.9381, 0.250533, -1, -0.225536, 5.80986, 0.68024, -1, 0.528579, 2.93369, 0.322711, -1, 2.65236, -0.174165, -0.363363, -1, 2.56383, -0.208601, 1.54207, -1, 5.31273, -0.370879, 0.318605, -1, 5.37976, -0.370273, -2.62011, -1, 2.69669, -0.21338, -1.2922, -1, 5.45508, -0.440968, -2.45808, -1, 2.72287, -0.194769, -1.24346, -1, 2.92205, -0.343255, -0.439147, -1, 2.96233, -0.0796782, -0.467154, -1, 5.92521, -0.145855, -0.932968, -1, 5.80381, -0.950085, -0.850286, -1, 2.91057, -0.204587, -0.470284, -1, 5.89618, 0.275619, -0.99325, -1, 2.93506, 0.343785, -0.515189, -1, 0.78256, 0.0736118, -2.70823, -1, 0.454783, 1.51272, -2.54833, -1, 1.42435, 0.865344, -5.32765, -1, 1.74473, -1.27764, -5.59609, -1, 0.868557, -0.593087, -2.80849, -1, 1.78365, -1.14146, -5.61167, -1, 0.862286, -0.501543, -2.8293, -1, 0.189206, 1.88018, -0.647599, -1, 0.433365, 2.82198, -0.920355, -1, -0.797296, 2.59858, -0.90733, -1, -1.33221, 2.51097, -0.957072, -1, -0.44514, 0.845117, -0.29602, -1, -0.0335268, 1.92196, 0.378033, -1, 0, 2.76765, 1.15764, -1, -0.0813548, 2.68486, -0.47822, -1, -0.193885, 2.3889, -1.80368, -1, -0.0527791, 0.798483, -0.599699, -1, 0.0966268, 1.89178, 0.270854, -1, 1.04234, 2.79502, 0.303255, -1, 0.941878, 2.82635, 0.32096, -1, 1.03087, 2.80072, 0.305388, -1, 0.343624, 0.933574, 0.101796, -1, 1.73932, -0.154499, 0.969904, -1, 2.68056, -0.14956, 1.33872, -1, 2.74949, -0.165915, 1.17991, -1, 2.81375, -0.172207, 1.02586, -1, 0.936963, -0.0454381, 0.346461, -1, 1.9679, -0.154649, -0.305064, -1, 2.94136, -0.384268, -0.44804, -1, 2.93377, -0.245592, -0.45061, -1, 2.95302, 0.236585, -0.470927, -1, 0.981707, 0.0719197, -0.176294, -1, 0.331468, 0.951788, -1.72458, -1, 0.628282, 1.33288, -2.61315, -1, 0.64266, 1.16959, -2.65908, -1, 0.671746, 0.671516, -2.8449, -1, 0.19382, 0.223476, -0.955245, -1 </real_array>
+				<nil>  </nil>
+				<vector3_array  len="150"> 					0.414062, 0.904297, 0, 0.492188, 0.845703, 0, 0.416016, 0.816406, 0, 0.701172, 0.939453, 0, 0.75, 0.882812, 0, 0.708984, 0.884766, 0, 0.789062, 0.558594, 0, 0.837891, 0.509766, 0, 0.785156, 0.505859, 0, 0.341797, 0.558594, 0, 0.222656, 0.509766, 0, 0.263672, 0.560547, 0, 0.0429688, 0.886719, 0, 0.130859, 0.814453, 0, 0.0527344, 0.802734, 0, 0.513672, 0.396484, 0, 0.572266, 0.474609, 0, 0.597656, 0.398438, 0, 0.623047, 0.992188, 0, 0.664062, 0.914062, 0, 0.566406, 0.996094, 0, 0.908203, 0.984375, 0, 0.908203, 0.902344, 0, 0.855469, 0.990234, 0, 0.958984, 0.609375, 0, 0.972656, 0.542969, 0, 0.912109, 0.621094, 0, 0.417969, 0.361328, 0, 0.294922, 0.341797, 0, 0.394531, 0.40625, 0, 0.392578, 0.917969, 0, 0.378906, 0.84375, 0, 0.287109, 0.958984, 0, 0.412109, 0.685547, 0, 0.509766, 0.646484, 0, 0.400391, 0.585938, 0, 0.570312, 0.789062, 0, 0.636719, 0.746094, 0, 0.595703, 0.707031, 0, 0.494141, 0.759766, 0, 0.417969, 0.730469, 0, 0.519531, 0.677734, 0, 0.453125, 0.695312, 0, 0.800781, 0.826172, 0, 0.84375, 0.738281, 0, 0.800781, 0.738281, 0, 0.759766, 0.826172, 0, 0.716797, 0.826172, 0, 0.757812, 0.738281, 0, 0.716797, 0.744141, 0, 0.886719, 0.464844, 0, 0.9375, 0.396484, 0, 0.894531, 0.378906, 0, 0.835938, 0.458984, 0, 0.78125, 0.453125, 0, 0.839844, 0.371094, 0, 0.785156, 0.371094, 0, 0.101562, 0.464844, 0, 0.0800781, 0.414062, 0, 0.0566406, 0.46875, 0, 0.144531, 0.515625, 0, 0.1875, 0.568359, 0, 0.0976562, 0.519531, 0, 0.113281, 0.582031, 0, 0.21875, 0.742188, 0, 0.304688, 0.689453, 0, 0.230469, 0.65625, 0, 0.142578, 0.730469, 0, 0.0644531, 0.716797, 0, 0.152344, 0.642578, 0, 0.0839844, 0.654297, 0, 0.630859, 0.552734, 0, 0.658203, 0.603516, 0, 0.699219, 0.564453, 0, 0.658203, 0.472656, 0, 0.677734, 0.398438, 0, 0.724609, 0.488281, 0, 0.730469, 0.412109, 0, 0.705078, 0.837891, 0, 0.705078, 0.771484, 0, 0.636719, 0.8125, 0, 0.607422, 0.917969, 0, 0.513672, 1, 0, 0.541016, 0.894531, 0, 0.462891, 0.951172, 0, 0.908203, 0.822266, 0, 0.896484, 0.736328, 0, 0.855469, 0.822266, 0, 0.855469, 0.912109, 0, 0.806641, 1, 0, 0.804688, 0.912109, 0, 0.751953, 0.96875, 0, 0.990234, 0.478516, 0, 0.988281, 0.404297, 0, 0.939453, 0.470703, 0, 0.929688, 0.558594, 0, 0.867188, 0.638672, 0, 0.876953, 0.552734, 0, 0.830078, 0.597656, 0, 0.171875, 0.320312, 0, 0.113281, 0.341797, 0, 0.136719, 0.392578, 0, 0.271484, 0.384766, 0, 0.369141, 0.447266, 0, 0.236328, 0.457031, 0, 0.353516, 0.503906, 0, 0.371094, 0.769531, 0, 0.378906, 0.703125, 0, 0.294922, 0.755859, 0, 0.277344, 0.884766, 0, 0.179688, 1, 0, 0.201172, 0.871094, 0, 0.113281, 0.941406, 0, 0.611328, 0.609375, 0, 0.646484, 0.634766, 0, 0.621094, 0.580078, 0, 0.5, 0.546875, 0, 0.390625, 0.486328, 0, 0.511719, 0.519531, 0, 0.451172, 0.441406, 0, 0.705078, 0.705078, 0, 0.662109, 0.664062, 0, 0.619141, 0.623047, 0, 0.556641, 0.642578, 0, 0.492188, 0.662109, 0, 0.888672, 0.652344, 0, 0.841797, 0.652344, 0, 0.798828, 0.652344, 0, 0.757812, 0.65625, 0, 0.716797, 0.660156, 0, 0.986328, 0.332031, 0, 0.943359, 0.310547, 0, 0.900391, 0.291016, 0, 0.845703, 0.291016, 0, 0.789062, 0.291016, 0, 0.0546875, 0.367188, 0, 0.0351562, 0.417969, 0, 0.0136719, 0.472656, 0, 0.0273438, 0.533203, 0, 0.0429688, 0.59375, 0, 0.392578, 0.636719, 0, 0.316406, 0.603516, 0, 0.242188, 0.570312, 0, 0.171875, 0.582031, 0, 0.101562, 0.591797, 0, 0.681641, 0.658203, 0, 0.722656, 0.617188, 0, 0.767578, 0.578125, 0, 0.771484, 0.5, 0, 0.777344, 0.421875, 0 </vector3_array>
+				<nil>  </nil>
+				<nil>  </nil>
+				<nil>  </nil>
+				<int_array  len="576"> 					0, 2, 1, 3, 5, 4, 6, 8, 7, 9, 11, 10, 12, 14, 13, 15, 17, 16, 18, 20, 19, 21, 23, 22, 24, 26, 25, 27, 29, 28, 30, 32, 31, 33, 35, 34, 36, 38, 37, 36, 39, 38, 40, 42, 41, 43, 45, 44, 43, 46, 45, 47, 49, 48, 50, 52, 51, 50, 53, 52, 54, 56, 55, 57, 59, 58, 57, 60, 59, 61, 63, 62, 64, 66, 65, 64, 67, 66, 68, 70, 69, 71, 73, 72, 71, 74, 73, 75, 77, 76, 78, 80, 79, 78, 81, 80, 82, 84, 83, 85, 87, 86, 85, 88, 87, 89, 91, 90, 92, 94, 93, 92, 95, 94, 96, 98, 97, 99, 101, 100, 99, 102, 101, 103, 105, 104, 106, 108, 107, 106, 109, 108, 110, 112, 111, 113, 115, 114, 113, 116, 115, 117, 119, 118, 1, 39, 36, 1, 2, 39, 2, 40, 39, 4, 46, 43, 4, 5, 46, 5, 47, 46, 7, 53, 50, 7, 8, 53, 8, 54, 53, 10, 60, 57, 10, 11, 60, 11, 61, 60, 13, 67, 64, 13, 14, 67, 14, 68, 67, 16, 74, 71, 16, 17, 74, 17, 75, 74, 19, 81, 78, 19, 20, 81, 20, 82, 81, 22, 88, 85, 22, 23, 88, 23, 89, 88, 25, 95, 92, 25, 26, 95, 26, 96, 95, 28, 102, 99, 28, 29, 102, 29, 103, 102, 31, 109, 106, 31, 32, 109, 32, 110, 109, 34, 116, 113, 34, 35, 116, 35, 117, 116, 37, 121, 120, 37, 38, 121, 38, 122, 121, 38, 41, 122, 38, 39, 41, 39, 40, 41, 41, 123, 122, 41, 42, 123, 42, 124, 123, 44, 126, 125, 44, 45, 126, 45, 127, 126, 45, 48, 127, 45, 46, 48, 46, 47, 48, 48, 128, 127, 48, 49, 128, 49, 129, 128, 51, 131, 130, 51, 52, 131, 52, 132, 131, 52, 55, 132, 52, 53, 55, 53, 54, 55, 55, 133, 132, 55, 56, 133, 56, 134, 133, 58, 136, 135, 58, 59, 136, 59, 137, 136, 59, 62, 137, 59, 60, 62, 60, 61, 62, 62, 138, 137, 62, 63, 138, 63, 139, 138, 65, 141, 140, 65, 66, 141, 66, 142, 141, 66, 69, 142, 66, 67, 69, 67, 68, 69, 69, 143, 142, 69, 70, 143, 70, 144, 143, 72, 146, 145, 72, 73, 146, 73, 147, 146, 73, 76, 147, 73, 74, 76, 74, 75, 76, 76, 148, 147, 76, 77, 148, 77, 149, 148, 79, 37, 120, 79, 80, 37, 80, 36, 37, 80, 83, 36, 80, 81, 83, 81, 82, 83, 83, 1, 36, 83, 84, 1, 84, 0, 1, 86, 44, 125, 86, 87, 44, 87, 43, 44, 87, 90, 43, 87, 88, 90, 88, 89, 90, 90, 4, 43, 90, 91, 4, 91, 3, 4, 93, 51, 130, 93, 94, 51, 94, 50, 51, 94, 97, 50, 94, 95, 97, 95, 96, 97, 97, 7, 50, 97, 98, 7, 98, 6, 7, 100, 58, 135, 100, 101, 58, 101, 57, 58, 101, 104, 57, 101, 102, 104, 102, 103, 104, 104, 10, 57, 104, 105, 10, 105, 9, 10, 107, 65, 140, 107, 108, 65, 108, 64, 65, 108, 111, 64, 108, 109, 111, 109, 110, 111, 111, 13, 64, 111, 112, 13, 112, 12, 13, 114, 72, 145, 114, 115, 72, 115, 71, 72, 115, 118, 71, 115, 116, 118, 116, 117, 118, 118, 16, 71, 118, 119, 16, 119, 15, 16 </int_array>
+			</array>
+		</dictionary>
+		<aabb name="custom_aabb/custom_aabb"> 0, 0, 0, 0, 0, 0 </aabb>
+
+	</resource>
+	<resource type="CapsuleShape" path="local://8">
+		<real name="radius"> 1 </real>
+		<real name="height"> 1 </real>
+
+	</resource>
+	<resource type="CapsuleShape" path="local://9">
+		<real name="radius"> 1 </real>
+		<real name="height"> 1 </real>
+
+	</resource>
+	<resource type="FixedMaterial" path="local://10">
+		<bool name="flags/visible"> True </bool>
+		<bool name="flags/double_sided"> False </bool>
+		<bool name="flags/invert_faces"> False </bool>
+		<bool name="flags/unshaded"> False </bool>
+		<bool name="flags/on_top"> False </bool>
+		<bool name="flags/lightmap_on_uv2"> True </bool>
+		<bool name="flags/colarray_is_srgb"> True </bool>
+		<int name="params/blend_mode"> 0 </int>
+		<int name="params/depth_draw"> 1 </int>
+		<real name="params/line_width"> 0 </real>
+		<bool name="fixed_flags/use_alpha"> True </bool>
+		<bool name="fixed_flags/use_color_array"> False </bool>
+		<bool name="fixed_flags/use_point_size"> False </bool>
+		<bool name="fixed_flags/discard_alpha"> False </bool>
+		<bool name="fixed_flags/use_xy_normalmap"> False </bool>
+		<color name="params/diffuse"> 0.256612, 0.584486, 0, 1 </color>
+		<color name="params/specular"> 1, 1, 1, 1 </color>
+		<color name="params/emission"> 0.156603, 0.150209, 0.347208, 1 </color>
+		<int name="params/specular_exp"> 40 </int>
+		<real name="params/detail_mix"> 1 </real>
+		<int name="params/normal_depth"> 1 </int>
+		<int name="params/shader"> 0 </int>
+		<real name="params/shader_param"> 0.5 </real>
+		<int name="params/glow"> 0 </int>
+		<real name="params/point_size"> 1 </real>
+		<transform name="uv_xform"> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
+		<resource name="textures/diffuse"></resource>		<int name="textures/diffuse_tc"> 0 </int>
+		<resource name="textures/detail"></resource>		<int name="textures/detail_tc"> 0 </int>
+		<resource name="textures/specular"></resource>		<int name="textures/specular_tc"> 0 </int>
+		<resource name="textures/emission"></resource>		<int name="textures/emission_tc"> 0 </int>
+		<resource name="textures/specular_exp"></resource>		<int name="textures/specular_exp_tc"> 0 </int>
+		<resource name="textures/glow"></resource>		<int name="textures/glow_tc"> 0 </int>
+		<resource name="textures/normal"></resource>		<int name="textures/normal_tc"> 0 </int>
+		<resource name="textures/shade_param"></resource>		<int name="textures/shade_param_tc"> 0 </int>
+
+	</resource>
+	<resource type="Animation" path="local://11">
+		<real name="length"> 1 </real>
+		<bool name="loop"> False </bool>
+		<real name="step"> 0.1 </real>
+		<string name="tracks/0/type"> "value" </string>
+		<node_path name="tracks/0/path"> "rock/rock_ 4:transform/scale" </node_path>
+		<int name="tracks/0/interp"> 1 </int>
+		<dictionary name="tracks/0/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "transitions" </string>
+			<real_array  len="2"> 				1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="2" shared="false">
+				<vector3> 1, 1, 1 </vector3>
+				<vector3> 3, 3, 3 </vector3>
+			</array>
+			<string> "times" </string>
+			<real_array  len="2"> 				0, 1 </real_array>
+		</dictionary>
+
+	</resource>
+	<main_resource>
+		<dictionary name="_bundled" shared="false">
+			<string> "names" </string>
+			<string_array  len="90">
+				<string> "forest" </string>
+				<string> "Spatial" </string>
+				<string> "_import_path" </string>
+				<string> "_import_transform" </string>
+				<string> "visibility/visible" </string>
+				<string> "__meta__" </string>
+				<string> "Label" </string>
+				<string> "player" </string>
+				<string> "RigidBody" </string>
+				<string> "transform/local" </string>
+				<string> "env" </string>
+				<string> "WorldEnvironment" </string>
+				<string> "environment" </string>
+				<string> "PhysToSpir" </string>
+				<string> "AnimationPlayer" </string>
+				<string> "playback/process_mode" </string>
+				<string> "playback/default_blend_time" </string>
+				<string> "root/root" </string>
+				<string> "anims/PhysToSpir" </string>
+				<string> "playback/active" </string>
+				<string> "playback/speed" </string>
+				<string> "blend_times" </string>
+				<string> "autoplay" </string>
+				<string> "terr" </string>
+				<string> "StaticBody" </string>
+				<string> "input/ray_pickable" </string>
+				<string> "input/capture_on_drag" </string>
+				<string> "shape_count" </string>
+				<string> "shapes/0/shape" </string>
+				<string> "shapes/0/transform" </string>
+				<string> "shapes/0/trigger" </string>
+				<string> "layers" </string>
+				<string> "friction" </string>
+				<string> "bounce" </string>
+				<string> "constant_linear_velocity" </string>
+				<string> "constant_angular_velocity" </string>
+				<string> "CollisionShape" </string>
+				<string> "shape" </string>
+				<string> "trigger" </string>
+				<string> "rock" </string>
+				<string> "rock_ 3_phys" </string>
+				<string> "MeshInstance" </string>
+				<string> "geometry/visible" </string>
+				<string> "geometry/material_override" </string>
+				<string> "geometry/cast_shadow" </string>
+				<string> "geometry/receive_shadows" </string>
+				<string> "geometry/range_begin" </string>
+				<string> "geometry/range_end" </string>
+				<string> "geometry/extra_cull_margin" </string>
+				<string> "geometry/billboard" </string>
+				<string> "geometry/billboard_y" </string>
+				<string> "geometry/depth_scale" </string>
+				<string> "geometry/visible_in_all_rooms" </string>
+				<string> "geometry/use_baked_light" </string>
+				<string> "geometry/baked_light_tex_id" </string>
+				<string> "mesh/mesh" </string>
+				<string> "mesh/skeleton" </string>
+				<string> "phys" </string>
+				<string> "rock_ 4_spi" </string>
+				<string> "spi" </string>
+				<string> "rock_ 26_phys" </string>
+				<string> "rock_ 27_phys" </string>
+				<string> "rock_ 4" </string>
+				<string> "suicides_phys" </string>
+				<string> "sui" </string>
+				<string> "sui 2" </string>
+				<string> "sui 3" </string>
+				<string> "lamps" </string>
+				<string> "Lamp" </string>
+				<string> "DirectionalLight" </string>
+				<string> "params/enabled" </string>
+				<string> "params/editor_only" </string>
+				<string> "params/bake_mode" </string>
+				<string> "params/energy" </string>
+				<string> "colors/diffuse" </string>
+				<string> "colors/specular" </string>
+				<string> "shadow/shadow" </string>
+				<string> "shadow/darkening" </string>
+				<string> "shadow/z_offset" </string>
+				<string> "shadow/z_slope_scale" </string>
+				<string> "shadow/esm_multiplier" </string>
+				<string> "shadow/blur_passes" </string>
+				<string> "projector" </string>
+				<string> "operator" </string>
+				<string> "shadow/mode" </string>
+				<string> "shadow/max_distance" </string>
+				<string> "shadow/split_weight" </string>
+				<string> "shadow/zoffset_scale" </string>
+				<string> "Lamp 2" </string>
+				<string> "Rock" </string>
+			</string_array>
+			<string> "version" </string>
+			<int> 1 </int>
+			<string> "conn_count" </string>
+			<int> 0 </int>
+			<string> "node_count" </string>
+			<int> 24 </int>
+			<string> "variants" </string>
+			<array  len="65" shared="false">
+				<node_path> "." </node_path>
+				<transform> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
+				<bool> True </bool>
+				<dictionary  shared="false">
+					<string> "__editor_plugin_states__" </string>
+					<dictionary  shared="false">
+						<string> "Script" </string>
+						<dictionary  shared="false">
+							<string> "current" </string>
+							<int> 2 </int>
+							<string> "sources" </string>
+							<array  len="4" shared="false">
+								<string> "res://scripts/player.gd" </string>
+								<string> "res://scripts/follow_camera.gd" </string>
+								<string> "res://scripts/switchWorld.gd" </string>
+								<string> "res://scripts/SUTjoystick.gd" </string>
+							</array>
+						</dictionary>
+						<string> "2D" </string>
+						<dictionary  shared="false">
+							<string> "snap_pixel" </string>
+							<bool> False </bool>
+							<string> "snap_rotation_step" </string>
+							<real> 0.261799 </real>
+							<string> "zoom" </string>
+							<real> 0.814506 </real>
+							<string> "snap_step" </string>
+							<vector2> 10, 10 </vector2>
+							<string> "snap_relative" </string>
+							<bool> False </bool>
+							<string> "snap_grid" </string>
+							<bool> False </bool>
+							<string> "snap_rotation_offset" </string>
+							<real> 0 </real>
+							<string> "snap_show_grid" </string>
+							<bool> False </bool>
+							<string> "snap_offset" </string>
+							<vector2> 0, 0 </vector2>
+							<string> "ofs" </string>
+							<vector2> -384.025, -165.345 </vector2>
+							<string> "snap_rotation" </string>
+							<bool> False </bool>
+						</dictionary>
+						<string> "3D" </string>
+						<dictionary  shared="false">
+							<string> "deflight_rot_y" </string>
+							<real> 0.628319 </real>
+							<string> "zfar" </string>
+							<real> 500 </real>
+							<string> "fov" </string>
+							<real> 45 </real>
+							<string> "viewports" </string>
+							<array  len="4" shared="false">
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 57.985062 </real>
+									<string> "x_rot" </string>
+									<real> 0.395795 </real>
+									<string> "y_rot" </string>
+									<real> -7.087488 </real>
+									<string> "listener" </string>
+									<bool> True </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> -0.872881, -3.20002, -18.6575 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+							</array>
+							<string> "viewport_mode" </string>
+							<int> 1 </int>
+							<string> "default_light" </string>
+							<bool> False </bool>
+							<string> "ambient_light_color" </string>
+							<color> 0.15, 0.15, 0.15, 1 </color>
+							<string> "show_grid" </string>
+							<bool> True </bool>
+							<string> "show_origin" </string>
+							<bool> True </bool>
+							<string> "znear" </string>
+							<real> 0.1 </real>
+							<string> "default_srgb" </string>
+							<bool> False </bool>
+							<string> "deflight_rot_x" </string>
+							<real> 0.942478 </real>
+						</dictionary>
+					</dictionary>
+					<string> "__editor_run_settings__" </string>
+					<dictionary  shared="false">
+						<string> "custom_args" </string>
+						<string> "-l $scene" </string>
+						<string> "run_mode" </string>
+						<int> 0 </int>
+					</dictionary>
+					<string> "__editor_plugin_screen__" </string>
+					<string> "3D" </string>
+				</dictionary>
+				<resource  resource_type="PackedScene" path="res://assets/ui.xml">  </resource>
+				<node_path> "" </node_path>
+				<dictionary  shared="false">
+					<string> "__editor_plugin_states__" </string>
+					<dictionary  shared="false">
+						<string> "2D" </string>
+						<dictionary  shared="false">
+							<string> "pixel_snap" </string>
+							<bool> False </bool>
+							<string> "zoom" </string>
+							<real> 0.902499 </real>
+							<string> "use_snap" </string>
+							<bool> False </bool>
+							<string> "ofs" </string>
+							<vector2> -167.254, -6.17479 </vector2>
+							<string> "snap" </string>
+							<int> 10 </int>
+						</dictionary>
+						<string> "3D" </string>
+						<dictionary  shared="false">
+							<string> "viewports" </string>
+							<array  len="4" shared="false">
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> True </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> -38.3191, -15.0133, -83.9569 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+							</array>
+							<string> "zfar" </string>
+							<real> 500 </real>
+							<string> "deflight_rot_y" </string>
+							<real> 0.628319 </real>
+							<string> "fov" </string>
+							<real> 45 </real>
+							<string> "default_light" </string>
+							<bool> True </bool>
+							<string> "viewport_mode" </string>
+							<int> 1 </int>
+							<string> "ambient_light_color" </string>
+							<color> 0.15, 0.15, 0.15, 1 </color>
+							<string> "show_grid" </string>
+							<bool> True </bool>
+							<string> "znear" </string>
+							<real> 0.1 </real>
+							<string> "show_origin" </string>
+							<bool> True </bool>
+							<string> "deflight_rot_x" </string>
+							<real> 0.942478 </real>
+							<string> "default_srgb" </string>
+							<bool> True </bool>
+						</dictionary>
+					</dictionary>
+					<string> "__editor_run_settings__" </string>
+					<dictionary  shared="false">
+						<string> "custom_args" </string>
+						<string> "-l $scene" </string>
+						<string> "run_mode" </string>
+						<int> 0 </int>
+					</dictionary>
+					<string> "__editor_plugin_screen__" </string>
+					<string> "2D" </string>
+				</dictionary>
+				<resource  resource_type="PackedScene" path="res://player/az.xml">  </resource>
+				<transform> -1, 0, -3.25841e-07, 0, 1, -0, 3.25841e-07, 0, -1, -7.23306, 1.59104, -10.0589 </transform>
+				<dictionary  shared="false">
+					<string> "_editor_collapsed" </string>
+					<bool> True </bool>
+					<string> "__editor_plugin_states__" </string>
+					<dictionary  shared="false">
+						<string> "Script" </string>
+						<dictionary  shared="false">
+							<string> "current" </string>
+							<int> 0 </int>
+							<string> "sources" </string>
+							<array  len="2" shared="false">
+								<string> "res://scripts/player.gd" </string>
+								<string> "res://scripts/follow_camera.gd" </string>
+							</array>
+						</dictionary>
+						<string> "2D" </string>
+						<dictionary  shared="false">
+							<string> "pixel_snap" </string>
+							<bool> False </bool>
+							<string> "zoom" </string>
+							<real> 0.598737 </real>
+							<string> "use_snap" </string>
+							<bool> False </bool>
+							<string> "ofs" </string>
+							<vector2> -570.842, -440.877 </vector2>
+							<string> "snap" </string>
+							<int> 10 </int>
+						</dictionary>
+						<string> "3D" </string>
+						<dictionary  shared="false">
+							<string> "deflight_rot_y" </string>
+							<real> 0.628319 </real>
+							<string> "zfar" </string>
+							<real> 500 </real>
+							<string> "fov" </string>
+							<real> 45 </real>
+							<string> "viewports" </string>
+							<array  len="4" shared="false">
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 5.078494 </real>
+									<string> "x_rot" </string>
+									<real> 0.225 </real>
+									<string> "y_rot" </string>
+									<real> 11.341466 </real>
+									<string> "listener" </string>
+									<bool> True </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0.384388, 1.82821, -0.0933053 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 1.21582, 2.08655, -0.129327 </vector3>
+								</dictionary>
+							</array>
+							<string> "default_light" </string>
+							<bool> True </bool>
+							<string> "viewport_mode" </string>
+							<int> 1 </int>
+							<string> "ambient_light_color" </string>
+							<color> 0.15, 0.15, 0.15, 1 </color>
+							<string> "show_grid" </string>
+							<bool> True </bool>
+							<string> "znear" </string>
+							<real> 0.1 </real>
+							<string> "show_origin" </string>
+							<bool> True </bool>
+							<string> "deflight_rot_x" </string>
+							<real> 0.942478 </real>
+							<string> "default_srgb" </string>
+							<bool> False </bool>
+						</dictionary>
+					</dictionary>
+					<string> "__editor_show_subtree" </string>
+					<bool> True </bool>
+					<string> "__editor_run_settings__" </string>
+					<dictionary  shared="false">
+						<string> "custom_args" </string>
+						<string> "-l $scene" </string>
+						<string> "run_mode" </string>
+						<int> 0 </int>
+					</dictionary>
+					<string> "__editor_plugin_screen__" </string>
+					<string> "3D" </string>
+				</dictionary>
+				<resource  resource_type="Environment" path="local://1">  </resource>
+				<int> 1 </int>
+				<real> 0 </real>
+				<node_path> ".." </node_path>
+				<resource  resource_type="Animation" path="local://2">  </resource>
+				<real> 1 </real>
+				<array  len="0" shared="false">
+				</array>
+				<string> "" </string>
+				<bool> False </bool>
+				<resource  resource_type="Shape" path="local://3">  </resource>
+				<transform> 0.999882, -1.74798e-07, -0.768218, -1.72498e-07, -1, 7.5489e-06, -0.0153643, -1.4831e-07, -49.9941, -2.3185, 1.34401, -52.4337 </transform>
+				<vector3> 0, 0, 0 </vector3>
+				<node_path> "rock_002" </node_path>
+				<transform> 0.214064, 0.0262843, 0.976466, 0.202513, 0.976725, -0.0706867, -0.955597, 0.212879, 0.203758, 47.3569, -50.4227, -281.94 </transform>
+				<transform> 0.214064, 0.0262843, 0.976466, 0.202513, 0.976725, -0.0706867, -0.955597, 0.212879, 0.203758, -9.68069, -2.27449, -18.6713 </transform>
+				<resource  resource_type="Material" path="local://4">  </resource>
+				<int> 0 </int>
+				<resource  resource_type="Mesh" path="local://5">  </resource>
+				<transform> 0.214064, 0.0262844, 0.976466, 0.202513, 0.976725, -0.0706869, -0.955597, 0.212878, 0.203759, -13.9258, -2.1222, -18.7486 </transform>
+				<resource  resource_type="Material" path="local://6">  </resource>
+				<node_path> "rock_025" </node_path>
+				<transform> 1.00695, 0, -0.616667, 0, 1.18078, 0, 0.616667, 0, 1.00695, -5.75743, -26.7528, -245.76 </transform>
+				<transform> 5.51991, 1.0166e-06, -3.38046, -2.82908, -3.543, -4.61957, -1.85035, 5.41705, -3.02141, 14.4127, 5.06178, -144.487 </transform>
+				<resource name=""></resource>				<resource  resource_type="Mesh" path="local://7">  </resource>
+				<dictionary  shared="false">
+					<string> "_editor_collapsed" </string>
+					<bool> True </bool>
+				</dictionary>
+				<resource  resource_type="Shape" path="local://8">  </resource>
+				<transform> 5.36373, 3.61336, -0.266465, 2.75329, -3.75553, 4.49583, 2.35513, -3.83887, -4.64903, -23.728, -0.682497, -141.261 </transform>
+				<dictionary  shared="false">
+					<string> "_editor_collapsed" </string>
+					<bool> True </bool>
+				</dictionary>
+				<resource  resource_type="Shape" path="local://9">  </resource>
+				<transform> 0.214825, 0.0263778, 0.979935, 0.203232, 0.980195, -0.070938, -0.958992, 0.213635, 0.204483, -13.9258, -2.1222, -27.2442 </transform>
+				<resource  resource_type="Material" path="local://10">  </resource>
+				<dictionary  shared="false">
+					<string> "_editor_collapsed" </string>
+					<bool> True </bool>
+				</dictionary>
+				<resource  resource_type="PackedScene" path="res://chars/sui.xml">  </resource>
+				<transform> -0.493663, 0, -0.869653, 0, 1, 0, 0.869653, 0, -0.493663, -1.69945, 0.226822, -44.1461 </transform>
+				<dictionary  shared="false">
+					<string> "_editor_collapsed" </string>
+					<bool> True </bool>
+					<string> "__editor_plugin_states__" </string>
+					<dictionary  shared="false">
+						<string> "2D" </string>
+						<dictionary  shared="false">
+							<string> "pixel_snap" </string>
+							<bool> False </bool>
+							<string> "zoom" </string>
+							<real> 1 </real>
+							<string> "use_snap" </string>
+							<bool> False </bool>
+							<string> "ofs" </string>
+							<vector2> -14, -10 </vector2>
+							<string> "snap" </string>
+							<int> 10 </int>
+						</dictionary>
+						<string> "3D" </string>
+						<dictionary  shared="false">
+							<string> "viewports" </string>
+							<array  len="4" shared="false">
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 7.220841 </real>
+									<string> "x_rot" </string>
+									<real> 0.25 </real>
+									<string> "y_rot" </string>
+									<real> -0.8875 </real>
+									<string> "listener" </string>
+									<bool> True </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0.0054514, 1.90589, -0.276307 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+							</array>
+							<string> "zfar" </string>
+							<real> 500 </real>
+							<string> "deflight_rot_y" </string>
+							<real> 0.628319 </real>
+							<string> "fov" </string>
+							<real> 45 </real>
+							<string> "default_light" </string>
+							<bool> True </bool>
+							<string> "viewport_mode" </string>
+							<int> 1 </int>
+							<string> "ambient_light_color" </string>
+							<color> 0.15, 0.15, 0.15, 1 </color>
+							<string> "show_grid" </string>
+							<bool> True </bool>
+							<string> "znear" </string>
+							<real> 0.1 </real>
+							<string> "show_origin" </string>
+							<bool> True </bool>
+							<string> "deflight_rot_x" </string>
+							<real> 0.942478 </real>
+							<string> "default_srgb" </string>
+							<bool> True </bool>
+						</dictionary>
+					</dictionary>
+					<string> "__editor_show_subtree" </string>
+					<bool> True </bool>
+					<string> "__editor_run_settings__" </string>
+					<dictionary  shared="false">
+						<string> "custom_args" </string>
+						<string> "-l $scene" </string>
+						<string> "run_mode" </string>
+						<int> 0 </int>
+					</dictionary>
+					<string> "__editor_plugin_screen__" </string>
+					<string> "3D" </string>
+				</dictionary>
+				<transform> 0.367253, 0, 0.930121, 0, 1, 0, -0.930121, 0, 0.367253, -10.0895, 0.749775, -57.6201 </transform>
+				<dictionary  shared="false">
+					<string> "__editor_plugin_states__" </string>
+					<dictionary  shared="false">
+						<string> "2D" </string>
+						<dictionary  shared="false">
+							<string> "pixel_snap" </string>
+							<bool> False </bool>
+							<string> "zoom" </string>
+							<real> 1 </real>
+							<string> "use_snap" </string>
+							<bool> False </bool>
+							<string> "ofs" </string>
+							<vector2> -14, -10 </vector2>
+							<string> "snap" </string>
+							<int> 10 </int>
+						</dictionary>
+						<string> "3D" </string>
+						<dictionary  shared="false">
+							<string> "viewports" </string>
+							<array  len="4" shared="false">
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 7.220841 </real>
+									<string> "x_rot" </string>
+									<real> 0.25 </real>
+									<string> "y_rot" </string>
+									<real> -0.8875 </real>
+									<string> "listener" </string>
+									<bool> True </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0.0054514, 1.90589, -0.276307 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+								<dictionary  shared="false">
+									<string> "distance" </string>
+									<real> 4 </real>
+									<string> "x_rot" </string>
+									<real> 0 </real>
+									<string> "y_rot" </string>
+									<real> 0 </real>
+									<string> "listener" </string>
+									<bool> False </bool>
+									<string> "use_environment" </string>
+									<bool> False </bool>
+									<string> "use_orthogonal" </string>
+									<bool> False </bool>
+									<string> "pos" </string>
+									<vector3> 0, 0, 0 </vector3>
+								</dictionary>
+							</array>
+							<string> "zfar" </string>
+							<real> 500 </real>
+							<string> "deflight_rot_y" </string>
+							<real> 0.628319 </real>
+							<string> "fov" </string>
+							<real> 45 </real>
+							<string> "default_light" </string>
+							<bool> True </bool>
+							<string> "viewport_mode" </string>
+							<int> 1 </int>
+							<string> "ambient_light_color" </string>
+							<color> 0.15, 0.15, 0.15, 1 </color>
+							<string> "show_grid" </string>
+							<bool> True </bool>
+							<string> "znear" </string>
+							<real> 0.1 </real>
+							<string> "show_origin" </string>
+							<bool> True </bool>
+							<string> "deflight_rot_x" </string>
+							<real> 0.942478 </real>
+							<string> "default_srgb" </string>
+							<bool> True </bool>
+						</dictionary>
+					</dictionary>
+					<string> "__editor_run_settings__" </string>
+					<dictionary  shared="false">
+						<string> "custom_args" </string>
+						<string> "-l $scene" </string>
+						<string> "run_mode" </string>
+						<int> 0 </int>
+					</dictionary>
+					<string> "__editor_plugin_screen__" </string>
+					<string> "3D" </string>
+				</dictionary>
+				<transform> 0.279671, 0, 0.960096, 0, 1, 0, -0.960096, 0, 0.279671, -4.09112, 0.279664, -67.5144 </transform>
+				<dictionary  shared="false">
+					<string> "_editor_collapsed" </string>
+					<bool> True </bool>
+				</dictionary>
+				<node_path> "Lamp" </node_path>
+				<transform> -0.946896, -0.265153, -0.181885, -0.320445, 0.824839, 0.465785, 0.0265221, 0.499334, -0.866004, 9.82015, 82.8222, -463.983 </transform>
+				<transform> 0.252829, 0.330115, -0.909452, 0.0543719, -0.943352, -0.327306, -0.965981, 0.0333035, -0.256455, 12.1259, 54.2619, -471.767 </transform>
+				<real> 0.2 </real>
+				<color> 0.341176, 0.552941, 0.658824, 0.305882 </color>
+				<color> 0.461705, 0.386881, 0, 1 </color>
+				<real> 0.05 </real>
+				<real> 10 </real>
+				<real> 0.51 </real>
+				<real> 2 </real>
+				<transform> 0.631975, -0.396961, -0.665606, -0.026003, -0.869234, 0.493716, -0.774552, -0.294708, -0.559656, -23.4775, 54.2619, -333.001 </transform>
+				<real> 0.1 </real>
+				<color> 0.458824, 0.384314, 0, 1 </color>
+				<color> 0.337255, 0.54902, 0.658824, 0.301961 </color>
+				<resource  resource_type="Animation" path="local://11">  </resource>
+			</array>
+			<string> "nodes" </string>
+			<int_array  len="643"> 				-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 0, 0, 6, 6, 4, 2, 2, 5, 5, 6, 0, 0, 0, 8, 7, 7, 4, 2, 0, 3, 1, 9, 8, 5, 9, 0, 0, 0, 11, 10, -1, 4, 2, 5, 3, 1, 4, 2, 12, 10, 0, 3, 0, 14, 13, -1, 9, 2, 5, 15, 11, 16, 12, 17, 13, 18, 14, 19, 2, 20, 15, 21, 16, 22, 17, 0, 0, 0, 1, 23, -1, 3, 2, 5, 3, 1, 4, 2, 0, 5, 0, 24, 24, -1, 14, 2, 5, 3, 1, 4, 2, 25, 18, 26, 18, 27, 11, 28, 19, 29, 20, 30, 2, 31, 11, 32, 15, 33, 12, 34, 21, 35, 21, 0, 6, 0, 36, 36, -1, 6, 2, 5, 3, 1, 9, 20, 4, 2, 37, 19, 38, 2, 0, 0, 0, 1, 39, -1, 3, 2, 5, 3, 1, 4, 2, 0, 8, 0, 41, 40, -1, 20, 2, 22, 3, 23, 9, 24, 4, 2, 31, 11, 42, 2, 43, 25, 44, 2, 45, 2, 46, 12, 47, 12, 48, 12, 49, 18, 50, 18, 51, 18, 52, 18, 53, 2, 54, 26, 55, 27, 56, 13, 1, 57, 8, 0, 41, 58, -1, 20, 2, 22, 3, 23, 9, 28, 4, 2, 31, 11, 42, 2, 43, 29, 44, 2, 45, 2, 46, 12, 47, 12, 48, 12, 49, 18, 50, 18, 51, 18, 52, 18, 53, 2, 54, 26, 55, 27, 56, 13, 1, 59, 8, 0, 41, 60, -1, 21, 2, 30, 3, 31, 9, 32, 4, 2, 31, 11, 42, 2, 43, 33, 44, 2, 45, 2, 46, 12, 47, 12, 48, 12, 49, 18, 50, 18, 51, 18, 52, 18, 53, 2, 54, 26, 55, 34, 56, 13, 5, 35, 0, 11, 0, 36, 36, -1, 5, 2, 5, 3, 1, 4, 2, 37, 36, 38, 2, 0, 8, 0, 41, 61, -1, 21, 2, 30, 3, 31, 9, 37, 4, 2, 31, 11, 42, 2, 43, 33, 44, 2, 45, 2, 46, 12, 47, 12, 48, 12, 49, 18, 50, 18, 51, 18, 52, 18, 53, 2, 54, 26, 55, 34, 56, 13, 5, 38, 0, 13, 0, 36, 36, -1, 5, 2, 5, 3, 1, 4, 2, 37, 39, 38, 2, 0, 8, 0, 41, 62, -1, 20, 2, 22, 3, 23, 9, 40, 4, 2, 31, 11, 42, 2, 43, 41, 44, 2, 45, 2, 46, 12, 47, 12, 48, 12, 49, 18, 50, 18, 51, 18, 52, 18, 53, 2, 54, 26, 55, 27, 56, 13, 1, 59, 0, 0, 1, 63, -1, 4, 2, 5, 3, 1, 4, 2, 5, 42, 0, 16, 0, 8, 64, 43, 4, 2, 0, 3, 1, 9, 44, 5, 45, 0, 16, 0, 8, 65, 43, 4, 2, 0, 3, 1, 9, 46, 5, 47, 0, 16, 0, 8, 66, 43, 4, 2, 0, 3, 1, 9, 48, 5, 47, 0, 0, 0, 1, 67, -1, 4, 2, 5, 3, 1, 4, 2, 5, 49, 0, 20, 0, 69, 68, -1, 23, 2, 50, 3, 51, 9, 52, 4, 2, 31, 11, 70, 2, 71, 18, 72, 26, 73, 53, 74, 54, 75, 55, 76, 2, 77, 12, 78, 56, 79, 12, 80, 57, 81, 12, 82, 33, 83, 26, 84, 26, 85, 12, 86, 58, 87, 59, 0, 20, 0, 69, 88, -1, 23, 2, 50, 3, 51, 9, 60, 4, 2, 31, 11, 70, 2, 71, 18, 72, 26, 73, 61, 74, 62, 75, 63, 76, 2, 77, 12, 78, 56, 79, 12, 80, 57, 81, 12, 82, 33, 83, 26, 84, 26, 85, 12, 86, 58, 87, 59, 0, 0, 0, 14, 89, -1, 9, 2, 5, 15, 11, 16, 12, 17, 13, 18, 64, 19, 2, 20, 15, 21, 16, 22, 17, 0 </int_array>
+			<string> "conns" </string>
+			<int_array  len="0"> 				 </int_array>
+		</dictionary>
+
+	</main_resource>
+</resource_file>
