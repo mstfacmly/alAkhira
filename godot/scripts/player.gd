@@ -2,34 +2,41 @@
 extends RigidBody
 
 
-const ANIM_FLOOR = 0
-const ANIM_SPRINT = 1
-const ANIM_AIR_UP = 2
-const ANIM_AIR_DOWN = 3
-const RUN_AIR_UP = 4
-const RUN_AIR_DOWN = 5
+const FLOOR = 0
+const WALK = 1
+const SPRINT = 2
+const AIR_UP = 3
+const AIR_DOWN = 4
+const RUN_AIR_UP = 5
+const RUN_AIR_DOWN = 6
 
 const MAX_SLOPE_ANGLE = 63
-
 
 #const CHAR_SCALE = Vector3(1,1,1)
 
 var facing_dir = Vector3(0, 0, -1)
 var movement_dir = Vector3()
-var jumping = false
+var jumping = false 
 
 var turn_speed = 80
 var keep_jump_inertia = true
-var air_idle_deaccel = true
-var max_speed = 11.0
-var accel = 21.0
-var deaccel = 14.0
+var air_idle_deaccel = false
+var max_speed = 13.0
+var run_speed = 11.0
+var walk_speed = 4.5
+var accel = 17.0
+var deaccel = 27.7
 var sharp_turn_threshhold = 100
 var hspeed = 0
 
 var on_floor = false
 
+#var ls_val = JS.get_analog("ls")
+
 var JS
+var joy_num
+var axis_value
+var cur_joy
 
 #var prev_shoot = false
 
@@ -66,14 +73,18 @@ func _integrate_forces(state):
 	
 	lv += delta * g #apply gravity
 
-	var anim = ANIM_FLOOR
+	var anim = FLOOR
 
 	var up = -g.normalized() #(up is against gravity)
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
 	var hv = lv - (up*vv) # horizontal velocity
+	
+	print(hv.length())
 
 	if hv.length() >= 11.555 :
-		anim = ANIM_SPRINT
+		anim = SPRINT
+	elif hv.length() <= 5.555 and hv.length() >= 1 :
+		anim = WALK
 	else:
 		pass
 
@@ -90,19 +101,20 @@ func _integrate_forces(state):
 	
 	var cam_xform = get_node("target/camera").get_global_transform()
 
-	if (JS.get_digital("ls_up") or Input.is_action_pressed("move_forward")):
-		dir+=-cam_xform.basis[2]
-	if (JS.get_digital("ls_down") or Input.is_action_pressed("move_backwards")):
-		dir+=cam_xform.basis[2]
-	if (JS.get_digital("ls_left") or Input.is_action_pressed("move_left")):
-		dir+=-cam_xform.basis[0]
-	if (JS.get_digital("ls_right") or Input.is_action_pressed("move_right")):
-		dir+=cam_xform.basis[0]
+# Composite axis on Joystick create errors in movement, will need to be fixed later
 
+	if (JS.get_analog("ls_up") or Input.is_action_pressed("move_forward")):
+		dir+=-cam_xform.basis[2]
+	if (JS.get_analog("ls_down") or Input.is_action_pressed("move_backwards")):
+		dir+=cam_xform.basis[2]
+	if (JS.get_analog("ls_left") or Input.is_action_pressed("move_left")):
+		dir+=-cam_xform.basis[0]
+	if (JS.get_analog("ls_right") or Input.is_action_pressed("move_right")):
+		dir+=cam_xform.basis[0]
+	
 	var jump_attempt = (JS.get_digital("action_1")) or Input.is_action_pressed("jump")
 
 	var target_dir = (dir - up*dir.dot(up)).normalized()
-	
 	
 	if state.get_contact_count() == 0 :
 		floor_velocity = last_floor_velocity
@@ -139,8 +151,8 @@ func _integrate_forces(state):
 			else :
 				hdir = target_dir
 				
-			if hspeed < max_speed :
-				hspeed += accel*delta
+			if hspeed < run_speed :
+				hspeed += accel * delta
 		else : #sharp turn OR stop moving
 			hspeed =  max(hspeed-deaccel*delta, 0)
 
@@ -160,17 +172,17 @@ func _integrate_forces(state):
 			if hspeed > 9 :
 				anim = RUN_AIR_UP
 			else :
-				anim = ANIM_AIR_UP
+				anim = AIR_UP
 		elif vv < 0 :
 			if hspeed >= 10 and vv < -g.length() / 2:
 				anim = RUN_AIR_DOWN
 			else :
-				anim = ANIM_AIR_DOWN
+				anim = AIR_DOWN
 	
 		if dir.length() > 0.1 :
 			hv += target_dir * (accel * 0.2) * delta
-			if hv.length() > max_speed :
-				hv = hv.normalized() * max_speed
+			if hv.length() > run_speed :
+				hv = hv.normalized() * run_speed
 		else :
 			hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 			hv = hdir * hspeed
@@ -205,7 +217,7 @@ func _integrate_forces(state):
 	state.set_linear_velocity(lv)
 	
 	if (onfloor):
-		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / max_speed)
+		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / run_speed)
 	else:
 		get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state",true)
 
@@ -223,9 +235,37 @@ func footStep():
 	var rand = rand_range( 0, sounds.size() )
 	get_node("SamplePlayer").play( sounds[rand] ) # play random one
 
+func _process(delta):
+	var x
+	var y
+	var pi = 3.1415
+
+	x = JS.get_analog("ls_hor")
+	x = cos(x)# * pi / 180)
+	x = abs(x)
+
+	y = JS.get_analog("ls_vert")
+	y = cos(y)# * pi / 180)
+	y = abs(y)
+
+	axis_value = sin(x + y) * pi / 360 * 100
+	axis_value = abs(axis_value)
+
+#	if y >= 0.9 or x >=0.9:
+	if axis_value >= 0.87:
+		run_speed = 11
+	else:
+		run_speed = 4.5
+
+#	print('X',x)
+#	print('Y',y)
+	print("AXIS",axis_value)
+#	print(run_speed)
+
 func _ready():
 	# Initalization here
 	get_node("AnimationTreePlayer").set_active(true)
+	set_process(true)
 	JS = get_node("/root/SUTjoystick")
 
 	pass

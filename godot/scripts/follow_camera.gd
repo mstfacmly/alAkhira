@@ -15,7 +15,7 @@ export var autoturn_speed=25
 var max_height = 7.0
 var min_height = -3
 
-var mouseposlast = Input.get_mouse_pos()
+var mouseposlast = Input.get_mouse_speed()
 var orbitrate = 720.0						#camera orbit rate around target
 var turn = Vector2(0.0,0.0)
 
@@ -29,9 +29,15 @@ var JS
 func _input(ev):
 	# If the mouse has been moved
 	if (ev.type==InputEvent.MOUSE_MOTION):
+		#var mouseposlast = get_viewport().get_mouse_pos()
 		var mousedelta = (mouseposlast - ev.pos)	# calculate delta change from last mouse movement
 		turn += mousedelta / orbitrate				# scale mouse delta to useful value
 		mouseposlast = ev.pos						# record last mouse pos
+		
+func _process(delta):
+	#joystick control
+	turn.y -= JS.get_analog("rs_ver") * distance / (orbitrate * 1.5)
+	turn.x -= JS.get_analog("rs_hor") * distance / (orbitrate / 2.5)
 
 func recalculate_camera():
 	var distance = pos.distance_squared_to(target) * 2
@@ -92,8 +98,8 @@ func _fixed_process(dt):
 	set_transform(t)
 
 	#joystick control
-	turn.y -= JS.get_analog("rs_ver") * distance / (orbitrate * 1.5)
-	turn.x -= JS.get_analog("rs_hor") * distance / (orbitrate / 2.5)
+#	turn.y -= JS.get_analog("rs_ver") * distance / (orbitrate * 1.5)
+#	turn.x -= JS.get_analog("rs_hor") * distance / (orbitrate / 2.5)
 
 func _ready():
 	target = get_parent().get_global_transform().origin
@@ -109,6 +115,7 @@ func _ready():
 		else:
 			node=node.get_parent()
 	# Initalization here
+	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
 	Input.set_mouse_mode(2)

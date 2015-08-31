@@ -1,37 +1,14 @@
-<<<<<<< HEAD
-=======
 blender/
 music/
 reference/
 text/
->>>>>>> 9816ee4... tweak spi values, peek button assign
+exports/
 *.blend1
 *.blend2
-<<<<<<< HEAD
-ignore
-<<<<<<< HEAD
-.fscache
-~*
-=======
-*.fscache
-~*
-.*
-ignore
-*.fscache
->>>>>>> fb0a6a7... switch _phys and _spi with Z and X keys
-=======
 ~*
 .*
 ignore
 *.fscache
 *.dae
 *.pck
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> ae16c95... collission and uv tweaks
-=======
 *.orig
->>>>>>> 4d645f0... experiment with slopes
-=======
-*.orig
->>>>>>> 80ac821... tweaked forest params
