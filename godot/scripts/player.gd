@@ -79,7 +79,7 @@ func _integrate_forces(state):
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
 	var hv = lv - (up*vv) # horizontal velocity
 	
-	print(hv.length())
+#	print(hv.length())
 
 	if hv.length() >= 11.555 :
 		anim = SPRINT
@@ -252,14 +252,14 @@ func _process(delta):
 	axis_value = abs(axis_value)
 
 #	if y >= 0.9 or x >=0.9:
-	if axis_value >= 0.87:
-		run_speed = 11
+	if axis_value <= 0.87:
+		run_speed = 2.72
 	else:
-		run_speed = 4.5
+		run_speed = 11
 
 #	print('X',x)
 #	print('Y',y)
-	print("AXIS",axis_value)
+#	print("AXIS",axis_value)
 #	print(run_speed)
 
 func _ready():
