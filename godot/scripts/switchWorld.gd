@@ -135,6 +135,7 @@ func env_transition(speed):
 			var animList = a.get_animation_list()
 			for b in animList:
 				a.play(b,  -1, speed, (speed < 0))
+			print("PhysToSpir found")
 		else:
 			a.play('PhysToSpir', -1, speed, (speed < 0))
 
