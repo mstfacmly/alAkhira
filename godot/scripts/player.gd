@@ -23,10 +23,9 @@ var keep_jump_inertia = true
 var air_idle_deaccel = false
 var max_speed = 13.0
 var run_speed = 11.0
-var walk_speed = 4.5
-var accel = 17.0
-var deaccel = 27.7
-var sharp_turn_threshhold = 100
+var accel = 13.33
+var deaccel = 24.0
+var sharp_turn_threshhold = 80
 var hspeed = 0
 
 var on_floor = false
@@ -77,13 +76,13 @@ func _integrate_forces(state):
 
 	var up = -g.normalized() #(up is against gravity)
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
-	var hv = lv - (up*vv) # horizontal velocity
+	var hv = lv - (up * vv) # horizontal velocity
 	
 #	print(hv.length())
 # hv calculations might need to be moved to func _process
 	if hv.length() >= 11.555 :
 		anim = SPRINT
-	elif hv.length() <= 5.555 and hv.length() >= 1 :
+	elif hv.length() <= 10.757 and hv.length() >= 1 :
 		anim = WALK
 	else:
 		pass
@@ -210,6 +209,7 @@ func _integrate_forces(state):
 	else :
 		lv =  hv + up*vv
 
+#	print(run_speed)
 
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
@@ -251,16 +251,17 @@ func _process(delta):
 	axis_value = abs(axis_value)
 
 #	if y >= 0.9 or x >=0.9:
-	if axis_value < 0.98 :
+	if axis_value < 0.976 :
+		hspeed = max(hspeed - (deaccel * 0.33) * delta, 0)
 		run_speed = 3.32
-	elif axis_value > 0.98 :
+	elif axis_value > 0.989 :
 		run_speed = 11
 	else:
 		pass
 		
 #	print('X',x)
 #	print('Y',y)
-	print(axis_value)
+#	print(axis_value)
 #	print(run_speed)
 
 func _ready():
