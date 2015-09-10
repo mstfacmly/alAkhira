@@ -248,18 +248,18 @@ func _process(delta):
 	y = cos(y)# * pi / 180)
 	y = abs(y)
 
-	axis_value = sin(x + y) * pi / 360 * 100
+	axis_value = sin(x + y)# * pi / 360 * 100
 	axis_value = abs(axis_value)
 
 #	if y >= 0.9 or x >=0.9:
-	if axis_value <= 0.87:
-		run_speed = 2.72
+	if axis_value <= 0.98:
+		run_speed = 3.32
 	else:
 		run_speed = 11
 
 #	print('X',x)
 #	print('Y',y)
-#	print("AXIS",axis_value)
+	print(axis_value)
 #	print(run_speed)
 
 func _ready():
