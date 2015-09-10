@@ -80,7 +80,7 @@ func _integrate_forces(state):
 	var hv = lv - (up*vv) # horizontal velocity
 	
 #	print(hv.length())
-
+# hv calculations might need to be moved to func _process
 	if hv.length() >= 11.555 :
 		anim = SPRINT
 	elif hv.length() <= 5.555 and hv.length() >= 1 :
@@ -100,8 +100,6 @@ func _integrate_forces(state):
 	var dir = Vector3() #where does the player intend to walk to
 	
 	var cam_xform = get_node("target/camera").get_global_transform()
-
-# Composite axis on Joystick create errors in movement, will need to be fixed later
 
 	if (JS.get_analog("ls_up") or Input.is_action_pressed("move_forward")):
 		dir+=-cam_xform.basis[2]
@@ -229,6 +227,7 @@ func _integrate_forces(state):
 	if (JS.get_digital("back")) or (Input.is_action_pressed("ui_cancel")):
 		OS.get_main_loop().quit()
 		
+		
 func footStep():
 	randomize() # otherwise it might be the same each program run
 	var sounds = ["step1","step2","step3"] # your sounds names
@@ -252,11 +251,13 @@ func _process(delta):
 	axis_value = abs(axis_value)
 
 #	if y >= 0.9 or x >=0.9:
-	if axis_value <= 0.98:
+	if axis_value < 0.98 :
 		run_speed = 3.32
-	else:
+	elif axis_value > 0.98 :
 		run_speed = 11
-
+	else:
+		pass
+		
 #	print('X',x)
 #	print('Y',y)
 	print(axis_value)
