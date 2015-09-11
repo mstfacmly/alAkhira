@@ -24,7 +24,7 @@ var air_idle_deaccel = false
 var max_speed = 13.0
 var run_speed = 11.0
 var accel = 13.33
-var deaccel = 24.0
+var deaccel = 27.0
 var sharp_turn_threshhold = 80
 var hspeed = 0
 
@@ -251,7 +251,7 @@ func _process(delta):
 	axis_value = abs(axis_value)
 
 #	if y >= 0.9 or x >=0.9:
-	if axis_value < 0.976 :
+	if axis_value != 0.98 and axis_value < 0.976 :
 		hspeed = max(hspeed - (deaccel * 0.33) * delta, 0)
 		run_speed = 3.32
 	elif axis_value > 0.989 :
@@ -261,7 +261,7 @@ func _process(delta):
 		
 #	print('X',x)
 #	print('Y',y)
-#	print(axis_value)
+	print(axis_value)
 #	print(run_speed)
 
 func _ready():
