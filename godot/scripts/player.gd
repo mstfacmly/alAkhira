@@ -250,18 +250,15 @@ func _process(delta):
 	axis_value = sin(x + y)# * pi / 360 * 100
 	axis_value = abs(axis_value)
 
-#	if y >= 0.9 or x >=0.9:
-	if axis_value != 0.98 and axis_value < 0.976 :
-		hspeed = max(hspeed - (deaccel * 0.33) * delta, 0)
+	if axis_value < 0.9713 :
+		hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 		run_speed = 3.32
-	elif axis_value > 0.989 :
+	else :
 		run_speed = 11
-	else:
-		pass
-		
+
 #	print('X',x)
 #	print('Y',y)
-	print(axis_value)
+#	print(axis_value)
 #	print(run_speed)
 
 func _ready():
