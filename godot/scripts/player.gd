@@ -256,8 +256,8 @@ func _process(delta):
 	else :
 		run_speed = 11
 
-#	print('X',x)
-#	print('Y',y)
+	print('X',x)
+	print('Y',y)
 #	print(axis_value)
 #	print(run_speed)
 
