@@ -237,28 +237,27 @@ func footStep():
 func _process(delta):
 	var x
 	var y
-	var pi = 3.1415
 
-	x = JS.get_analog("ls_hor")
-	x = cos(x)# * pi / 180)
-	x = abs(x)
+	x = abs(JS.get_analog("ls_hor"))
+#	x = cos(x)# * pi / 180)
+#	x = abs(x)
 
-	y = JS.get_analog("ls_vert")
-	y = cos(y)# * pi / 180)
-	y = abs(y)
+	y = abs(JS.get_analog("ls_vert"))
+#	y = cos(y)# * pi / 180)
+#	y = abs(y)
 
-	axis_value = sin(x + y)# * pi / 360 * 100
-	axis_value = abs(axis_value)
+	axis_value = atan(x + y)# * PI / 360 * 100
+#	axis_value = abs(axis_value)
 
-	if axis_value < 0.9713 :
+	if axis_value < 0.713 :
 		hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 		run_speed = 3.32
 	else :
 		run_speed = 11
 
-	print('X',x)
-	print('Y',y)
-#	print(axis_value)
+#	print('X',x)
+#	print('Y',y)
+	print(axis_value)
 #	print(run_speed)
 
 func _ready():
