@@ -3,29 +3,29 @@
 	<resource type="FixedMaterial" path="local://1">
 		<string name="resource/name"> "Material.001" </string>
 		<bool name="flags/visible"> True </bool>
-		<bool name="flags/double_sided"> True </bool>
+		<bool name="flags/double_sided"> False </bool>
 		<bool name="flags/invert_faces"> False </bool>
 		<bool name="flags/unshaded"> False </bool>
 		<bool name="flags/on_top"> False </bool>
 		<bool name="flags/lightmap_on_uv2"> True </bool>
 		<bool name="flags/colarray_is_srgb"> True </bool>
-		<int name="params/blend_mode"> 0 </int>
+		<int name="params/blend_mode"> 1 </int>
 		<int name="params/depth_draw"> 1 </int>
 		<real name="params/line_width"> 0 </real>
-		<bool name="fixed_flags/use_alpha"> False </bool>
+		<bool name="fixed_flags/use_alpha"> True </bool>
 		<bool name="fixed_flags/use_color_array"> False </bool>
 		<bool name="fixed_flags/use_point_size"> False </bool>
 		<bool name="fixed_flags/discard_alpha"> False </bool>
 		<bool name="fixed_flags/use_xy_normalmap"> False </bool>
 		<color name="params/diffuse"> 0.64, 0.64, 0.64, 1 </color>
-		<color name="params/specular"> 0.5, 0.5, 0.5, 1 </color>
-		<color name="params/emission"> 0, 0, 0, 1 </color>
+		<color name="params/specular"> 0.0666667, 0.0666667, 0.0666667, 1 </color>
+		<color name="params/emission"> 0.6, 0.6, 0.6, 1 </color>
 		<real name="params/specular_exp"> 50 </real>
 		<real name="params/detail_mix"> 1 </real>
 		<int name="params/normal_depth"> 1 </int>
-		<int name="params/shader"> 0 </int>
-		<real name="params/shader_param"> 0.5 </real>
-		<int name="params/glow"> 0 </int>
+		<int name="params/shader"> 3 </int>
+		<real name="params/shader_param"> 0.8 </real>
+		<real name="params/glow"> 8 </real>
 		<real name="params/point_size"> 1 </real>
 		<transform name="uv_xform"> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
 		<resource name="textures/diffuse"></resource>		<int name="textures/diffuse_tc"> 0 </int>
@@ -61,7 +61,7 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "name" </string>
-			<string> "Material.001" </string>
+			<string> "bridge_spi" </string>
 			<string> "primitive" </string>
 			<int> 4 </int>
 		</dictionary>
@@ -124,7 +124,7 @@
 			<string> "node_count" </string>
 			<int> 4 </int>
 			<string> "nodes" </string>
-			<int_array  len="114"> 				-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 0, 0, 7, 6, -1, 20, 2, 4, 3, 5, 8, 5, 4, 2, 9, 6, 10, 2, 11, 7, 12, 2, 13, 2, 14, 8, 15, 8, 16, 8, 17, 9, 18, 9, 19, 9, 20, 9, 21, 2, 22, 10, 23, 11, 24, 12, 0, 1, 0, 26, 25, -1, 14, 2, 13, 3, 1, 4, 2, 27, 2, 28, 9, 29, 6, 30, 14, 31, 1, 32, 9, 9, 6, 33, 15, 34, 8, 35, 16, 36, 16, 0, 2, 0, 38, 37, -1, 5, 2, 13, 3, 1, 4, 2, 37, 14, 39, 9, 0 </int_array>
+			<int_array  len="114"> 				-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 0, 0, 7, 6, -1, 20, 2, 4, 3, 5, 8, 5, 4, 2, 9, 6, 10, 2, 11, 7, 12, 8, 13, 8, 14, 9, 15, 9, 16, 9, 17, 8, 18, 8, 19, 8, 20, 8, 21, 2, 22, 10, 23, 11, 24, 12, 0, 1, 0, 26, 25, -1, 14, 2, 13, 3, 1, 4, 2, 27, 2, 28, 8, 29, 6, 30, 14, 31, 1, 32, 8, 9, 6, 33, 15, 34, 9, 35, 16, 36, 16, 0, 2, 0, 38, 37, -1, 5, 2, 13, 3, 1, 4, 2, 37, 14, 39, 8, 0 </int_array>
 			<string> "variants" </string>
 			<array  len="17" shared="false">
 				<node_path> "." </node_path>
@@ -194,9 +194,9 @@
 									<string> "use_orthogonal" </string>
 									<bool> False </bool>
 									<string> "x_rot" </string>
-									<real> 0.5125 </real>
+									<real> 0.475 </real>
 									<string> "y_rot" </string>
-									<real> 0.7875 </real>
+									<real> 2.0375 </real>
 								</dictionary>
 								<dictionary  shared="false">
 									<string> "distance" </string>
@@ -264,8 +264,8 @@
 				<node_path> "bridge_spi-col" </node_path>
 				<transform> 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38419e-07, 11.2462, 1.90735e-06 </transform>
 				<int> 1 </int>
-				<resource name=""></resource>				<real> 0 </real>
-				<bool> False </bool>
+				<resource name=""></resource>				<bool> False </bool>
+				<real> 0 </real>
 				<int> 0 </int>
 				<resource  resource_type="Mesh" path="local://2">  </resource>
 				<node_path> ".." </node_path>

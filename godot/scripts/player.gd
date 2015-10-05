@@ -21,16 +21,16 @@ var jumping = false
 var turn_speed = 80
 var keep_jump_inertia = true
 var air_idle_deaccel = false
-var max_speed = 13.0
-var run_speed = 11.0
+var max_speed = 11.0
+var sprint = 13.0
+var run = 11.0
+var walk = 3.32
 var accel = 13.33
 var deaccel = 27.0
 var sharp_turn_threshhold = 80
 var hspeed = 0
 
 var on_floor = false
-
-#var ls_val = JS.get_analog("ls")
 
 var JS
 var joy_num
@@ -78,11 +78,11 @@ func _integrate_forces(state):
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
 	var hv = lv - (up * vv) # horizontal velocity
 	
-#	print(hv.length())
-# hv calculations might need to be moved to func _process
+	print(hv.length())
+	# hv calculations might need to be moved to func _process
 	if hv.length() >= 11.555 :
 		anim = SPRINT
-	elif hv.length() <= 10.757 and hv.length() >= 1 :
+	elif hv.length() < 3.757 and hv.length() >= 0.01 :
 		anim = WALK
 	else:
 		pass
@@ -148,10 +148,10 @@ func _integrate_forces(state):
 			else :
 				hdir = target_dir
 				
-			if hspeed < run_speed :
+			if hspeed < max_speed :
 				hspeed += accel * delta
 		else : #sharp turn OR stop moving
-			hspeed =  max(hspeed-deaccel*delta, 0)
+			hspeed =  max(hspeed - deaccel * delta, 0)
 
 		hv = hdir * hspeed
 
@@ -178,8 +178,8 @@ func _integrate_forces(state):
 	
 		if dir.length() > 0.1 :
 			hv += target_dir * (accel * 0.2) * delta
-			if hv.length() > run_speed :
-				hv = hv.normalized() * run_speed
+			if hv.length() > max_speed :
+				hv = hv.normalized() * max_speed
 		else :
 			hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 			hv = hdir * hspeed
@@ -198,10 +198,10 @@ func _integrate_forces(state):
 		onfloor = false
 		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
 			lv += last_floor_velocity - up*last_floor_velocity.dot(up) 
-	elif onwall and jump_attempt : 
-		vv = g.length() / 2.486
-		hv = n * vv
-		onfloor = false
+#	elif onwall and jump_attempt : 
+#		vv = g.length() / 2.486
+#		hv = n * vv
+#		onfloor = false
 		
 	if onfloor :
 		lv = hv + up*floor_velocity.normalized().dot(up)*hspeed
@@ -209,13 +209,13 @@ func _integrate_forces(state):
 	else :
 		lv =  hv + up*vv
 
-#	print(run_speed)
+#	print(max_speed)
 
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
 	
 	if (onfloor):
-		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / run_speed)
+		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / max_speed)
 	else:
 		get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state",true)
 
@@ -250,15 +250,16 @@ func _process(delta):
 #	axis_value = abs(axis_value)
 
 	if axis_value < 0.713 :
-		hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
-		run_speed = 3.32
+		hspeed = max(hspeed - (deaccel * 0.3) * delta, 0)
+		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
+		max_speed = walk
 	else :
-		run_speed = 11
+		max_speed = run
 
 #	print('X',x)
 #	print('Y',y)
-	print(axis_value)
-#	print(run_speed)
+#	print(axis_value)
+#	print(max_speed)
 
 func _ready():
 	# Initalization here
