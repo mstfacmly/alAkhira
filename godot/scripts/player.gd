@@ -1,7 +1,7 @@
 
 extends RigidBody
 
-
+# Animation constants
 const FLOOR = 0
 const WALK = 1
 const SPRINT = 2
@@ -10,7 +10,7 @@ const AIR_DOWN = 4
 const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
 
-const MAX_SLOPE_ANGLE = 63
+const MAX_SLOPE_ANGLE = 30
 
 #const CHAR_SCALE = Vector3(1,1,1)
 
@@ -18,24 +18,25 @@ var facing_dir = Vector3(0, 0, -1)
 var movement_dir = Vector3()
 var jumping = false 
 
-var turn_speed = 80
+var turn_speed = 33
 var keep_jump_inertia = true
 var air_idle_deaccel = false
-var max_speed = 11.0
+var max_speed
 var sprint = 13.0
 var run = 11.0
 var walk = 3.32
 var accel = 13.33
 var deaccel = 27.0
-var sharp_turn_threshhold = 80
+var sharp_turn_threshhold = 120
 var hspeed = 0
 
 var on_floor = false
+var ledge_hanging = false
+var ledge_pos = get_node("near")
 
+# Joystick
 var JS
-var joy_num
 var axis_value
-var cur_joy
 
 #var prev_shoot = false
 
@@ -64,6 +65,14 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 	
+func body_enter_shape( body_id, body, body_shape, area_shape ):
+	if (body_id == "ledge") and (body_shape==0) and jumping and not on_floor: # and not state=="Ledge Hanging Right" and siding_left==true):
+		ledge_hanging = true
+		on_floor = false
+		ledge_pos.x = body.get_pos().x+20 #change the position to be correct
+#		ledge_pos.y=body.get_pos().y+38
+		ledge_pos.z = body.get_pos().z + 38
+	print(body)
 
 func _integrate_forces(state):
 	var lv = state.get_linear_velocity() # linear velocity
@@ -127,15 +136,15 @@ func _integrate_forces(state):
 						floor_velocity = n.reflect(target_dir) #follow the slope
 					onfloor = true
 					break
-				elif slope <= 90 :
-					onwall = true
+#				elif slope <= 90 :
+#					onwall = true
 			elif shape == 1 and not onfloor and on_floor : # slope_down
 				floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 1.01
 				if target_dir.length() > 0 :
 					floor_velocity = n.reflect(target_dir) #follow the slope
 				onfloor = true
 				break
-				
+			break
 	
 	# calculate new direction and speed
 	if onfloor :
@@ -184,12 +193,11 @@ func _integrate_forces(state):
 			hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 			hv = hdir * hspeed
 			
-			
 	if jumping : 
 		if not jump_attempt : #short jump
 			vv -= g.length() / 2.486 / 2.486 #3.14159
 			jumping = false
-		elif vv < 2.486 or onfloor or onwall: # fv, crashed or landed
+		elif vv < 2.486: # or onfloor or onwall: # fv, crashed or landed
 			jumping = false
 			
 	if onfloor and jump_attempt :
@@ -211,6 +219,10 @@ func _integrate_forces(state):
 
 #	print(max_speed)
 
+	if ledge_hanging == true:
+		lv == 0
+		hdir == Vector3(0,1,0)
+
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
 	
@@ -218,16 +230,14 @@ func _integrate_forces(state):
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / max_speed)
 	else:
 		get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state",true)
-
 	get_node("AnimationTreePlayer").transition_node_set_current("state",anim)
 	state.set_angular_velocity(Vector3())
-	
-	get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state", true)
+#	get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state", true)
 	
 	if (JS.get_digital("back")) or (Input.is_action_pressed("ui_cancel")):
 		OS.get_main_loop().quit()
-		
-		
+
+
 func footStep():
 	randomize() # otherwise it might be the same each program run
 	var sounds = ["step1","step2","step3"] # your sounds names
@@ -249,7 +259,7 @@ func _process(delta):
 	axis_value = atan(x + y)# * PI / 360 * 100
 #	axis_value = abs(axis_value)
 
-	if axis_value < 0.713 :
+	if axis_value < 0.713:
 		hspeed = max(hspeed - (deaccel * 0.3) * delta, 0)
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
 		max_speed = walk
