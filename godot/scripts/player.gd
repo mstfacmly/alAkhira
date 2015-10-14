@@ -25,7 +25,7 @@ var max_speed
 var sprint = 13.0
 var run = 11.0
 var walk = 3.32
-var accel = 13.33
+var accel = 16.33
 var deaccel = 27.0
 var sharp_turn_threshhold = 120
 var hspeed = 0
@@ -259,7 +259,7 @@ func _process(delta):
 	axis_value = atan(x + y)# * PI / 360 * 100
 #	axis_value = abs(axis_value)
 
-	if axis_value < 0.713:
+	if axis_value < 0.743:
 		hspeed = max(hspeed - (deaccel * 0.3) * delta, 0)
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
 		max_speed = walk
