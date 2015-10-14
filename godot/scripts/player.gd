@@ -65,12 +65,12 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 	
-func body_enter_shape( body_id, body, body_shape, area_shape ):
-	if (body_id == "ledge") and (body_shape==0) and jumping and not on_floor: # and not state=="Ledge Hanging Right" and siding_left==true):
+func _on_ledge_body_enter_shape( body_id, body, body_shape, area_shape ):
+	if (body_id == "ledge") and jumping: # and not state=="Ledge Hanging Right" and siding_left==true):
 		ledge_hanging = true
-		on_floor = false
+#		on_floor = false
 		ledge_pos.x = body.get_pos().x+20 #change the position to be correct
-#		ledge_pos.y=body.get_pos().y+38
+#		ledge_pos.y=body.get_pos().y+20
 		ledge_pos.z = body.get_pos().z + 38
 	print(body)
 
@@ -87,7 +87,7 @@ func _integrate_forces(state):
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
 	var hv = lv - (up * vv) # horizontal velocity
 	
-	print(hv.length())
+#	print(hv.length())
 	# hv calculations might need to be moved to func _process
 	if hv.length() >= 11.555 :
 		anim = SPRINT
@@ -221,7 +221,7 @@ func _integrate_forces(state):
 
 	if ledge_hanging == true:
 		lv == 0
-		hdir == Vector3(0,1,0)
+		hdir == Vector2(0,0)
 
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
