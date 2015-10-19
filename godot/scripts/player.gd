@@ -72,7 +72,10 @@ func _on_ledge_body_enter_shape( body_id, body, body_shape, area_shape ):
 		ledge_pos.x = body.get_pos().x+20 #change the position to be correct
 #		ledge_pos.y=body.get_pos().y+20
 		ledge_pos.z = body.get_pos().z + 38
+	else:
+		ledge_hanging = false
 	print(body)
+	print(ledge_hanging)
 
 func _integrate_forces(state):
 	var lv = state.get_linear_velocity() # linear velocity
@@ -164,7 +167,7 @@ func _integrate_forces(state):
 
 		hv = hdir * hspeed
 
-		var mesh = get_node("armature").get_node("Skeleton").get_node("az")
+		var mesh = get_node("armature").get_node("Skeleton").get_node("mesh")
 		var mesh_xform = mesh.get_transform()
 		var facing_mesh= -mesh_xform.basis[0].normalized()
 		facing_mesh = (facing_mesh - up*facing_mesh.dot(up)).normalized()
