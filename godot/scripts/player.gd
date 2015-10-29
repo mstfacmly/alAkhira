@@ -31,16 +31,19 @@ var sharp_turn_threshhold = 120
 var hspeed = 0
 
 var on_floor = false
-var ledge_hanging = false
-var ledge_pos = get_node("near")
 
 # Joystick
 var JS
 var axis_value
+var space
 
 #var prev_shoot = false
 
 var last_floor_velocity = Vector3()
+
+func _body_enter_shape(bodyID, body, shape, localShape):
+	if body.has_method('collide'):
+		body.collide(self, space)
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transition a change of direction
 
@@ -64,18 +67,6 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 	ang = (ang - a) * s
 
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
-	
-func _on_ledge_body_enter_shape( body_id, body, body_shape, area_shape ):
-	if (body_id == "ledge") and jumping: # and not state=="Ledge Hanging Right" and siding_left==true):
-		ledge_hanging = true
-#		on_floor = false
-		ledge_pos.x = body.get_pos().x+20 #change the position to be correct
-#		ledge_pos.y=body.get_pos().y+20
-		ledge_pos.z = body.get_pos().z + 38
-	else:
-		ledge_hanging = false
-	print(body)
-	print(ledge_hanging)
 
 func _integrate_forces(state):
 	var lv = state.get_linear_velocity() # linear velocity
@@ -222,10 +213,6 @@ func _integrate_forces(state):
 
 #	print(max_speed)
 
-	if ledge_hanging == true:
-		lv == 0
-		hdir == Vector2(0,0)
-
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
 	
@@ -279,5 +266,10 @@ func _ready():
 	get_node("AnimationTreePlayer").set_active(true)
 	set_process(true)
 	JS = get_node("/root/SUTjoystick")
+	
+	set_contact_monitor(true)
+	connect('body_enter_shape', self, "_body_enter_shape")
+	
+	space = get_world().get_direct_space_state()
 
 	pass
