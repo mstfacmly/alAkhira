@@ -37,6 +37,7 @@ var JS
 var axis_value
 var space
 
+var timer
 #var prev_shoot = false
 
 var last_floor_velocity = Vector3()
@@ -82,7 +83,13 @@ func _integrate_forces(state):
 	var hv = lv - (up * vv) # horizontal velocity
 	
 #	print(hv.length())
+
 	# hv calculations might need to be moved to func _process
+	if hv.length() >= 7.0 :
+		timer.set_wait_time(1)
+		timer.set_one_shot(true)
+		get_node("timer").start()
+#		print("timer: ", timer)
 	if hv.length() >= 11.555 :
 		anim = SPRINT
 	elif hv.length() < 3.757 and hv.length() >= 0.01 :
@@ -261,6 +268,11 @@ func _process(delta):
 #	print(axis_value)
 #	print(max_speed)
 
+func _on_timer_timeout():
+	max_speed = sprint
+	print("max speed: ", max_speed)
+	print('test')
+
 func _ready():
 	# Initalization here
 	get_node("AnimationTreePlayer").set_active(true)
@@ -271,5 +283,6 @@ func _ready():
 	connect('body_enter_shape', self, "_body_enter_shape")
 	
 	space = get_world().get_direct_space_state()
+	timer = get_node("timer")
 
 	pass
