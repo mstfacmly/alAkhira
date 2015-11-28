@@ -22,7 +22,7 @@ var turn_speed = 33
 var keep_jump_inertia = true
 var air_idle_deaccel = false
 var max_speed
-var sprint = 13.0
+var sprint = 21.0
 var run = 11.0
 var walk = 3.32
 var accel = 16.33
@@ -38,6 +38,8 @@ var axis_value
 var space
 
 var timer
+var wait = 3.33
+
 #var prev_shoot = false
 
 var last_floor_velocity = Vector3()
@@ -82,23 +84,25 @@ func _integrate_forces(state):
 	var vv = up.dot(lv)# / 2.486 # vertical velocity
 	var hv = lv - (up * vv) # horizontal velocity
 	
-#	print(hv.length())
+	print("speed : ", max_speed)
+	print("h velocity : ", hv.length())
+	print("wait time : ", timer.get_wait_time())
+	
+#	hv calculations might need to be moved to func _process
+	var countd = timer.get_wait_time()
 
-	# hv calculations might need to be moved to func _process
-	if hv.length() >= 7.0 :
-		timer.set_wait_time(1)
-		timer.set_one_shot(true)
-		get_node("timer").start()
-#		print("timer: ", timer)
+	if hv.length() > 10.0 and hv.length() <= 11.333 :
+		timer.set_wait_time(countd - 0.01)
 	if hv.length() >= 11.555 :
 		anim = SPRINT
 	elif hv.length() < 3.757 and hv.length() >= 0.01 :
 		anim = WALK
+		timer.set_wait_time(wait)
 	else:
 		pass
 
 	var hdir = hv.normalized() # horizontal direction
-	#hspeed = hv.length() #horizontal speed
+#	hspeed = hv.length() #horizontal speed
 
 	var floor_velocity = Vector3()
 	var onfloor = false
@@ -137,8 +141,9 @@ func _integrate_forces(state):
 						floor_velocity = n.reflect(target_dir) #follow the slope
 					onfloor = true
 					break
-#				elif slope <= 90 :
-#					onwall = true
+				elif slope <= 90 :
+					onwall = true
+					print(onwall)
 			elif shape == 1 and not onfloor and on_floor : # slope_down
 				floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 1.01
 				if target_dir.length() > 0 :
@@ -260,29 +265,25 @@ func _process(delta):
 		hspeed = max(hspeed - (deaccel * 0.3) * delta, 0)
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
 		max_speed = walk
+	elif axis_value > 0.756 and timer.get_wait_time() <= 0.11 : 
+		max_speed = sprint
 	else :
 		max_speed = run
 
 #	print('X',x)
 #	print('Y',y)
-#	print(axis_value)
+	print(axis_value)
 #	print(max_speed)
-
-func _on_timer_timeout():
-	max_speed = sprint
-	print("max speed: ", max_speed)
-	print('test')
 
 func _ready():
 	# Initalization here
 	get_node("AnimationTreePlayer").set_active(true)
 	set_process(true)
 	JS = get_node("/root/SUTjoystick")
-	
+
 	set_contact_monitor(true)
 	connect('body_enter_shape', self, "_body_enter_shape")
-	
+
 	space = get_world().get_direct_space_state()
 	timer = get_node("timer")
-
-	pass
+	timer.set_wait_time(wait)
