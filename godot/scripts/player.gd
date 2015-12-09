@@ -25,10 +25,16 @@ var max_speed
 var sprint = 21.0
 var run = 11.0
 var walk = 3.32
-var accel = 16.33
+var accel = 7.33
 var deaccel = 27.0
 var sharp_turn_threshhold = 120
-var hspeed = 0
+var hspeed
+
+var g
+var up
+var lv
+var vv
+var hv = Vector3()
 
 var on_floor = false
 
@@ -72,26 +78,25 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 
 func _integrate_forces(state):
-	var lv = state.get_linear_velocity() # linear velocity
-	var g = state.get_total_gravity() * 2
+	lv = state.get_linear_velocity() # linear velocity
+	g = state.get_total_gravity() * 2
 	var delta = state.get_step()
-	
+
 	lv += delta * g #apply gravity
 
 	var anim = FLOOR
 
-	var up = -g.normalized() #(up is against gravity)
-	var vv = up.dot(lv)# / 2.486 # vertical velocity
-	var hv = lv - (up * vv) # horizontal velocity
-	
-	print("speed : ", max_speed)
-	print("h velocity : ", hv.length())
-	print("wait time : ", timer.get_wait_time())
-	
-#	hv calculations might need to be moved to func _process
+	up = -g.normalized() #(up is against gravity)
+	vv = up.dot(lv)# / 2.486 # vertical velocity
+	hv = lv - (up * vv) # horizontal velocity
+
+#	print("speed : ", max_speed)
+#	print("h velocity : ", hv.length())
+#	print("wait time : ", timer.get_wait_time())
+
 	var countd = timer.get_wait_time()
 
-	if hv.length() > 10.0 and hv.length() <= 11.333 :
+	if hv.length() > 10.0 and hv.length() < 11.333 :
 		timer.set_wait_time(countd - 0.01)
 	if hv.length() >= 11.555 :
 		anim = SPRINT
@@ -101,17 +106,20 @@ func _integrate_forces(state):
 	else:
 		pass
 
+	if timer.get_wait_time() <= 0.02:
+		while max_speed < sprint:
+			max_speed = max_speed + 0.001
+
 	var hdir = hv.normalized() # horizontal direction
-#	hspeed = hv.length() #horizontal speed
+	hspeed = hv.length() #horizontal speed
 
 	var floor_velocity = Vector3()
 	var onfloor = false
 	var onwall = false
 	var n = Vector3()
 
-
 	var dir = Vector3() #where does the player intend to walk to
-	
+
 	var cam_xform = get_node("target/camera").get_global_transform()
 
 	if (JS.get_analog("ls_up") or Input.is_action_pressed("move_forward")):
@@ -122,11 +130,11 @@ func _integrate_forces(state):
 		dir+=-cam_xform.basis[0]
 	if (JS.get_analog("ls_right") or Input.is_action_pressed("move_right")):
 		dir+=cam_xform.basis[0]
-	
+
 	var jump_attempt = (JS.get_digital("action_1")) or Input.is_action_pressed("jump")
 
 	var target_dir = (dir - up*dir.dot(up)).normalized()
-	
+
 	if state.get_contact_count() == 0 :
 		floor_velocity = last_floor_velocity
 	else :
@@ -151,7 +159,7 @@ func _integrate_forces(state):
 				onfloor = true
 				break
 			break
-	
+
 	# calculate new direction and speed
 	if onfloor :
 		#if speed is less than 0.1, sharp turns do nothing
@@ -162,7 +170,7 @@ func _integrate_forces(state):
 				facing_dir = -hdir
 			else :
 				hdir = target_dir
-				
+
 			if hspeed < max_speed :
 				hspeed += accel * delta
 		else : #sharp turn OR stop moving
@@ -190,7 +198,7 @@ func _integrate_forces(state):
 				anim = RUN_AIR_DOWN
 			else :
 				anim = AIR_DOWN
-	
+
 		if dir.length() > 0.1 :
 			hv += target_dir * (accel * 0.2) * delta
 			if hv.length() > max_speed :
@@ -198,32 +206,30 @@ func _integrate_forces(state):
 		else :
 			hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 			hv = hdir * hspeed
-			
+
 	if jumping : 
 		if not jump_attempt : #short jump
 			vv -= g.length() / 2.486 / 2.486 #3.14159
 			jumping = false
 		elif vv < 2.486: # or onfloor or onwall: # fv, crashed or landed
 			jumping = false
-			
+
 	if onfloor and jump_attempt :
 		vv = g.length() / 2.486
 		jumping = true
 		onfloor = false
 		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
 			lv += last_floor_velocity - up*last_floor_velocity.dot(up) 
-#	elif onwall and jump_attempt : 
-#		vv = g.length() / 2.486
-#		hv = n * vv
-#		onfloor = false
+	elif onwall and jump_attempt : 
+		vv = g.length() / 2.486
+		hv = n * vv
+		onfloor = false
 		
 	if onfloor :
 		lv = hv + up*floor_velocity.normalized().dot(up)*hspeed
 		last_floor_velocity = floor_velocity
 	else :
 		lv =  hv + up*vv
-
-#	print(max_speed)
 
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
@@ -234,8 +240,8 @@ func _integrate_forces(state):
 		get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state",true)
 	get_node("AnimationTreePlayer").transition_node_set_current("state",anim)
 	state.set_angular_velocity(Vector3())
-#	get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state", true)
 	
+
 	if (JS.get_digital("back")) or (Input.is_action_pressed("ui_cancel")):
 		OS.get_main_loop().quit()
 
@@ -251,29 +257,21 @@ func _process(delta):
 	var y
 
 	x = abs(JS.get_analog("ls_hor"))
-#	x = cos(x)# * pi / 180)
-#	x = abs(x)
-
 	y = abs(JS.get_analog("ls_vert"))
-#	y = cos(y)# * pi / 180)
-#	y = abs(y)
-
 	axis_value = atan(x + y)# * PI / 360 * 100
-#	axis_value = abs(axis_value)
 
-	if axis_value < 0.743:
+	if axis_value < 0.743 and axis_value > 0.101 :
+		accel = 21
 		hspeed = max(hspeed - (deaccel * 0.3) * delta, 0)
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
 		max_speed = walk
-	elif axis_value > 0.756 and timer.get_wait_time() <= 0.11 : 
-		max_speed = sprint
 	else :
 		max_speed = run
 
 #	print('X',x)
 #	print('Y',y)
-	print(axis_value)
-#	print(max_speed)
+#	print("axis val : ", axis_value)
+#	print("speed : ", max_speed)
 
 func _ready():
 	# Initalization here

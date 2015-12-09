@@ -3,11 +3,11 @@ extends Camera
 # with help from romulox_x, thc202 and adolson
 
 var collision_exception=[]
-export var min_distance=0.5
-export var max_distance=7.0
-export var angle_v_adjust=0.0
-export var autoturn_ray_aperture=25
-export var autoturn_speed=25
+export var min_distance = 0.5
+export var max_distance = 7.2
+export var angle_v_adjust= 0.0
+export var autoturn_ray_aperture = 25
+export var autoturn_speed = 25
 var max_height = 7.0
 var min_height = -3
 
@@ -19,6 +19,17 @@ var pos										# camera pos
 var target									# look-at target
 var up = Vector3(0.0,1.0,0.0)
 var distance
+
+var fov = get_fov()
+var fovd = 64
+var fovn = fov + 5
+var fovf = fov + 15
+var near = get_znear()
+var far = get_zfar()
+var defdist = 7.2
+var sprint = 6.96
+var walk = 8.2
+var adjust = 0.001
 
 var JS
 
@@ -46,6 +57,11 @@ func _fixed_process(dt):
 	recalculate_camera()
 	var target = get_parent().get_global_transform().origin
 	var delta = pos - target #regular delta follow
+	var hv = get_node("../../../player").hv
+	var hspeed = hv.length()
+#	print("cam hspeed : ", hspeed)
+	print("distance : ", max_distance)
+	print("fov : ", fov)
 
 	#check ranges
 	if (delta.length() < min_distance):
@@ -90,6 +106,28 @@ func _fixed_process(dt):
 	var t = get_transform()
 	t.basis = Matrix3(t.basis[0],deg2rad(angle_v_adjust)) * t.basis
 	set_transform(t)
+	
+	if hspeed >= 11.555:
+		while max_distance >= sprint :
+			max_distance -= adjust
+		while fov < fovf:
+			fov += adjust
+			set_perspective( fov , near, far)
+	elif hspeed <= 3.757 and hspeed >= 0.9 :
+		while max_distance <= walk :
+			max_distance += adjust 
+		while fov >= fovd:
+			fov -= adjust
+			set_perspective( fov , near , far)
+	elif hspeed <= 11.333 and hspeed >= 6.66:
+		while max_distance >= defdist:
+			max_distance -= adjust
+		while fov >= fovn:
+			fov += adjust
+			set_perspective( fov , near, far)
+	else:
+		max_distance == defdist
+		set_perspective( fovd, near, far)
 
 func _ready():
 	pos = get_global_transform().origin
@@ -110,5 +148,5 @@ func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
-	Input.set_mouse_mode(0) # 2 captures the mouse
+	Input.set_mouse_mode(2) # 2 captures the mouse
 	set_as_toplevel(true) # this detaches the camera transform from the parent spatial node

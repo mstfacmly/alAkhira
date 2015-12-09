@@ -342,7 +342,7 @@
 		<bool name="loop"> False </bool>
 		<real name="step"> 0.1 </real>
 		<string name="tracks/0/type"> "value" </string>
-		<node_path name="tracks/0/path"> "bridge_pieces_phys/bridge_piece-3:transform/translation" </node_path>
+		<node_path name="tracks/0/path"> "bridge_pieces/bridge_piece-3:transform/translation" </node_path>
 		<int name="tracks/0/interp"> 2 </int>
 		<dictionary name="tracks/0/keys" shared="false">
 			<string> "cont" </string>
@@ -358,7 +358,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/1/type"> "value" </string>
-		<node_path name="tracks/1/path"> "bridge_pieces_phys/bridge_piece-3:transform/rotation" </node_path>
+		<node_path name="tracks/1/path"> "bridge_pieces/bridge_piece-3:transform/rotation" </node_path>
 		<int name="tracks/1/interp"> 2 </int>
 		<dictionary name="tracks/1/keys" shared="false">
 			<string> "cont" </string>
@@ -374,7 +374,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/2/type"> "value" </string>
-		<node_path name="tracks/2/path"> "bridge_pieces_phys/bridge_piece-1:transform/rotation" </node_path>
+		<node_path name="tracks/2/path"> "bridge_pieces/bridge_piece-1:transform/rotation" </node_path>
 		<int name="tracks/2/interp"> 2 </int>
 		<dictionary name="tracks/2/keys" shared="false">
 			<string> "cont" </string>
@@ -390,7 +390,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/3/type"> "value" </string>
-		<node_path name="tracks/3/path"> "bridge_pieces_phys/bridge_piece-1:transform/translation" </node_path>
+		<node_path name="tracks/3/path"> "bridge_pieces/bridge_piece-1:transform/translation" </node_path>
 		<int name="tracks/3/interp"> 2 </int>
 		<dictionary name="tracks/3/keys" shared="false">
 			<string> "cont" </string>
@@ -406,7 +406,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/4/type"> "value" </string>
-		<node_path name="tracks/4/path"> "bridge_pieces_phys/bridge_piece-6:transform/translation" </node_path>
+		<node_path name="tracks/4/path"> "bridge_pieces/bridge_piece-6:transform/translation" </node_path>
 		<int name="tracks/4/interp"> 2 </int>
 		<dictionary name="tracks/4/keys" shared="false">
 			<string> "cont" </string>
@@ -422,7 +422,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/5/type"> "value" </string>
-		<node_path name="tracks/5/path"> "bridge_pieces_phys/bridge_piece-6:transform/rotation" </node_path>
+		<node_path name="tracks/5/path"> "bridge_pieces/bridge_piece-6:transform/rotation" </node_path>
 		<int name="tracks/5/interp"> 2 </int>
 		<dictionary name="tracks/5/keys" shared="false">
 			<string> "cont" </string>
@@ -438,7 +438,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/6/type"> "value" </string>
-		<node_path name="tracks/6/path"> "bridge_pieces_phys/bridge_piece-5:transform/rotation" </node_path>
+		<node_path name="tracks/6/path"> "bridge_pieces/bridge_piece-5:transform/rotation" </node_path>
 		<int name="tracks/6/interp"> 2 </int>
 		<dictionary name="tracks/6/keys" shared="false">
 			<string> "cont" </string>
@@ -454,7 +454,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/7/type"> "value" </string>
-		<node_path name="tracks/7/path"> "bridge_pieces_phys/bridge_piece-5:transform/translation" </node_path>
+		<node_path name="tracks/7/path"> "bridge_pieces/bridge_piece-5:transform/translation" </node_path>
 		<int name="tracks/7/interp"> 2 </int>
 		<dictionary name="tracks/7/keys" shared="false">
 			<string> "cont" </string>
@@ -470,7 +470,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/8/type"> "value" </string>
-		<node_path name="tracks/8/path"> "bridge_pieces_phys/bridge_piece-4:transform/translation" </node_path>
+		<node_path name="tracks/8/path"> "bridge_pieces/bridge_piece-4:transform/translation" </node_path>
 		<int name="tracks/8/interp"> 2 </int>
 		<dictionary name="tracks/8/keys" shared="false">
 			<string> "cont" </string>
@@ -486,7 +486,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/9/type"> "value" </string>
-		<node_path name="tracks/9/path"> "bridge_pieces_phys/bridge_piece-4:transform/rotation" </node_path>
+		<node_path name="tracks/9/path"> "bridge_pieces/bridge_piece-4:transform/rotation" </node_path>
 		<int name="tracks/9/interp"> 2 </int>
 		<dictionary name="tracks/9/keys" shared="false">
 			<string> "cont" </string>
@@ -502,7 +502,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/10/type"> "value" </string>
-		<node_path name="tracks/10/path"> "bridge_pieces_phys/bridge_piece-2:transform/translation" </node_path>
+		<node_path name="tracks/10/path"> "bridge_pieces/bridge_piece-2:transform/translation" </node_path>
 		<int name="tracks/10/interp"> 2 </int>
 		<dictionary name="tracks/10/keys" shared="false">
 			<string> "cont" </string>
@@ -518,7 +518,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/11/type"> "value" </string>
-		<node_path name="tracks/11/path"> "bridge_pieces_phys/bridge_piece-2:transform/rotation" </node_path>
+		<node_path name="tracks/11/path"> "bridge_pieces/bridge_piece-2:transform/rotation" </node_path>
 		<int name="tracks/11/interp"> 2 </int>
 		<dictionary name="tracks/11/keys" shared="false">
 			<string> "cont" </string>
@@ -534,7 +534,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/12/type"> "value" </string>
-		<node_path name="tracks/12/path"> "bridge_pieces_phys/bridge_piece-8:transform/rotation" </node_path>
+		<node_path name="tracks/12/path"> "bridge_pieces/bridge_piece-8:transform/rotation" </node_path>
 		<int name="tracks/12/interp"> 2 </int>
 		<dictionary name="tracks/12/keys" shared="false">
 			<string> "cont" </string>
@@ -550,7 +550,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/13/type"> "value" </string>
-		<node_path name="tracks/13/path"> "bridge_pieces_phys/bridge_piece-8:transform/translation" </node_path>
+		<node_path name="tracks/13/path"> "bridge_pieces/bridge_piece-8:transform/translation" </node_path>
 		<int name="tracks/13/interp"> 2 </int>
 		<dictionary name="tracks/13/keys" shared="false">
 			<string> "cont" </string>
@@ -566,7 +566,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/14/type"> "value" </string>
-		<node_path name="tracks/14/path"> "bridge_pieces_phys/bridge_piece-7:transform/translation" </node_path>
+		<node_path name="tracks/14/path"> "bridge_pieces/bridge_piece-7:transform/translation" </node_path>
 		<int name="tracks/14/interp"> 2 </int>
 		<dictionary name="tracks/14/keys" shared="false">
 			<string> "cont" </string>
@@ -582,7 +582,7 @@
 			</array>
 		</dictionary>
 		<string name="tracks/15/type"> "value" </string>
-		<node_path name="tracks/15/path"> "bridge_pieces_phys/bridge_piece-7:transform/rotation" </node_path>
+		<node_path name="tracks/15/path"> "bridge_pieces/bridge_piece-7:transform/rotation" </node_path>
 		<int name="tracks/15/interp"> 2 </int>
 		<dictionary name="tracks/15/keys" shared="false">
 			<string> "cont" </string>
@@ -645,7 +645,7 @@
 				<string> "shape" </string>
 				<string> "CollisionShape" </string>
 				<string> "trigger" </string>
-				<string> "bridge_pieces_phys" </string>
+				<string> "bridge_pieces" </string>
 				<string> "bridge_piece-4" </string>
 				<string> "transform/local" </string>
 				<string> "bridge_piece-5" </string>
@@ -670,9 +670,9 @@
 			<string> "node_count" </string>
 			<int> 32 </int>
 			<string> "nodes" </string>
-			<int_array  len="988"> 				-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 0, 0, 6, 0, -1, 19, 2, 4, 3, 1, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 10, 22, 11, 0, 1, 0, 24, 23, -1, 15, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 13, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 5, 16, 0, 2, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 13, 37, 8, 0, 0, 0, 1, 38, -1, 4, 2, 12, 3, 1, 4, 2, 5, 17, 0, 4, 0, 6, 39, -1, 21, 2, 18, 3, 19, 40, 20, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 21, 22, 11, 5, 22, 0, 5, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 23, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 6, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 23, 37, 8, 0, 5, 0, 1, 1, -1, 3, 2, 12, 3, 1, 4, 2, 0, 4, 0, 6, 41, -1, 21, 2, 24, 3, 25, 40, 26, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 27, 22, 11, 5, 28, 0, 9, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 29, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 10, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 29, 37, 8, 0, 4, 0, 6, 42, -1, 21, 2, 30, 3, 31, 40, 32, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 33, 22, 11, 5, 34, 0, 12, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 35, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 13, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 35, 37, 8, 0, 4, 0, 6, 43, -1, 21, 2, 36, 3, 37, 40, 38, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 39, 22, 11, 5, 40, 0, 15, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 41, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 16, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 41, 37, 8, 0, 4, 0, 6, 44, -1, 21, 2, 42, 3, 43, 40, 44, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 45, 22, 11, 5, 46, 0, 18, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 47, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 19, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 47, 37, 8, 0, 4, 0, 6, 45, -1, 21, 2, 48, 3, 49, 40, 50, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 51, 22, 11, 5, 52, 0, 21, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 53, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 22, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 53, 37, 8, 0, 4, 0, 6, 46, -1, 21, 2, 54, 3, 55, 40, 56, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 57, 22, 11, 5, 58, 0, 24, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 59, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 25, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 59, 37, 8, 0, 4, 0, 6, 47, -1, 21, 2, 60, 3, 61, 40, 62, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 63, 22, 11, 5, 64, 0, 27, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 65, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 28, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 65, 37, 8, 0, 0, 0, 1, 48, 66, 3, 2, 0, 3, 1, 5, 67, 0, 0, 0, 50, 49, -1, 9, 2, 68, 51, 5, 52, 7, 53, 11, 54, 69, 55, 2, 56, 14, 57, 70, 58, 71, 0 </int_array>
+			<int_array  len="986"> 				-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 0, 0, 6, 0, -1, 19, 2, 4, 3, 1, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 10, 22, 11, 0, 1, 0, 24, 23, -1, 15, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 13, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 5, 16, 0, 2, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 13, 37, 8, 0, 0, 0, 1, 38, -1, 3, 2, 12, 3, 1, 4, 2, 0, 4, 0, 6, 39, -1, 21, 2, 17, 3, 18, 40, 19, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 20, 22, 11, 5, 21, 0, 5, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 22, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 6, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 22, 37, 8, 0, 5, 0, 1, 1, -1, 3, 2, 12, 3, 1, 4, 2, 0, 4, 0, 6, 41, -1, 21, 2, 23, 3, 24, 40, 25, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 26, 22, 11, 5, 27, 0, 9, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 28, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 10, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 28, 37, 8, 0, 4, 0, 6, 42, -1, 21, 2, 29, 3, 30, 40, 31, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 32, 22, 11, 5, 33, 0, 12, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 34, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 13, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 34, 37, 8, 0, 4, 0, 6, 43, -1, 21, 2, 35, 3, 36, 40, 37, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 38, 22, 11, 5, 39, 0, 15, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 40, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 16, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 40, 37, 8, 0, 4, 0, 6, 44, -1, 21, 2, 41, 3, 42, 40, 43, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 44, 22, 11, 5, 45, 0, 18, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 46, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 19, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 46, 37, 8, 0, 4, 0, 6, 45, -1, 21, 2, 47, 3, 48, 40, 49, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 50, 22, 11, 5, 51, 0, 21, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 52, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 22, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 52, 37, 8, 0, 4, 0, 6, 46, -1, 21, 2, 53, 3, 54, 40, 55, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 56, 22, 11, 5, 57, 0, 24, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 58, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 25, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 58, 37, 8, 0, 4, 0, 6, 47, -1, 21, 2, 59, 3, 60, 40, 61, 4, 2, 7, 5, 8, 2, 9, 6, 10, 2, 11, 2, 12, 7, 13, 7, 14, 7, 15, 8, 16, 8, 17, 8, 18, 8, 19, 2, 20, 9, 21, 62, 22, 11, 5, 63, 0, 27, 0, 24, 23, -1, 14, 2, 12, 3, 1, 4, 2, 25, 2, 26, 8, 27, 5, 28, 64, 29, 1, 30, 8, 7, 5, 31, 14, 32, 7, 33, 15, 34, 15, 0, 28, 0, 36, 35, -1, 5, 2, 12, 3, 1, 4, 2, 35, 64, 37, 8, 0, 0, 0, 1, 48, 65, 3, 2, 0, 3, 1, 5, 66, 0, 0, 0, 50, 49, -1, 9, 2, 67, 51, 5, 52, 7, 53, 11, 54, 68, 55, 2, 56, 14, 57, 69, 58, 70, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="72" shared="false">
+			<array  len="71" shared="false">
 				<node_path> "." </node_path>
 				<transform> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
 				<bool> True </bool>
@@ -730,17 +730,17 @@
 							<array  len="4" shared="false">
 								<dictionary  shared="false">
 									<string> "distance" </string>
-									<real> 31.149008 </real>
+									<real> 124.472046 </real>
 									<string> "listener" </string>
 									<bool> True </bool>
 									<string> "pos" </string>
-									<vector3> -0.92441, 4.36317, 14.0434 </vector3>
+									<vector3> 1.00375, 2.05487, 11.8323 </vector3>
 									<string> "use_environment" </string>
 									<bool> False </bool>
 									<string> "use_orthogonal" </string>
 									<bool> False </bool>
 									<string> "x_rot" </string>
-									<real> 0.433302 </real>
+									<real> 0.533302 </real>
 									<string> "y_rot" </string>
 									<real> 4.749961 </real>
 								</dictionary>
@@ -818,10 +818,6 @@
 				<resource  resource_type="Shape" path="local://3">  </resource>
 				<real> 1 </real>
 				<vector3> 0, 0, 0 </vector3>
-				<dictionary  shared="false">
-					<string> "_editor_collapsed" </string>
-					<bool> True </bool>
-				</dictionary>
 				<dictionary  shared="false">
 					<string> "_editor_collapsed" </string>
 					<bool> True </bool>
