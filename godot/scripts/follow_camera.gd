@@ -22,14 +22,18 @@ var distance
 
 var fov = get_fov()
 var fovd = 64
-var fovn = fov + 5
-var fovf = fov + 15
+var fovn = fov + 3
+var fovf = fov + 7
+var fovs = fov + 16
+var fovp = fovs - 16
 var near = get_znear()
 var far = get_zfar()
-var defdist = 7.2
-var sprint = 6.96
-var walk = 8.2
-var adjust = 0.001
+var distdef = 7.2
+var distspi = 6.16
+var distphys = distspi + 0.50
+var sprint = 6.66
+var run = 7.0
+var adjust = 0.01
 
 var JS
 
@@ -39,11 +43,12 @@ func _input(ev):
 		var mousedelta = (mouseposlast - ev.pos)	# calculate delta change from last mouse movement
 		turn += mousedelta / orbitrate				# scale mouse delta to useful value
 		mouseposlast = ev.pos						# record last mouse pos
-		
+
 func _process(delta):
 	#joystick control
 	turn.y -= JS.get_analog("rs_ver") * distance / (orbitrate * 1.5)
 	turn.x -= JS.get_analog("rs_hor") * distance / (orbitrate / 2.5)
+	adjust_camera()
 
 func recalculate_camera():
 	var distance = pos.distance_squared_to(target) * 2
@@ -52,16 +57,44 @@ func recalculate_camera():
 	pos.y = distance * -sin(turn.y)
 	pos.z = -distance * cos(turn.x) * cos(turn.y)
 
+func adjust_camera():
 
-func _fixed_process(dt):
-	recalculate_camera()
-	var target = get_parent().get_global_transform().origin
-	var delta = pos - target #regular delta follow
 	var hv = get_node("../../../player").hv
 	var hspeed = hv.length()
+	var curr = get_node("../../env_controller").curr
+	
 #	print("cam hspeed : ", hspeed)
 	print("distance : ", max_distance)
 	print("fov : ", fov)
+	
+	if hspeed >= 11.555: 						#sprinting
+		while max_distance >= sprint:
+			max_distance -= adjust
+		while fov <= fovf:
+			fov += adjust
+	elif hspeed <= 11.333 and hspeed >= 6.66:	#running
+		while max_distance >= run:
+			max_distance -= adjust
+		while fov <= fovn:
+			fov += adjust
+	else:										#everything else
+		while max_distance <= distdef:
+			max_distance += adjust
+		while fov >= fovd:
+			fov -= adjust
+
+	if curr == 'spi':
+		while fov <= fovs:
+			fov += adjust
+		while max_distance >= distspi:
+			max_distance -= adjust
+
+func _fixed_process(dt):
+	recalculate_camera()
+	set_perspective(fov,near,far)
+	
+	var target = get_parent().get_global_transform().origin
+	var delta = pos - target #regular delta follow
 
 	#check ranges
 	if (delta.length() < min_distance):
@@ -106,28 +139,6 @@ func _fixed_process(dt):
 	var t = get_transform()
 	t.basis = Matrix3(t.basis[0],deg2rad(angle_v_adjust)) * t.basis
 	set_transform(t)
-	
-	if hspeed >= 11.555:
-		while max_distance >= sprint :
-			max_distance -= adjust
-		while fov < fovf:
-			fov += adjust
-			set_perspective( fov , near, far)
-	elif hspeed <= 3.757 and hspeed >= 0.9 :
-		while max_distance <= walk :
-			max_distance += adjust 
-		while fov >= fovd:
-			fov -= adjust
-			set_perspective( fov , near , far)
-	elif hspeed <= 11.333 and hspeed >= 6.66:
-		while max_distance >= defdist:
-			max_distance -= adjust
-		while fov >= fovn:
-			fov += adjust
-			set_perspective( fov , near, far)
-	else:
-		max_distance == defdist
-		set_perspective( fovd, near, far)
 
 func _ready():
 	pos = get_global_transform().origin
