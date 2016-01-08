@@ -149,7 +149,7 @@ func _ready():
 	# find collision exceptions for ray
 	var node = self
 	while(node):
-		if (node extends RigidBody):
+		if (node extends KinematicBody or node extends RigidBody):
 			collision_exception.append(node.get_rid())
 			break
 		else:
@@ -159,5 +159,5 @@ func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
-	Input.set_mouse_mode(2) # 2 captures the mouse
+	Input.set_mouse_mode(0) # 2 captures the mouse
 	set_as_toplevel(true) # this detaches the camera transform from the parent spatial node
