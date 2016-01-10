@@ -52,6 +52,7 @@ func _input(ev):
 #	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
 	var cast = JS.get_digital("bump_left") || Input.is_action_pressed('cast')
 	var attack = JS.get_digital("action_3") || Input.is_action_pressed('attack')
+	print(curr)
 	
 	if cast && attack:
 		if curr == 'phys':

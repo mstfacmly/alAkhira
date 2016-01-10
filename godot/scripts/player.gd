@@ -37,6 +37,9 @@ var lv
 var vv
 var hv = Vector3()
 
+var onfloor = false
+var onwall = false
+
 var on_floor = false
 
 # Joystick
@@ -115,8 +118,6 @@ func _integrate_forces(state):
 	hspeed = hv.length() #horizontal speed
 
 	var floor_velocity = Vector3()
-	var onfloor = false
-	var onwall = false
 	var n = Vector3()
 
 	var dir = Vector3() #where does the player intend to walk to
@@ -162,6 +163,7 @@ func _integrate_forces(state):
 					if target_dir.length() > 0 :
 						floor_velocity = n.reflect(target_dir) #follow the slope
 					onfloor = true
+					print('onfloor')
 					floor_index = i 
 					break
 				elif slope <= 90 :
@@ -233,6 +235,7 @@ func _integrate_forces(state):
 		vv = g.length() / 2.486
 		jumping = true
 		onfloor = false
+		print('jumping')
 		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
 			lv += last_floor_velocity - up*last_floor_velocity.dot(up) 
 	elif onwall and jump_attempt : 
