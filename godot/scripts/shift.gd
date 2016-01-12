@@ -16,11 +16,11 @@ var spi = {
 	'materials': [],
 	'nodes': []
 }
+var anim = []
+var players = []
 var curr = 'phys'
 var overlay = 'none'
-var env_player
 
-var environment = {}
 var JS
 
 var showing = false
@@ -31,7 +31,7 @@ var transition_time = 0.5
 
 func _ready():
 
-	var root = get_node('../../')
+	var root = get_node('/root/')
 	traverse(root.get_children())
 	unique_materials(phys)
 	unique_materials(spi)
@@ -40,7 +40,6 @@ func _ready():
 	spir_peek(spi, true)
 	toggle(spi, phys)
 	
-	env_player = root.get_node('env/SwitchViews')
 	JS = get_node("/root/SUTjoystick")
 	
 	set_process_input(true)
@@ -52,19 +51,18 @@ func _input(ev):
 #	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
 	var cast = JS.get_digital("bump_left") || Input.is_action_pressed('cast')
 	var attack = JS.get_digital("action_3") || Input.is_action_pressed('attack')
-	print(curr)
 	
 	if cast && attack:
 		if curr == 'phys':
 			toggle(phys, spi)
 			spir_peek(spi, false)
 			curr = 'spi'
-			env_transition('PhysToSpir', 1)
+			env_transition(1)
 		elif curr == 'spi':
 			toggle(spi, phys)
 			spir_peek(spi, true)
 			curr = 'phys'
-			env_transition('PhysToSpir', -1)
+			env_transition(-1)
 	elif cast and curr == 'phys' and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
@@ -131,8 +129,15 @@ func post_toggle(a, b):
 	showing = false
 	hidding = false
 
-func env_transition(anim, speed):
-	env_player.play(anim, -1, speed, (speed < 0))
+func env_transition(speed):
+	for a in anim:
+		if(a.get_name() == 'PhysToSpir'):
+			var animList = a.get_animation_list()
+			for b in animList:
+				a.play(b,  -1, speed, (speed < 0))
+			print("PhysToSpir found")
+		else:
+			a.play('PhysToSpir', -1, speed, (speed < 0))
 
 func traverse(nodes):
 	var name = ''
@@ -149,6 +154,9 @@ func traverse(nodes):
 			elif name.match('*_spi'):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
+		elif node.is_type('AnimationPlayer'):
+			if(name.match('PhysToSpir') or node.has_animation('PhysToSpir')):
+				anim.push_back(node)
 				
 		elif node.get_child_count():
 			traverse(node.get_children())

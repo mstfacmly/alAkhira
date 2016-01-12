@@ -61,7 +61,7 @@ func adjust_camera():
 
 	var hv = get_node("../../../player").hv
 	var hspeed = hv.length()
-	var curr = get_node("../../env_controller").curr
+	var curr = get_node("../../scripts/shift").curr
 	
 #	print("cam hspeed : ", hspeed)
 	print("distance : ", max_distance)
@@ -159,5 +159,5 @@ func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
-	Input.set_mouse_mode(0) # 2 captures the mouse
+	Input.set_mouse_mode(2) # 2 captures the mouse
 	set_as_toplevel(true) # this detaches the camera transform from the parent spatial node
