@@ -11,7 +11,6 @@ const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
 
 const MAX_SLOPE_ANGLE = 30
-const MIN_SLOPE_ANGLE = -30
 
 #const CHAR_SCALE = Vector3(1,1,1)
 
@@ -36,9 +35,6 @@ var up
 var lv
 var vv
 var hv = Vector3()
-
-var onfloor = false
-var onwall = false
 
 var on_floor = false
 
@@ -118,6 +114,8 @@ func _integrate_forces(state):
 	hspeed = hv.length() #horizontal speed
 
 	var floor_velocity = Vector3()
+	var onfloor = false
+	var onwall = false
 	var n = Vector3()
 
 	var dir = Vector3() #where does the player intend to walk to
@@ -136,19 +134,7 @@ func _integrate_forces(state):
 	var jump_attempt = (JS.get_digital("action_1")) or Input.is_action_pressed("jump")
 
 	var target_dir = (dir - up*dir.dot(up)).normalized()
-	
-#	var found_floor = false
-	var floor_index = -1
-	
-#	for x in range(state.get_contact_count()):
-#		var ci = state.get_contact_local_normal(x)
-#		if (ci.dot(Vector3(0, 0, -1)) > 0.6):
-#			onfloor = true
-#			floor_index = x
-#			
-#	lv += state.get_total_gravity() * delta 
-#	state.set_linear_velocity(lv)
-#	
+
 	if state.get_contact_count() == 0 :
 		floor_velocity = last_floor_velocity
 	else :
@@ -156,21 +142,18 @@ func _integrate_forces(state):
 			var shape = state.get_contact_local_shape(i)
 			n = state.get_contact_local_normal(i)
 			var slope = rad2deg(acos(n.dot(up)))
-#			var slope = n.dot(Vector3(0,0,-1))
 			if shape == 0 : #capsule
 				if slope < MAX_SLOPE_ANGLE :
 					floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 0.0099
 					if target_dir.length() > 0 :
 						floor_velocity = n.reflect(target_dir) #follow the slope
 					onfloor = true
-					print('onfloor')
-					floor_index = i 
 					break
 				elif slope <= 90 :
 					onwall = true
 					print(onwall)
 			elif shape == 1 and not onfloor and on_floor : # slope_down
-				floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 0.1
+				floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 1.01
 				if target_dir.length() > 0 :
 					floor_velocity = n.reflect(target_dir) #follow the slope
 				onfloor = true
@@ -235,7 +218,6 @@ func _integrate_forces(state):
 		vv = g.length() / 2.486
 		jumping = true
 		onfloor = false
-		print('jumping')
 		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
 			lv += last_floor_velocity - up*last_floor_velocity.dot(up) 
 	elif onwall and jump_attempt : 
