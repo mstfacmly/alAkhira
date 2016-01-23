@@ -64,8 +64,8 @@ func adjust_camera():
 	var curr = get_node("../../scripts/shift").curr
 	
 #	print("cam hspeed : ", hspeed)
-	print("distance : ", max_distance)
-	print("fov : ", fov)
+#	print("distance : ", max_distance)
+#	print("fov : ", fov)
 	
 	if hspeed >= 11.555: 						#sprinting
 		while max_distance >= sprint:
@@ -159,5 +159,5 @@ func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
-	Input.set_mouse_mode(2) # 2 captures the mouse
+	Input.set_mouse_mode(0) # 2 captures the mouse
 	set_as_toplevel(true) # this detaches the camera transform from the parent spatial node

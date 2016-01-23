@@ -151,7 +151,7 @@ func _integrate_forces(state):
 					break
 				elif slope <= 90 :
 					onwall = true
-					print(onwall)
+#					print(onwall)
 			elif shape == 1 and not onfloor and on_floor : # slope_down
 				floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 1.01
 				if target_dir.length() > 0 :
@@ -181,8 +181,8 @@ func _integrate_forces(state):
 		var mesh = get_node("armature").get_node("Skeleton").get_node("mesh")
 		var mesh_xform = mesh.get_transform()
 		var facing_mesh= -mesh_xform.basis[0].normalized()
-		facing_mesh = (facing_mesh - up*facing_mesh.dot(up)).normalized()
-		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0/hspeed*turn_speed, up)
+		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
+		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 		var m3 = Matrix3(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled( CHAR_SCALE )
 
 		mesh.set_transform(Transform().looking_at(facing_dir, up))
@@ -219,26 +219,24 @@ func _integrate_forces(state):
 		jumping = true
 		onfloor = false
 		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
-			lv += last_floor_velocity - up*last_floor_velocity.dot(up) 
+			lv += last_floor_velocity - up * last_floor_velocity.dot(up) 
 	elif onwall and jump_attempt : 
 		vv = g.length() / 2.486
 		hv = n * vv
 		onfloor = false
 		
 	if onfloor :
-		lv = hv + up*floor_velocity.normalized().dot(up)*hspeed
+		lv = hv + up * floor_velocity.normalized().dot(up)*hspeed
 		last_floor_velocity = floor_velocity
 	else :
-		lv =  hv + up*vv
+		lv =  hv + up * vv
 
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
 	
 	if (onfloor):
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / max_speed)
-	else:
-		get_node("AnimationTreePlayer").oneshot_node_set_autorestart("state",true)
-	get_node("AnimationTreePlayer").transition_node_set_current("state",anim)
+	get_node("AnimationTreePlayer").transition_node_set_current("state", anim)
 	state.set_angular_velocity(Vector3())
 	
 
@@ -253,11 +251,9 @@ func footStep():
 	get_node("SamplePlayer").play( sounds[rand] ) # play random one
 
 func _process(delta):
-	var x
-	var y
+	var x = abs(JS.get_analog("ls_hor"))
+	var y = abs(JS.get_analog("ls_vert")) 
 
-	x = abs(JS.get_analog("ls_hor"))
-	y = abs(JS.get_analog("ls_vert"))
 	axis_value = atan(x + y)# * PI / 360 * 100
 
 	if axis_value < 0.743 and axis_value > 0.101 :
