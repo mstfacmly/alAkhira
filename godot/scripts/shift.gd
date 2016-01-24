@@ -44,16 +44,14 @@ func _ready():
 	set_process_input(true)
 	set_fixed_process(true)
 		
-	paus = get_node("../pause")
 
 	pass
 
 func _input(ev):
-#	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
-	var cast = Input.is_action_pressed('cast') or Input.is_joy_button_pressed(0,4)
-	var attack = Input.is_action_pressed('attack') or Input.is_joy_button_pressed(0,2)
+	var cast = Input.is_action_pressed("cast")
+	var attack = Input.is_action_pressed("attack")
 	
-	if cast && attack or paus.paused == true:
+	if cast && attack:
 		if curr == 'phys':
 			toggle(phys, spi)
 			spir_peek(spi, false)
