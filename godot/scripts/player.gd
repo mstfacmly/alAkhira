@@ -46,6 +46,8 @@ var space
 var timer
 var wait = 3.33
 
+var paused = false
+
 #var prev_shoot = false
 
 var last_floor_velocity = Vector3()
@@ -239,8 +241,7 @@ func _integrate_forces(state):
 	get_node("AnimationTreePlayer").transition_node_set_current("state", anim)
 	state.set_angular_velocity(Vector3())
 	
-
-	if (Input.is_action_pressed("ui_cancel")):
+	if (Input.is_action_pressed("ui_quit")):
 		OS.get_main_loop().quit()
 
 
