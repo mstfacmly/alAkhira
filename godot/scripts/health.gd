@@ -5,11 +5,9 @@ var div = 5
 var healths
 var isdead = false
 onready var shift = get_node("../shift")
-var curr
 
 func _process(delta):
-	curr = shift.curr
-	print("curr : ",curr)
+	var curr = shift.curr
 
 	healths = set_value(health)
 	var healthg = get_value()

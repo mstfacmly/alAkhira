@@ -35,8 +35,6 @@ var sprint = 6.66
 var run = 7.0
 var adjust = 0.01
 
-var JS
-
 func _input(ev):
 	# If the mouse has been moved
 	if (ev.type==InputEvent.MOUSE_MOTION):
@@ -46,8 +44,8 @@ func _input(ev):
 
 func _process(delta):
 	#joystick control
-	turn.y -= JS.get_analog("rs_ver") * distance / (orbitrate * 1.5)
-	turn.x -= JS.get_analog("rs_hor") * distance / (orbitrate / 2.5)
+	turn.y -= Input.get_joy_axis(0,3) * distance / (orbitrate * 1.5)
+	turn.x -= Input.get_joy_axis(0,2) * distance / (orbitrate / 2.5)
 	adjust_camera()
 
 func recalculate_camera():
@@ -59,7 +57,8 @@ func recalculate_camera():
 
 func adjust_camera():
 
-	var hv = get_node("../../../player").hv
+	var player = get_node("../../../player")
+	var hv = player.hv
 	var hspeed = hv.length()
 	var curr = get_node("../../scripts/shift").curr
 	
@@ -144,7 +143,6 @@ func _ready():
 	pos = get_global_transform().origin
 	target = get_parent().get_global_transform().origin
 	distance = pos.distance_squared_to(target)# * 2
-	JS = get_node("/root/SUTjoystick")
 	
 	# find collision exceptions for ray
 	var node = self

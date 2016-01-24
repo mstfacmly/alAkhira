@@ -21,8 +21,6 @@ var players = []
 var curr = 'phys'
 var overlay = 'none'
 
-var JS
-
 var showing = false
 var hidding = false
 
@@ -40,7 +38,6 @@ func _ready():
 	spir_peek(spi, true)
 	toggle(spi, phys)
 	
-	JS = get_node("/root/SUTjoystick")
 	
 	set_process_input(true)
 	set_fixed_process(true)
@@ -49,8 +46,8 @@ func _ready():
 
 func _input(ev):
 #	if (JS.get_digital("bump_left") or (Input.is_action_pressed('magic')) && curr != 'spi':
-	var cast = JS.get_digital("bump_left") || Input.is_action_pressed('cast')
-	var attack = JS.get_digital("action_3") || Input.is_action_pressed('attack')
+	var cast = Input.is_action_pressed('cast') or Input.is_joy_button_pressed(0,4)
+	var attack = Input.is_action_pressed('attack') or Input.is_joy_button_pressed(0,2)
 	
 	if cast && attack:
 		if curr == 'phys':

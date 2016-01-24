@@ -131,7 +131,7 @@ func _integrate_forces(state):
 	if (JS.get_analog("ls_right") or Input.is_action_pressed("move_right")):
 		dir+=cam_xform.basis[0]
 
-	var jump_attempt = (JS.get_digital("action_1")) or Input.is_action_pressed("jump")
+	var jump_attempt = Input.is_action_pressed("jump")
 
 	var target_dir = (dir - up*dir.dot(up)).normalized()
 
@@ -240,7 +240,7 @@ func _integrate_forces(state):
 	state.set_angular_velocity(Vector3())
 	
 
-	if (JS.get_digital("back")) or (Input.is_action_pressed("ui_cancel")):
+	if (Input.is_action_pressed("ui_cancel")):
 		OS.get_main_loop().quit()
 
 
@@ -251,14 +251,14 @@ func footStep():
 	get_node("SamplePlayer").play( sounds[rand] ) # play random one
 
 func _process(delta):
-	var x = abs(JS.get_analog("ls_hor"))
-	var y = abs(JS.get_analog("ls_vert")) 
+	var x = abs(Input.get_joy_axis(0,0)) #(JS.get_analog("ls_hor"))
+	var y = abs(Input.get_joy_axis(0,1))  #(JS.get_analog("ls_vert")) 
 
-	axis_value = atan(x + y)# * PI / 360 * 100
+	axis_value = atan(x + y) # * PI / 360 * 100
 
 	if axis_value < 0.743 and axis_value > 0.101 :
-		accel = 21
-		hspeed = max(hspeed - (deaccel * 0.3) * delta, 0)
+#		accel = 21
+		hspeed = max(hspeed - (deaccel * 0.3) * (delta * 10), 0)
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
 		max_speed = walk
 	else :
