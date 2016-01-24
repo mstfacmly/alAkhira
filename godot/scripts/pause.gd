@@ -7,8 +7,10 @@ func _process(p):
 		_on_pause()
 	elif paused == true and Input.is_action_pressed("pause"):
 		_on_unpause()
-	
-	print(paused)
+		
+	if (Input.is_action_pressed("ui_quit")):
+		OS.get_main_loop().quit()
+
 
 func _on_pause():
 	get_node("pause_menu").set_exclusive(true)

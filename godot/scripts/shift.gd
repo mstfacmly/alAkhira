@@ -27,7 +27,7 @@ var hidding = false
 var t
 var transition_time = 0.5
 
-var paused
+var paus
 
 func _ready():
 
@@ -44,7 +44,7 @@ func _ready():
 	set_process_input(true)
 	set_fixed_process(true)
 		
-	paused = get_node("../pause").paused
+	paus = get_node("../pause")
 
 	pass
 
@@ -53,7 +53,7 @@ func _input(ev):
 	var cast = Input.is_action_pressed('cast') or Input.is_joy_button_pressed(0,4)
 	var attack = Input.is_action_pressed('attack') or Input.is_joy_button_pressed(0,2)
 	
-	if cast && attack or paused == true:
+	if cast && attack or paus.paused == true:
 		if curr == 'phys':
 			toggle(phys, spi)
 			spir_peek(spi, false)

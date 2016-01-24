@@ -241,9 +241,6 @@ func _integrate_forces(state):
 	get_node("AnimationTreePlayer").transition_node_set_current("state", anim)
 	state.set_angular_velocity(Vector3())
 	
-	if (Input.is_action_pressed("ui_quit")):
-		OS.get_main_loop().quit()
-
 
 func footStep():
 	randomize() # otherwise it might be the same each program run
