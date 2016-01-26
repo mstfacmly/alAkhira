@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="8" version="2.0" version_name="Godot Engine v2.0.alpha.custom_build">
-	<ext_resource path="res://scripts/ledge.gd" type="Script" index="2"></ext_resource>
-	<ext_resource path="res://assets/script_nodes/pause.xml" type="PackedScene" index="5"></ext_resource>
-	<ext_resource path="res://player/az.xml" type="PackedScene" index="3"></ext_resource>
 	<ext_resource path="res://env/scenes/testroom.scn" type="PackedScene" index="0"></ext_resource>
 	<ext_resource path="res://assets/test/angles.xml" type="PackedScene" index="4"></ext_resource>
+	<ext_resource path="res://scripts/ledge.gd" type="Script" index="2"></ext_resource>
+	<ext_resource path="res://player/az.xml" type="PackedScene" index="3"></ext_resource>
+	<ext_resource path="res://assets/script_nodes/pause.xml" type="PackedScene" index="5"></ext_resource>
 	<ext_resource path="res://assets/phys_spi.xml" type="PackedScene" index="1"></ext_resource>
 	<resource type="BoxShape" path="local://1">
 		<vector3 name="extents"> 4.11404, 0.269228, 0.164656 </vector3>
@@ -21,7 +21,7 @@
 				<node_path> "player" </node_path>
 			</array>
 			<string> "names" </string>
-			<string_array  len="103">
+			<string_array  len="107">
 				<string> "scene" </string>
 				<string> "_import_path" </string>
 				<string> "_import_transform" </string>
@@ -74,6 +74,7 @@
 				<string> "player" </string>
 				<string> "armature" </string>
 				<string> "Skeleton" </string>
+				<string> "bones/2/bound_childs" </string>
 				<string> "col_triggers" </string>
 				<string> "near" </string>
 				<string> "mid" </string>
@@ -95,9 +96,12 @@
 				<string> "autoturn_speed" </string>
 				<string> "scripts" </string>
 				<string> "healthb" </string>
+				<string> "margin/left" </string>
+				<string> "margin/top" </string>
 				<string> "combat" </string>
 				<string> "shift" </string>
 				<string> "timer" </string>
+				<string> "wait_time" </string>
 				<string> "step_down" </string>
 				<string> "step_down 2" </string>
 				<string> "col_capsule" </string>
@@ -127,20 +131,22 @@
 				<string> "pause" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 19 </int>
+			<int> 23 </int>
 			<string> "node_paths" </string>
-			<array  len="1" shared="false">
+			<array  len="3" shared="false">
+				<node_path> "player/armature" </node_path>
 				<node_path> "player/target" </node_path>
+				<node_path> "player/scripts" </node_path>
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="393"> 				-1, -1, 4, 0, -1, 3, 1, 0, 2, 1, 3, 2, 0, 0, 0, 4, 5, -1, 2, 2, 1, 3, 3, 0, 1, 0, 6, 6, -1, 19, 2, 1, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 7, 16, 12, 17, 13, 18, 12, 19, 14, 20, 15, 21, 16, 22, 8, 23, 14, 24, 9, 0, 1, 0, 25, 25, -1, 21, 2, 1, 7, 17, 8, 5, 9, 6, 10, 7, 11, 8, 12, 18, 13, 19, 14, 20, 15, 6, 16, 12, 17, 21, 18, 22, 19, 14, 20, 12, 21, 16, 22, 8, 26, 8, 27, 23, 28, 24, 29, 25, 0, 0, 0, 2147483647, 4, 26, 1, 1, 0, 0, 0, 0, 2147483647, 30, 27, 1, 31, 28, 0, 0, 0, 44, 32, -1, 15, 2, 1, 7, 29, 33, 7, 34, 7, 35, 5, 36, 30, 37, 1, 38, 7, 8, 5, 39, 15, 40, 12, 41, 31, 42, 31, 43, 32, 3, 33, 0, 6, 0, 48, 32, -1, 4, 2, 1, 45, 30, 46, 7, 47, 8, 0, 0, 0, 2147483647, 49, 34, 1, 7, 35, 0, 1073741824, -1, 2147483647, 65, -1, 5, 66, 9, 67, 36, 68, 37, 69, 38, 70, 38, 0, 8, -1, 2147483647, 81, -1, 1, 82, 39, 0, 0, 0, 2147483647, 83, 40, 0, 0, 0, 0, 4, 84, -1, 3, 2, 1, 7, 41, 3, 42, 0, 12, 0, 99, 85, -1, 16, 2, 1, 7, 43, 8, 5, 86, 6, 87, 16, 88, 7, 89, 7, 90, 12, 91, 12, 92, 12, 93, 7, 94, 7, 95, 7, 96, 7, 97, 7, 98, 8, 0, 0, 0, 4, 100, -1, 3, 2, 1, 7, 44, 3, 45, 0, 14, 0, 99, 85, -1, 16, 2, 1, 7, 43, 8, 5, 86, 6, 87, 16, 88, 7, 89, 7, 90, 12, 91, 12, 92, 12, 93, 7, 94, 7, 95, 7, 96, 7, 97, 7, 98, 8, 0, 0, 0, 4, 101, -1, 3, 2, 1, 7, 46, 3, 47, 0, 16, 0, 99, 85, -1, 16, 2, 1, 7, 43, 8, 5, 86, 6, 87, 16, 88, 7, 89, 7, 90, 12, 91, 12, 92, 12, 93, 7, 94, 7, 95, 7, 96, 7, 97, 7, 98, 8, 0, 0, 0, 2147483647, 102, 48, 0, 0 </int_array>
+			<int_array  len="439"> 				-1, -1, 4, 0, -1, 3, 1, 0, 2, 1, 3, 2, 0, 0, 0, 4, 5, -1, 2, 2, 1, 3, 3, 0, 1, 0, 6, 6, -1, 19, 2, 1, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 7, 16, 12, 17, 13, 18, 12, 19, 14, 20, 15, 21, 16, 22, 8, 23, 14, 24, 9, 0, 1, 0, 25, 25, -1, 21, 2, 1, 7, 17, 8, 5, 9, 6, 10, 7, 11, 8, 12, 18, 13, 19, 14, 20, 15, 6, 16, 12, 17, 21, 18, 22, 19, 14, 20, 12, 21, 16, 22, 8, 26, 8, 27, 23, 28, 24, 29, 25, 0, 0, 0, 2147483647, 4, 26, 1, 1, 0, 0, 0, 0, 2147483647, 30, 27, 1, 31, 28, 0, 0, 0, 44, 32, -1, 15, 2, 1, 7, 29, 33, 7, 34, 7, 35, 5, 36, 30, 37, 1, 38, 7, 8, 5, 39, 15, 40, 12, 41, 31, 42, 31, 43, 32, 3, 33, 0, 6, 0, 48, 32, -1, 4, 2, 1, 45, 30, 46, 7, 47, 8, 0, 0, 0, 2147483647, 49, 34, 2, 7, 35, 39, 36, 0, 1073741824, -1, 2147483647, 51, -1, 1, 52, 37, 0, 1073741825, -1, 2147483647, 66, -1, 6, 54, 36, 67, 9, 68, 38, 69, 39, 70, 40, 71, 40, 0, 10, -1, 2147483647, 25, -1, 3, 12, 41, 17, 21, 27, 36, 0, 1073741826, -1, 2147483647, 73, -1, 2, 74, 42, 75, 43, 0, 8, -1, 2147483647, 78, -1, 1, 79, 24, 0, 8, -1, 2147483647, 85, -1, 1, 86, 44, 0, 0, 0, 2147483647, 87, 45, 0, 0, 0, 0, 4, 88, -1, 3, 2, 1, 7, 46, 3, 47, 0, 16, 0, 103, 89, -1, 16, 2, 1, 7, 48, 8, 5, 90, 6, 91, 16, 92, 7, 93, 7, 94, 12, 95, 12, 96, 12, 97, 7, 98, 7, 99, 7, 100, 7, 101, 7, 102, 8, 0, 0, 0, 4, 104, -1, 3, 2, 1, 7, 49, 3, 50, 0, 18, 0, 103, 89, -1, 16, 2, 1, 7, 48, 8, 5, 90, 6, 91, 16, 92, 7, 93, 7, 94, 12, 95, 12, 96, 12, 97, 7, 98, 7, 99, 7, 100, 7, 101, 7, 102, 8, 0, 0, 0, 4, 105, -1, 3, 2, 1, 7, 51, 3, 52, 0, 20, 0, 103, 89, -1, 16, 2, 1, 7, 48, 8, 5, 90, 6, 91, 16, 92, 7, 93, 7, 94, 12, 95, 12, 96, 12, 97, 7, 98, 7, 99, 7, 100, 7, 101, 7, 102, 8, 0, 0, 0, 2147483647, 106, 53, 0, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="49" shared="false">
+			<array  len="54" shared="false">
 				<node_path> "." </node_path>
 				<transform> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 </transform>
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
-					<string> "3D" </string>
+					<string> "Script" </string>
 				</dictionary>
 				<dictionary  shared="false">
 					<string> "_editor_collapsed" </string>
@@ -180,9 +186,16 @@
 				</dictionary>
 				<resource  external="3">  </resource>
 				<transform> 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.328253, 0 </transform>
+				<real> 0.1 </real>
+				<array  len="1" shared="false">
+					<node_path> "col_triggers" </node_path>
+				</array>
 				<real> 8.33 </real>
 				<real> 7 </real>
 				<int> 25 </int>
+				<real> 0.33 </real>
+				<real> 0.8225 </real>
+				<real> 0.96 </real>
 				<dictionary  shared="false">
 					<string> "active" </string>
 					<bool> False </bool>
