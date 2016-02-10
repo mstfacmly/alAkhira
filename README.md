@@ -7,6 +7,6 @@ To access the Blender 3D art models, you will need to have Bittorrent Sync insta
 goo.gl/D1iRZV
 
 ## Links to tools
-godotengine.org
-blender.org
-getsync.com
+ - godotengine.org
+ - blender.org
+ - getsync.com
