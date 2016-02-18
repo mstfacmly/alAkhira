@@ -1,7 +1,7 @@
 
 extends Spatial
 
-# NOTE: this scripts assumes that every _phys and _spir node has only children of the 
+# NOTE: this scripts assumes that every _phys and _spir node has only children of the
 # same type or none and will also be switched
 
 var DIFFUSE = FixedMaterial.PARAM_DIFFUSE
@@ -18,7 +18,8 @@ var spi = {
 }
 var anim = []
 var players = []
-var curr = 'phys'
+onready var az = get_node("/root/scene/player/scripts/shift")
+var curr
 var overlay = 'none'
 
 var showing = false
@@ -36,15 +37,13 @@ func _ready():
 	traverse(root.get_children())
 	unique_materials(phys)
 	unique_materials(spi)
-	
+
 	#initialize on phys
-	spir_peek(spi, true)
 	toggle(spi, phys)
-	
-	
+
 	set_process_input(true)
 	set_fixed_process(true)
-		
+	set_process(true)
 
 	pass
 
@@ -58,55 +57,49 @@ func _input(ev):
 			_spi()
 
 func _phys():
+	
 	toggle(phys, spi)
-	spir_peek(spi, false)
 	curr = 'spi'
 	env_transition(1)
-	
+
 func _spi():
 	toggle(spi, phys)
-	spir_peek(spi, true)
 	curr = 'phys'
 	env_transition(-1)
+
+func _process(delta):
+	curr = az.curr
 
 func _fixed_process(delta):
 	if showing != false || hidding != false:
 		interpolate(showing, hidding, delta)
-	
+
 func interpolate(show, hide, delta):
 	var step_show
 	var step_hide
 	var color
 	var target
 	t += delta
-	
+
 	var step = t/transition_time
-	
+
 	if show != false:
 		for mat in show['materials']:
 			color = mat.get_parameter(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 1)
 			step_show = color.linear_interpolate(target, step)
 			mat.set_parameter(DIFFUSE, step_show)
-				
+
 	if hide != false:
 		for mat in hide['materials']:
 			color = mat.get_parameter(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 0)
 			step_hide = color.linear_interpolate(target, step)
 			mat.set_parameter(DIFFUSE, step_hide)
-	
+
 	if t >= transition_time:
 		post_toggle(hide, show)
-	
-func spir_peek(store, activate):
-	if activate:
-		for mat in store['materials'] :
-			mat.set_blend_mode(ADD)
-	else:
-		for mat in store['materials'] :
-			mat.set_blend_mode(MIX)
-			
+
 #switch from a to b
 func toggle(a, b):
 	if b != false:
@@ -116,7 +109,6 @@ func toggle(a, b):
 	showing = b
 	hidding = a
 	t = 0
-	
 
 func post_toggle(a, b):
 	if a != false:
@@ -141,10 +133,10 @@ func traverse(nodes):
 	var materials
 	for node in nodes:
 		name = node.get_name()
-		
+
 		if name.match('*_phys') or name.match('*_spi'):
 			materials = get_materials(node)
-			
+
 			if name.match('*_phys'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
@@ -154,10 +146,10 @@ func traverse(nodes):
 		elif node.is_type('AnimationPlayer'):
 			if(name.match('PhysToSpir') or node.has_animation('PhysToSpir')):
 				anim.push_back(node)
-				
+
 		elif node.get_child_count():
 			traverse(node.get_children())
-			
+
 func get_next_material(root):
 	var res = []
 	var surfaces
@@ -168,9 +160,9 @@ func get_next_material(root):
 		surfaces = mesh.get_surface_count()
 		for i in range(surfaces):
 			res.push_back(mesh.surface_get_material(i))
-			
+
 	var nodes = root.get_children()
-	for node in nodes : 
+	for node in nodes :
 		res.append(get_materials(node))
 	return res
 
@@ -188,12 +180,12 @@ func get_materials(root):
 				res.push_back(mesh.surface_get_material(i))
 		else:
 			res.push_back(mat)
-			
+
 	var nodes = root.get_children()
-	for node in nodes : 
+	for node in nodes :
 		res += get_materials(node)
 	return res
-	
+
 func unique_materials(store):
 	var record = []
 	var new = []
@@ -204,4 +196,3 @@ func unique_materials(store):
 			new.push_back(resource)
 			record.push_back(resource.get_rid())
 	store['materials'] = new
-	

@@ -16,14 +16,16 @@ const MAX_SLOPE_ANGLE = 30
 
 var facing_dir = Vector3(0, 0, -1)
 var movement_dir = Vector3()
-var jumping = false 
+var jumping = false
+var falling = false
+var sliding = false
 
 var turn_speed = 33
 var keep_jump_inertia = true
 var air_idle_deaccel = false
 var max_speed
-var sprint = 21.0
-var run = 11.0
+var sprint = 13.0
+var run = 7.0
 var walk = 3.32
 var accel = 7.33
 var deaccel = 27.0
@@ -46,8 +48,8 @@ var space
 var timer
 var wait = 3.33
 
-var paused = false
-
+onready var det = get_node("step_detect")
+onready var sd = get_node("step_up")
 #var prev_shoot = false
 
 var last_floor_velocity = Vector3()
@@ -79,10 +81,18 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 
+func _jump():
+	Input.is_action_pressed("jump")
+	sd.set_trigger(true)
+
 func _integrate_forces(state):
 	lv = state.get_linear_velocity() # linear velocity
 	g = state.get_total_gravity() * 2
 	var delta = state.get_step()
+	var onfloor = false
+	var onwall = false
+	var onslope = false
+	var jump_attempt = Input.is_action_pressed("jump")
 
 	lv += delta * g #apply gravity
 
@@ -93,12 +103,29 @@ func _integrate_forces(state):
 	hv = lv - (up * vv) # horizontal velocity
 
 #	print("speed : ", max_speed)
-#	print("h velocity : ", hv.length())
+	print("h velocity : ", hv.length())
 #	print("wait time : ", timer.get_wait_time())
+#	print("collide :", state.get_contact_count())
+#	print("sd:",sd.is_trigger())
+	
+	if !onfloor:
+		sd.set_trigger(true)
+#	if !onfloor and !jumping:
+#		falling = true
+	if falling:
+		sd.set_trigger(true)
+	if jump_attempt:
+		sd.set_trigger(true)
+	if jumping:
+		sd.set_trigger(true)
+#	if onfloor:
+#		sd.set_trigger(true)
+	if onslope:
+		sd.set_trigger(false)
 
 	var countd = timer.get_wait_time()
 
-	if hv.length() > 10.0 and hv.length() < 11.333 :
+	if hv.length() > 7.0 and hv.length() < 11.333 :
 		timer.set_wait_time(countd - 0.01)
 	if hv.length() >= 11.555 :
 		anim = SPRINT
@@ -116,10 +143,7 @@ func _integrate_forces(state):
 	hspeed = hv.length() #horizontal speed
 
 	var floor_velocity = Vector3()
-	var onfloor = false
-	var onwall = false
 	var n = Vector3()
-
 	var dir = Vector3() #where does the player intend to walk to
 
 	var cam_xform = get_node("target/camera").get_global_transform()
@@ -133,9 +157,9 @@ func _integrate_forces(state):
 	if (JS.get_analog("ls_right") or Input.is_action_pressed("move_right")):
 		dir+=cam_xform.basis[0]
 
-	var jump_attempt = Input.is_action_pressed("jump")
-
 	var target_dir = (dir - up*dir.dot(up)).normalized()
+	
+	var floor_index = -1
 
 	if state.get_contact_count() == 0 :
 		floor_velocity = last_floor_velocity
@@ -146,29 +170,36 @@ func _integrate_forces(state):
 			var slope = rad2deg(acos(n.dot(up)))
 			if shape == 0 : #capsule
 				if slope < MAX_SLOPE_ANGLE :
-					floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 0.0099
+					floor_index = i
+					floor_velocity = state.get_contact_collider_velocity_at_pos(floor_index) * 0.2
 					if target_dir.length() > 0 :
 						floor_velocity = n.reflect(target_dir) #follow the slope
 					onfloor = true
+					onslope = true
 					break
 				elif slope <= 90 :
 					onwall = true
 #					print(onwall)
 			elif shape == 1 and not onfloor and on_floor : # slope_down
-				floor_velocity = state.get_contact_collider_velocity_at_pos(i) * 1.01
+				floor_index = i
+				floor_velocity = state.get_contact_collider_velocity_at_pos(floor_index) * 0.9
 				if target_dir.length() > 0 :
 					floor_velocity = n.reflect(target_dir) #follow the slope
 				onfloor = true
+				onslope = true
+#				sliding = true
 				break
 			break
 
+	print("floor index :", floor_index)
+		
 	# calculate new direction and speed
 	if onfloor :
 		#if speed is less than 0.1, sharp turns do nothing
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshhold
 		if dir.length() > 0 and not sharp_turn :
 			if hspeed > 0.001 :
-				hdir = adjust_facing(hdir,target_dir,delta,1.0/hspeed*turn_speed,up)
+				hdir = adjust_facing(hdir , target_dir, delta,1.0 / hspeed * turn_speed, up)
 				facing_dir = -hdir
 			else :
 				hdir = target_dir
@@ -213,10 +244,13 @@ func _integrate_forces(state):
 		if not jump_attempt : #short jump
 			vv -= g.length() / 2.486 / 2.486 #3.14159
 			jumping = false
+			falling = true
 		elif vv < 2.486: # or onfloor or onwall: # fv, crashed or landed
 			jumping = false
+			falling = true
 
 	if onfloor and jump_attempt :
+		sd.set_trigger(true)
 		vv = g.length() / 2.486
 		jumping = true
 		onfloor = false
@@ -225,7 +259,7 @@ func _integrate_forces(state):
 	elif onwall and jump_attempt : 
 		vv = g.length() / 2.486
 		hv = n * vv
-		onfloor = false
+#		onfloor = false
 		
 	if onfloor :
 		lv = hv + up * floor_velocity.normalized().dot(up)*hspeed

@@ -13,10 +13,8 @@ func _input(ev):
 	
 	if paused == false and pause:
 		_on_pause()
-		paused = true
 	elif paused == true and pause:
 		_on_unpause()
-		paused = false
 			
 	if ev.is_action("pause") && ev.is_pressed():
 		t.start()
@@ -30,11 +28,13 @@ func _on_pause():
 	get_node("pause_menu").popup()
 	get_tree().set_pause(true)
 	az.set_hidden(true)
+	paused = true
 
 func _on_unpause():
 	get_node("pause_menu").hide()
 	get_tree().set_pause(false)
 	az.set_hidden(false)
+	paused = false
 
 func _on_timer_timeout():
 	OS.get_main_loop().quit()
