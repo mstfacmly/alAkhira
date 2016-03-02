@@ -45,18 +45,31 @@ var JS
 var axis_value
 var space
 
-var timer
+onready var timer = get_node("timer")
 var wait = 3.33
 
-onready var det = get_node("step_detect")
-onready var sd = get_node("step_up")
-#var prev_shoot = false
-
 var last_floor_velocity = Vector3()
+
+var jump_attempt
 
 func _body_enter_shape(bodyID, body, shape, localShape):
 	if body.has_method('collide'):
 		body.collide(self, space)
+
+func _input(ev):
+	if (ev.is_action_pressed("jump") && !ev.is_echo()):
+		jump_attempt = true
+	else:
+		jump_attempt = false
+		
+#	print("speed : ", max_speed)
+#	print("h velocity : ", hv.length())
+#	print("wait time : ", timer.get_wait_time())
+#	print("collide :", state.get_contact_count())
+#	print("sd:",sd.is_trigger())
+	print("jumping: ",jumping)
+#	print("onslope : ", onslope)
+#	print("floor index :", floor_index)
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transition a change of direction
 
@@ -81,10 +94,6 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 
-func _jump():
-	Input.is_action_pressed("jump")
-	sd.set_trigger(true)
-
 func _integrate_forces(state):
 	lv = state.get_linear_velocity() # linear velocity
 	g = state.get_total_gravity() * 2
@@ -92,7 +101,6 @@ func _integrate_forces(state):
 	var onfloor = false
 	var onwall = false
 	var onslope = false
-	var jump_attempt = Input.is_action_pressed("jump")
 
 	lv += delta * g #apply gravity
 
@@ -103,25 +111,11 @@ func _integrate_forces(state):
 	hv = lv - (up * vv) # horizontal velocity
 
 #	print("speed : ", max_speed)
-	print("h velocity : ", hv.length())
+#	print("h velocity : ", hv.length())
 #	print("wait time : ", timer.get_wait_time())
 #	print("collide :", state.get_contact_count())
 #	print("sd:",sd.is_trigger())
 	
-	if !onfloor:
-		sd.set_trigger(true)
-#	if !onfloor and !jumping:
-#		falling = true
-	if falling:
-		sd.set_trigger(true)
-	if jump_attempt:
-		sd.set_trigger(true)
-	if jumping:
-		sd.set_trigger(true)
-#	if onfloor:
-#		sd.set_trigger(true)
-	if onslope:
-		sd.set_trigger(false)
 
 	var countd = timer.get_wait_time()
 
@@ -159,39 +153,16 @@ func _integrate_forces(state):
 
 	var target_dir = (dir - up*dir.dot(up)).normalized()
 	
-	var floor_index = -1
-
-	if state.get_contact_count() == 0 :
+	if (state.get_contact_count() == 0):
 		floor_velocity = last_floor_velocity
-	else :
-		for i in range(state.get_contact_count()) :
-			var shape = state.get_contact_local_shape(i)
-			n = state.get_contact_local_normal(i)
-			var slope = rad2deg(acos(n.dot(up)))
-			if shape == 0 : #capsule
-				if slope < MAX_SLOPE_ANGLE :
-					floor_index = i
-					floor_velocity = state.get_contact_collider_velocity_at_pos(floor_index) * 0.2
-					if target_dir.length() > 0 :
-						floor_velocity = n.reflect(target_dir) #follow the slope
-					onfloor = true
-					onslope = true
-					break
-				elif slope <= 90 :
-					onwall = true
-#					print(onwall)
-			elif shape == 1 and not onfloor and on_floor : # slope_down
-				floor_index = i
-				floor_velocity = state.get_contact_collider_velocity_at_pos(floor_index) * 0.9
-				if target_dir.length() > 0 :
-					floor_velocity = n.reflect(target_dir) #follow the slope
-				onfloor = true
-				onslope = true
-#				sliding = true
-				break
+	else:
+		for i in range(state.get_contact_count()):
+			if (state.get_contact_local_shape(i) != 1):
+				continue
+			
+			onfloor = true
+			floor_velocity = state.get_contact_collider_velocity_at_pos(i)
 			break
-
-	print("floor index :", floor_index)
 		
 	# calculate new direction and speed
 	if onfloor :
@@ -250,14 +221,13 @@ func _integrate_forces(state):
 			falling = true
 
 	if onfloor and jump_attempt :
-		sd.set_trigger(true)
-		vv = g.length() / 2.486
+		vv = g.length() / 3.486
 		jumping = true
 		onfloor = false
 		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
 			lv += last_floor_velocity - up * last_floor_velocity.dot(up) 
 	elif onwall and jump_attempt : 
-		vv = g.length() / 2.486
+		vv = g.length() / 3.486
 		hv = n * vv
 #		onfloor = false
 		
@@ -305,11 +275,12 @@ func _ready():
 	# Initalization here
 	get_node("AnimationTreePlayer").set_active(true)
 	set_process(true)
+	set_process_input(true)
+	
 	JS = get_node("/root/SUTjoystick")
 
 	set_contact_monitor(true)
 	connect('body_enter_shape', self, "_body_enter_shape")
 
 	space = get_world().get_direct_space_state()
-	timer = get_node("timer")
 	timer.set_wait_time(wait)
