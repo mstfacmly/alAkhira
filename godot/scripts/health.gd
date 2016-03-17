@@ -16,7 +16,7 @@ func _process(delta):
 	if health >=0 && curr == 'phys':
 		health -= delta / div
 	elif curr == 'spi':
-		health -= rand_range(-rnd,rnd) 
+		health -= rand_range(-rnd,rnd * 1.001) 
 	elif health == 0:
 		isdead = true
 

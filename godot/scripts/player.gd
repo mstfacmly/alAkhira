@@ -10,8 +10,6 @@ const AIR_DOWN = 4
 const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
 
-const MAX_SLOPE_ANGLE = 30
-
 #const CHAR_SCALE = Vector3(1,1,1)
 
 var facing_dir = Vector3(0, 0, -1)
@@ -21,7 +19,7 @@ var falling = false
 var sliding = false
 
 var turn_speed = 33
-var keep_jump_inertia = true
+var keep_jump_inertia = false
 var air_idle_deaccel = false
 var max_speed
 var sprint = 13.0
@@ -44,6 +42,7 @@ var on_floor = false
 var JS
 var axis_value
 var space
+const DEADZONE = 0.2
 
 onready var timer = get_node("timer")
 var wait = 3.33
@@ -52,34 +51,60 @@ var last_floor_velocity = Vector3()
 
 var jump_attempt
 
-func _body_enter_shape(bodyID, body, shape, localShape):
-	if body.has_method('collide'):
-		body.collide(self, space)
+#func _body_enter_shape(bodyID, body, shape, localShape):
+#	if body.has_method('collide'):
+#		body.collide(self, space)
 
 func _input(ev):
-	if (ev.is_action_pressed("jump") && !ev.is_echo()):
+	if (ev.is_action("jump") && ev.is_pressed() && !ev.is_echo()):
 		jump_attempt = true
 	else:
 		jump_attempt = false
 		
+#	print(ev)
+
+func _fixed_process(delta):
+	# Detect physics for slopes/walls
+	var space = get_world().get_space()
+	var space_state = PhysicsServer.space_get_direct_state(space)
+
+	# Recalculate Joystick input for walk/run
+	var x = abs(Input.get_joy_axis(0,0))
+	var y = abs(Input.get_joy_axis(0,1))
+
+	axis_value = atan(x + y) # * PI / 360 * 100
+
+	if axis_value < 0.743 and axis_value > 0.101 :
+		hspeed = max(hspeed - (deaccel * 0.3) * (delta * 10), 0)
+		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
+		max_speed = walk
+	else :
+		max_speed = run
+
+#	print('X',x)
+#	print('Y',y)
+#	print("axis val : ", axis_value)
+#	print("speed : ", max_speed)
 #	print("speed : ", max_speed)
 #	print("h velocity : ", hv.length())
 #	print("wait time : ", timer.get_wait_time())
-#	print("collide :", state.get_contact_count())
+#	print("collide :", state.get_ )
 #	print("sd:",sd.is_trigger())
-	print("jumping: ",jumping)
+#	print("jumping: ",jumping)
 #	print("onslope : ", onslope)
 #	print("floor index :", floor_index)
+#	print("shape ", shape)
 
-func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transition a change of direction
 
-	var n = p_target # normal
+func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
+
+	var n = p_target						# normal
 	var t = n.cross(current_gn).normalized()
 	var x = n.dot(p_facing)
 	var y = t.dot(p_facing)
 	var ang = atan2(y,x)
 
-	if (abs(ang)<0.001): # too small
+	if (abs(ang)<0.001):					# too small
 		return p_facing
 
 	var s = sign(ang)
@@ -95,27 +120,21 @@ func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn): #transi
 	return ((n * cos(ang)) + (t * sin(ang))) * p_facing.length()
 
 func _integrate_forces(state):
-	lv = state.get_linear_velocity() # linear velocity
+	lv = state.get_linear_velocity()		# linear velocity
 	g = state.get_total_gravity() * 2
 	var delta = state.get_step()
 	var onfloor = false
 	var onwall = false
 	var onslope = false
 
-	lv += delta * g #apply gravity
+	lv += delta * g							#apply gravity
 
 	var anim = FLOOR
 
-	up = -g.normalized() #(up is against gravity)
-	vv = up.dot(lv)# / 2.486 # vertical velocity
-	hv = lv - (up * vv) # horizontal velocity
+	up = -g.normalized()					#(up is against gravity)
+	vv = up.dot(lv)							#/ 2.486 # vertical velocity
+	hv = lv - (up * vv)						# horizontal velocity
 
-#	print("speed : ", max_speed)
-#	print("h velocity : ", hv.length())
-#	print("wait time : ", timer.get_wait_time())
-#	print("collide :", state.get_contact_count())
-#	print("sd:",sd.is_trigger())
-	
 
 	var countd = timer.get_wait_time()
 
@@ -142,28 +161,28 @@ func _integrate_forces(state):
 
 	var cam_xform = get_node("target/camera").get_global_transform()
 
-	if (JS.get_analog("ls_up") or Input.is_action_pressed("move_forward")):
+	if (Input.is_action_pressed("move_forward") or JS.get_analog("ls_up")):
 		dir+=-cam_xform.basis[2]
-	if (JS.get_analog("ls_down") or Input.is_action_pressed("move_backwards")):
+	if (Input.is_action_pressed("move_backwards") or JS.get_analog("ls_down")):
 		dir+=cam_xform.basis[2]
-	if (JS.get_analog("ls_left") or Input.is_action_pressed("move_left")):
+	if (Input.is_action_pressed("move_left") or JS.get_analog("ls_left")):
 		dir+=-cam_xform.basis[0]
-	if (JS.get_analog("ls_right") or Input.is_action_pressed("move_right")):
+	if (Input.is_action_pressed("move_right") or JS.get_analog("ls_right")):
 		dir+=cam_xform.basis[0]
 
 	var target_dir = (dir - up*dir.dot(up)).normalized()
-	
+
 	if (state.get_contact_count() == 0):
 		floor_velocity = last_floor_velocity
 	else:
 		for i in range(state.get_contact_count()):
 			if (state.get_contact_local_shape(i) != 1):
 				continue
-			
+
 			onfloor = true
 			floor_velocity = state.get_contact_collider_velocity_at_pos(i)
 			break
-		
+
 	# calculate new direction and speed
 	if onfloor :
 		#if speed is less than 0.1, sharp turns do nothing
@@ -182,14 +201,39 @@ func _integrate_forces(state):
 
 		hv = hdir * hspeed
 
-		var mesh = get_node("armature").get_node("Skeleton").get_node("mesh")
+		var mesh = get_node("armature/Skeleton/mesh")
 		var mesh_xform = mesh.get_transform()
 		var facing_mesh= -mesh_xform.basis[0].normalized()
+
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
 		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
+
 		var m3 = Matrix3(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled( CHAR_SCALE )
 
 		mesh.set_transform(Transform().looking_at(facing_dir, up))
+
+		if (onfloor) && jump_attempt :
+			vv = g.length() / 2.486
+			jumping = true
+			onfloor = false
+			if onfloor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
+				lv += last_floor_velocity - up * last_floor_velocity.dot(up)
+#		elif onwall and jump_attempt :
+#			vv = g.length() / 2.486
+#			hv = n * vv
+#			onfloor = false
+		else:
+			pass
+
+		if jumping :
+			if not jump_attempt : #short jump
+				vv -= g.length() / 2.486 / 2.486 #3.14159
+				jumping = false
+#				falling = true
+			elif vv < 2.486: # or onfloor or onwall: # fv, crashed or landed
+				vv -= g.length() / 2.486 / 2.486
+				jumping = false
+#				falling = true
 
 	else :
 		if vv > 0 :
@@ -211,76 +255,38 @@ func _integrate_forces(state):
 			hspeed = max(hspeed - (deaccel * 0.2) * delta, 0)
 			hv = hdir * hspeed
 
-	if jumping : 
-		if not jump_attempt : #short jump
-			vv -= g.length() / 2.486 / 2.486 #3.14159
-			jumping = false
-			falling = true
-		elif vv < 2.486: # or onfloor or onwall: # fv, crashed or landed
-			jumping = false
-			falling = true
-
-	if onfloor and jump_attempt :
-		vv = g.length() / 3.486
-		jumping = true
-		onfloor = false
-		if on_floor and last_floor_velocity != Vector3() : # transfer velocity to jump immediately
-			lv += last_floor_velocity - up * last_floor_velocity.dot(up) 
-	elif onwall and jump_attempt : 
-		vv = g.length() / 3.486
-		hv = n * vv
-#		onfloor = false
-		
 	if onfloor :
-		lv = hv + up * floor_velocity.normalized().dot(up)*hspeed
+		lv = hv + up * floor_velocity.normalized().dot(up) * hspeed
 		last_floor_velocity = floor_velocity
 	else :
 		lv =  hv + up * vv
 
 	on_floor = onfloor
 	state.set_linear_velocity(lv)
-	
+
 	if (onfloor):
 		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / max_speed)
 	get_node("AnimationTreePlayer").transition_node_set_current("state", anim)
 	state.set_angular_velocity(Vector3())
-	
 
-func footStep():
-	randomize() # otherwise it might be the same each program run
-	var sounds = ["step1","step2","step3"] # your sounds names
-	var rand = rand_range( 0, sounds.size() )
-	get_node("SamplePlayer").play( sounds[rand] ) # play random one
-
-func _process(delta):
-	var x = abs(Input.get_joy_axis(0,0)) #(JS.get_analog("ls_hor"))
-	var y = abs(Input.get_joy_axis(0,1))  #(JS.get_analog("ls_vert")) 
-
-	axis_value = atan(x + y) # * PI / 360 * 100
-
-	if axis_value < 0.743 and axis_value > 0.101 :
-#		accel = 21
-		hspeed = max(hspeed - (deaccel * 0.3) * (delta * 10), 0)
-		get_node("AnimationTreePlayer").blend2_node_set_amount("walk", hspeed / (deaccel * 0.3))
-		max_speed = walk
-	else :
-		max_speed = run
-
-#	print('X',x)
-#	print('Y',y)
-#	print("axis val : ", axis_value)
-#	print("speed : ", max_speed)
+#func footStep():
+#	randomize() # otherwise it might be the same each program run
+#	var sounds = ["step1","step2","step3"] # your sounds names
+#	var rand = rand_range( 0, sounds.size() )
+#	get_node("SamplePlayer").play( sounds[rand] ) # play random one
 
 func _ready():
 	# Initalization here
 	get_node("AnimationTreePlayer").set_active(true)
 	set_process(true)
+	set_fixed_process(true)
 	set_process_input(true)
-	
+
 	JS = get_node("/root/SUTjoystick")
 
 	set_contact_monitor(true)
-	connect('body_enter_shape', self, "_body_enter_shape")
-
+#	connect('body_enter_shape', self, "_body_enter_shape")
 	space = get_world().get_direct_space_state()
+
+
 	timer.set_wait_time(wait)

@@ -19,7 +19,7 @@ var spi = {
 var anim = []
 var players = []
 onready var az = get_node("/root/scene/player/scripts/shift")
-var curr
+#var curr
 var overlay = 'none'
 
 var showing = false
@@ -43,32 +43,28 @@ func _ready():
 
 	set_process_input(true)
 	set_fixed_process(true)
-	set_process(true)
+#	set_process(true)
 
 	pass
 
 func _input(ev):
 	var pause = ev.is_action_pressed("pause") && !ev.is_echo()
-	
+
 	if pause:
-		if curr == 'phys':
+		if az.curr == 'phys':
 			_phys()
-		elif curr == 'spi':
+		elif az.curr == 'spi':
 			_spi()
 
 func _phys():
-	
 	toggle(phys, spi)
-	curr = 'spi'
+	az.curr = 'spi'
 	env_transition(1)
 
 func _spi():
 	toggle(spi, phys)
-	curr = 'phys'
+	az.curr = 'phys'
 	env_transition(-1)
-
-func _process(delta):
-	curr = az.curr
 
 func _fixed_process(delta):
 	if showing != false || hidding != false:
