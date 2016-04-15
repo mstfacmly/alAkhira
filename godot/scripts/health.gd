@@ -4,7 +4,7 @@ var health = 100
 var div = 5
 var healths
 var isdead = false
-onready var shift = get_node("../shift")
+onready var shift = get_node("/root/scene/player/scripts/shift")
 
 func _process(delta):
 	var curr = shift.curr

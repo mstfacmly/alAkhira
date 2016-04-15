@@ -4,7 +4,7 @@ var paused = false
 onready var t = get_node("timer")
 onready var root = get_node("/root/")
 onready var az = root.get_node("scene/player")
-onready var ui = root.get_node("scene/player/scripts/healthb")
+onready var ui = root.get_node("scene/player/ui/healthb")
 
 func _input(ev):
 	var wait = 2
@@ -17,7 +17,7 @@ func _input(ev):
 	elif paused == true and pause:
 		_on_unpause()
 
-	if paused == true && ev.is_action_pressed("pause"):
+	if ev.is_action_pressed("pause"):
 		t.start()
 	elif ev.is_action("pause") && !ev.is_pressed():
 		t.stop()
