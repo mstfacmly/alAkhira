@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="12" version="2.0" version_name="Godot Engine v2.0.stable.custom_build">
+<resource_file type="PackedScene" subresource_count="11" version="2.0" version_name="Godot Engine v2.0.stable.custom_build">
 	<ext_resource path="res://scripts/health.gd" type="Script" index="0"></ext_resource>
 	<ext_resource path="res://assets/script_nodes/pause.xml" type="PackedScene" index="1"></ext_resource>
 	<ext_resource path="res://assets/textures/vignette.png" type="Texture" index="2"></ext_resource>
 	<ext_resource path="res://assets/textures/white.png" type="Texture" index="3"></ext_resource>
-	<ext_resource path="res://assets/textures/blur.png" type="Texture" index="4"></ext_resource>
-	<ext_resource path="res://scripts/debug_text.gd" type="Script" index="5"></ext_resource>
+	<ext_resource path="res://scripts/debug_text.gd" type="Script" index="4"></ext_resource>
 	<resource type="StyleBoxFlat" path="local://19">
 		<real name="content_margin/left"> -1 </real>
 		<real name="content_margin/right"> -1 </real>
@@ -46,7 +45,7 @@
 	<resource type="CanvasItemShader" path="local://6">
 		<dictionary name="_code" shared="false">
 			<string> "fragment" </string>
-			<string> "uniform texture mask;&#000a;float radius = 0.003;&#000a;vec3 col = vec3(0);&#000a;&#000a;col+= texscreen(SCREEN_UV+vec2(-radius,-radius));&#000a;col+= texscreen(SCREEN_UV+vec2(0,-radius));&#000a;col+= texscreen(SCREEN_UV+vec2(radius,-radius));&#000a;&#000a;col+= texscreen(SCREEN_UV+vec2(-radius,0));&#000a;col+= texscreen(SCREEN_UV+vec2(0,0));&#000a;col+= texscreen(SCREEN_UV+vec2(radius,0));&#000a;&#000a;&#000a;col+= texscreen(SCREEN_UV+vec2(-radius,radius));&#000a;col+= texscreen(SCREEN_UV+vec2(0,radius));&#000a;col+= texscreen(SCREEN_UV+vec2(radius,radius));&#000a;&#000a;col/=9.0;&#000a;COLOR.rgb=col;&#000a;COLOR.a=tex(mask, UV).r;" </string>
+			<string> "uniform texture vignette;&#000a;uniform float radius=0.005;&#000a;uniform float etching=2.0;&#000a;uniform float edge_darken=0.5;&#000a;&#000a;float d = length(UV-vec2(0.5,0.5))*etching;&#000a;mat2 rot = mat2( vec2(cos(d),-sin(d)), vec2(sin(d),cos(d)) );&#000a;&#000a;vec3 col = vec3(0);&#000a;&#000a;col+= texscreen(SCREEN_UV+rot*vec2(-radius,-radius));&#000a;col+= texscreen(SCREEN_UV+rot*vec2(0,-radius));&#000a;col+= texscreen(SCREEN_UV+rot*vec2(radius,-radius));&#000a;&#000a;col+= texscreen(SCREEN_UV+rot*vec2(-radius,0));&#000a;vec3 scol = texscreen(SCREEN_UV+vec2(0,0));&#000a;col+= scol;&#000a;col+= texscreen(SCREEN_UV+rot*vec2(radius,0));&#000a;&#000a;&#000a;col+= texscreen(SCREEN_UV+rot*vec2(-radius,radius));&#000a;col+= texscreen(SCREEN_UV+rot*vec2(0,radius));&#000a;col+= texscreen(SCREEN_UV+vec2(radius,radius));&#000a;&#000a;col/=9.0;&#000a;float v = tex(vignette,UV).r;&#000a;COLOR.rgb=mix(col,scol,v)*mix(1.0,v,edge_darken);&#000a;&#000a;" </string>
 			<string> "fragment_ofs" </string>
 			<int> 0 </int>
 			<string> "light" </string>
@@ -63,7 +62,10 @@
 	<resource type="CanvasItemMaterial" path="local://7">
 		<resource name="shader/shader" resource_type="Shader" path="local://6">  </resource>
 		<int name="shader/shading_mode"> 0 </int>
-		<resource name="shader_param/mask" external="4">  </resource>
+		<resource name="shader_param/vignette" external="2">  </resource>
+		<real name="shader_param/radius"> 0.005 </real>
+		<real name="shader_param/etching"> 2 </real>
+		<real name="shader_param/edge_darken"> 0.5 </real>
 
 	</resource>
 	<main_resource>
@@ -76,7 +78,7 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "names" </string>
-			<string_array  len="44">
+			<string_array  len="42">
 				<string> "ui" </string>
 				<string> "visibility/behind_parent" </string>
 				<string> "anchor/right" </string>
@@ -114,8 +116,6 @@
 				<string> "expand" </string>
 				<string> "TextureFrame" </string>
 				<string> "blur" </string>
-				<string> "visibility/visible" </string>
-				<string> "visibility/self_opacity" </string>
 				<string> "debug_info" </string>
 				<string> "percent_visible" </string>
 				<string> "lines_skipped" </string>
@@ -128,7 +128,7 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="164"> 				-1, -1, 9, 0, -1, 8, 1, 0, 2, 1, 3, 1, 4, 2, 5, 0, 6, 3, 7, 3, 8, 4, 0, 0, 0, 28, 10, -1, 22, 11, 1, 12, 3, 13, 3, 2, 1, 3, 1, 14, 5, 15, 6, 16, 7, 17, 8, 4, 0, 5, 2, 6, 3, 18, 9, 19, 10, 20, 11, 21, 12, 22, 10, 23, 10, 24, 2, 25, 2, 26, 0, 27, 13, 0, 0, 0, 2147483647, 29, 14, 0, 0, 0, 0, 35, 30, -1, 10, 31, 15, 32, 16, 2, 1, 3, 1, 4, 0, 5, 0, 6, 3, 7, 3, 33, 17, 34, 0, 0, 0, 0, 35, 36, -1, 12, 37, 2, 38, 18, 32, 19, 2, 1, 3, 1, 15, 20, 4, 0, 5, 0, 6, 3, 7, 3, 33, 17, 34, 0, 0, 0, 0, 43, 39, -1, 9, 16, 21, 17, 22, 4, 0, 5, 0, 6, 3, 40, 20, 41, 23, 42, 24, 27, 25, 0 </int_array>
+			<int_array  len="162"> 				-1, -1, 9, 0, -1, 8, 1, 0, 2, 1, 3, 1, 4, 2, 5, 0, 6, 3, 7, 3, 8, 4, 0, 0, 0, 28, 10, -1, 22, 11, 1, 12, 3, 13, 3, 2, 1, 3, 1, 14, 5, 15, 6, 16, 7, 17, 8, 4, 0, 5, 2, 6, 3, 18, 9, 19, 10, 20, 11, 21, 12, 22, 10, 23, 10, 24, 2, 25, 2, 26, 0, 27, 13, 0, 0, 0, 2147483647, 29, 14, 0, 0, 0, 0, 35, 30, -1, 10, 31, 15, 32, 16, 2, 1, 3, 1, 4, 0, 5, 0, 6, 3, 7, 3, 33, 17, 34, 0, 0, 0, 0, 35, 36, -1, 11, 31, 18, 32, 19, 2, 1, 3, 1, 15, 20, 4, 0, 5, 0, 6, 3, 7, 3, 33, 17, 34, 0, 0, 0, 0, 41, 37, -1, 9, 16, 21, 17, 22, 4, 0, 5, 0, 6, 3, 38, 20, 39, 23, 40, 24, 27, 25, 0 </int_array>
 			<string> "variants" </string>
 			<array  len="26" shared="false">
 				<bool> True </bool>
@@ -137,7 +137,7 @@
 				<int> 2 </int>
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
-					<string> "Script" </string>
+					<string> "2D" </string>
 				</dictionary>
 				<real> 0.8225 </real>
 				<real> 0.911667 </real>
@@ -149,17 +149,17 @@
 				<real> -0.1 </real>
 				<resource  external="0">  </resource>
 				<resource  external="1">  </resource>
-				<real> 0.42 </real>
+				<real> 0.72 </real>
 				<resource  resource_type="CanvasItemMaterial" path="local://5">  </resource>
 				<resource  external="3">  </resource>
-				<real> 0.21 </real>
+				<real> 0.42 </real>
 				<resource  resource_type="CanvasItemMaterial" path="local://7">  </resource>
 				<real> 1 </real>
 				<real> 190 </real>
 				<real> 210 </real>
 				<int> 0 </int>
 				<int> -1 </int>
-				<resource  external="5">  </resource>
+				<resource  external="4">  </resource>
 			</array>
 			<string> "version" </string>
 			<int> 2 </int>
