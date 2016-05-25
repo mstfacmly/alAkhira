@@ -95,7 +95,7 @@ func js_input():
 	var Jy = Input.get_joy_axis(0,3)
 	
 	if abs(Jy) >= DEADZONE:
-		cam_pitch = max(min(cam_pitch + (Jy * (cam_view_sensitivity * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
+		cam_pitch = max(min(cam_pitch + (Jy * (cam_view_sensitivity * 5) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
 		
 	if abs(Jx) >= DEADZONE:
 		if cam_smooth_movement:
