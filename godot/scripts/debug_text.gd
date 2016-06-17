@@ -22,8 +22,8 @@ func _process(delta):
 		txt += str("\nDrawn Objects: ", Performance.get_monitor(Performance.RENDER_OBJECTS_IN_FRAME));
 		txt += str("\nDraw Calls: ", Performance.get_monitor(Performance.RENDER_DRAW_CALLS_IN_FRAME));
 #		txt += str("\nOn Floor: ", player.on_floor);
-		txt += str("\nLedge: ", player.ledge);
-		txt += str("\nWall: ", player.wall);
+#		txt += str("\nLedge: ", player.ledge);
+#		txt += str("\nWall: ", player.wall);
 		txt += str("\nVelocity: ", player.velocity.length());
 		txt += str("\nCam Radius: ", cam.cam_radius);
 		txt += str("\nCam FOV: ", cam.cam_fov);
@@ -35,6 +35,6 @@ func _process(delta):
 #		if (not player.result.empty()):
 #			txt += str("\nCollider: ", player.result.collider_id);
 #		else:
-#			txt += str("\nCollider: ", null ); 
+#			txt += str("\nCollider: ", null );
 
 		set_text(txt);
