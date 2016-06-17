@@ -22,7 +22,8 @@ var curr = 'phys'
 var overlay = 'none'
 
 var showing = false
-var hidding = false
+var hiding = false
+var shifting = false
 
 var t
 var transition_time = 0.5
@@ -50,29 +51,31 @@ func _ready():
 func _input(ev):
 	var cast = Input.is_action_pressed("cast")
 	var attack = Input.is_action_pressed("attack")
+	var shift = cast && attack
 	
-	if cast && attack:
+	if shift:
 		if curr == 'phys':
 			toggle(phys, spi)
 			spir_peek(spi, false)
 			curr = 'spi'
 			env_transition(1)
+			shifting = true
 		elif curr == 'spi':
 			toggle(spi, phys)
 			spir_peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
+			shifting = false
 	elif cast and curr == 'phys' and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
-	elif hidding == false and curr == 'phys' and overlay == 'spi' and not cast :
+	elif hiding == false and curr == 'phys' and overlay == 'spi' and not cast :
 		toggle(spi, false) #just hide spi
 		overlay = 'none'
 
-
 func _fixed_process(delta):
-	if showing != false || hidding != false:
-		interpolate(showing, hidding, delta)
+	if showing != false || hiding != false:
+		interpolate(showing, hiding, delta)
 	
 func interpolate(show, hide, delta):
 	var step_show
@@ -116,7 +119,7 @@ func toggle(a, b):
 			obj.set_fixed_process(true)
 			obj.show()
 	showing = b
-	hidding = a
+	hiding = a
 	t = 0
 	
 
@@ -126,7 +129,7 @@ func post_toggle(a, b):
 			obj.set_fixed_process(false)
 			obj.hide()
 	showing = false
-	hidding = false
+	hiding = false
 
 func env_transition(speed):
 	for a in anim:
