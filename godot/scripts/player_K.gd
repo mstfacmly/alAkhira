@@ -8,9 +8,9 @@ onready var cam = get_node("cam");
 
 var view_sensitivity = 0.2;
 var focus_view_sensv = 0.1;
-var sprint = 7.77
-var run = 4.44
-var walk = 2.12
+var walk = 3.12
+var run = walk * 1.5 #4.44
+var sprint = run * 2 #7.77
 #var run_multiplier = 2.1;
 var max_speed = run;
 var climbspeed = 6
@@ -217,30 +217,34 @@ func player_on_fixedprocess(delta):
 	else:
 		max_speed = max(min(max_speed + (4 * delta),walk * 2.0),run);
 
+	var move_up = Input.is_key_pressed(KEY_W) or JS.get_analog("ls_up");
+	var move_down = Input.is_key_pressed(KEY_S) or JS.get_analog("ls_down");
+	var move_left = Input.is_key_pressed(KEY_A) or JS.get_analog("ls_left");
+	var move_right = Input.is_key_pressed(KEY_D) or JS.get_analog("ls_right");
+
 	var tmp_camyaw = cam.cam_yaw;
 	if is_moving:
-		if Input.is_key_pressed(KEY_W) or JS.get_analog("ls_up"):
-			if Input.is_key_pressed(KEY_A) or JS.get_analog("ls_left"):
+		if move_up:
+			if move_left:
 				tmp_camyaw += 45;
-			if Input.is_key_pressed(KEY_D)  or JS.get_analog("ls_right"):
+			if move_right:
 				tmp_camyaw -= 45;
-		elif Input.is_key_pressed(KEY_S) or JS.get_analog("ls_down"):
-			if Input.is_key_pressed(KEY_A) or JS.get_analog("ls_left"):
+		elif move_down:
+			if move_left:
 				tmp_camyaw += 135;
-			elif Input.is_key_pressed(KEY_D) or JS.get_analog("ls_right"):
+			elif move_right:
 				tmp_camyaw -= 135;
 			else:
 				tmp_camyaw -= 180;
-		elif Input.is_key_pressed(KEY_A) or JS.get_analog("ls_left"):
+		elif move_left:
 			tmp_camyaw += 90;
-		elif Input.is_key_pressed(KEY_D) or JS.get_analog("ls_right"):
+		elif move_right:
 			tmp_camyaw -= 90;
 
 	if is_moving:
 		var body_rot = get_node("body").get_rotation();
 		body_rot.y = deg2rad(lerp(rad2deg(body_rot.y),tmp_camyaw,10 * delta));
 		get_node("body").set_rotation(body_rot);
-
 
 	if is_moving && hvel >= run - 0.1 and hvel <= sprint - 1 :
 		anim = FLOOR
@@ -256,7 +260,7 @@ func player_on_fixedprocess(delta):
 		cam.cam_fov = 72
 	elif is_moving && hvel <= walk + 0.5:
 		anim = WALK
-		cam.cam_radius = 3.1
+		cam.cam_radius = 3.7
 		cam.cam_fov = 64
 		if timer.get_wait_time() < 3:
 			timer.set_wait_time(3)
@@ -264,7 +268,7 @@ func player_on_fixedprocess(delta):
 			pass
 	else:
 		anim = FLOOR;
-		cam.cam_radius = 2.5;
+		cam.cam_radius = 3.1;
 		cam.cam_fov = 64;
 		timer.set_wait_time(3)
 
@@ -274,7 +278,7 @@ func player_on_fixedprocess(delta):
 		else:
 			anim = AIR_UP;
 	elif falling && !on_floor:
-		if hvel >= run:# - 1:
+		if hvel >= sprint:# - 1:
 			anim = RUN_AIR_DOWN;
 		else:
 			anim = AIR_DOWN;
