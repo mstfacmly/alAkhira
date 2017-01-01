@@ -8,15 +8,15 @@ onready var cam = get_node("cam");
 
 var view_sensitivity = 0.2;
 var focus_view_sensv = 0.1;
-var sprint = 11.0
-var run = 7.0
-var walk = 3.33
+var sprint = 7.77
+var run = 4.44
+var walk = 2.12
 #var run_multiplier = 2.1;
 var max_speed = run;
 var climbspeed = 6
 var gravity = -9.8;
 var gravity_factor = 3;
-var jump_speed = -gravity ;
+var jump_speed = -gravity * 1.11 ;
 var acceleration = 4;
 var deacceleration = 10;
 var accel = gravity
@@ -37,7 +37,7 @@ var falling = false;
 #var relevantCol = null;
 #var ledge = null;
 #var wall = null;
-var direction = 1;
+var direction = -1;
 var dist = 4;
 
 var char_offset = Vector3();
@@ -84,25 +84,12 @@ func _process(delta):
 func _fixed_process(delta):
 	check_movement(delta);
 	player_on_fixedprocess(delta);
-	getLedge(delta, delta);
-#	getWall(delta);
-#	check_climb_platform_horizontal(delta);
-	check_climb_platform_vertical(delta);
-
+	getParkour(delta, delta);
+	
 	if InputEvent.JOYSTICK_MOTION:
 		joy_input(delta);
 	else:
 		pass
-
-	var space_state = get_world().get_direct_space_state()
-	result = space_state.intersect_ray( get_translation(), Vector3(50,50,0), [self])
-
-	if (not result.empty()):
-		result = result
-	elif (result.has('collider')):
-		return result['collider'].get_node('wall')
-	else:
-		null
 
 func joy_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -110,8 +97,9 @@ func joy_input(delta):
 
 	var axis_value = atan(x + y) # * PI / 360 * 100
 	if axis_value < 0.743 and axis_value > 0.101 :
-		while max_speed > walk:
-			max_speed = max(min(max_speed - (4 * delta),walk * 2.0),walk);
+		if max_speed > walk:
+			while max_speed > walk:
+				max_speed = max(min(max_speed - (4 * delta),walk * 2.0),walk);
 	else :
 		pass
 
@@ -205,7 +193,7 @@ func check_movement(delta):
 
 	if jumping:
 		if !jump_attempt:
-			velocity.y += gravity / 4.972 #2.486 / 2.486
+			velocity.y += gravity / 2.486 #4.972 #2.486 / 2.486
 			jumping = false;
 			falling = true;
 		elif velocity.y >= 10.486:
@@ -254,22 +242,22 @@ func player_on_fixedprocess(delta):
 		get_node("body").set_rotation(body_rot);
 
 
-	if hvel >= 6.4 and hvel <= 7.2 :
+	if is_moving && hvel >= run - 0.1 and hvel <= sprint - 1 :
 		anim = FLOOR
 		cam.cam_radius = 4.0
-		cam.cam_fov = 68
+		cam.cam_fov = 69
 		if timer.get_wait_time() > 0.05 :
-			timer.set_wait_time(countd - 0.01)
+			timer.set_wait_time(countd - 0.005)
 		else:
 			pass
-	elif hvel >= 10:
+	elif is_moving && hvel >= run + 1.3:
 		anim = SPRINT
 		cam.cam_radius = 4.2
 		cam.cam_fov = 72
-	elif is_moving && hvel <= 4.2:
+	elif is_moving && hvel <= walk + 0.5:
 		anim = WALK
-		cam.cam_radius = 2.1
-		cam.cam_fov = 68
+		cam.cam_radius = 3.1
+		cam.cam_fov = 64
 		if timer.get_wait_time() < 3:
 			timer.set_wait_time(3)
 		else:
@@ -281,12 +269,12 @@ func player_on_fixedprocess(delta):
 		timer.set_wait_time(3)
 
 	if jumping:
-		if hvel >= 6 :
+		if hvel >= run :
 			anim = RUN_AIR_UP;
 		else:
 			anim = AIR_UP;
 	elif falling && !on_floor:
-		if hvel >= 6:
+		if hvel >= run:# - 1:
 			anim = RUN_AIR_DOWN;
 		else:
 			anim = AIR_DOWN;
@@ -307,91 +295,23 @@ func player_on_fixedprocess(delta):
 	curfov = cam.cam_fov
 	var physfov
 	var spifov
-	print("shifting: ", curr.shifting)
 
 	if curr.curr != 'spir' && curr.shifting :
 		cam.cam_fov += 26
 	elif curr.curr == 'phys' && curr.shifting :
 		cam.cam_fov -= 26
 
-func getLedge(space_state, ledge):
+func getParkour(space_state, parkour):
 	space_state = get_world().get_direct_space_state()
 
-	ledge = space_state.intersect_ray( Vector3(get_translation().x, get_translation().y + (dist - 1.75), get_translation().z) , Vector3(get_translation().x + dist, get_translation().y + (dist - 1) , get_translation().z + dist), [self])
+	parkour = space_state.intersect_ray( Vector3(get_translation().x, get_translation().y + (dist - 1.75), get_translation().z) , Vector3(get_translation().x + dist, get_translation().y + (dist - 1) , get_translation().z + dist), [self])
 
-	if (ledge.has('collider')):
-		if(ledge['collider'].has_node('ledge')):
-			ledge = ledge['collider'].get_node('ledge').get_translation().y
-			return ledge
-			print(ledge)
-
-func getWall(space_state, wall):
-	space_state = get_world().get_direct_space_state()
-
-	wall = space_state.intersect_ray( Vector3(get_translation().x, get_translation().y + (dist / dist), get_translation().z) , Vector3(get_translation().x + dist, get_translation().y + (dist / dist), get_translation().z + dist), [self])
-
-	if (wall.has('collider')):
-		if(wall['collider'].has_node('wall')):
-			return wall['collider'].get_node('wall')
-		else:
-			null
-	return null
-
-func check_climb_platform_horizontal(space_state, ledge):
-	var climb_vertically = false
-	if (on_floor): #(!on_ladder && !is_hurt):
-		var platform_check = null
-
-		if (!climbing_platform):
-			platform_check = getLedge(space_state, ledge)
-
-		# clamp to platform if should be hanging
-#		if (platform_check != null && !climbing_platform && climb_platform == null): # && !is_charging && !is_magic):
-#			hanging = true
-#			var d = platform_check.get_translation().x - get_translation().x
-#			climb_platform = platform_check
-#			move(Vector3(d, 0, 0))
-
-	#	if (platform_check == null && climb_platform != null && !climbing_platform):
-	#		climb_platform = null
-	#		hanging = false
-
-		# animate climbing platform
-		# move a specific distance in an L shape to climb the platform every fixed function call
-		# move up 4 tiles (the height of the character) and then left or right one tile
-		# depending on how you choose to animate climbing, this may or may not
-		# look very nice. If you have too few frames or don't adjust the vertical position, the
-		# character can sometimes look like they're oscillating up and down on the platform
-		# vertical motion is delayed until vertical motion checking
-##		if (climbing_platform && climb_platform != null):
-##			if (get_translation().y <= climb_platform.get_translation().y - GRID_SIZE / 2):
-##				move(Vector3(climbspeed, 0, 0))
-##				if (get_translation().z >= climb_platform.get_translation().z):
-##					climb_platform = null
-##					climbing_platform = false
-			# don't keep climbing if the platform isn't there anymore
-			# but clamp to it horizontally if it is and we are moving up
-##			elif (get_translation().y <= climb_platform.get_translation().y + GRID_SIZE/2) :
-##				var platformDeltaX = climb_platform.get_translation().z - GRID_SIZE/2 - get_translation().z
-##				move(Vector3(platformDeltaX, 0, 0))
-##				climb_vertically = true
-##			else:
-##				climbing_platform = false
-##		else:
-##			climbing_platform = false
-#	return climb_vertically
-
-func check_climb_platform_vertical(climb_vertically):
-	# clamp to platform vertically to prevent falling while hanging with no input
-	if (hanging && climb_platform != null):
-		accel = climb_platform.get_translation().y - GRID_SIZE/2 - get_position_in_parent().y
-
-	# move character up from climbing ledge
-	# see notes in horizontal motion about animation
-	if (climb_vertically && climbing_platform):
-		#var d = climb_platform.get_global_pos().y - TILE_SIZE/2 - get_pos().y + sprite_offset.y
-		accel = -climbspeed
-		falling = false
+	if (parkour.has('collider')):
+		if(parkour['collider'].has_node('parkour')):
+			parkour = parkour['collider'].get_node('parkour').get_translation().y
+			
+		return parkour
+	print(parkour)
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
 
