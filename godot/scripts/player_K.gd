@@ -1,56 +1,66 @@
 extends KinematicBody
 
-const MAX_SLOPE_ANGLE = 65;
-const GRID_SIZE = 32;
+const MAX_SLOPE_ANGLE = 45;
+#const GRID_SIZE = 32;
+const CHAR_SCALE = Vector3(1,1,1)
 
 var g_Time = 0.0;
-onready var cam = get_node("cam");
 
+# Camera
+onready var cam = get_node("cam");
 var view_sensitivity = 0.2;
 var focus_view_sensv = 0.1;
-var walk = 3.12
-var run = walk * 1.5 #4.44
-var sprint = run * 2 #7.77
-#var run_multiplier = 2.1;
-var max_speed = run;
-var climbspeed = 6
-var gravity = -9.8;
-var gravity_factor = 3;
-var jump_speed = -gravity * 1.11 ;
-var acceleration = 4;
-var deacceleration = 10;
-var accel = gravity
+var curfov;
+var aim;
 
+#Movement
 var velocity = Vector3();
 var is_moving = false;
 var on_floor = false;
 var on_wall = false;
-
-
-#var focus_switchtime = 0.3;
-#var focus_mode = false;
-#var focus_right = true;
-
+var run = 4.44
+var walk = run / 1.5
+var sprint = run * 2 #7.77
+#var run_multiplier = 2.1;
+var max_speed = run;
+var turn_speed = 33
+var sharp_turn_threshold = 130
+var climbspeed = 2
 var jump_attempt = false;
 var jumping = false;
 var falling = false;
 #var relevantCol = null;
 #var ledge = null;
 #var wall = null;
-var direction = -1;
 var dist = 4;
+
+# Environment
+const gravity = -9.8;
+var up = Vector3(0,1,0)
+var gravity_factor = 3;
+var jump_speed = -gravity * 1.11 ;
+const ACCEL = 2;
+const DEACCEL = 6;
+var accel = gravity / 2
+
+#var focus_switchtime = 0.3;
+#var focus_mode = false;
+#var focus_right = true;
 
 var char_offset = Vector3();
 onready var timer = get_node("timer");
 onready var animate = get_node("AnimationTreePlayer");
-var hvel
-var curfov
+var hvel = Vector3();
 onready var curr = get_node("scripts/shift")
-onready var body = get_node("body")
+onready var mesh = get_node("body/skeleton/mesh")
 
-var result
+var anim;
+var climb_platform = null;
+var climbing_platform = false;
+var hanging = false;
+var facing_dir = Vector3(0, 0, -1);
 
-var JS
+var result;
 
 # Animation constants
 const FLOOR = 0
@@ -60,12 +70,6 @@ const AIR_UP = 3
 const AIR_DOWN = 4
 const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
-
-var anim
-var lookat
-var climb_platform = null
-var climbing_platform = false
-var hanging = false
 
 func _input(ev):
 	if ev.type == InputEvent.KEY:
@@ -77,15 +81,14 @@ func _input(ev):
 	else:
 		jump_attempt = false
 
-
 func _process(delta):
 	g_Time += delta;
 
 func _fixed_process(delta):
 	check_movement(delta);
 	player_on_fixedprocess(delta);
-	getParkour(delta, delta);
-	
+#	getParkour(delta, delta);
+
 	if InputEvent.JOYSTICK_MOTION:
 		joy_input(delta);
 	else:
@@ -105,7 +108,15 @@ func joy_input(delta):
 
 func check_movement(delta):
 	var ray = get_node("ray");
-	var aim = body.get_global_transform().basis;
+	var cam_node = get_node("cam/cam")
+	var cam_xform = cam_node.get_global_transform();
+
+	is_moving = false;
+
+	var m_up = (Input.is_action_pressed("move_forward"));
+	var m_back = (Input.is_action_pressed("move_backwards"));
+	var m_left = (Input.is_action_pressed("move_left"));
+	var m_right = (Input.is_action_pressed("move_right"));
 
 	var g = gravity * gravity_factor;
 
@@ -116,72 +127,102 @@ func check_movement(delta):
 		if velocity.length() < 0.01:
 			velocity = Vector3();
 
-	if on_wall:
-		g -= gravity_factor;
+#	if on_wall:
+#		g -= gravity_factor;
+	var dir = Vector3()
 
-	is_moving = false;
-	var aiming = Vector3();
-
-	var move_up = Input.is_key_pressed(KEY_W) or JS.get_analog("ls_up");
-	var move_down = Input.is_key_pressed(KEY_S) or JS.get_analog("ls_down");
-	var move_left = Input.is_key_pressed(KEY_A) or JS.get_analog("ls_left");
-	var move_right = Input.is_key_pressed(KEY_D) or JS.get_analog("ls_right");
-
-	if move_up :
+	if m_up:
+		dir += -cam_xform.basis[2];
 		is_moving = true;
-		aiming += aim[2];
-	elif move_down :
+	if m_back:
+		dir += cam_xform.basis[2];
 		is_moving = true;
-		aiming += aim[2];
-	elif move_left :
+	if m_left:
+		dir += -cam_xform.basis[0];
 		is_moving = true;
-		aiming += aim[2];
-	elif move_right :
+	if m_right:
+		dir += cam_xform.basis[0];
 		is_moving = true;
-		aiming += aim[2];
+#	else:
+#		is_moving = false
 
-	aiming.y = 0;
-	aiming = aiming.normalized();
+	dir.y = 0;
+	dir = dir.normalized();
 
-	velocity.y += g*delta;
+	velocity.y += g * delta;
 
-	var hvel = velocity;
+	var hvel = velocity
 	hvel.y = 0;
 
-	var target = aiming * max_speed;
-	var accel = deacceleration;
+	var hspeed = hvel.length()
+	var hdir = hvel.normalized()
 
-	if aiming.dot(hvel) > 0:
-		accel = acceleration;
+	var target = dir * max_speed;
+	if (dir.dot(hvel) > 0):
+		accel = ACCEL;
+	else:
+		accel = DEACCEL;
 
 	hvel = target;
-	#hvel = hvel.linear_interpolate(target,accel * delta);
+	hvel = hvel.linear_interpolate(target,accel * delta);
+
 	velocity.x = hvel.x;
 	velocity.z = hvel.z;
 
-	var motion = velocity * delta;
-	motion = move(motion);
+	var motion = move(velocity * delta);
+#	motion = move(motion);
 
 	on_floor = ray.is_colliding();
 
 	var original_vel = velocity;
+	var floor_velocity = Vector3()
 	var attempts = 4;
 
-	if motion.length() > 0:
-		while is_colliding() && attempts:
+	if motion.length() > 0.1:
+		while (is_colliding() and attempts):
 			var n = get_collision_normal();
-			if (rad2deg(acos(n.dot(Vector3(0,1,0)))) <  MAX_SLOPE_ANGLE):
+
+			if (rad2deg(acos(n.dot(up))) <  MAX_SLOPE_ANGLE):
+				floor_velocity = (original_vel * get_collider_velocity())
 				on_floor = true;
 
 			motion = n.slide(motion);
 			velocity = n.slide(velocity);
-
 			if original_vel.dot(velocity) > 0:
-				motion = move(motion);
+				motion = move(motion)
 				if motion.length() < 0.001:
 					break;
-
 			attempts -= 1;
+
+	if on_floor and floor_velocity != Vector3():
+		move(floor_velocity * delta)
+
+	var target_dir = (dir - up * dir.dot(up)).normalized()
+
+	if on_floor:
+		var sharp_turn = hspeed > 0.1 && rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
+
+		if (dir.length() > 0.1 && !sharp_turn):
+			if (hspeed > 0.01):
+				hdir = adjust_facing(hdir , target_dir, delta,1.0 / hspeed * turn_speed, up)
+				facing_dir = -hdir
+			else:
+				hdir = target_dir
+
+#				if hspeed < max_speed:
+#					hspeed += (accel * delta) / 2
+#		else:
+#			hspeed =  max(hspeed - DEACCEL * delta, 0)
+#			if (hspeed < 0):
+#				hspeed = 0
+
+		var mesh_xform = mesh.get_transform()
+		var facing_mesh = -mesh_xform.basis[0].normalized()
+		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
+		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
+		var m3 = Matrix3(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
+
+		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
 	if on_floor and jump_attempt:
 		velocity.y = jump_speed # * gravity_factor;
@@ -208,45 +249,16 @@ func player_on_fixedprocess(delta):
 	hvel = velocity.length()
 	var countd = timer.get_wait_time()
 
-	if Input.is_key_pressed(KEY_ALT) && is_moving:
-		max_speed = max(min(max_speed - (4 * delta),walk * 2.0),walk);
-	elif Input.is_key_pressed(KEY_ALT) && !is_moving :
+	if Input.is_key_pressed(KEY_ALT) && (hvel > walk ):
+		max_speed = max(min(max_speed - (2 * delta),walk * 2.0),walk);
+	elif Input.is_key_pressed(KEY_ALT) && (hvel <= walk) :
 		max_speed = walk
 	elif timer.get_wait_time() < 0.8:
-		max_speed = max(min(max_speed + (10 * delta),walk),sprint);
+		max_speed = max(min(max_speed + (4 * delta),walk),sprint);
 	else:
 		max_speed = max(min(max_speed + (4 * delta),walk * 2.0),run);
 
-	var move_up = Input.is_key_pressed(KEY_W) or JS.get_analog("ls_up");
-	var move_down = Input.is_key_pressed(KEY_S) or JS.get_analog("ls_down");
-	var move_left = Input.is_key_pressed(KEY_A) or JS.get_analog("ls_left");
-	var move_right = Input.is_key_pressed(KEY_D) or JS.get_analog("ls_right");
-
-	var tmp_camyaw = cam.cam_yaw;
-	if is_moving:
-		if move_up:
-			if move_left:
-				tmp_camyaw += 45;
-			if move_right:
-				tmp_camyaw -= 45;
-		elif move_down:
-			if move_left:
-				tmp_camyaw += 135;
-			elif move_right:
-				tmp_camyaw -= 135;
-			else:
-				tmp_camyaw -= 180;
-		elif move_left:
-			tmp_camyaw += 90;
-		elif move_right:
-			tmp_camyaw -= 90;
-
-	if is_moving:
-		var body_rot = get_node("body").get_rotation();
-		body_rot.y = deg2rad(lerp(rad2deg(body_rot.y),tmp_camyaw,10 * delta));
-		get_node("body").set_rotation(body_rot);
-
-	if is_moving && hvel >= run - 0.1 and hvel <= sprint - 1 :
+	if is_moving && (hvel >= run - 0.1) and (hvel <= sprint - 1) :
 		anim = FLOOR
 		cam.cam_radius = 4.0
 		cam.cam_fov = 69
@@ -254,11 +266,11 @@ func player_on_fixedprocess(delta):
 			timer.set_wait_time(countd - 0.005)
 		else:
 			pass
-	elif is_moving && hvel >= run + 1.3:
+	elif is_moving && (hvel >= run + 1.3):
 		anim = SPRINT
 		cam.cam_radius = 4.2
 		cam.cam_fov = 72
-	elif is_moving && hvel <= walk + 0.5:
+	elif is_moving && (hvel <= walk + 1.3) :
 		anim = WALK
 		cam.cam_radius = 3.7
 		cam.cam_fov = 64
@@ -305,27 +317,27 @@ func player_on_fixedprocess(delta):
 	elif curr.curr == 'phys' && curr.shifting :
 		cam.cam_fov -= 26
 
+
 func getParkour(space_state, parkour):
 	space_state = get_world().get_direct_space_state()
 
-	parkour = space_state.intersect_ray( Vector3(get_translation().x, get_translation().y + (dist - 1.75), get_translation().z) , Vector3(get_translation().x + dist, get_translation().y + (dist - 1) , get_translation().z + dist), [self])
+	parkour = space_state.intersect_ray(Vector3(get_translation().x, get_translation().y + (dist - 1.75), get_translation().z) , Vector3(get_translation().x + dist, get_translation().y + (dist - 1) , get_translation().z + dist), [self])
 
 	if (parkour.has('collider')):
 		if(parkour['collider'].has_node('parkour')):
 			parkour = parkour['collider'].get_node('parkour').get_translation().y
-			
+
 		return parkour
 	print(parkour)
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
-
 	var n = p_target						# normal
 	var t = n.cross(current_gn).normalized()
 	var x = n.dot(p_facing)
 	var y = t.dot(p_facing)
 	var ang = atan2(y,x)
 
-	if (abs(ang)<0.001):					# too small
+	if (abs(ang) < 0.001):					# too small
 		return p_facing
 
 	var s = sign(ang)
@@ -357,5 +369,3 @@ func _ready():
 
 	animate.set_active(true)
 	timer.set_wait_time(3)
-
-	JS = get_node("/root/SUTjoystick")
