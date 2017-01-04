@@ -10,10 +10,17 @@ var cam_pos = Vector3();
 var cam_ray_result = {};
 var cam_smooth_movement = true;
 export var cam_fov = 64.0;
+export var min_distance = 0.5;
+export var max_distance = 7.2;
+export var angle_v_adjust = 0.0;
+export var autoturn_ray_aperture = 24;
+export var autoturn_speed = 25;
 var cam_view_sensitivity = 0.3;
 var cam_smooth_lerp = 6.16;
 var cam_pitch_minmax = Vector2(69, -42);
 var turn = Vector2()
+
+var up = Vector3(0,1,0)
 
 var is_enabled = false;
 var collision_exception = [];
@@ -26,7 +33,7 @@ const DEADZONE = 0.2
 func _ready():
 	cam = get_node("cam");
 	pivot = get_node("pivot");
-	
+
 	cam_fov = cam.get_fov();
 
 func set_enabled(enabled):
@@ -52,7 +59,7 @@ func add_collision_exception(node):
 func _input(ev):
 	if !is_enabled:
 		return;
-	
+
 	if ev.type == InputEvent.MOUSE_MOTION:
 		cam_pitch = max(min(cam_pitch+(ev.relative_y*cam_view_sensitivity),cam_pitch_minmax.x),cam_pitch_minmax.y);
 		if cam_smooth_movement:
@@ -62,44 +69,17 @@ func _input(ev):
 			cam_currentradius = cam_radius;
 			cam_update();
 
-
-#	if ev.type == InputEvent.MOUSE_BUTTON:
-#		if ev.pressed:
-#			if ev.button_index == BUTTON_WHEEL_UP:
-#				cam_radius = max(min(cam_radius - 0.2,4.0),1.0);
-#			elif ev.button_index == BUTTON_WHEEL_DOWN:
-#				cam_radius = max(min(cam_radius + 0.2,4.0),1.0);
-
-func _process(delta):
-	if !is_enabled:
-		return;
-	
-	if !cam.is_current():
-		cam.make_current();
-	
-	if cam.get_projection() == Camera.PROJECTION_PERSPECTIVE:
-		cam.set_perspective(lerp(cam.get_fov(), cam_fov, cam_smooth_lerp * delta), cam.get_znear(), cam.get_zfar());
-	
-	if cam_smooth_movement:
-		cam_cpitch = lerp(cam_cpitch, cam_pitch, 10 * delta);
-		cam_cyaw = lerp(cam_cyaw, cam_yaw, 10 * delta);
-		cam_currentradius = lerp(cam_currentradius, cam_radius, 5 * delta);
-
-	js_input()
-
-	cam_update()
-
 func js_input():
 
 	var Jx = Input.get_joy_axis(0,2)
 	var Jy = Input.get_joy_axis(0,3)
-	
+
 	if abs(Jy) >= DEADZONE:
-		cam_pitch = max(min(cam_pitch + (Jy * (cam_view_sensitivity * 5) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
-		
+		cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * 5) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
+
 	if abs(Jx) >= DEADZONE:
 		if cam_smooth_movement:
-			cam_yaw = cam_yaw-(Jx * (cam_view_sensitivity * 10));
+			cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * 10));
 		else:
 			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity *10)),360);
 			cam_currentradius = cam_radius;
@@ -108,7 +88,7 @@ func js_input():
 
 func cam_update():
 	cam_pos = pivot.get_global_transform().origin;
-	
+
 	if cam_smooth_movement:
 		cam_pos.x += cam_currentradius * sin(deg2rad(cam_cyaw)) * cos(deg2rad(cam_cpitch));
 		cam_pos.y += cam_currentradius * sin(deg2rad(cam_cpitch));
@@ -117,9 +97,9 @@ func cam_update():
 		cam_pos.x += cam_currentradius * sin(deg2rad(cam_yaw)) * cos(deg2rad(cam_pitch));
 		cam_pos.y += cam_currentradius * sin(deg2rad(cam_pitch));
 		cam_pos.z += cam_currentradius * cos(deg2rad(cam_yaw)) * cos(deg2rad(cam_pitch));
-	
+
 	var pos = Vector3();
-	
+
 	if cam_ray_result.size() != 0:
 		var a = (cam_ray_result.position - pivot.get_global_transform().origin).normalized();
 		var b = pivot.get_global_transform().origin.distance_to(cam_ray_result.position);
@@ -127,13 +107,56 @@ func cam_update():
 		pos = pivot.get_global_transform().origin + a * max(b-0.5, 0);
 	else:
 		pos = cam_pos;
-	
+
 	cam.look_at_from_pos(pos, pivot.get_global_transform().origin, Vector3(0,1,0));
 
-func _fixed_process(delta):
+func autoturn_cam(dt):
+	var target = get_parent().get_global_transform().origin
+	var delta = cam_pos - target #regular delta follow
+
+	var ds = PhysicsServer.space_get_direct_state( get_world().get_space() )
+
+	var col_left = ds.intersect_ray(target,target+Matrix3(up,deg2rad(autoturn_ray_aperture)).xform(delta),collision_exception)
+	var col = ds.intersect_ray(target,target+delta,collision_exception)
+	var col_right = ds.intersect_ray(target,target+Matrix3(up,deg2rad(-autoturn_ray_aperture)).xform(delta),collision_exception)
+
+	if (!col.empty()):
+		#if main ray was occluded, get camera closer, this is the worst case scenario
+		delta = col.position - target
+	elif (!col_left.empty() and col_right.empty()):
+		#if only left ray is occluded, turn the camera around to the right
+		delta = Matrix3(up,deg2rad(-dt*autoturn_speed)).xform(delta)
+	elif (col_left.empty() and !col_right.empty()):
+		#if only right ray is occluded, turn the camera around to the left
+		delta = Matrix3(up,deg2rad(dt*autoturn_speed)).xform(delta)
+	else:
+		#do nothing otherwise, left and right are occluded but center is not, so do not autoturn
+		pass
+
+func _process(delta):
 	if !is_enabled:
 		return;
-	
+
+	if !cam.is_current():
+		cam.make_current();
+
+	if cam.get_projection() == Camera.PROJECTION_PERSPECTIVE:
+		cam.set_perspective(lerp(cam.get_fov(), cam_fov, cam_smooth_lerp * delta), cam.get_znear(), cam.get_zfar());
+
+	if cam_smooth_movement:
+		cam_cpitch = lerp(cam_cpitch, cam_pitch, 10 * delta);
+		cam_cyaw = lerp(cam_cyaw, cam_yaw, 10 * delta);
+		cam_currentradius = lerp(cam_currentradius, cam_radius, 5 * delta);
+
+	js_input();
+	cam_update();
+
+func _fixed_process(delta):
+	autoturn_cam(delta);
+
+	if !is_enabled:
+		return;
+
 	var ds = get_world().get_direct_space_state();
 	if ds != null:
 		cam_ray_result = ds.intersect_ray(pivot.get_global_transform().origin, cam_pos, collision_exception);

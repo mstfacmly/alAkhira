@@ -1,6 +1,6 @@
 extends KinematicBody
 
-const MAX_SLOPE_ANGLE = 45;
+const MAX_SLOPE_ANGLE = 65;
 #const GRID_SIZE = 32;
 const CHAR_SCALE = Vector3(1,1,1)
 
@@ -11,10 +11,9 @@ onready var cam = get_node("cam");
 var view_sensitivity = 0.2;
 var focus_view_sensv = 0.1;
 var curfov;
-var aim;
 
 #Movement
-var velocity = Vector3();
+var vel = Vector3();
 var is_moving = false;
 var on_floor = false;
 var on_wall = false;
@@ -78,6 +77,8 @@ func _input(ev):
 
 	if (ev.is_action("jump") && ev.is_pressed() && !ev.is_echo()):
 		jump_attempt = true
+	elif (ev.is_action("jump") && ev.is_pressed() && ev.is_echo()):
+		jump_attempt = false
 	else:
 		jump_attempt = false
 
@@ -87,7 +88,7 @@ func _process(delta):
 func _fixed_process(delta):
 	check_movement(delta);
 	player_on_fixedprocess(delta);
-#	getParkour(delta, delta);
+	getParkour(delta, delta);
 
 	if InputEvent.JOYSTICK_MOTION:
 		joy_input(delta);
@@ -123,9 +124,9 @@ func check_movement(delta):
 	if on_floor:
 		g = 0;
 		if !is_moving:
-			velocity.y = 0;
-		if velocity.length() < 0.01:
-			velocity = Vector3();
+			vel.y = 0;
+		if vel.length() < 0.01:
+			vel = Vector3();
 
 #	if on_wall:
 #		g -= gravity_factor;
@@ -149,9 +150,9 @@ func check_movement(delta):
 	dir.y = 0;
 	dir = dir.normalized();
 
-	velocity.y += g * delta;
+	vel.y += g * delta;
 
-	var hvel = velocity
+	var hvel = vel
 	hvel.y = 0;
 
 	var hspeed = hvel.length()
@@ -166,36 +167,37 @@ func check_movement(delta):
 	hvel = target;
 	hvel = hvel.linear_interpolate(target,accel * delta);
 
-	velocity.x = hvel.x;
-	velocity.z = hvel.z;
+	vel.x = hvel.x;
+	vel.z = hvel.z;
 
-	var motion = move(velocity * delta);
+	var motion = move(vel * delta);
 #	motion = move(motion);
 
 	on_floor = ray.is_colliding();
 
-	var original_vel = velocity;
-	var floor_velocity = Vector3()
+	var original_vel = vel;
+#	var floor_vel = Vector3()
 	var attempts = 4;
 
-	if motion.length() > 0.1:
-		while (is_colliding() and attempts):
+	if motion.length() > 0:
+		while is_colliding() and attempts:
 			var n = get_collision_normal();
 
 			if (rad2deg(acos(n.dot(up))) <  MAX_SLOPE_ANGLE):
-				floor_velocity = (original_vel * get_collider_velocity())
+#				floor_vel = (original_vel * get_collider_velocity())
 				on_floor = true;
 
 			motion = n.slide(motion);
-			velocity = n.slide(velocity);
-			if original_vel.dot(velocity) > 0:
+			vel = n.slide(vel);
+
+			if (original_vel.dot(vel) > 0):
 				motion = move(motion)
-				if motion.length() < 0.001:
+				if (motion.length() < 0.01):
 					break;
 			attempts -= 1;
 
-	if on_floor and floor_velocity != Vector3():
-		move(floor_velocity * delta)
+#	if on_floor and floor_vel != Vector3():
+#		move(floor_vel * delta)
 
 	var target_dir = (dir - up * dir.dot(up)).normalized()
 
@@ -225,7 +227,7 @@ func check_movement(delta):
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
 	if on_floor and jump_attempt:
-		velocity.y = jump_speed # * gravity_factor;
+		vel.y = jump_speed # * gravity_factor;
 		on_floor = false;
 		jumping = true;
 		falling = false;
@@ -234,11 +236,11 @@ func check_movement(delta):
 
 	if jumping:
 		if !jump_attempt:
-			velocity.y += gravity / 2.486 #4.972 #2.486 / 2.486
+			vel.y += gravity / 2.486 #4.972 #2.486 / 2.486
 			jumping = false;
 			falling = true;
-		elif velocity.y >= 10.486:
-			velocity.y += gravity / 4.972
+		elif vel.y >= 10.486:
+			vel.y += gravity / 4.972
 			jumping = false;
 			falling = true;
 
@@ -246,7 +248,7 @@ func check_movement(delta):
 		falling = true;
 
 func player_on_fixedprocess(delta):
-	hvel = velocity.length()
+	hvel = vel.length()
 	var countd = timer.get_wait_time()
 
 	if Input.is_key_pressed(KEY_ALT) && (hvel > walk ):
@@ -325,7 +327,7 @@ func getParkour(space_state, parkour):
 
 	if (parkour.has('collider')):
 		if(parkour['collider'].has_node('parkour')):
-			parkour = parkour['collider'].get_node('parkour').get_translation().y
+			parkour = parkour['collider'].get_node('parkour').get_global_pos().y
 
 		return parkour
 	print(parkour)
