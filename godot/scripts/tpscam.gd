@@ -1,5 +1,7 @@
 extends Spatial
 
+onready var target = get_parent().get_global_transform().origin
+
 var cam_pitch = 0.0;
 var cam_yaw = 0.0;
 var cam_cpitch = 0.0;
@@ -21,6 +23,7 @@ var cam_pitch_minmax = Vector2(69, -42);
 var turn = Vector2()
 
 var up = Vector3(0,1,0)
+var ds;
 
 var is_enabled = false;
 var collision_exception = [];
@@ -35,6 +38,7 @@ func _ready():
 	pivot = get_node("pivot");
 
 	cam_fov = cam.get_fov();
+	ds = get_world().get_direct_space_state();
 
 func set_enabled(enabled):
 	if enabled:
@@ -88,6 +92,8 @@ func js_input():
 
 func cam_update():
 	cam_pos = pivot.get_global_transform().origin;
+	var delta = cam_pos - target #regular delta follow
+#	var ds = get_world().get_direct_space_state();
 
 	if cam_smooth_movement:
 		cam_pos.x += cam_currentradius * sin(deg2rad(cam_cyaw)) * cos(deg2rad(cam_cpitch));
@@ -100,21 +106,27 @@ func cam_update():
 
 	var pos = Vector3();
 
+	if (delta.length() < min_distance):
+		delta = delta.normalized() * min_distance
+	elif (delta.length() > max_distance):
+		delta = delta.normalized() * max_distance
+
 	if cam_ray_result.size() != 0:
-		var a = (cam_ray_result.position - pivot.get_global_transform().origin).normalized();
-		var b = pivot.get_global_transform().origin.distance_to(cam_ray_result.position);
+		var a = (cam_ray_result.position - cam_pos).normalized();
+		var b = cam_pos.distance_to(cam_ray_result.position);
 		#pos = cam_ray_result.position;
-		pos = pivot.get_global_transform().origin + a * max(b-0.5, 0);
+		if a.length() < min_distance:
+			a = a.normalized * min_distance;
+		elif a.length() > max_distance:
+			a = a.normalized() * max_distance;
+		pos = cam_pos + a * max(b-0.5, 0);
 	else:
 		pos = cam_pos;
 
-	cam.look_at_from_pos(pos, pivot.get_global_transform().origin, Vector3(0,1,0));
+	cam.look_at_from_pos(pos, pivot.get_global_transform().origin, up);
 
 func autoturn_cam(dt):
-	var target = get_parent().get_global_transform().origin
 	var delta = cam_pos - target #regular delta follow
-
-	var ds = PhysicsServer.space_get_direct_state( get_world().get_space() )
 
 	var col_left = ds.intersect_ray(target,target+Matrix3(up,deg2rad(autoturn_ray_aperture)).xform(delta),collision_exception)
 	var col = ds.intersect_ray(target,target+delta,collision_exception)
@@ -157,6 +169,5 @@ func _fixed_process(delta):
 	if !is_enabled:
 		return;
 
-	var ds = get_world().get_direct_space_state();
 	if ds != null:
 		cam_ray_result = ds.intersect_ray(pivot.get_global_transform().origin, cam_pos, collision_exception);

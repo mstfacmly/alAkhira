@@ -21,20 +21,13 @@ func _process(delta):
 		txt += str("\nDrawn Vertices: ", Performance.get_monitor(Performance.RENDER_VERTICES_IN_FRAME));
 		txt += str("\nDrawn Objects: ", Performance.get_monitor(Performance.RENDER_OBJECTS_IN_FRAME));
 		txt += str("\nDraw Calls: ", Performance.get_monitor(Performance.RENDER_DRAW_CALLS_IN_FRAME));
-#		txt += str("\nOn Floor: ", player.on_floor);
-#		txt += str("\nLedge: ", player.ledge);
-#		txt += str("\nWall: ", player.wall);
-		txt += str("\nVelocity: ", player.velocity.length());
+		txt += str("\nOn Floor: ", player.on_floor);
+		txt += str("\nVelocity: ", player.vel.length());
 		txt += str("\nCam Radius: ", cam.cam_radius);
 		txt += str("\nCam FOV: ", cam.cam_fov);
 		txt += str("\nTimer: ", timer.get_wait_time());
 		txt += str("\nWorld: ", curr.curr);
-#		txt += str("\nJoystick X2: ", js_axis.get_joy_axis(0,2) );
-#		txt += str("\nJoystick Y2: ", js_axis.get_joy_axis(0,36) );
-#		txt += str("\nChar Rot: ", player.get_node("body").get_rotation().y);
-#		if (not player.result.empty()):
-#			txt += str("\nCollider: ", player.result.collider_id);
-#		else:
-#			txt += str("\nCollider: ", null );
+		txt += str("\nJoystick X2: ", js_axis.get_joy_axis(0,2) );
+		txt += str("\nJoystick Y2: ", js_axis.get_joy_axis(0,36) );
 
 		set_text(txt);

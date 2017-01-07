@@ -32,6 +32,7 @@ var falling = false;
 #var ledge = null;
 #var wall = null;
 var dist = 4;
+var collision_exception=[];
 
 # Environment
 const gravity = -9.8;
@@ -49,6 +50,7 @@ var accel = gravity / 2
 var char_offset = Vector3();
 onready var timer = get_node("timer");
 onready var animate = get_node("AnimationTreePlayer");
+onready var ptarget = get_node("body/ptarget").get_global_transform().origin;
 var hvel = Vector3();
 onready var curr = get_node("scripts/shift")
 onready var mesh = get_node("body/skeleton/mesh")
@@ -88,7 +90,7 @@ func _process(delta):
 func _fixed_process(delta):
 	check_movement(delta);
 	player_on_fixedprocess(delta);
-	getParkour(delta, delta);
+	getParkour();
 
 	if InputEvent.JOYSTICK_MOTION:
 		joy_input(delta);
@@ -112,8 +114,6 @@ func check_movement(delta):
 	var cam_node = get_node("cam/cam")
 	var cam_xform = cam_node.get_global_transform();
 
-	is_moving = false;
-
 	var m_up = (Input.is_action_pressed("move_forward"));
 	var m_back = (Input.is_action_pressed("move_backwards"));
 	var m_left = (Input.is_action_pressed("move_left"));
@@ -130,7 +130,9 @@ func check_movement(delta):
 
 #	if on_wall:
 #		g -= gravity_factor;
-	var dir = Vector3()
+
+	is_moving = false;
+	var dir = Vector3();
 
 	if m_up:
 		dir += -cam_xform.basis[2];
@@ -159,13 +161,13 @@ func check_movement(delta):
 	var hdir = hvel.normalized()
 
 	var target = dir * max_speed;
-	if (dir.dot(hvel) > 0):
+	if dir.dot(hvel) > 0:
 		accel = ACCEL;
 	else:
 		accel = DEACCEL;
 
 	hvel = target;
-	hvel = hvel.linear_interpolate(target,accel * delta);
+#	hvel = hvel.linear_interpolate(target,accel * delta);
 
 	vel.x = hvel.x;
 	vel.z = hvel.z;
@@ -320,17 +322,21 @@ func player_on_fixedprocess(delta):
 		cam.cam_fov -= 26
 
 
-func getParkour(space_state, parkour):
-	space_state = get_world().get_direct_space_state()
+func getParkour():
+	var ds = get_world().get_direct_space_state()
+	var parkour_detect = 90;
+	var delta = ptarget - mesh.get_global_transform().origin
 
-	parkour = space_state.intersect_ray(Vector3(get_translation().x, get_translation().y + (dist - 1.75), get_translation().z) , Vector3(get_translation().x + dist, get_translation().y + (dist - 1) , get_translation().z + dist), [self])
+	var col_left = ds.intersect_ray(ptarget,ptarget+Matrix3(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
+	var col = ds.intersect_ray(ptarget,ptarget+delta,collision_exception)
+	var col_right = ds.intersect_ray(ptarget,ptarget+Matrix3(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 
-	if (parkour.has('collider')):
-		if(parkour['collider'].has_node('parkour')):
-			parkour = parkour['collider'].get_node('parkour').get_global_pos().y
+##	if (parkour.has('collider')):
+##		if(parkour['collider'].has_node('parkour')):
+##			parkour = parkour['collider'].get_node('parkour').get_global_pos().y
 
-		return parkour
-	print(parkour)
+##		return parkour
+##	print(parkour)
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
 	var n = p_target						# normal
