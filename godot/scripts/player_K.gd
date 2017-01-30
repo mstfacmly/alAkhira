@@ -18,7 +18,7 @@ var is_moving = false;
 var on_floor = false;
 var on_wall = false;
 var run = 4.44
-var walk = run / 1.5
+var walk = run / 1.75
 var sprint = run * 2.12 #7.77
 #var run_multiplier = 2.1;
 var max_speed = run;
@@ -28,11 +28,8 @@ var climbspeed = 2
 var jump_attempt = false;
 var jumping = false;
 var falling = false;
-#var relevantCol = null;
-#var ledge = null;
-#var wall = null;
 var dist = 4;
-var collision_exception=[];
+var collision_exception=[ self ];
 var col_result = [];
 
 # Environment
@@ -51,7 +48,6 @@ var accel = gravity / 2
 var char_offset = Vector3();
 onready var timer = get_node("timer");
 onready var animate = get_node("AnimationTreePlayer");
-onready var ptarget = get_node("body/skeleton/mesh/ptarget").get_global_transform().origin;
 var hvel = Vector3();
 onready var curr = get_node("scripts/shift")
 onready var mesh = get_node("body/skeleton/mesh")
@@ -88,14 +84,14 @@ func _input(ev):
 func _process(delta):
 	g_Time += delta;
 
-func _fixed_process(delta):
-	check_movement(delta);
-	player_on_fixedprocess(delta);
-
 	if InputEvent.JOYSTICK_MOTION:
 		joy_input(delta);
 	else:
 		pass
+
+func _fixed_process(delta):
+	check_movement(delta);
+	player_on_fixedprocess(delta);
 
 func joy_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -228,13 +224,14 @@ func check_movement(delta):
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
-	check_parkour();
-
 	if on_floor and jump_attempt:
-		vel.y = jump_speed # * gravity_factor;
-		on_floor = false;
-		jumping = true;
-		falling = false;
+		if col_result == 'front' && hspeed >= (walk - 2):
+			vel.y = jump_speed + (hspeed * 0.33);
+		else:
+			vel.y = jump_speed; # * gravity_factor;
+			on_floor = false;
+			jumping = true;
+			falling = false;
 	else:
 		pass
 
@@ -250,6 +247,8 @@ func check_movement(delta):
 
 	if !on_floor:
 		falling = true;
+
+	check_parkour();
 
 func player_on_fixedprocess(delta):
 	hvel = vel.length()
@@ -285,10 +284,16 @@ func player_on_fixedprocess(delta):
 		else:
 			pass
 	else:
-		anim = FLOOR;
-		cam.cam_radius = 3.1;
-		cam.cam_fov = 64;
-		timer.set_wait_time(3)
+		if Input.is_key_pressed(KEY_ALT):
+			anim = FLOOR;
+			cam.cam_radius = 3.7
+			cam.cam_fov = 64
+			timer.set_wait_time(3)
+		else:
+			anim = FLOOR;
+			cam.cam_radius = 3.1;
+			cam.cam_fov = 64;
+			timer.set_wait_time(3)
 
 	if jumping:
 		if hvel >= run :
@@ -326,18 +331,18 @@ func player_on_fixedprocess(delta):
 
 func check_parkour():
 	var ds = get_world().get_direct_space_state();
-	var parkour_detect = 20;
-	var delta = ptarget - mesh.get_global_transform().origin;
+	var parkour_detect = 80;
+	var ppos = mesh.get_global_transform().origin;
+	var ptarget = mesh.get_node("ptarget").get_global_transform().origin;
+	var delta = ptarget - ppos;
 
-	var col_left = ds.intersect_ray(ptarget,ptarget+Matrix3(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
-	var col = ds.intersect_ray(ptarget,ptarget+delta,collision_exception)
-	var col_right = ds.intersect_ray(ptarget,ptarget+Matrix3(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
+	var col_right = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
+	var col = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
+	var col_left = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 
-	if (!col.empty() && col_left.empty() && col_right.empty()):
+	if (!col.empty()): # && col_left.empty() && col_right.empty()):
 		col_result = "front"
 		return col_result
-#		if vel >= run && jump_attempt:
-#			vel.y = vel.y * 2
 	elif (!col_left.empty() && col_right.empty()):
 		col_result = "left"
 		return col_result
@@ -347,6 +352,8 @@ func check_parkour():
 	else:
 		col_result = "nothing"
 		return col_result
+
+	#need to add code to move the collider with the character
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
 	var n = p_target						# normal
