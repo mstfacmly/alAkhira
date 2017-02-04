@@ -1,10 +1,11 @@
 extends KinematicBody
-
+#
 const MAX_SLOPE_ANGLE = 65;
 #const GRID_SIZE = 32;
 const CHAR_SCALE = Vector3(1,1,1)
 
 var g_Time = 0.0;
+onready var health = get_node("ui/healthb")
 
 # Camera
 onready var cam = get_node("cam");
@@ -28,6 +29,7 @@ var climbspeed = 2
 var jump_attempt = false;
 var jumping = false;
 var falling = false;
+var wrun = [];
 var dist = 4;
 var collision_exception=[ self ];
 var col_result = [];
@@ -92,6 +94,7 @@ func _process(delta):
 func _fixed_process(delta):
 	check_movement(delta);
 	player_on_fixedprocess(delta);
+	check_parkour();
 
 func joy_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -225,15 +228,27 @@ func check_movement(delta):
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
 	if on_floor and jump_attempt:
-		if col_result == 'front' && hspeed >= (walk - 2):
+		if col_result == 'front' && hspeed >= (walk):
 			vel.y = jump_speed + (hspeed * 0.33);
+			wrun = 'vert';
+		elif col_result == 'left' && hspeed >= (walk):
+			vel.y = jump_speed + (hspeed * 0.07);
+			wrun = 'horz';
+		elif col_result == 'right' && hspeed >= (walk):
+			vel.y = jump_speed + (hspeed * 0.07);
+			wrun = 'horz';
 		else:
 			vel.y = jump_speed; # * gravity_factor;
 			on_floor = false;
 			jumping = true;
 			falling = false;
+			wrun = [];
 	else:
 		pass
+
+	if falling:
+		if vel.y >= 25:
+			health.state = 'dead'
 
 	if jumping:
 		if !jump_attempt:
@@ -248,7 +263,26 @@ func check_movement(delta):
 	if !on_floor:
 		falling = true;
 
-	check_parkour();
+	if col_result == 'nothing':
+		wrun = [];
+
+	var wrunhmax = jump_speed + hspeed
+	var wrunvmax = wrunhmax * 0.7
+	var wrunjump = false;
+
+	if wrun == 'vert':
+		if jump_attempt:
+			vel.y = jump_speed;
+		elif vel.y >= wrunvmax:
+			vel.y += gravity / 4.972
+	elif wrun == 'horz':
+#		if jump_attempt:
+#			vel = jump_speed;
+		if vel.y >= wrunhmax:
+			vel.y += gravity / 4.972
+
+	if wrunjump == true and jump_attempt:
+		jump_attempt = !jump_attempt;
 
 func player_on_fixedprocess(delta):
 	hvel = vel.length()
@@ -315,6 +349,14 @@ func player_on_fixedprocess(delta):
 	else:
 		pass
 
+	if !on_floor:
+		cam.cam_radius = 4.7
+		cam.cam_fov = 72
+
+	if col_result != 'nothing':
+		cam.cam_radius = 4.7
+		cam.cam_fov = 72
+
 	if on_floor:
 		animate.blend2_node_set_amount("walk", hvel / max_speed);
 	animate.transition_node_set_current("state", anim);
@@ -350,10 +392,8 @@ func check_parkour():
 		col_result = "right"
 		return col_result
 	else:
-		col_result = "nothing"
+		col_result = "nothing";
 		return col_result
-
-	#need to add code to move the collider with the character
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
 	var n = p_target						# normal

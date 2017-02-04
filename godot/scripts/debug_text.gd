@@ -24,6 +24,7 @@ func _process(delta):
 		txt += str("\nOn Floor: ", player.on_floor);
 		txt += str("\nColliding: ", player.col_result);
 		txt += str("\nVelocity: ", player.vel.length());
+		txt += str("\nVertical Velocity: ", player.vel.y);
 		txt += str("\nCam Radius: ", cam.cam_radius);
 		txt += str("\nCam FOV: ", cam.cam_fov);
 		txt += str("\nTimer: ", timer.get_wait_time());
