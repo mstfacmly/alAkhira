@@ -3,7 +3,7 @@ extends ProgressBar
 var health = 100
 var div = 5
 var healths
-var isdead = false
+export var state = 'alive'
 onready var shift = get_node("/root/scene/player/scripts/shift")
 
 func _process(delta):
@@ -16,9 +16,9 @@ func _process(delta):
 	if health >=0 && curr == 'phys':
 		health -= delta / div
 	elif curr == 'spi':
-		health -= rand_range(-rnd,rnd * 1.001) 
+		health -= rand_range(-rnd,rnd * 1.001)
 	elif health == 0:
-		isdead = true
+		state = 'dead'
 
 func _ready():
 	set_process(true)

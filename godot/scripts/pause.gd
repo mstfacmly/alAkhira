@@ -18,7 +18,8 @@ func _input(ev):
 		_on_unpause()
 
 	if ev.is_action_pressed("pause"):
-		t.start()
+		if paused == true:
+			t.start()
 	elif ev.is_action("pause") && !ev.is_pressed():
 		t.stop()
 	else:

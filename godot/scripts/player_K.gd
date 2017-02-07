@@ -1,5 +1,5 @@
 extends KinematicBody
-#
+
 const MAX_SLOPE_ANGLE = 65;
 #const GRID_SIZE = 32;
 const CHAR_SCALE = Vector3(1,1,1)
@@ -177,7 +177,7 @@ func check_movement(delta):
 	on_floor = ray.is_colliding();
 
 	var original_vel = vel;
-#	var floor_vel = Vector3()
+	var floor_vel = Vector3()
 	var attempts = 4;
 
 	if motion.length() > 0:
@@ -186,6 +186,7 @@ func check_movement(delta):
 
 			if (rad2deg(acos(n.dot(up))) <  MAX_SLOPE_ANGLE):
 #				floor_vel = (original_vel * get_collider_velocity())
+				floor_vel = (original_vel / MAX_SLOPE_ANGLE)
 				on_floor = true;
 
 			motion = n.slide(motion);
@@ -227,16 +228,20 @@ func check_movement(delta):
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
+	var wrunhmax = (jump_speed + hspeed) * 0.7;
+	var wrunjump = false;
+	var fallvel = gravity / 2.486
+
 	if on_floor and jump_attempt:
-		if col_result == 'front' && hspeed >= (walk):
-			vel.y = jump_speed + (hspeed * 0.33);
+		if col_result == 'front' && hspeed >= walk:
+			vel.y = jump_speed + (hspeed * 0.13);
 			wrun = 'vert';
-		elif col_result == 'left' && hspeed >= (walk):
-			vel.y = jump_speed + (hspeed * 0.07);
+			jumping = false;
+		elif col_result in ['left','right'] && hspeed >= walk:
+			vel.y = jump_speed + (hspeed * 0.13);
+			vel.z = jump_speed + hspeed;
 			wrun = 'horz';
-		elif col_result == 'right' && hspeed >= (walk):
-			vel.y = jump_speed + (hspeed * 0.07);
-			wrun = 'horz';
+			jumping = false;
 		else:
 			vel.y = jump_speed; # * gravity_factor;
 			on_floor = false;
@@ -246,43 +251,36 @@ func check_movement(delta):
 	else:
 		pass
 
+	if jumping:
+		if !jump_attempt or vel.y >= 10.486:
+			vel.y += fallvel;
+			jumping = false;
+			falling = true;
+
+	if wrun == 'vert':
+		if !jump_attempt or vel.y >= wrunhmax:
+			falling = true;
+	elif wrun == 'horz':
+		if !jump_attempt or vel.y >= wrunhmax:
+			falling = true;
+			fallvel = fallvel / 2
+
+	if !on_floor && col_result == 'front' && jump_attempt:
+			vel.y = jump_speed;
+			wrunjump = true;
+
+	if !on_floor && !jumping:
+		falling = true;
+
 	if falling:
 		if vel.y >= 25:
 			health.state = 'dead'
 
-	if jumping:
-		if !jump_attempt:
-			vel.y += gravity / 2.486 #4.972 #2.486 / 2.486
-			jumping = false;
-			falling = true;
-		elif vel.y >= 10.486:
-			vel.y += gravity / 4.972
-			jumping = false;
-			falling = true;
-
-	if !on_floor:
-		falling = true;
-
 	if col_result == 'nothing':
 		wrun = [];
 
-	var wrunhmax = jump_speed + hspeed
-	var wrunvmax = wrunhmax * 0.7
-	var wrunjump = false;
-
-	if wrun == 'vert':
-		if jump_attempt:
-			vel.y = jump_speed;
-		elif vel.y >= wrunvmax:
-			vel.y += gravity / 4.972
-	elif wrun == 'horz':
-#		if jump_attempt:
-#			vel = jump_speed;
-		if vel.y >= wrunhmax:
-			vel.y += gravity / 4.972
-
-	if wrunjump == true and jump_attempt:
-		jump_attempt = !jump_attempt;
+	if wrunjump && jump_attempt:
+		!jump_attempt;
 
 func player_on_fixedprocess(delta):
 	hvel = vel.length()
@@ -349,6 +347,11 @@ func player_on_fixedprocess(delta):
 	else:
 		pass
 
+	if wrun == 'vert':
+		anim = SPRINT;
+	elif wrun == 'horz':
+		anim = SPRINT;
+
 	if !on_floor:
 		cam.cam_radius = 4.7
 		cam.cam_fov = 72
@@ -382,14 +385,20 @@ func check_parkour():
 	var col = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
 	var col_left = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 
-	if (!col.empty()): # && col_left.empty() && col_right.empty()):
-		col_result = "front"
-		return col_result
-	elif (!col_left.empty() && col_right.empty()):
+	if (!col_left.empty() && col_right.empty()):
 		col_result = "left"
 		return col_result
 	elif (!col_right.empty() && col_left.empty()):
 		col_result = "right"
+		return col_result
+	elif (!col.empty() && !col_left.empty() && col_right.empty()):
+		col_result = "left"
+		return col_result
+	elif (!col.empty() && !col_right.empty() && col_left.empty()):
+		col_result = "right"
+		return col_result
+	elif (!col.empty()): # && col_left.empty() && col_right.empty()):
+		col_result = "front"
 		return col_result
 	else:
 		col_result = "nothing";
