@@ -3,8 +3,9 @@ extends KinematicBody
 const MAX_SLOPE_ANGLE = 65;
 #const GRID_SIZE = 32;
 const CHAR_SCALE = Vector3(1,1,1)
+const DEADZONE = 0.1
 
-var g_Time = 0.0;
+#var g_Time = 0.0;
 onready var health = get_node("ui/healthb")
 
 # Camera
@@ -84,7 +85,7 @@ func _input(ev):
 		jump_attempt = false
 
 func _process(delta):
-	g_Time += delta;
+#	g_Time += delta;
 
 	if InputEvent.JOYSTICK_MOTION:
 		joy_input(delta);
@@ -101,10 +102,13 @@ func joy_input(delta):
 	var y = abs(Input.get_joy_axis(0,1))
 
 	var axis_value = atan(x + y) # * PI / 360 * 100
-	if axis_value < 0.743 and axis_value > 0.101 :
+	if axis_value >= DEADZONE && axis_value <= 0.743:
 		if max_speed > walk:
 			while max_speed > walk:
-				max_speed = max(min(max_speed - (4 * delta),walk * 2.0),walk);
+				max_speed -= 0.05;
+#				max_speed = max(min(max_speed - (4 * delta),walk * 2.0),walk);
+		else:
+			max_speed = walk;
 	else :
 		pass
 
@@ -228,7 +232,8 @@ func check_movement(delta):
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
-	var wrunhmax = (jump_speed + hspeed) * 0.7;
+	var wrunhmax = (jump_speed + hspeed) * 0.11;
+	var wrunvmax = (jump_speed + hspeed) #* 0.33;
 	var wrunjump = false;
 	var fallvel = gravity / 2.486
 
@@ -239,7 +244,7 @@ func check_movement(delta):
 			jumping = false;
 		elif col_result in ['left','right'] && hspeed >= walk:
 			vel.y = jump_speed + (hspeed * 0.13);
-			vel.z = jump_speed + hspeed;
+			hvel = jump_speed + hspeed;
 			wrun = 'horz';
 			jumping = false;
 		else:
@@ -258,14 +263,17 @@ func check_movement(delta):
 			falling = true;
 
 	if wrun == 'vert':
-		if !jump_attempt or vel.y >= wrunhmax:
+		if !jump_attempt or vel.y >= wrunvmax:
+			wrun = []
 			falling = true;
 	elif wrun == 'horz':
 		if !jump_attempt or vel.y >= wrunhmax:
+			wrun = []
 			falling = true;
-			fallvel = fallvel / 2
+#			fallvel = fallvel / 2
 
-	if !on_floor && col_result == 'front' && jump_attempt:
+	if !on_floor && col_result == 'front' && !jump_attempt:
+		if jump_attempt:
 			vel.y = jump_speed;
 			wrunjump = true;
 

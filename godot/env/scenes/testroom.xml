@@ -2,12 +2,12 @@
 <resource_file type="PackedScene" subresource_count="9" version="2.1" version_name="Godot Engine v2.1.stable.official">
 	<ext_resource path="res://assets/test/box_small.xml" type="PackedScene" index="7"></ext_resource>
 	<ext_resource path="res://scripts/tpscam.gd" type="Script" index="5"></ext_resource>
-	<ext_resource path="res://player/az.xml" type="PackedScene" index="4"></ext_resource>
+	<ext_resource path="res://assets/test/large_box.xml" type="PackedScene" index="6"></ext_resource>
 	<ext_resource path="res://env/scenes/roomshape.xml" type="PackedScene" index="1"></ext_resource>
 	<ext_resource path="res://env/scenes/testroom.scn" type="PackedScene" index="2"></ext_resource>
 	<ext_resource path="res://assets/phys_spi.xml" type="PackedScene" index="0"></ext_resource>
-	<ext_resource path="res://assets/test/large_box.xml" type="PackedScene" index="6"></ext_resource>
 	<ext_resource path="res://assets/test/angles.xml" type="PackedScene" index="3"></ext_resource>
+	<ext_resource path="res://player/az.xml" type="PackedScene" index="4"></ext_resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
@@ -133,13 +133,12 @@
 				<string> "cube_small" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 28 </int>
+			<int> 27 </int>
 			<string> "node_paths" </string>
-			<array  len="1" shared="false">
-				<node_path> "player/body/skeleton/mesh" </node_path>
+			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="538"> 				-1, -1, 4, 0, -1, 3, 1, 0, 2, 1, 3, 2, 0, 0, 0, 2147483647, 5, 3, 2, 6, 4, 7, 5, 0, 0, 0, 4, 8, -1, 2, 9, 6, 2, 1, 0, 2, 0, 10, 10, -1, 20, 2, 1, 11, 7, 7, 5, 12, 8, 13, 6, 14, 5, 15, 9, 16, 10, 17, 11, 18, 12, 19, 5, 20, 13, 21, 14, 22, 13, 23, 15, 24, 16, 25, 17, 26, 9, 27, 15, 28, 10, 0, 2, 0, 29, 29, -1, 21, 2, 1, 11, 18, 12, 8, 13, 6, 14, 5, 15, 9, 16, 19, 17, 20, 18, 21, 19, 6, 20, 13, 21, 22, 22, 13, 23, 23, 24, 13, 25, 17, 26, 9, 30, 4, 31, 24, 32, 10, 33, 25, 0, 0, 0, 2147483647, 34, 26, 2, 35, 8, 36, 8, 0, 0, 0, 2147483647, 37, 27, 1, 1, 0, 0, 0, 0, 2147483647, 38, 28, 0, 0, 0, 0, 4, 39, -1, 4, 9, 6, 2, 1, 11, 29, 7, 5, 0, 8, 0, 54, 40, -1, 16, 2, 1, 11, 30, 12, 8, 41, 6, 42, 17, 43, 9, 44, 5, 45, 13, 46, 13, 47, 13, 48, 5, 49, 5, 50, 5, 51, 5, 52, 5, 53, 9, 0, 0, 0, 4, 55, -1, 4, 9, 6, 2, 1, 11, 31, 7, 5, 0, 10, 0, 54, 40, -1, 16, 2, 1, 11, 30, 12, 8, 41, 6, 42, 17, 43, 9, 44, 5, 45, 13, 46, 13, 47, 13, 48, 5, 49, 5, 50, 5, 51, 5, 52, 5, 53, 9, 0, 0, 0, 4, 56, -1, 4, 9, 6, 2, 1, 11, 32, 7, 5, 0, 12, 0, 54, 40, -1, 16, 2, 1, 11, 30, 12, 8, 41, 6, 42, 17, 43, 9, 44, 5, 45, 13, 46, 13, 47, 13, 48, 5, 49, 5, 50, 5, 51, 5, 52, 5, 53, 9, 0, 0, 0, 2147483647, 57, 33, 1, 11, 34, 0, 14, -1, 2147483647, 58, -1, 1, 9, 6, 0, 1073741824, -1, 2147483647, 61, -1, 1, 9, 6, 0, 14, -1, 2147483647, 74, -1, 1, 9, 5, 0, 14, -1, 2147483647, 80, -1, 1, 81, 35, 0, 14, 0, 4, 71, -1, 11, 2, 1, 11, 36, 84, 37, 85, 38, 86, 10, 87, 39, 88, 13, 89, 40, 90, 41, 71, 42, 72, 42, 0, 19, 0, 101, 71, -1, 11, 2, 1, 91, 9, 92, 38, 93, 43, 94, 44, 95, 8, 96, 5, 97, 45, 98, 17, 99, 13, 100, 13, 0, 20, 0, 29, 29, -1, 21, 2, 1, 11, 46, 12, 8, 13, 6, 14, 5, 15, 9, 16, 47, 17, 48, 18, 48, 19, 5, 20, 16, 21, 22, 22, 13, 23, 15, 24, 16, 25, 17, 26, 9, 30, 9, 31, 43, 32, 10, 33, 25, 0, 19, 0, 102, 72, -1, 2, 2, 1, 11, 49, 0, 19, 0, 102, 73, -1, 2, 2, 1, 11, 50, 0, 0, 0, 2147483647, 103, 51, 4, 9, 6, 11, 52, 35, 8, 36, 8, 0, 24, -1, 2147483647, 105, -1, 1, 106, 17, 0, 0, 0, 2147483647, 108, 53, 2, 11, 54, 106, 17, 0, 0, 0, 2147483647, 109, 53, 1, 106, 17, 0 </int_array>
+			<int_array  len="529"> 				-1, -1, 4, 0, -1, 3, 1, 0, 2, 1, 3, 2, 0, 0, 0, 2147483647, 5, 3, 2, 6, 4, 7, 5, 0, 0, 0, 4, 8, -1, 2, 9, 6, 2, 1, 0, 2, 0, 10, 10, -1, 20, 2, 1, 11, 7, 7, 5, 12, 8, 13, 6, 14, 5, 15, 9, 16, 10, 17, 11, 18, 12, 19, 5, 20, 13, 21, 14, 22, 13, 23, 15, 24, 16, 25, 17, 26, 9, 27, 15, 28, 10, 0, 2, 0, 29, 29, -1, 21, 2, 1, 11, 18, 12, 8, 13, 6, 14, 5, 15, 9, 16, 19, 17, 20, 18, 21, 19, 6, 20, 13, 21, 22, 22, 13, 23, 23, 24, 13, 25, 17, 26, 9, 30, 4, 31, 24, 32, 10, 33, 25, 0, 0, 0, 2147483647, 34, 26, 2, 35, 8, 36, 8, 0, 0, 0, 2147483647, 37, 27, 1, 1, 0, 0, 0, 0, 2147483647, 38, 28, 0, 0, 0, 0, 4, 39, -1, 4, 9, 6, 2, 1, 11, 29, 7, 5, 0, 8, 0, 54, 40, -1, 16, 2, 1, 11, 30, 12, 8, 41, 6, 42, 17, 43, 9, 44, 5, 45, 13, 46, 13, 47, 13, 48, 5, 49, 5, 50, 5, 51, 5, 52, 5, 53, 9, 0, 0, 0, 4, 55, -1, 4, 9, 6, 2, 1, 11, 31, 7, 5, 0, 10, 0, 54, 40, -1, 16, 2, 1, 11, 30, 12, 8, 41, 6, 42, 17, 43, 9, 44, 5, 45, 13, 46, 13, 47, 13, 48, 5, 49, 5, 50, 5, 51, 5, 52, 5, 53, 9, 0, 0, 0, 4, 56, -1, 4, 9, 6, 2, 1, 11, 32, 7, 5, 0, 12, 0, 54, 40, -1, 16, 2, 1, 11, 30, 12, 8, 41, 6, 42, 17, 43, 9, 44, 5, 45, 13, 46, 13, 47, 13, 48, 5, 49, 5, 50, 5, 51, 5, 52, 5, 53, 9, 0, 0, 0, 2147483647, 57, 33, 1, 11, 34, 0, 14, -1, 2147483647, 58, -1, 1, 9, 6, 0, 14, -1, 2147483647, 74, -1, 1, 9, 5, 0, 14, -1, 2147483647, 80, -1, 1, 81, 35, 0, 14, 0, 4, 71, -1, 11, 2, 1, 11, 36, 84, 37, 85, 38, 86, 10, 87, 39, 88, 13, 89, 40, 90, 41, 71, 42, 72, 42, 0, 18, 0, 101, 71, -1, 11, 2, 1, 91, 9, 92, 38, 93, 43, 94, 44, 95, 8, 96, 5, 97, 45, 98, 17, 99, 13, 100, 13, 0, 19, 0, 29, 29, -1, 21, 2, 1, 11, 46, 12, 8, 13, 6, 14, 5, 15, 9, 16, 47, 17, 48, 18, 48, 19, 5, 20, 16, 21, 22, 22, 13, 23, 15, 24, 16, 25, 17, 26, 9, 30, 9, 31, 43, 32, 10, 33, 25, 0, 18, 0, 102, 72, -1, 2, 2, 1, 11, 49, 0, 18, 0, 102, 73, -1, 2, 2, 1, 11, 50, 0, 0, 0, 2147483647, 103, 51, 4, 9, 6, 11, 52, 35, 8, 36, 8, 0, 23, -1, 2147483647, 105, -1, 1, 106, 17, 0, 0, 0, 2147483647, 108, 53, 2, 11, 54, 106, 17, 0, 0, 0, 2147483647, 109, 53, 1, 106, 17, 0 </int_array>
 			<string> "variants" </string>
 			<array  len="55" shared="false">
 				<node_path> "." </node_path>
@@ -312,50 +311,11 @@
 							<array  len="0" shared="false">
 							</array>
 							<string> "from" </string>
-							<string> "04_stand_jump_rise" </string>
-							<string> "id" </string>
-							<string> "anim 3" </string>
-							<string> "pos" </string>
-							<vector2> 183, 166 </vector2>
-							<string> "type" </string>
-							<string> "animation" </string>
-						</dictionary>
-						<dictionary  shared="false">
-							<string> "filter" </string>
-							<array  len="0" shared="false">
-							</array>
-							<string> "from" </string>
 							<string> "01_walk-cycle" </string>
 							<string> "id" </string>
 							<string> "anim 8" </string>
 							<string> "pos" </string>
 							<vector2> 470, 77 </vector2>
-							<string> "type" </string>
-							<string> "animation" </string>
-						</dictionary>
-						<dictionary  shared="false">
-							<string> "filter" </string>
-							<array  len="0" shared="false">
-							</array>
-							<string> "from" </string>
-							<string> "03_sprint-cycle" </string>
-							<string> "id" </string>
-							<string> "anim 7" </string>
-							<string> "pos" </string>
-							<vector2> 286, 115 </vector2>
-							<string> "type" </string>
-							<string> "animation" </string>
-						</dictionary>
-						<dictionary  shared="false">
-							<string> "filter" </string>
-							<array  len="0" shared="false">
-							</array>
-							<string> "from" </string>
-							<string> "06_run_jump_rise" </string>
-							<string> "id" </string>
-							<string> "anim 5" </string>
-							<string> "pos" </string>
-							<vector2> 185, 311 </vector2>
 							<string> "type" </string>
 							<string> "animation" </string>
 						</dictionary>
@@ -395,6 +355,45 @@
 							<string> "anim 2" </string>
 							<string> "pos" </string>
 							<vector2> 32, 191 </vector2>
+							<string> "type" </string>
+							<string> "animation" </string>
+						</dictionary>
+						<dictionary  shared="false">
+							<string> "filter" </string>
+							<array  len="0" shared="false">
+							</array>
+							<string> "from" </string>
+							<string> "04_stand_jump_rise" </string>
+							<string> "id" </string>
+							<string> "anim 3" </string>
+							<string> "pos" </string>
+							<vector2> 183, 166 </vector2>
+							<string> "type" </string>
+							<string> "animation" </string>
+						</dictionary>
+						<dictionary  shared="false">
+							<string> "filter" </string>
+							<array  len="0" shared="false">
+							</array>
+							<string> "from" </string>
+							<string> "03_sprint-cycle" </string>
+							<string> "id" </string>
+							<string> "anim 7" </string>
+							<string> "pos" </string>
+							<vector2> 286, 115 </vector2>
+							<string> "type" </string>
+							<string> "animation" </string>
+						</dictionary>
+						<dictionary  shared="false">
+							<string> "filter" </string>
+							<array  len="0" shared="false">
+							</array>
+							<string> "from" </string>
+							<string> "06_run_jump_rise" </string>
+							<string> "id" </string>
+							<string> "anim 5" </string>
+							<string> "pos" </string>
+							<vector2> 185, 311 </vector2>
 							<string> "type" </string>
 							<string> "animation" </string>
 						</dictionary>
