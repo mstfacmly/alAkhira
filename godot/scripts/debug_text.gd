@@ -32,7 +32,7 @@ func _process(delta):
 		txt += str("\nTimer: ", timer.get_wait_time());
 		txt += str("\nChar State: ", health.state);
 		txt += str("\nWorld: ", curr.curr);
-		txt += str("\nJoystick X2: ", js_axis.get_joy_axis(0,2) );
-		txt += str("\nJoystick Y2: ", js_axis.get_joy_axis(0,36) );
+		txt += str("\nJoystick X: ", js_axis.get_joy_axis(0,0) );
+		txt += str("\nJoystick Y: ", js_axis.get_joy_axis(0,1));
 
 		set_text(txt);
