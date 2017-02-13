@@ -34,6 +34,7 @@ var wrun = [];
 var dist = 4;
 var collision_exception=[ self ];
 var col_result = [];
+var ledge_col = [];
 
 # Environment
 const gravity = -9.8;
@@ -96,6 +97,7 @@ func _fixed_process(delta):
 	check_movement(delta);
 	player_on_fixedprocess(delta);
 	check_parkour();
+	check_ledge();
 
 func joy_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -411,6 +413,23 @@ func check_parkour():
 	else:
 		col_result = "nothing";
 		return col_result
+
+func check_ledge():
+	var ppos = mesh.get_global_transform().origin;
+	var ptarget = mesh.get_node("ptarget").get_global_transform().origin;
+	var ledgecol = mesh.get_node("ledgecol").get_global_transform().origin;
+	var delta = ptarget - ppos;
+	var ds = get_world().get_direct_space_state();
+
+	if wrun == "vert":
+		var col_top = ds.intersect_ray(ledgecol,ptarget)
+		if !col_top.empty():
+			ledge_col = "ledge"
+			return ledge_col
+	elif wrun == []:
+		ledge_col = []
+	else:
+		pass
 
 func adjust_facing(p_facing, p_target,p_step, p_adjust_rate,current_gn):	#transition a change of direction
 	var n = p_target						# normal
