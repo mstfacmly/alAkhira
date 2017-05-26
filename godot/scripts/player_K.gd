@@ -230,18 +230,22 @@ func check_movement(delta):
 		var facing_mesh = -mesh_xform.basis[0].normalized()
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
 		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
-		var m3 = Matrix3(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
+		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
 	var wrunhmax = (jump_speed + hspeed) * 0.11;
-	var wrunvmax = (jump_speed + hspeed) #* 0.33;
+	var wrunvmax = (jump_speed + hspeed) * 0.5;
 	var wrunjump = false;
-	var fallvel = gravity / 2.486
+	var fallvel = gravity / 2.486;
+	var mrot = mesh.get_transform().basis[0].angle_to(Vector3(0,0,1))
+#	var mrot = mesh.get_rotation().y
+	var mroted = mrot * PI
+#	var mroted = deg2rad(lerp(rad2deg(mrot), rad2deg(mrot * PI) , delta))
 
 	if on_floor and jump_attempt:
 		if col_result == 'front' && hspeed >= walk:
-			vel.y = jump_speed + (hspeed * 0.13);
+			vel.y = jump_speed + hspeed;# * 0.13);
 			wrun = 'vert';
 			jumping = false;
 		elif col_result in ['left','right'] && hspeed >= walk:
@@ -266,25 +270,37 @@ func check_movement(delta):
 
 	if wrun == 'vert':
 		if !jump_attempt or vel.y >= wrunvmax:
-			wrun = []
+			wrun = [];
 			falling = true;
 	elif wrun == 'horz':
 		if !jump_attempt or vel.y >= wrunhmax:
-			wrun = []
+			wrun = [];
 			falling = true;
 #			fallvel = fallvel / 2
 
-	if !on_floor && col_result == 'front' && !jump_attempt:
-		if jump_attempt:
-			vel.y = jump_speed;
-			wrunjump = true;
+#	if !on_floor && col_result == 'front' && !jump_attempt:
+#		if jump_attempt:
+#			vel.y = jump_speed;
+#			wrunjump = true;
 
 	if !on_floor && !jumping:
 		falling = true;
 
-	if falling:
-		if vel.y >= 25:
-			health.state = 'dead'
+	if !on_floor && !jump_attempt && falling:
+		if col_result == 'front':
+#			mrot.y = deg2rad(lerp(rad2deg(mrot.y),-45*4, 10 * delta));
+#			mrot = mrot.rotated(mesh.get_transform().basis, PI)
+#			mrot = lerp(mrot.y, -180, 10 * delta);
+#			mesh.set_rotation(mrot);
+			mesh.set_rotation(Vector3(0,mroted,0));
+			fallvel += fallvel / 100;
+		elif vel.y >= 25:
+			health.state = 'dead';
+		else:
+			pass
+
+	print(mrot)
+#	print(mesh.get_rotation())
 
 	if col_result == 'nothing':
 		wrun = [];
@@ -391,9 +407,9 @@ func check_parkour():
 	var ptarget = mesh.get_node("ptarget").get_global_transform().origin;
 	var delta = ptarget - ppos;
 
-	var col_right = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
+	var col_right = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
 	var col = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
-	var col_left = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
+	var col_left = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 
 	if (!col_left.empty() && col_right.empty()):
 		col_result = "left"
@@ -424,10 +440,10 @@ func check_ledge():
 	if wrun == "vert":
 		var col_top = ds.intersect_ray(ledgecol,ptarget)
 		if !col_top.empty():
-			ledge_col = "ledge"
-			return ledge_col
+			ledge_col = col_top;
+			return ledge_col;
 	elif wrun == []:
-		ledge_col = []
+		ledge_col = [];
 	else:
 		pass
 
