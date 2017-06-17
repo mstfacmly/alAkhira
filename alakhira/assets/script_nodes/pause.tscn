@@ -1,0 +1,125 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://scripts/pause.gd" type="Script" id=1]
+[ext_resource path="res://scripts/popmenu.gd" type="Script" id=2]
+[ext_resource path="res://scripts/pause_shift.gd" type="Script" id=3]
+
+[node name="pause" type="Spatial"]
+
+process/pause_mode = 2
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+script/script = ExtResource( 1 )
+__meta__ = {
+"__editor_plugin_screen__": "2D"
+}
+
+[node name="pause_menu" type="PopupPanel" parent="."]
+
+visibility/visible = false
+visibility/self_opacity = 0.42
+visibility/blend_mode = 1
+anchor/left = 2
+anchor/top = 2
+anchor/right = 2
+anchor/bottom = 2
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+margin/left = 0.125
+margin/top = 0.183333
+margin/right = 0.81875
+margin/bottom = 0.85
+popup/exclusive = false
+script/script = ExtResource( 2 )
+
+[node name="title" type="Label" parent="pause_menu"]
+
+anchor/left = 2
+anchor/top = 2
+anchor/right = 1
+anchor/bottom = 2
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.630631
+margin/top = 0.025
+margin/right = 7.0
+margin/bottom = 0.1
+text = "al akhira"
+align = 2
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="hold to quit" type="Label" parent="pause_menu"]
+
+anchor/left = 2
+anchor/top = 2
+anchor/right = 1
+anchor/bottom = 2
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.630631
+margin/top = 0.1
+margin/right = 6.0
+margin/bottom = 0.175
+text = "hold pause to quit"
+align = 2
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="buttons" type="VButtonArray" parent="pause_menu"]
+
+visibility/visible = false
+visibility/blend_mode = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 10.0
+margin/top = 10.0
+margin/right = 110.0
+margin/bottom = 390.0
+flat = false
+button/count = 4
+button/min_button_size = 24.0
+button/align = 1
+button/0/text = "test"
+button/0/tooltip = ""
+button/0/icon = null
+button/1/text = "forest"
+button/1/tooltip = ""
+button/1/icon = null
+button/2/text = "city"
+button/2/tooltip = ""
+button/2/icon = null
+button/3/text = "quit"
+button/3/tooltip = ""
+button/3/icon = null
+button/selected = 0
+
+[node name="timer" type="Timer" parent="."]
+
+process/pause_mode = 2
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="shift" type="Spatial" parent="."]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+script/script = ExtResource( 3 )
+
+[connection signal="button_selected" from="pause_menu/buttons" to="pause_menu" method="_on_buttons_button_selected"]
+
+[connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
+
+

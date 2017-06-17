@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/health.gd" type="Script" id=1]
+[ext_resource path="res://scripts/debug_text.gd" type="Script" id=2]
+[ext_resource path="res://assets/ui/pause.tscn" type="PackedScene" id=3]
+
+[node name="ui" type="Control"]
+
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_clip_content = false
+mouse_filter = 0
+
+[node name="healthb" type="ProgressBar" parent="."]
+
+anchor_left = 2
+anchor_top = 2
+anchor_right = 1
+anchor_bottom = 1
+margin_left = -365.0
+margin_top = -247.0
+margin_right = 20.0
+margin_bottom = 11.0
+rect_clip_content = false
+mouse_filter = 2
+size_flags_vertical = 0
+min_value = 0.0
+max_value = 100.0
+step = -0.1
+page = 0.0
+value = 1.0
+exp_edit = false
+rounded = true
+percent_visible = true
+script = ExtResource( 1 )
+state = "alive"
+
+[node name="debug_info" type="Label" parent="."]
+
+margin_right = 190.0
+margin_bottom = 210.0
+rect_clip_content = false
+mouse_filter = 2
+size_flags_vertical = 0
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+script = ExtResource( 2 )
+
+[node name="pause" parent="." instance=ExtResource( 3 )]
+
+

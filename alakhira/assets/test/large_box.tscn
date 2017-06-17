@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://assets/test/box_large.msh" type="Mesh" id=1]
+
+[sub_resource type="BoxShape" id=22]
+
+extents = Vector3( 2.24345, 0.253283, 4.09821 )
+
+[sub_resource type="BoxShape" id=23]
+
+extents = Vector3( 2.24832, 1.99377, 4.06933 )
+
+[node name="box" type="StaticBody"]
+
+_import_path = NodePath("cube_large-col")
+_import_transform = Transform( 1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0 )
+input/ray_pickable = true
+input/capture_on_drag = false
+shape_count = 2
+shapes/0/shape = SubResource( 22 )
+shapes/0/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085491, 4.21233, 0.061066 )
+shapes/0/trigger = false
+shapes/1/shape = SubResource( 23 )
+shapes/1/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122467, 2.03809, 0.0610657 )
+shapes/1/trigger = false
+collision/layers = 1
+collision/mask = 1
+friction = 1.0
+bounce = 0.0
+constant_linear_velocity = Vector3( 0, 0, 0 )
+constant_angular_velocity = Vector3( 0, 0, 0 )
+__meta__ = {
+"__editor_plugin_screen__": "3D"
+}
+
+[node name="box" type="MeshInstance" parent="."]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.3103, 0, 0 )
+layers = 1
+geometry/visible = true
+geometry/material_override = null
+geometry/cast_shadow = 1
+geometry/receive_shadows = true
+geometry/range_begin = 0.0
+geometry/range_end = 0.0
+geometry/extra_cull_margin = 0.0
+geometry/billboard = false
+geometry/billboard_y = false
+geometry/depth_scale = false
+geometry/visible_in_all_rooms = false
+geometry/use_baked_light = false
+geometry/baked_light_tex_id = 0
+mesh/mesh = ExtResource( 1 )
+mesh/skeleton = NodePath("..")
+material/0 = null
+
+[node name="ledge" type="CollisionShape" parent="."]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085491, 4.21233, 0.061066 )
+shape = SubResource( 22 )
+trigger = false
+_update_shape_index = 0
+
+[node name="wall" type="CollisionShape" parent="."]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122467, 2.03809, 0.0610657 )
+shape = SubResource( 23 )
+trigger = false
+_update_shape_index = 1
+
+
