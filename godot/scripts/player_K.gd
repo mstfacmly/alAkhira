@@ -230,7 +230,7 @@ func check_movement(delta):
 		var facing_mesh = -mesh_xform.basis[0].normalized()
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
 		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
-		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
+		var m3 = Matrix3(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
@@ -407,9 +407,9 @@ func check_parkour():
 	var ptarget = mesh.get_node("ptarget").get_global_transform().origin;
 	var delta = ptarget - ppos;
 
-	var col_right = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
+	var col_right = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
 	var col = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
-	var col_left = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
+	var col_left = ds.intersect_ray(ppos,ptarget+Matrix3(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 
 	if (!col_left.empty() && col_right.empty()):
 		col_result = "left"
