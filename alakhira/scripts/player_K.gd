@@ -84,9 +84,8 @@ func _input(ev):
 	if (ev.is_action('jump') && ev.is_pressed()):
 		if !ev.is_echo():
 			jump_attempt = true;
-			fr = OS.get_ticks_msec()
-			if fr <= 300:
-				jump_attempt = false;
+#			if vel.y == 10:
+#				jump_attempt = false;
 		elif ev.is_echo():
 			jump_attempt = false;
 	else:
@@ -412,7 +411,7 @@ func check_parkour():
 	var ds = get_world().get_direct_space_state();
 	var parkour_detect = 80;
 	var ppos = mesh.get_global_transform().origin;
-	var ptarget = mesh.get_node("ptarget").get_global_transform().origin;
+	var ptarget = mesh.get_node("targets/ptarget").get_global_transform().origin;
 	var delta = ptarget - ppos;
 
 	var col_right = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
@@ -440,8 +439,8 @@ func check_parkour():
 
 func check_ledge():
 	var ppos = mesh.get_global_transform().origin;
-	var ptarget = mesh.get_node("ptarget").get_global_transform().origin;
-	var ledgecol = mesh.get_node("ledgecol").get_global_transform().origin;
+	var ptarget = mesh.get_node("targets/ptarget").get_global_transform().origin;
+	var ledgecol = mesh.get_node("targets/ledgecol").get_global_transform().origin;
 	var delta = ptarget - ppos;
 	var ds = get_world().get_direct_space_state();
 

@@ -1,0 +1,13 @@
+[gd_scene format=2]
+
+[node name="targets" type="Spatial"]
+
+[node name="ptarget" type="Position3D" parent="."]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 3 )
+
+[node name="ledgecol" type="Position3D" parent="."]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 3 )
+
+
