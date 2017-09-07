@@ -3,8 +3,8 @@ extends Control
 var paused = false
 onready var t = get_node("timer")
 onready var root = get_node("/root/")
-onready var az = root.get_node("scene/player")
-onready var ui = root.get_node("scene/player/ui/healthb")
+onready var az = root.get_node("scene/az")
+onready var ui = root.get_node("scene/az/ui/healthb")
 onready var pmenu = get_node("pause_menu")
 
 func _input(ev):

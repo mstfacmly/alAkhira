@@ -18,7 +18,7 @@ var spi = {
 }
 var anim = []
 var players = []
-onready var az = get_node("/root/scene/player/scripts/shift")
+onready var az = get_node("/root/scene/az/scripts/shift")
 #var curr
 var overlay = 'none'
 
