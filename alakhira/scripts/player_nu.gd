@@ -32,15 +32,16 @@ var mv_spd = run;
 var turn_speed = 42;
 var sharp_turn_threshold = 130
 #var climbspeed = 2
-var jmp_spd = -g / 1.91 ;
+var jmp_spd = -g #/ 1.91 ;
 var hvel = Vector3();
 var hspeed
-var jump_attempt;
+var jump_attempt = false
 var jumping = false;
 var falling = false;
+var vvel
 var wrun = [];
 var dist = 4;
-#var collision_exception=[ self ];
+var collision_exception=[ self ];
 var col_result = [];
 var ledge_col = [];
 
@@ -66,9 +67,9 @@ func _input(ev):
 			OS.set_window_fullscreen(!OS.is_window_fullscreen());
 
 	if ev.is_action_pressed("jump"):
-		jumping = true
+		jump_attempt = true
 	elif ev.is_action_released("jump"):
-		jumping = false
+		jump_attempt = false
 
 func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         var n = p_target # Normal
@@ -103,8 +104,8 @@ func _fixed_process(delta):
 func check_mv(delta):
 	# Velocity
 	var lv = lin_vel
-	lv += g * delta
-	var vvel = up.dot(lv)
+	lv += g * (delta * 3)
+	vvel = up.dot(lv)
 	var hvel = lv - up * vvel
 
 	var hdir = hvel.normalized()
@@ -165,25 +166,25 @@ func check_mv(delta):
 			if hvel.length() > mv_spd:
 				hvel = hvel.normalized() * mv_spd
 
-	if is_on_floor() && jumping:
-#		jumping = true
+	if is_on_floor() && jump_attempt:
+		jumping = true
 		vvel = jmp_spd
-
-#	if !jump_attempt:
-#		jumping = false
-
-#	if !jumping && !is_on_floor():
-#		falling = true
-#	if jumping && vvel.normalized() = 10.486:
-#		falling = true
-
-	if falling:
-		lv += g * (delta * 3)
+	elif !is_on_floor() && jump_attempt or !is_on_floor() && !jump_attempt:
+		jumping = false
 
 	lv = hvel + up * vvel
 
 	if is_on_floor():
 		mv_dir = lv
+
+	if is_on_wall():
+		lv = Vector3(0,0.0000001,0)
+	else:
+		pass
+
+	if is_on_wall() && jump_attempt:
+		jumping = true
+		vvel = jmp_spd + hvel
 
 	lin_vel = move_and_slide(lv, -g.normalized())
 
@@ -311,6 +312,27 @@ func parkour():
 	else:
 		col_result = "nothing";
 		return col_result
+
+	if is_on_floor() and jump_attempt:
+		if col_result == 'front' && hspeed >= walk:
+#			vvel = jmp_spd + hspeed;# * 0.13);
+			wrun = 'vert';
+			jumping = false;
+			is_on_wall()
+		elif col_result in ['left','right'] && hspeed >= walk:
+			vvel = jmp_spd + (hspeed * 0.13);
+			hvel = jmp_spd + hspeed;
+			wrun = 'horz';
+			jumping = false;
+			is_on_wall()
+		else:
+			vvel = jmp_spd; # * gravity_factor;
+			!is_on_floor();
+			jumping = true;
+			falling = false;
+			wrun = [];
+	else:
+		pass
 
 func ledge():
 	var ppos = mesh.get_global_transform().origin;
