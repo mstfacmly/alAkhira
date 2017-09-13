@@ -131,8 +131,10 @@ func check_mv(delta):
 		dir += cam_xform.basis[0]
 
 	var target_dir = (dir - up * dir.dot(up)).normalized()
-
-	if is_on_floor():
+	var mesh_xform = mesh.get_transform()
+	var facing_mesh = -mesh_xform.basis[0].normalized()
+	
+	if is_on_floor():# or (is_on_wall() && jump_attempt):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
 
 		if dir.length() > 0.1 and !sharp_turn:
@@ -151,8 +153,6 @@ func check_mv(delta):
 
 		hvel = hdir * hspeed
 
-		var mesh_xform = mesh.get_transform()
-		var facing_mesh = -mesh_xform.basis[0].normalized()
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
 		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0/hspeed * turn_speed, up)
 		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
@@ -176,15 +176,38 @@ func check_mv(delta):
 
 	if is_on_floor():
 		mv_dir = lv
-
+		wrun = []
+	
+	if !is_on_floor():
+		if hspeed >= run:
+			if col_result == 'front':
+#				vvel = jmp_spd + hspeed;# * 0.13);
+				wrun = 'vert';
+				is_on_wall()
+			elif col_result in ['left','right']:# && hspeed > walk:
+#				vvel = jmp_spd + (hspeed * 0.13);
+#				hvel = jmp_spd + hvel;
+				wrun = 'horz';
+#				jumping = false;
+				is_on_wall()
+			else:
+				wrun = []
+	
 	if is_on_wall():
-		lv = Vector3(0,0.0000001,0)
+		if !jump_attempt:
+			lv = Vector3(0,0.0000001,0)
+		elif jump_attempt:
+			if wrun == 'vert':
+				#lv += g * (delta * 3)
+				vvel = jmp_spd + hvel #(hvel * 2)
+				lv = hvel + up * vvel
+#				move_and_slide(-facing_mesh, -g.normalized())
+		else:
+			pass
 	else:
 		pass
-
-	if is_on_wall() && jump_attempt:
-		jumping = true
-		vvel = jmp_spd + hvel
+		
+	print('wrun: ', wrun)
 
 	lin_vel = move_and_slide(lv, -g.normalized())
 
@@ -218,7 +241,7 @@ func player_fp(delta):
 		anim = SPRINT
 		cam.cam_radius = 4.2
 		cam.cam_fov = 72
-	elif hspeed >= walk - 1.3 && hspeed <= run:
+	elif hspeed >= 0.1 && hspeed <= run:
 		anim = WALK
 		cam.cam_radius = 3.7
 		cam.cam_fov = 64
@@ -313,26 +336,6 @@ func parkour():
 		col_result = "nothing";
 		return col_result
 
-	if is_on_floor() and jump_attempt:
-		if col_result == 'front' && hspeed >= walk:
-#			vvel = jmp_spd + hspeed;# * 0.13);
-			wrun = 'vert';
-			jumping = false;
-			is_on_wall()
-		elif col_result in ['left','right'] && hspeed >= walk:
-			vvel = jmp_spd + (hspeed * 0.13);
-			hvel = jmp_spd + hspeed;
-			wrun = 'horz';
-			jumping = false;
-			is_on_wall()
-		else:
-			vvel = jmp_spd; # * gravity_factor;
-			!is_on_floor();
-			jumping = true;
-			falling = false;
-			wrun = [];
-	else:
-		pass
 
 func ledge():
 	var ppos = mesh.get_global_transform().origin;
@@ -346,7 +349,7 @@ func ledge():
 		if !col_top.empty():
 			ledge_col = col_top;
 			return ledge_col;
-	elif wrun == []:
+	elif wrun == '':
 		ledge_col = [];
 	else:
 		pass
