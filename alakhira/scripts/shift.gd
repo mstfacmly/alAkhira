@@ -69,12 +69,12 @@ func _input(ev):
 	elif cast and curr == 'phys' and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
-	elif hiding == false and curr == 'phys' and overlay == 'spi' and not cast :
+	elif !hiding and curr == 'phys' and overlay == 'spi' and not cast :
 		toggle(spi, false) #just hide spi
 		overlay = 'none'
 
 func _fixed_process(delta):
-	if showing != false || hiding != false:
+	if showing || hiding:
 		interpolate(showing, hiding, delta)
 
 func interpolate(show, hide, delta):
@@ -86,14 +86,14 @@ func interpolate(show, hide, delta):
 
 	var step = t/transition_time
 
-	if show != false:
+	if show:
 		for mat in show['materials']:
 			color = mat.get_parameter(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 1)
 			step_show = color.linear_interpolate(target, step)
 			mat.set_parameter(DIFFUSE, step_show)
 
-	if hide != false:
+	if hide:
 		for mat in hide['materials']:
 			color = mat.get_parameter(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 0)
@@ -114,7 +114,7 @@ func spir_peek(store, activate):
 
 #switch from a to b
 func toggle(a, b):
-	if b != false:
+	if b:
 		for obj in b.nodes:
 			obj.set_fixed_process(true)
 			obj.show()
@@ -124,7 +124,7 @@ func toggle(a, b):
 
 
 func post_toggle(a, b):
-	if a != false:
+	if a:
 		for obj in a.nodes:
 			obj.set_fixed_process(false)
 			obj.hide()

@@ -123,7 +123,7 @@ func cam_update():
 	else:
 		pos = cam_pos;
 
-	cam.look_at_from_pos(pos, pivot.get_global_transform().origin, up);
+	cam.look_at_from_position(pos, pivot.get_global_transform().origin, up);
 
 func autoturn_cam(dt):
 	var delta = cam_pos - target #regular delta follow

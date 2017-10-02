@@ -67,7 +67,7 @@ func _spi():
 	env_transition(-1)
 
 func _fixed_process(delta):
-	if showing != false || hidding != false:
+	if showing || hidding:
 		interpolate(showing, hidding, delta)
 
 func interpolate(show, hide, delta):
@@ -79,14 +79,14 @@ func interpolate(show, hide, delta):
 
 	var step = t/transition_time
 
-	if show != false:
+	if show:
 		for mat in show['materials']:
 			color = mat.get_parameter(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 1)
 			step_show = color.linear_interpolate(target, step)
 			mat.set_parameter(DIFFUSE, step_show)
 
-	if hide != false:
+	if hide:
 		for mat in hide['materials']:
 			color = mat.get_parameter(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 0)
@@ -98,7 +98,7 @@ func interpolate(show, hide, delta):
 
 #switch from a to b
 func toggle(a, b):
-	if b != false:
+	if b:
 		for obj in b.nodes:
 			obj.set_fixed_process(true)
 			obj.show()
@@ -107,7 +107,7 @@ func toggle(a, b):
 	t = 0
 
 func post_toggle(a, b):
-	if a != false:
+	if a:
 		for obj in a.nodes:
 			obj.set_fixed_process(false)
 			obj.hide()

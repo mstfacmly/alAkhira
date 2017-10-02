@@ -150,11 +150,13 @@ func check_mv(delta):
 			hspeed -= DEACCEL * delta
 			if hspeed < 0:
 				hspeed = 0
+		print("hspeed: ",hspeed)
 
 		hvel = hdir * hspeed
 
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
-		facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0/hspeed * turn_speed, up)
+		if hspeed > 0.01:
+			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
@@ -207,7 +209,7 @@ func check_mv(delta):
 	else:
 		pass
 		
-	print('wrun: ', wrun)
+#	print('wrun: ', wrun)
 
 	lin_vel = move_and_slide(lv, -g.normalized())
 
@@ -280,10 +282,10 @@ func player_fp(delta):
 	else:
 		pass
 
-	if wrun == 'vert':
-		anim = SPRINT;
-	elif wrun == 'horz':
-		anim = SPRINT;
+#	if wrun == 'vert':
+#		anim = SPRINT;
+#	elif wrun == 'horz':
+#		anim = SPRINT;
 
 	if is_on_floor():
 		animate.blend2_node_set_amount("run", hspeed / mv_spd);
@@ -293,7 +295,7 @@ func player_fp(delta):
 		cam.cam_radius = 4.7
 		cam.cam_fov = 72
 
-	if col_result != 'nothing':
+	if !col_result.empty():
 		cam.cam_radius = 4.7
 		cam.cam_fov = 72
 
@@ -343,16 +345,26 @@ func ledge():
 	var ledgecol = mesh.get_node("targets/ledgecol").get_global_transform().origin;
 	var delta = ptarget - ppos;
 	var ds = get_world().get_direct_space_state();
-
-	if wrun == "vert":
+	
+	if col_result == "front":
 		var col_top = ds.intersect_ray(ledgecol,ptarget)
 		if !col_top.empty():
-			ledge_col = col_top;
-			return ledge_col;
-	elif wrun == '':
-		ledge_col = [];
-	else:
-		pass
+			ledge_col = col_top.position.y
+			return ledge_col
+			
+		ledgecol
+	
+#	if wrun == "vert":
+#		var col_top = ds.intersect_ray(ledgecol,ptarget);
+#		if !col_top.empty():
+#			ledge_col = col_top.position.y ;
+#			return ledge_col ;
+#	elif wrun == '':
+#		ledge_col = [];
+#	else:
+#		pass
+		
+	print("ledge col: ", ledge_col)
 
 
 func _ready():
