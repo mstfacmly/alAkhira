@@ -44,7 +44,7 @@ func set_enabled(enabled):
 	if enabled:
 		Input.set_mouse_mode(2);
 		set_process(true);
-		set_fixed_process(true);
+#		set_fixed_process(true);
 		set_process_input(true);
 		is_enabled = true;
 	else:

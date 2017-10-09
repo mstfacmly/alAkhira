@@ -43,7 +43,7 @@ func _ready():
 
 
 	set_process_input(true)
-	set_fixed_process(true)
+#	set_fixed_process(true)
 
 
 	pass

@@ -95,13 +95,7 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 
         return (n*cos(ang) + t*sin(ang))*p_facing.length()
 
-func _fixed_process(delta):
-	check_mv(delta)
-	player_fp(delta)
-	parkour()
-	ledge()
-
-func check_mv(delta):
+func _physics_process(delta):
 	# Velocity
 	var lv = lin_vel
 	lv += g * (delta * 3)
@@ -193,6 +187,7 @@ func check_mv(delta):
 #				jumping = false;
 				is_on_wall()
 			else:
+#				col_result == []
 				wrun = []
 	
 	if is_on_wall():
@@ -212,6 +207,10 @@ func check_mv(delta):
 #	print('wrun: ', wrun)
 
 	lin_vel = move_and_slide(lv, -g.normalized())
+	
+	player_fp(delta)
+	parkour()
+	ledge()
 
 func player_fp(delta):
 	hspeed = lin_vel.length()
@@ -346,7 +345,7 @@ func ledge():
 	var delta = ptarget - ppos;
 	var ds = get_world().get_direct_space_state();
 	
-	if col_result == "front":
+	if col_result == 'front':
 		var col_top = ds.intersect_ray(ledgecol,ptarget)
 		if !col_top.empty():
 			ledge_col = col_top.position.y
@@ -354,7 +353,7 @@ func ledge():
 			
 		ledgecol
 	
-#	if wrun == "vert":
+#	if wrun == 'vert':
 #		var col_top = ds.intersect_ray(ledgecol,ptarget);
 #		if !col_top.empty():
 #			ledge_col = col_top.position.y ;
@@ -364,7 +363,7 @@ func ledge():
 #	else:
 #		pass
 		
-	print("ledge col: ", ledge_col)
+#	print("ledge col: ", ledge_col)
 
 
 func _ready():

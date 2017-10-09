@@ -42,7 +42,7 @@ func _ready():
 	toggle(spi, phys)
 
 	set_process_input(true)
-	set_fixed_process(true)
+#	set_fixed_process(true)
 #	set_process(true)
 
 	pass

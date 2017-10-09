@@ -6,24 +6,33 @@
 
 [node name="ui" type="Control"]
 
-margin_right = 1024.0
-margin_bottom = 600.0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+_sections_unfolded = [ "Rect" ]
 
 [node name="healthb" type="ProgressBar" parent="."]
 
-anchor_left = 2
-anchor_top = 2
-anchor_right = 1
-anchor_bottom = 1
-margin_left = -365.0
-margin_top = -247.0
-margin_right = 20.0
-margin_bottom = 11.0
+anchor_left = 0.66
+anchor_top = 0.92
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 34.9822
+margin_top = 16.1263
+margin_right = -14.0
+margin_bottom = -8.0
+rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
+size_flags_horizontal = 0
 size_flags_vertical = 0
+size_flags_stretch_ratio = 0.5
 min_value = 0.0
 max_value = 100.0
 step = -0.1
@@ -33,14 +42,21 @@ exp_edit = false
 rounded = true
 percent_visible = true
 script = ExtResource( 1 )
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect", "Size Flags", "Theme" ]
 state = "alive"
 
 [node name="debug_info" type="Label" parent="."]
 
-margin_right = 190.0
-margin_bottom = 210.0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.185989
+anchor_bottom = 0.349163
+margin_right = -0.452362
+margin_bottom = 0.502411
+rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
+size_flags_horizontal = 1
 size_flags_vertical = 0
 percent_visible = 1.0
 lines_skipped = 0
