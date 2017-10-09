@@ -39,6 +39,9 @@ func _ready():
 
 	cam_fov = cam.get_fov();
 	ds = get_world().get_direct_space_state();
+	
+	set_process(true)
+	_fixed_process(true)
 
 func set_enabled(enabled):
 	if enabled:

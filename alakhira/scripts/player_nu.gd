@@ -173,6 +173,7 @@ func _physics_process(delta):
 	if is_on_floor():
 		mv_dir = lv
 		wrun = []
+		falling = false
 	
 	if !is_on_floor():
 		if hspeed >= run:
@@ -187,14 +188,17 @@ func _physics_process(delta):
 #				jumping = false;
 				is_on_wall()
 			else:
+				pass
 #				col_result == []
-				wrun = []
+#				wrun = []
+		if !jumping:
+			falling = true
 	
 	if is_on_wall():
 		if !jump_attempt:
 			lv = Vector3(0,0.0000001,0)
 		elif jump_attempt:
-			if wrun == 'vert':
+			if col_result == 'front':
 				#lv += g * (delta * 3)
 				vvel = jmp_spd + hvel #(hvel * 2)
 				lv = hvel + up * vvel
