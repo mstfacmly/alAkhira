@@ -19,8 +19,11 @@ export var autoturn_ray_aperture = 24;
 export var autoturn_speed = 25;
 var cam_view_sensitivity = 0.3;
 var cam_smooth_lerp = 6.16;
-var cam_pitch_minmax = Vector2(69, -42);
+var cam_pitch_minmax = Vector2(69, -28);
 var turn = Vector2()
+
+export var js_accel_x = 2.3
+export var js_accel_y = 1.3
 
 var up = Vector3(0,1,0)
 var ds;
@@ -31,7 +34,7 @@ var collision_exception = [];
 export(NodePath) var cam;
 export(NodePath) var pivot;
 
-const DEADZONE = 0.2
+const DEADZONE = 0.1
 
 func _ready():
 	cam = get_node("cam");
@@ -41,7 +44,7 @@ func _ready():
 	ds = get_world().get_direct_space_state();
 	
 	set_process(true)
-	_fixed_process(true)
+	set_physics_process(true)
 
 func set_enabled(enabled):
 	if enabled:
@@ -82,13 +85,13 @@ func js_input():
 	var Jy = Input.get_joy_axis(0,3)
 
 	if abs(Jy) >= DEADZONE:
-		cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * 5) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
+		cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * js_accel_y) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
 
 	if abs(Jx) >= DEADZONE:
 		if cam_smooth_movement:
-			cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * 10));
+			cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x));
 		else:
-			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity *10)),360);
+			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x)),360);
 			cam_currentradius = cam_radius;
 			cam_update();
 
@@ -166,7 +169,7 @@ func _process(delta):
 	js_input();
 	cam_update();
 
-func _fixed_process(delta):
+func _physics_process(delta):
 	autoturn_cam(delta);
 
 	if !is_enabled:
