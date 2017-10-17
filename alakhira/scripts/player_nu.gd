@@ -40,10 +40,12 @@ var jumping = false;
 var falling = false;
 var vvel
 var wrun = [];
+var wjmp
 var dist = 4;
 var collision_exception=[ self ];
 var col_result = [];
-var ledge_col = [];
+var ledge_col = Vector3();
+var on_ledge = false;
 
 var anim;
 var climb_platform = null;
@@ -66,10 +68,9 @@ func _input(ev):
 		if ev.is_pressed() && Input.is_key_pressed(KEY_F11):
 			OS.set_window_fullscreen(!OS.is_window_fullscreen())
 
-
 	if ev.is_action_pressed("jump"):
 		jump_attempt = true
-	elif ev.is_action_released("jump"):
+	elif ev.is_action_released("jump") or ev.is_echo():
 		jump_attempt = false
 
 func js_input(delta):
@@ -210,24 +211,10 @@ func _physics_process(delta):
 				wrun = []
 		if !jumping:
 			falling = true
+			
+	wjmp = jmp_spd + (hvel * 0.5)
 	
-	if is_on_wall():
-		if !jump_attempt:
-			lv = Vector3(0,0.0000001,0)
-		elif jump_attempt:
-			if col_result == ['front']:
-				#lv += g * (delta * 3)
-				vvel = jmp_spd + hvel #(hvel * 2)
-				lv = hvel + up * vvel
-#				move_and_slide(-facing_mesh, -g.normalized())
-		else:
-			pass
-	else:
-		pass
-		
-#	print('wrun: ', wrun)
-
-	lin_vel = move_and_slide(lv, -g.normalized())
+	lin_vel = move_and_slide(lv, up)
 
 	player_fp(delta)
 	js_input(delta)
@@ -308,7 +295,7 @@ func player_fp(delta):
 		animate.blend2_node_set_amount("run", hspeed / mv_spd);
 	animate.transition_node_set_current("state", anim);
 
-	if !is_on_floor() or !col_result.empty():
+	if !is_on_floor() or (!col_result.empty() and hspeed >= run):
 		cam.cam_radius = 4.7
 		cam.cam_fov = 72
 
@@ -359,14 +346,52 @@ func ledge():
 	var ptarget = mesh.get_node("targets/ptarget").get_global_transform().origin;
 	var ledgecol = mesh.get_node("targets/ledgecol").get_global_transform().origin;
 	var delta = ptarget - ppos;
+	var lv = Vector3()
+	
+	var ledge_diff = ledge_col.y - mesh.get_global_transform().origin.y
+	print(ledge_diff)
 	
 	if col_result == ['front']:
 		var col_top = ds.intersect_ray(ledgecol,ptarget)
 		if !col_top.empty():
-			ledge_col = col_top.position.y
+			ledge_col = Vector3(0,col_top.position.y,0)
 			return ledge_col
-		ledgecol
+			ledgecol.global_translation(ledge_col)
 	else:
+		pass
+		
+	if is_on_wall():
+#	if col_result == ['front']:
+		if !jump_attempt:
+			lv = Vector3(0,0.0000001,0)
+		elif jump_attempt:
+			if col_result == ['front']:
+#				vvel = jmp_spd + hvel #(hvel * 2)
+				lv = hvel * wjmp * up
+				if ledge_diff <= 1.6 && ledge_diff >= -1.1:
+					on_ledge = true;
+				else:
+					on_ledge = false
+#					!is_on_wall()
+		else:
+			pass
+	else:
+		pass
+		
+#	print('wrun: ', wrun)
+	if on_ledge:
+		translate(ledge_col)# - (ledge_col - Vector3(0,2.8,0)))
+#		mesh.get_owner().global_translate(wjmp)
+#		mesh.get_owner().move_and_slide(wjmp, Vector3(0,0,1),1)
+#		mesh.get_owner().translate(ledge_col * 0.5)
+		lv = ledge_col
+		if jump_attempt:
+			lv = wjmp
+			on_ledge = false
+#			move_and_slide(Vector3(0,0,1),up)
+	else:
+		on_ledge = false
+		lv += g * (delta *3)
 		pass
 	
 #	if wrun == ['vert']:
