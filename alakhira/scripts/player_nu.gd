@@ -33,7 +33,7 @@ var mv_spd = run;
 var turn_speed = 42;
 var sharp_turn_threshold = 130
 #var climbspeed = 2
-var jmp_spd = -g * 1.33 ;
+var jmp_spd = -g * 1.84 ;
 var hvel = Vector3();
 var hspeed
 var jump_attempt = false
@@ -196,6 +196,8 @@ func _physics_process(delta):
 		jumping = false
 
 	lv = hvel + up * vvel
+	
+	parkour()
 
 	if is_on_floor():
 		mv_dir = lv
@@ -203,6 +205,7 @@ func _physics_process(delta):
 		falling = false
 	
 	if !is_on_floor():
+		ledge()
 		if hspeed >= run:
 			if col_result == ['front']:
 #				vvel = jmp_spd + hspeed;# * 0.13);
@@ -221,20 +224,22 @@ func _physics_process(delta):
 			falling = true
 			
 	var wjmp = jmp_spd + (hvel * 0.5)
-	var ledge_diff = ledge_col.y - ppos.y
-	print("diff :", ledge_diff)
-	ledge()
+	var ledge_diff = ledge_col.y - ptarget.y
+	print(ledge_col)
+#	print("diff :", ledge_diff)
 	
 	if is_on_wall():
+		ledge()
 #	if col_result == ['front']:
 		if !jump_attempt:
 			lv = Vector3(0,0.0000001,0)
 		elif jump_attempt:
 			if col_result == ['front']:
 #				vvel = jmp_spd + hvel #(hvel * 2)
-				lv = hvel * wjmp# + up
-				if ledge_diff <= 4.2 && ledge_diff >= 0.2:
-					global_translate(ledge_col + Vector3(0,2.8,0))
+				lv = wjmp
+				vvel = wjmp * hvel# + up
+				if ledge_col.y > 2.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
+					global_translate(ledge_col - ledge_col - Vector3(0,1.2,0))
 #					global_translate(wjmp)
 #					move_and_slide(wjmp, Vector3(0,0,1),1)
 #					translate(ledge_col)
@@ -249,12 +254,18 @@ func _physics_process(delta):
 		
 #	print('wrun: ', wrun)
 	if on_ledge:
-		lv = Vector3()
-		if !jump_attempt && jump_attempt:
+		lv.y = 0
+		lv.z = 0
+		if mv_l:
+			move_and_slide(lv, up)
+		elif mv_r:
+			move_and_slide(-lv, up)
+		elif !jump_attempt && jump_attempt:
 			lv += jmp_spd
 			on_ledge = false
 #			move_and_slide(Vector3(0,0,1),-g.normalized())
-		elif Input.is_action_pressed("back"):
+		elif Input.is_action_pressed("grab"):
+			mesh.rotate(up, 185)
 			on_ledge = false
 #			lv += g * (delta * 3)
 	elif !on_ledge:
@@ -263,8 +274,8 @@ func _physics_process(delta):
 	lin_vel = move_and_slide(lv, up)
 
 	player_fp(delta)
-	parkour()
-	ledge()
+#	parkour()
+#	ledge()
 
 
 func player_fp(delta):
