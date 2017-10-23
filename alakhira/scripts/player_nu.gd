@@ -159,7 +159,7 @@ func _physics_process(delta):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
 
 		if dir.length() > 0.1 and !sharp_turn:
-			if hspeed > 0.001:
+			if hspeed >= walk -1: # 0.001:
 				hdir = adjust_facing(hdir, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 				facing_dir = hdir
 			else:
@@ -225,7 +225,7 @@ func _physics_process(delta):
 			
 	var wjmp = jmp_spd + (hvel * 0.5)
 	var ledge_diff = ledge_col.y - ptarget.y
-	print(ledge_col)
+#	print(ledge_col)
 #	print("diff :", ledge_diff)
 	
 	if is_on_wall():
@@ -247,6 +247,8 @@ func _physics_process(delta):
 				else:
 					on_ledge = false
 #					!is_on_wall()
+			else:
+				lv = Vector3(0,0.0000001,0)
 		else:
 			pass
 	else:
@@ -257,14 +259,17 @@ func _physics_process(delta):
 		lv.y = 0
 		lv.z = 0
 		if mv_l:
-			move_and_slide(lv, up)
-		elif mv_r:
-			move_and_slide(-lv, up)
-		elif !jump_attempt && jump_attempt:
-			lv += jmp_spd
+			dir += -cam_xform.basis[0]
+		if mv_r:
+			dir += cam_xform.basis[0]
+		#if mv_l or mv_r:
+		#	lin_vel = move_and_slide(lv, up)
+		if Input.is_action_just_pressed("jump"):
+#			lv += jmp_spd
 			on_ledge = false
+			translate(ledge_col + (Vector3(0,-2.52,0.91)))
 #			move_and_slide(Vector3(0,0,1),-g.normalized())
-		elif Input.is_action_pressed("grab"):
+		if Input.is_action_pressed("grab"):
 			mesh.rotate(up, 185)
 			on_ledge = false
 #			lv += g * (delta * 3)
