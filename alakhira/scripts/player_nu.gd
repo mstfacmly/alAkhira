@@ -155,7 +155,7 @@ func _physics_process(delta):
 	var mesh_xform = mesh.get_transform()
 	var facing_mesh = -mesh_xform.basis[0].normalized()
 	
-	if is_on_floor():# or (is_on_wall() && jump_attempt):
+	if is_on_floor() or on_ledge:# or (is_on_wall() && jump_attempt):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
 
 		if dir.length() > 0.1 and !sharp_turn:
@@ -176,7 +176,7 @@ func _physics_process(delta):
 		hvel = hdir * hspeed
 
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
-		if hspeed > 0.01:
+		if hspeed > 0.01 and is_on_floor():
 			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
 
@@ -258,21 +258,16 @@ func _physics_process(delta):
 	if on_ledge:
 		lv.y = 0
 		lv.z = 0
-		if mv_l:
-			dir += -cam_xform.basis[0]
-		if mv_r:
-			dir += cam_xform.basis[0]
-		#if mv_l or mv_r:
-		#	lin_vel = move_and_slide(lv, up)
 		if Input.is_action_just_pressed("jump"):
 #			lv += jmp_spd
 			on_ledge = false
-			translate(ledge_col + (Vector3(0,-2.52,0.91)))
+			translate(ledge_col + (Vector3(0,-5.36,0.91)))
 #			move_and_slide(Vector3(0,0,1),-g.normalized())
 		if Input.is_action_pressed("grab"):
 			mesh.rotate(up, 185)
 			on_ledge = false
 #			lv += g * (delta * 3)
+
 	elif !on_ledge:
 		lv += g * (delta *3)
 
