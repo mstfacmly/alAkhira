@@ -28,7 +28,7 @@ const DEACCEL = ACCEL * 2.13;
 export var run = 4.44
 var walk = run / 1.75
 var sprint = run * 2.12 #7.77
-var mv_dir = Vector3()
+#var mv_dir = Vector3()
 var mv_spd = run;
 var turn_speed = 42;
 var sharp_turn_threshold = 130
@@ -43,6 +43,7 @@ var vvel
 var wrun = [];
 var dist = 4;
 var collision_exception=[ self ];
+var col_f
 var col_result = [];
 var ledge_col = Vector3();
 var on_ledge = false;
@@ -154,6 +155,7 @@ func _physics_process(delta):
 	var target_dir = (dir - up * dir.dot(up)).normalized()
 	var mesh_xform = mesh.get_transform()
 	var facing_mesh = -mesh_xform.basis[0].normalized()
+	var mesh_basis = mesh_xform.basis[0]
 	
 	if is_on_floor() or on_ledge:# or (is_on_wall() && jump_attempt):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
@@ -162,6 +164,8 @@ func _physics_process(delta):
 			if hspeed >= walk -1: # 0.001:
 				hdir = adjust_facing(hdir, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 				facing_dir = hdir
+			elif on_ledge:
+				hdir = Vector3(0,0,mesh_basis.z)
 			else:
 				hdir = target_dir
 
@@ -178,7 +182,7 @@ func _physics_process(delta):
 		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
 		if hspeed > 0.01 and is_on_floor():
 			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
-		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized()).scaled(CHAR_SCALE)
+		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
 
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 
@@ -200,7 +204,7 @@ func _physics_process(delta):
 	parkour()
 
 	if is_on_floor():
-		mv_dir = lv
+#		mv_dir = lv
 		wrun = []
 		falling = false
 	
@@ -210,13 +214,13 @@ func _physics_process(delta):
 			if col_result == ['front']:
 #				vvel = jmp_spd + hspeed;# * 0.13);
 				wrun = 'vert';
-				is_on_wall()
+#				is_on_wall()
 			elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
 #				vvel = jmp_spd + (hspeed * 0.13);
 #				hvel = jmp_spd + hvel;
 				wrun = 'horz';
 #				jumping = false;
-				is_on_wall()
+#				is_on_wall()
 			else:
 				col_result == []
 				wrun = []
@@ -227,19 +231,21 @@ func _physics_process(delta):
 	var ledge_diff = ledge_col.y - ptarget.y
 #	print(ledge_col)
 #	print("diff :", ledge_diff)
+	print(is_processing_input())
 	
 	if is_on_wall():
 		ledge()
 #	if col_result == ['front']:
-		if !jump_attempt:
+		if !jump_attempt :
 			lv = Vector3(0,0.0000001,0)
-		elif jump_attempt:
+		if jump_attempt:
 			if col_result == ['front']:
 #				vvel = jmp_spd + hvel #(hvel * 2)
+#				lv += g * (delta *3)
 				lv = wjmp
-				vvel = wjmp * hvel# + up
+				vvel = wjmp# + hvel# + up
 				if ledge_col.y > 2.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
-					global_translate(ledge_col - ledge_col - Vector3(0,1.2,0))
+					global_translate(ledge_col - ledge_col - facing_mesh.slide(Vector3(0,1.2,0)))
 #					global_translate(wjmp)
 #					move_and_slide(wjmp, Vector3(0,0,1),1)
 #					translate(ledge_col)
@@ -247,8 +253,8 @@ func _physics_process(delta):
 				else:
 					on_ledge = false
 #					!is_on_wall()
-			else:
-				lv = Vector3(0,0.0000001,0)
+#			else:
+#				lv = Vector3(0,0.0000001,0)
 		else:
 			pass
 	else:
@@ -256,22 +262,27 @@ func _physics_process(delta):
 		
 #	print('wrun: ', wrun)
 	if on_ledge:
+#		mv_dir = Vector3(0,0,lv.z)
 		lv.y = 0
-		lv.z = 0
 		if Input.is_action_just_pressed("jump"):
 #			lv += jmp_spd
 			on_ledge = false
-			translate(ledge_col + (Vector3(0,-5.36,0.91)))
+			translate(ledge_col + mesh_basis + Vector3(0,-6.36,0.91))
 #			move_and_slide(Vector3(0,0,1),-g.normalized())
 		if Input.is_action_pressed("grab"):
+#			translate(mesh_basis)
 			mesh.rotate(up, 185)
 			on_ledge = false
 #			lv += g * (delta * 3)
 
 	elif !on_ledge:
 		lv += g * (delta *3)
-
-	lin_vel = move_and_slide(lv, up)
+	
+	if on_ledge:
+		lin_vel = move_and_slide(Vector3(0,0,lv.z),up)
+	else:
+		lin_vel = move_and_slide(lv, up)
+		
 
 	player_fp(delta)
 #	parkour()
@@ -387,6 +398,8 @@ func parkour():
 		return col_result
 	elif (!col.empty()): # && col_left.empty() && col_right.empty()):
 		col_result = ['front']
+		col_f = col
+		return col_f
 		return col_result
 	else:
 #		pass
