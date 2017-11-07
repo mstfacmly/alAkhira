@@ -165,7 +165,7 @@ func _physics_process(delta):
 				hdir = adjust_facing(hdir, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 				facing_dir = hdir
 			elif on_ledge:
-				hdir = Vector3(0,0,mesh_basis.z)
+				hdir = mesh_basis + Vector3(0,0,target_dir.z)
 			else:
 				hdir = target_dir
 
@@ -231,20 +231,21 @@ func _physics_process(delta):
 	var ledge_diff = ledge_col.y - ptarget.y
 #	print(ledge_col)
 #	print("diff :", ledge_diff)
-	print(is_processing_input())
+	print(col_result)
 	
 	if is_on_wall():
 		ledge()
-#	if col_result == ['front']:
-		if !jump_attempt :
-			lv = Vector3(0,0.0000001,0)
-		if jump_attempt:
-			if col_result == ['front']:
+		if col_result == ['front']:# && is_on_wall():
+#		ledge()
+			if !jump_attempt :
+				lv = Vector3(0,0.0000001,0)
+			if jump_attempt:
+#				if col_result == ['front']:
 #				vvel = jmp_spd + hvel #(hvel * 2)
 #				lv += g * (delta *3)
 				lv = wjmp
-				vvel = wjmp# + hvel# + up
-				if ledge_col.y > 2.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
+				vvel = jmp_spd #wjmp# + hvel# + up
+				if ledge_col.y > 3.33 && ledge_diff <= 1.2 && ledge_diff >= 0.2:
 					global_translate(ledge_col - ledge_col - facing_mesh.slide(Vector3(0,1.2,0)))
 #					global_translate(wjmp)
 #					move_and_slide(wjmp, Vector3(0,0,1),1)
@@ -253,12 +254,18 @@ func _physics_process(delta):
 				else:
 					on_ledge = false
 #					!is_on_wall()
+	if col_result == ['left'] or col_result == ['right']:
+		if jump_attempt:
+			vvel = jmp_spd * 0.84
+			if is_on_wall():
+				lv.y = 9.8 * delta
+##			mesh.rotate(Vector3(1,0,0),45)
 #			else:
 #				lv = Vector3(0,0.0000001,0)
-		else:
-			pass
-	else:
-		pass
+			else:
+				pass
+#	else:
+#		pass
 		
 #	print('wrun: ', wrun)
 	if on_ledge:
@@ -278,10 +285,10 @@ func _physics_process(delta):
 	elif !on_ledge:
 		lv += g * (delta *3)
 	
-	if on_ledge:
-		lin_vel = move_and_slide(Vector3(0,0,lv.z),up)
-	else:
-		lin_vel = move_and_slide(lv, up)
+#	if on_ledge:
+#		lin_vel = move_and_slide(Vector3(0,0,lv.z),up)
+#	else:
+	lin_vel = move_and_slide(lv, up)
 		
 
 	player_fp(delta)
