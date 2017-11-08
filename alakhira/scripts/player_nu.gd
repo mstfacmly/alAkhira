@@ -40,6 +40,7 @@ var jump_attempt = false
 var jumping = false;
 var falling = false;
 var vvel
+var can_wrun
 var wrun = [];
 var dist = 4;
 var collision_exception=[ self ];
@@ -66,6 +67,10 @@ const AIR_DOWN = 4
 const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
 
+var timer = 0
+#var time_start = 0
+#var time_now = 0
+
 func _input(ev):
 	if ev == InputEventKey:
 		if ev.is_pressed() && Input.is_key_pressed(KEY_F11):
@@ -73,7 +78,7 @@ func _input(ev):
 
 	if ev.is_action_pressed("jump"):
 		jump_attempt = true
-	elif ev.is_action_released("jump") or ev.is_echo():
+	elif ev.is_action_released("jump"):# or ev.is_echo():
 		jump_attempt = false
 
 func js_input(delta):
@@ -124,7 +129,8 @@ func _physics_process(delta):
 	var lv = lin_vel
 	lv += g * (delta * 3)
 	vvel = up.dot(lv)
-	var hvel = lv - up * vvel
+	var hvcalc = lv - up * vvel
+	hvel = Vector3(hvcalc.x, 0 ,hvcalc.z)
 
 	var hdir = hvel.normalized()
 	var hspeed = hvel.length()
@@ -140,6 +146,7 @@ func _physics_process(delta):
 	var mv_b = Input.is_action_pressed("mv_b")
 	var mv_l = Input.is_action_pressed("mv_l")
 	var mv_r = Input.is_action_pressed("mv_r")
+	var jmp_att = Input.is_action_just_pressed("jump")
 
 	var cam_xform = cam_node.get_global_transform()
 
@@ -193,10 +200,11 @@ func _physics_process(delta):
 			if hvel.length() > mv_spd:
 				hvel = hvel.normalized() * mv_spd
 
-	if is_on_floor() && jump_attempt:
+	if is_on_floor() && jmp_att:
 		jumping = true
+		can_wrun = true
 		vvel = jmp_spd
-	elif !is_on_floor() && jump_attempt or !is_on_floor() && !jump_attempt:
+	elif !is_on_floor() && !jmp_att: #jump_attempt or !is_on_floor() && !jump_attempt:
 		jumping = false
 
 	lv = hvel + up * vvel
@@ -207,18 +215,19 @@ func _physics_process(delta):
 #		mv_dir = lv
 		wrun = []
 		falling = false
+		var can_wrun = true
 	
 	if !is_on_floor():
 		ledge()
 		if hspeed >= run:
 			if col_result == ['front']:
 #				vvel = jmp_spd + hspeed;# * 0.13);
-				wrun = 'vert';
+				wrun = ['vert'];
 #				is_on_wall()
 			elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
 #				vvel = jmp_spd + (hspeed * 0.13);
 #				hvel = jmp_spd + hvel;
-				wrun = 'horz';
+				wrun = ['horz'];
 #				jumping = false;
 #				is_on_wall()
 			else:
@@ -227,17 +236,17 @@ func _physics_process(delta):
 		if !jumping:
 			falling = true
 			
-	var wjmp = jmp_spd + (hvel * 0.5)
+	var wjmp = jmp_spd + (hvel)# * 0.5)
 	var ledge_diff = ledge_col.y - ptarget.y
 #	print(ledge_col)
 #	print("diff :", ledge_diff)
-	print(col_result)
+#	print(col_result)
 	
 	if is_on_wall():
 		ledge()
-		if col_result == ['front']:# && is_on_wall():
+		if wrun == ['vert']:# && is_on_wall():
 #		ledge()
-			if !jump_attempt :
+			if !jmp_att :
 				lv = Vector3(0,0.0000001,0)
 			if jump_attempt:
 #				if col_result == ['front']:
@@ -254,16 +263,24 @@ func _physics_process(delta):
 				else:
 					on_ledge = false
 #					!is_on_wall()
-	if col_result == ['left'] or col_result == ['right']:
-		if jump_attempt:
-			vvel = jmp_spd * 0.84
+	
+	if wrun == ['horz']:
+		if jump_attempt && can_wrun == true:
+#			vvel = jmp_spd * 0.84
 			if is_on_wall():
 				lv.y = 9.8 * delta
-##			mesh.rotate(Vector3(1,0,0),45)
-#			else:
+				timer += 0.01
+				print(timer)
+				if timer == 0.99:
+					jump_attempt = false
+					jmp_att = false
+					can_wrun = false
+#				mesh.rotate_y(col_f.normal.z)
+			elif can_wrun == false:
+				lv.y += g.y * (delta *3)
 #				lv = Vector3(0,0.0000001,0)
-			else:
-				pass
+		else:
+			timer = 0
 #	else:
 #		pass
 		
@@ -271,7 +288,7 @@ func _physics_process(delta):
 	if on_ledge:
 #		mv_dir = Vector3(0,0,lv.z)
 		lv.y = 0
-		if Input.is_action_just_pressed("jump"):
+		if jmp_att:
 #			lv += jmp_spd
 			on_ledge = false
 			translate(ledge_col + mesh_basis + Vector3(0,-6.36,0.91))
