@@ -66,6 +66,7 @@ const AIR_UP = 3
 const AIR_DOWN = 4
 const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
+const LEDGE_H = 7
 
 var timer = 0
 #var time_start = 0
@@ -76,9 +77,9 @@ func _input(ev):
 		if ev.is_pressed() && Input.is_key_pressed(KEY_F11):
 			OS.set_window_fullscreen(!OS.is_window_fullscreen())
 
-	if ev.is_action_pressed("jump"):
+	if ev.is_action_pressed("feet"):
 		jump_attempt = true
-	elif ev.is_action_released("jump"):# or ev.is_echo():
+	elif ev.is_action_released("feet"):# or ev.is_echo():
 		jump_attempt = false
 
 func js_input(delta):
@@ -146,7 +147,7 @@ func _physics_process(delta):
 	var mv_b = Input.is_action_pressed("mv_b")
 	var mv_l = Input.is_action_pressed("mv_l")
 	var mv_r = Input.is_action_pressed("mv_r")
-	var jmp_att = Input.is_action_just_pressed("jump")
+	var jmp_att = Input.is_action_just_pressed("feet")
 
 	var cam_xform = cam_node.get_global_transform()
 
@@ -293,7 +294,7 @@ func _physics_process(delta):
 			on_ledge = false
 			translate(ledge_col + mesh_basis + Vector3(0,-6.36,0.91))
 #			move_and_slide(Vector3(0,0,1),-g.normalized())
-		if Input.is_action_pressed("grab"):
+		if Input.is_action_pressed("arm_r"):
 #			translate(mesh_basis)
 			mesh.rotate(up, 185)
 			on_ledge = false
@@ -376,6 +377,9 @@ func player_fp(delta):
 		anim = AIR_DOWN
 	else:
 		pass
+		
+	if on_ledge:
+		anim = LEDGE_H
 
 #	if wrun == 'vert':
 #		anim = SPRINT;

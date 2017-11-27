@@ -43,14 +43,13 @@ func _ready():
 
 
 	set_process_input(true)
-#	set_fixed_process(true)
 
 
 	pass
 
 func _input(ev):
 	var cast = Input.is_action_pressed("cast")
-	var attack = Input.is_action_pressed("attack")
+	var attack = Input.is_action_pressed("arm_l")
 	var shift = cast && attack
 
 	if shift:
@@ -73,7 +72,7 @@ func _input(ev):
 		toggle(spi, false) #just hide spi
 		overlay = 'none'
 
-func _fixed_process(delta):
+func _physics_process(delta):
 	if showing || hiding:
 		interpolate(showing, hiding, delta)
 
