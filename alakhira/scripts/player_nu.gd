@@ -1,10 +1,7 @@
 extends KinematicBody
 
 #onready var timer = get_node("timer");
-onready var animate = get_node("animationTree");
-onready var curr = get_node("scripts/shift");
-onready var mesh = get_node("body/skeleton/mesh");
-onready var health = get_node("ui/healthb");
+#onready var health = get_node("ui/healthb");
 
 # Environment
 var g = Vector3(0,-9.8,0);
@@ -14,8 +11,6 @@ const CHAR_SCALE = Vector3(1,1,1)
 const DEADZONE = 0.1
 
 # Camera
-onready var cam = get_node("cam");
-onready var cam_node = cam.get_node("cam");
 var view_sensitivity = 0.2;
 var focus_view_sensv = 0.1;
 var curfov;
@@ -36,7 +31,7 @@ var sharp_turn_threshold = 130
 var jmp_spd = -g * 1.84 ;
 var hvel = Vector3();
 var hspeed
-var jump_attempt = false
+var parkour_f = false
 var jumping = false;
 var falling = false;
 var vvel
@@ -67,6 +62,7 @@ const AIR_DOWN = 4
 const RUN_AIR_UP = 5
 const RUN_AIR_DOWN = 6
 const LEDGE_H = 7
+const ROLL = 8
 
 var timer = 0
 #var time_start = 0
@@ -78,9 +74,9 @@ func _input(ev):
 			OS.set_window_fullscreen(!OS.is_window_fullscreen())
 
 	if ev.is_action_pressed("feet"):
-		jump_attempt = true
+		parkour_f = true
 	elif ev.is_action_released("feet"):# or ev.is_echo():
-		jump_attempt = false
+		parkour_f = false
 
 func js_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -124,6 +120,8 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         return (n*cos(ang) + t*sin(ang))*p_facing.length()
 
 func _physics_process(delta):
+	var mesh = $body/skeleton/mesh
+	var cam_node = $cam/cam
 	js_input(delta)
 
 	# Velocity
@@ -165,7 +163,7 @@ func _physics_process(delta):
 	var facing_mesh = -mesh_xform.basis[0].normalized()
 	var mesh_basis = mesh_xform.basis[0]
 	
-	if is_on_floor() or on_ledge:# or (is_on_wall() && jump_attempt):
+	if is_on_floor() or on_ledge:# or (is_on_wall() && parkour_f):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
 
 		if dir.length() > 0.1 and !sharp_turn:
@@ -205,7 +203,7 @@ func _physics_process(delta):
 		jumping = true
 		can_wrun = true
 		vvel = jmp_spd
-	elif !is_on_floor() && !jmp_att: #jump_attempt or !is_on_floor() && !jump_attempt:
+	elif !is_on_floor() && !jmp_att: #parkour_f or !is_on_floor() && !parkour_f:
 		jumping = false
 
 	lv = hvel + up * vvel
@@ -249,7 +247,7 @@ func _physics_process(delta):
 #		ledge()
 			if !jmp_att :
 				lv = Vector3(0,0.0000001,0)
-			if jump_attempt:
+			if parkour_f:
 #				if col_result == ['front']:
 #				vvel = jmp_spd + hvel #(hvel * 2)
 #				lv += g * (delta *3)
@@ -266,27 +264,31 @@ func _physics_process(delta):
 #					!is_on_wall()
 	
 	if wrun == ['horz']:
-		if jump_attempt && can_wrun == true:
+		if wjmp && can_wrun == true:
 #			vvel = jmp_spd * 0.84
 			if is_on_wall():
-				lv.y = 9.8 * delta
+				lv.y = 0.01
+				lv.y -= lv.y + delta/delta * 0.9
 				timer += 0.01
-				print(timer)
-				if timer == 0.99:
-					jump_attempt = false
-					jmp_att = false
-					can_wrun = false
+#				print(timer)
+#				if timer >= 0.99:
+#					parkour_f = false
+#					jmp_att = false
+#					can_wrun = false
 #				mesh.rotate_y(col_f.normal.z)
-			elif can_wrun == false:
+			if can_wrun == false:
+				wjmp = false
 				lv.y += g.y * (delta *3)
 #				lv = Vector3(0,0.0000001,0)
-		else:
-			timer = 0
-#	else:
-#		pass
+		elif !wjmp:
+			lv.y += g.y * (delta *3)
+	else:
+#		timer = 0
+		pass
 		
 #	print('wrun: ', wrun)
 	if on_ledge:
+		wrun = []
 #		mv_dir = Vector3(0,0,lv.z)
 		lv.y = 0
 		if jmp_att:
@@ -315,6 +317,19 @@ func _physics_process(delta):
 
 
 func player_fp(delta):
+	var animate = $animationTree
+	var curr = $scripts/shift
+	var cam = $cam
+	
+	animate.set_active(true)
+	if cam.has_method("set_enabled"):
+		cam.set_enabled(true)
+
+	cam.add_collision_exception(self);
+	cam.cam_radius = 2.5;
+	cam.cam_view_sensitivity = view_sensitivity;
+	cam.cam_smooth_movement = true;
+	
 	hspeed = lin_vel.length()
 #	var countd = timer.get_wait_time()
 	anim = FLOOR
@@ -381,10 +396,10 @@ func player_fp(delta):
 	if on_ledge:
 		anim = LEDGE_H
 
-#	if wrun == 'vert':
-#		anim = SPRINT;
-#	elif wrun == 'horz':
-#		anim = SPRINT;
+	if wrun == ['vert']:
+		anim = ROLL
+	elif wrun == ['horz']:
+		anim = ROLL
 
 	if is_on_floor():
 		animate.blend2_node_set_amount("run", hspeed / mv_spd);
@@ -466,12 +481,5 @@ func ledge():
 
 
 func _ready():
-	animate.set_active(true)
 
-	if cam.has_method("set_enabled"):
-		cam.set_enabled(true);
-
-	cam.add_collision_exception(self);
-	cam.cam_radius = 2.5;
-	cam.cam_view_sensitivity = view_sensitivity;
-	cam.cam_smooth_movement = true;
+	pass
