@@ -4,60 +4,61 @@
 [ext_resource path="res://assets/test/boxes.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/test/ledge_l.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/test/plat_l.dae" type="PackedScene" id=4]
-[ext_resource path="res://player/az_tmp.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/env.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/env.tscn" type="PackedScene" id=5]
+[ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=6]
 
-[node name="scene" instance=ExtResource( 1 )]
+[node name="scene" index="0" instance=ExtResource( 1 )]
 
-[node name="testroom" parent="."]
+[node name="testroom" parent="." index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.314484, -0.025816, -0.0214484 )
 cast_shadow = 0
 _sections_unfolded = [ "Transform" ]
 
-[node name="col" parent="testroom"]
+[node name="col" parent="testroom" index="0"]
 
 _sections_unfolded = [ "Collision" ]
 
-[node name="boxes" parent="." instance=ExtResource( 2 )]
+[node name="boxes" parent="." index="1" instance=ExtResource( 2 )]
 
-[node name="ledge_l" parent="." instance=ExtResource( 3 )]
+[node name="ledge_l" parent="." index="2" instance=ExtResource( 3 )]
 
 editor/display_folded = false
 
-[node name="Scene Root" parent="ledge_l" instance=ExtResource( 4 )]
+[node name="Scene Root" parent="ledge_l" index="2" instance=ExtResource( 4 )]
 
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.3398, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="az" parent="." instance=ExtResource( 5 )]
+[node name="env" parent="." index="3" instance=ExtResource( 5 )]
 
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.73063, 0 )
-_sections_unfolded = [ "Pause", "Transform", "collision" ]
+[node name="OmniLight" type="OmniLight" parent="." index="4"]
 
-[node name="env" parent="." instance=ExtResource( 6 )]
-
-[node name="OmniLight" type="OmniLight" parent="."]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.6535, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.205, -10.1316 )
 visible = false
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
 light_energy = 1.0
 light_indirect_energy = 1.0
 light_negative = false
-light_specular = 0.5
+light_specular = 0.0
+light_bake_mode = 1
 light_cull_mask = -1
-shadow_enabled = false
+shadow_enabled = true
 shadow_color = Color( 0, 0, 0, 1 )
-shadow_bias = 0.15
-shadow_contact = 0.0
+shadow_bias = 1.0
+shadow_contact = 1.0
 shadow_reverse_cull_face = false
 editor_only = false
 omni_range = 40.3151
 omni_attenuation = 1.0
 omni_shadow_mode = 1
 omni_shadow_detail = 1
-_sections_unfolded = [ "Light" ]
+_sections_unfolded = [ "Editor", "Light", "Shadow" ]
+
+[node name="az" parent="." index="5" instance=ExtResource( 6 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 
 
+[editable path="env"]
