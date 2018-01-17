@@ -109,7 +109,7 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 
         var s = sign(ang)
         ang = ang*s
-        var turn = ang*p_adjust_rate*p_step
+        var turn = ang * p_adjust_rate * p_step
         var a
         if (ang < turn):
                 a = ang
@@ -117,10 +117,10 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
                 a = turn
         ang = (ang - a)*s
 
-        return (n*cos(ang) + t*sin(ang))*p_facing.length()
+        return (n*cos(ang) + t*sin(ang)) * p_facing.length()
 
 func _physics_process(delta):
-	var mesh = $body/skeleton/mesh
+	var mesh = $body/skeleton 
 	var cam_node = $cam/cam
 	js_input(delta)
 
@@ -135,21 +135,20 @@ func _physics_process(delta):
 	var hspeed = hvel.length()
 	
 	ppos = mesh.get_global_transform().origin
-	ptarget = mesh.get_node("targets/ptarget").get_global_transform().origin
-	ledgecol = mesh.get_node("targets/ledgecol").get_global_transform();
+	ptarget = $body/skeleton/targets/ptarget.get_global_transform().origin
+	ledgecol = $body/skeleton/targets/ledgecol.get_global_transform();
 
 	var dir = Vector3()
+	var cam_xform = cam_node.get_global_transform()
 
 	# Input
-	var mv_u = Input.is_action_pressed("mv_f")
+	var mv_f = Input.is_action_pressed("mv_f")
 	var mv_b = Input.is_action_pressed("mv_b")
 	var mv_l = Input.is_action_pressed("mv_l")
 	var mv_r = Input.is_action_pressed("mv_r")
 	var jmp_att = Input.is_action_just_pressed("feet")
 
-	var cam_xform = cam_node.get_global_transform()
-
-	if mv_u:
+	if mv_f:
 		dir += -cam_xform.basis[2]
 	if mv_b:
 		dir += cam_xform.basis[2]
@@ -160,8 +159,10 @@ func _physics_process(delta):
 
 	var target_dir = (dir - up * dir.dot(up)).normalized()
 	var mesh_xform = mesh.get_transform()
-	var facing_mesh = -mesh_xform.basis[0].normalized()
 	var mesh_basis = mesh_xform.basis[0]
+	var facing_mesh = -mesh_basis.normalized()
+	facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
+	
 	
 	if is_on_floor() or on_ledge:# or (is_on_wall() && parkour_f):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
@@ -184,8 +185,7 @@ func _physics_process(delta):
 #		print("hspeed: ",hspeed)
 
 		hvel = hdir * hspeed
-
-		facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
+		
 		if hspeed > 0.01 and is_on_floor():
 			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)

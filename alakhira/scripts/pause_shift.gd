@@ -66,7 +66,7 @@ func _spi():
 	az.curr = 'phys'
 	env_transition(-1)
 
-func _fixed_process(delta):
+func _physics_process(delta):
 	if showing || hidding:
 		interpolate(showing, hidding, delta)
 
@@ -125,22 +125,22 @@ func env_transition(speed):
 			a.play('PhysToSpir', -1, speed, (speed < 0))
 
 func traverse(nodes):
-	var name = ''
+	var nm = ''
 	var materials
 	for node in nodes:
-		name = node.get_name()
+		nm = node.get_name()
 
-		if name.matchn('*_phys') or name.matchn('*_spi'):
+		if nm.matchn('*_phys') or nm.matchn('*_spi'):
 			materials = get_materials(node)
 
-			if name.matchn('*_phys'):
+			if nm.matchn('*_phys'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
-			elif name.matchn('*_spi'):
+			elif nm.matchn('*_spi'):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
-			if(name.matchn('PhysToSpir') or node.has_animation('PhysToSpir')):
+			if(nm.matchn('PhysToSpir') or node.has_animation('PhysToSpir')):
 				anim.push_back(node)
 
 		elif node.get_child_count():

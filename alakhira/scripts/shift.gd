@@ -141,22 +141,22 @@ func env_transition(speed):
 			a.play('PhysToSpir', -1, speed, (speed < 0))
 
 func traverse(nodes):
-	var name = ''
+	var nm = ''
 	var materials
 	for node in nodes:
-		name = node.get_name()
+		nm = node.get_name()
 
 		if name.matchn('*_phys') or name.matchn('*_spi'):
 			materials = get_materials(node)
 
-			if name.matchn('*_phys'):
+			if nm.matchn('*_phys'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
 			elif name.matchn('*_spi'):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
-			if(name.matchn('phystospir') or node.has_animation('PhysToSpir')):
+			if(nm.matchn('phystospir') or node.has_animation('PhysToSpir')):
 				anim.push_back(node)
 
 		elif node.get_child_count():
