@@ -254,7 +254,7 @@ func _physics_process(delta):
 				lv = wjmp
 				vvel = jmp_spd #wjmp# + hvel# + up
 				if ledge_col.y > 3.33 && ledge_diff <= 1.2 && ledge_diff >= 0.2:
-					global_translate(ledge_col - ledge_col - facing_mesh.slide(Vector3(0,1.2,0)))
+					global_translate(ledge_col - (ledge_col * 1.23) - facing_mesh.slide(Vector3(0,1.2,0)))
 #					global_translate(wjmp)
 #					move_and_slide(wjmp, Vector3(0,0,1),1)
 #					translate(ledge_col)
@@ -294,13 +294,20 @@ func _physics_process(delta):
 		if jmp_att:
 #			lv += jmp_spd
 			on_ledge = false
-			translate(ledge_col + mesh_basis + Vector3(0,-6.36,0.91))
+#			translate(Vector3(0,5.36,-1.91))
+			translate(mesh_xform.basis.xform(Vector3(-1.91,3.36,0)))
+#			translate(ledge_col + mesh_basis + Vector3(0,-5.36,-1.91))
 #			move_and_slide(Vector3(0,0,1),-g.normalized())
 		if Input.is_action_pressed("arm_r"):
 #			translate(mesh_basis)
 			mesh.rotate(up, 185)
 			on_ledge = false
 #			lv += g * (delta * 3)
+
+	if Input.is_action_just_pressed("head"):
+		translateMove(dist)
+#		translate(mesh_xform.basis.xform(Vector3(-1.91,0,0)))
+#		translate_object_local(Vector3(0,0,-2))
 
 	elif !on_ledge:
 		lv += g * (delta *3)
@@ -480,6 +487,6 @@ func ledge():
 #	print("ledge col: ", ledge_col)
 
 
-func _ready():
-
-	pass
+func translateMove(dist):
+	var localTranslate = Vector3(-1,0,0)
+	translate(get_transform().basis.xform(localTranslate))
