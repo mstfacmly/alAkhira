@@ -20,6 +20,8 @@ var anim = []
 var players = []
 var curr = 'phys'
 var overlay = 'none'
+onready var root = get_node('/root/')
+onready var env = $env
 
 var showing = false
 var hiding = false
@@ -32,7 +34,7 @@ var paus
 
 func _ready():
 
-	var root = get_node('/root/')
+#	var root = get_node('/root/')
 	traverse(root.get_children())
 	unique_materials(phys)
 	unique_materials(spi)
@@ -40,10 +42,6 @@ func _ready():
 	#initialize on phys
 	spir_peek(spi, true)
 	toggle(spi, phys)
-
-
-	set_process_input(true)
-
 
 	pass
 
@@ -58,12 +56,14 @@ func _input(ev):
 			spir_peek(spi, false)
 			curr = 'spi'
 			env_transition(1)
+#			env_spir()
 			shifting = true
 		elif curr == 'spi':
 			toggle(spi, phys)
 			spir_peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
+#			env_phys()
 			shifting = false
 	elif cast and curr == 'phys' and overlay != 'spi':
 		toggle(false, spi) #just show spi
@@ -132,13 +132,13 @@ func post_toggle(a, b):
 
 func env_transition(speed):
 	for a in anim:
-		if(a.get_name() == 'PhysToSpir'):
+		if(a.get_name() == 'shift'):
 			var animList = a.get_animation_list()
 			for b in animList:
 				a.play(b,  -1, speed, (speed < 0))
-			print("PhysToSpir found")
+			print("shift found")
 		else:
-			a.play('PhysToSpir', -1, speed, (speed < 0))
+			a.play('shift', -1, speed, (speed < 0))
 
 func traverse(nodes):
 	var nm = ''
@@ -156,7 +156,7 @@ func traverse(nodes):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
-			if(nm.matchn('phystospir') or node.has_animation('PhysToSpir')):
+			if(nm.matchn('phystospir') or node.has_animation('shift')):
 				anim.push_back(node)
 
 		elif node.get_child_count():
@@ -208,3 +208,17 @@ func unique_materials(store):
 			new.push_back(resource)
 			record.push_back(resource.get_rid())
 	store['materials'] = new
+
+func env_phys():
+		env.set_fog_enabled(false)
+		env.set_glow_enabled(false) 
+		env.adjustment_brightness = 1
+		env.adjustment_contrast = 0.84
+		env.adjustment_saturation = 0.84
+
+func env_spir():
+		env.set_fog_enabled(true)
+		env.set_glow_enabled(true)
+		env.adjustment_brightness = 0.9
+		env.adjustment_contrast = 1.1
+		env.adjustment_saturation = 0.11
