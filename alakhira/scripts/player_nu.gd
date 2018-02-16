@@ -58,11 +58,6 @@ var timer = 0
 #var time_start = 0
 #var time_now = 0
 
-func _input(ev):
-	if ev == InputEventKey:
-		if ev.is_pressed() && Input.is_key_pressed(KEY_F11):
-			OS.set_window_fullscreen(!OS.is_window_fullscreen())
-
 func js_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
 	var y = abs(Input.get_joy_axis(0,1))
@@ -78,7 +73,6 @@ func js_input(delta):
 	else :
 		pass
 #	print(axis_value)
-
 
 func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         var n = p_target # Normal
@@ -120,6 +114,7 @@ func _physics_process(delta):
 	var hspeed = hvel.length()
 	
 	ppos = mesh.get_global_transform().origin
+	var ptarg = $body/skeleton/targets/ptarget
 	ptarget = $body/skeleton/targets/ptarget.get_global_transform().origin
 	ledgecol = $body/skeleton/targets/ledgecol.get_global_transform()
 
@@ -150,6 +145,9 @@ func _physics_process(delta):
 	
 	
 	if is_on_floor() or on_ledge:# or (is_on_wall() && parkour_f):
+		wrun = []
+		falling = false
+		var can_wrun = true
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
 
 		if dir.length() > 0.1 and !sharp_turn:
@@ -197,12 +195,16 @@ func _physics_process(delta):
 	lv = hvel + up * vvel
 	
 	parkour()
-
-	if is_on_floor():
-#		mv_dir = lv
-		wrun = []
-		falling = false
-		var can_wrun = true
+	
+#	if is_on_floor():
+#		var col_pos = ptarget - ppos
+#		col_f = get_world().get_direct_space_state()
+#		var col = col_f.intersect_ray(ppos,ptarget + col_pos, collision_exception)
+#		if col.normal > 1:
+#			print(col)
+#		if col.dot(col.get_normal()):
+#			rotate_y(1)
+		
 	
 	if !is_on_floor():
 		ledge()
@@ -244,6 +246,7 @@ func _physics_process(delta):
 	
 		if wrun == ['horz']:
 #			mesh.rotate_y(col_f.normal.z)
+#			mesh.rotate_y(65)
 			if can_wrun == true:
 				lv.y = 4.2
 				lv.y -= lv.y + delta/delta# * 0.9
@@ -277,7 +280,7 @@ func _physics_process(delta):
 			on_ledge = false
 #			lv += g * (delta * 3)
 
-	if is_on_floor() && Input.is_action_just_pressed("head"):
+	if Input.is_action_just_pressed("head"):
 #		body_apply_impulse(self, ppos, mesh_xform.basis.xform(Vector3(-2,0,0)))
 #		translate(mesh_xform.basis.xform(Vector3(-2,4.2,-2)))
 		pass
@@ -289,12 +292,10 @@ func _physics_process(delta):
 #		lin_vel = move_and_slide(Vector3(0,0,lv.z),up)
 #	else:
 	lin_vel = move_and_slide(lv, up)
-		
-
+	
 	player_fp(delta)
 #	parkour()
 #	ledge()
-
 
 func player_fp(delta):
 	var animate = $animationTree
@@ -406,38 +407,40 @@ func parkour():
 	var parkour_detect = 80
 	var delta = ptarget - ppos
 
-	var col_right = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
-	var col = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
-	var col_left = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
+	var col_r = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
+	var col_f = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
+	var col_l = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
+	var col_b = ds.intersect_ray(ppos,-ptarget + delta,collision_exception)
 
-	if (!col_left.empty() && col_right.empty()):
+	if (!col_l.empty() && col_r.empty()):
 		col_result = ['left']
 		return col_result
-	elif (!col_right.empty() && col_left.empty()):
+	elif (!col_r.empty() && col_l.empty()):
 		col_result = ['right']
 		return col_result
-	elif (!col.empty() && !col_left.empty() && col_right.empty()):
+	elif (!col_f.empty() && !col_l.empty() && col_r.empty()):
 		col_result = ['left']
 		return col_result
-	elif (!col.empty() && !col_right.empty() && col_left.empty()):
+	elif (!col_f.empty() && !col_r.empty() && col_l.empty()):
 		col_result = ['right']
 		return col_result
-	elif (!col.empty()): # && col_left.empty() && col_right.empty()):
+	elif (!col_f.empty()): # && col_left.empty() && col_right.empty()):
 		col_result = ['front']
-		col_f = col
-		return col_f
+		return col_result
+	elif (!col_b.empty()):
+		col_result = ['back']
 		return col_result
 	else:
 		col_result = []
 		return col_result
-
+		
 
 func ledge():
 	var ds = get_world().get_direct_space_state()
 	var delta = ptarget - ppos
 	
 	if col_result == ['front']:
-		var col_top = ds.intersect_ray(ledgecol.origin,ptarget)
+		var col_top = ds.intersect_ray(ledgecol.origin,ptarget + delta,collision_exception)
 		if !col_top.empty():
 			ledge_col = Vector3(0,col_top.position.y,0)
 			return ledge_col

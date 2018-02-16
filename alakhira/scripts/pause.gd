@@ -8,6 +8,9 @@ onready var ui = root.get_node("scene/az/ui/healthb")
 onready var pmenu = get_node("pause_menu")
 
 func _input(ev):
+	if Input.is_key_pressed(KEY_F11):
+		OS.set_window_fullscreen(!OS.window_fullscreen)
+	
 	var wait = 2
 	var timer = t.set_wait_time(wait)
 
