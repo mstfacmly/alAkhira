@@ -14,6 +14,7 @@ const DEADZONE = 0.1
 var view_sensitivity = 0.2
 var focus_view_sensv = 0.1
 var curfov
+var cam
 
 #Movement
 var ppos
@@ -181,6 +182,9 @@ func _physics_process(delta):
 			hvel += target_dir * (ACCEL * 0.2) * delta
 			if hvel.length() > mv_spd:
 				hvel = hvel.normalized() * mv_spd
+				
+		if attempts == 0:
+			attempts = 1
 
 	if is_on_floor() && jmp_att:
 		jumping = true
@@ -227,15 +231,27 @@ func _physics_process(delta):
 	
 	if is_on_wall():
 		ledge()
-
+		
+		if col_result == ['back']:
+			wrun = ['vert']
+			
 		if wrun == ['vert']:# && is_on_wall():
-			if !jmp_att :
-				lv = Vector3(0,0.0000001,0)
-			if jmp_att && attempts >= 1:
-				lv += wjmp * mv_spd * 4.2
-#				lv += g * (delta * 3)
-#				vvel = jmp_spd #wjmp# + hvel# + up
-				attempts -= 1
+			if col_result == ['front']:
+				if !jmp_att :
+					lv = Vector3(0,0.0000001,0)
+				elif jmp_att && attempts >= 1:
+					lv += wjmp * mv_spd * 4.2
+#					lv += g * (delta * 3)
+	#				vvel = jmp_spd #wjmp# + hvel# + up
+					attempts -= 1
+				if Input.is_action_just_pressed('arm_r'):
+					mesh.rotate_y(179)
+
+			elif col_result == ['back']:
+				if !jmp_att :
+					lv = Vector3(0,0.0000001,0)
+				elif jmp_att:
+					translate(mesh_xform.basis.xform(Vector3(-jmp_spd.y * .33,jmp_spd.y * .25 ,0)))
 			
 			if ledge_col.y > 3.33 && ledge_diff <= 1.2 && ledge_diff >= 0.2:
 				global_translate(ledge_col - (ledge_col * 1.23) - facing_mesh.slide(Vector3(0,1.2,0)))
@@ -262,20 +278,21 @@ func _physics_process(delta):
 		elif !wjmp:
 			lv.y += g.y * (delta *3)
 
-	else:
+#	else:
 #		if attempts == 0:
-		attempts = 1
+#		attempts = 1
 #		timer = 0
 #		pass
 
 #	print('wrun: ', wrun)
+
 	if on_ledge:
 		wrun = []
 		lv.y = 0
 		if jmp_att:
 			on_ledge = false
 			translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
-		if Input.is_action_pressed("arm_r"):
+		if Input.is_action_just_pressed("arm_r"):
 			mesh.rotate(up, 185)
 			on_ledge = false
 #			lv += g * (delta * 3)
@@ -300,7 +317,7 @@ func _physics_process(delta):
 func player_fp(delta):
 	var animate = $animationTree
 	var curr = $scripts/shift
-	var cam = $cam
+	cam = $cam
 	
 	animate.set_active(true)
 	if cam.has_method("set_enabled"):
@@ -389,7 +406,7 @@ func player_fp(delta):
 		animate.blend2_node_set_amount("run", hspeed / mv_spd)
 	animate.transition_node_set_current("state", anim)
 
-	if !is_on_floor() or (!col_result.empty() and hspeed >= run):
+	if !is_on_floor() or (!col_result.empty() and col_result != ['back'] and hspeed >= run):
 		cam.cam_radius = 4.7
 		cam.cam_fov = 72
 
@@ -433,7 +450,7 @@ func parkour():
 	else:
 		col_result = []
 		return col_result
-		
+	print(col_result)
 
 func ledge():
 	var ds = get_world().get_direct_space_state()

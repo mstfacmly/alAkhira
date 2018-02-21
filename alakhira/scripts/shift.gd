@@ -21,7 +21,7 @@ var players = []
 var curr = 'phys'
 var overlay = 'none'
 onready var root = get_node('/root/')
-onready var env = $env
+#onready var env = $env
 
 var showing = false
 var hiding = false
@@ -146,13 +146,13 @@ func traverse(nodes):
 	for node in nodes:
 		nm = node.get_name()
 
-		if name.matchn('*_phys') or name.matchn('*_spi'):
+		if nm.matchn('*_phys') or nm.matchn('*_spi'):
 			materials = get_materials(node)
 
 			if nm.matchn('*_phys'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
-			elif name.matchn('*_spi'):
+			elif nm.matchn('*_spi'):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
@@ -209,16 +209,16 @@ func unique_materials(store):
 			record.push_back(resource.get_rid())
 	store['materials'] = new
 
-func env_phys():
-		env.set_fog_enabled(false)
-		env.set_glow_enabled(false) 
-		env.adjustment_brightness = 1
-		env.adjustment_contrast = 0.84
-		env.adjustment_saturation = 0.84
+#func env_phys():
+#		env.set_fog_enabled(false)
+#		env.set_glow_enabled(false) 
+#		env.adjustment_brightness = 1
+#		env.adjustment_contrast = 0.84
+#		env.adjustment_saturation = 0.84
 
-func env_spir():
-		env.set_fog_enabled(true)
-		env.set_glow_enabled(true)
-		env.adjustment_brightness = 0.9
-		env.adjustment_contrast = 1.1
-		env.adjustment_saturation = 0.11
+#func env_spir():
+#		env.set_fog_enabled(true)
+#		env.set_glow_enabled(true)
+#		env.adjustment_brightness = 0.9
+#		env.adjustment_contrast = 1.1
+#		env.adjustment_saturation = 0.11

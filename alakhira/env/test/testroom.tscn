@@ -11,7 +11,6 @@
 
 [node name="testroom" parent="." index="0"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.314484, -0.025816, -0.0214484 )
 cast_shadow = 0
 _sections_unfolded = [ "Transform" ]
 
