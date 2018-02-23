@@ -18,7 +18,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="ptarget" type="Position3D" parent="." index="1"]
 
-transform = Transform( 1, 0, 2.13163e-14, 0, 1, 0, -2.13163e-14, 0, 1, -3, 0, 0 )
+transform = Transform( 1, 0, 2.13163e-14, 0, 1, 0, -2.13163e-14, 0, 1, -1.3, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="ledgecol" type="Position3D" parent="." index="2"]

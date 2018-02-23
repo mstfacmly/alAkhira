@@ -142,15 +142,17 @@ func _physics_process(delta):
 	var mesh_xform = mesh.get_transform()
 	var mesh_basis = mesh_xform.basis[0]
 	var facing_mesh = -mesh_basis.normalized()
-	facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()
-	
-	
+	facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()	
+
 	if is_on_floor() or on_ledge:# or (is_on_wall() && parkour_f):
 		wrun = []
 		falling = false
 		var can_wrun = true
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
-
+	
+		if attempts == 0:
+			attempts = 1
+	
 		if dir.length() > 0.1 and !sharp_turn:
 			if hspeed >= walk -1: # 0.001:
 				hdir = adjust_facing(hdir, target_dir, delta, 1.0 / hspeed * turn_speed, up)
@@ -159,32 +161,27 @@ func _physics_process(delta):
 				hdir = mesh_basis + Vector3(0,0,target_dir.z)
 			else:
 				hdir = target_dir
-
+	
 			if hspeed < mv_spd:
 				hspeed += ACCEL * delta
 		else:
 			hspeed -= DEACCEL * delta
 			if hspeed < 0:
 				hspeed = 0
-#		print("hspeed: ",hspeed)
-
+	
 		hvel = hdir * hspeed
 		
 		if hspeed > 0.01 and is_on_floor():
 			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
-
+	
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
-
+	
 	else:
-		var hs
 		if dir.length() > 0.1:
 			hvel += target_dir * (ACCEL * 0.2) * delta
 			if hvel.length() > mv_spd:
 				hvel = hvel.normalized() * mv_spd
-				
-		if attempts == 0:
-			attempts = 1
 
 	if is_on_floor() && jmp_att:
 		jumping = true
@@ -197,19 +194,9 @@ func _physics_process(delta):
 		jumping = false
 
 	lv = hvel + up * vvel
-	
+
 	parkour()
-	
-#	if is_on_floor():
-#		var col_pos = ptarget - ppos
-#		col_f = get_world().get_direct_space_state()
-#		var col = col_f.intersect_ray(ppos,ptarget + col_pos, collision_exception)
-#		if col.normal > 1:
-#			print(col)
-#		if col.dot(col.get_normal()):
-#			rotate_y(1)
-		
-	
+
 	if !is_on_floor():
 		ledge()
 		if hspeed >= run:
@@ -222,13 +209,13 @@ func _physics_process(delta):
 				wrun = []
 		if !jumping:
 			falling = true
-			
+
 	var wjmp = jmp_spd + (hvel)# * 0.5)
 	var ledge_diff = ledge_col.y - ptarget.y
 #	print(ledge_col)
 #	print("diff :", ledge_diff)
 #	print(col_result)
-	
+
 	if is_on_wall():
 		ledge()
 		
@@ -242,17 +229,17 @@ func _physics_process(delta):
 				elif jmp_att && attempts >= 1:
 					lv += wjmp * mv_spd * 4.2
 #					lv += g * (delta * 3)
-	#				vvel = jmp_spd #wjmp# + hvel# + up
+#					vvel = jmp_spd #wjmp# + hvel# + up
 					attempts -= 1
 				if Input.is_action_just_pressed('arm_r'):
 					mesh.rotate_y(179)
-
+	
 			elif col_result == ['back']:
 				if !jmp_att :
 					lv = Vector3(0,0.0000001,0)
 				elif jmp_att:
 					translate(mesh_xform.basis.xform(Vector3(-jmp_spd.y * .33,jmp_spd.y * .25 ,0)))
-			
+	
 			if ledge_col.y > 3.33 && ledge_diff <= 1.2 && ledge_diff >= 0.2:
 				global_translate(ledge_col - (ledge_col * 1.23) - facing_mesh.slide(Vector3(0,1.2,0)))
 				on_ledge = true
@@ -273,52 +260,40 @@ func _physics_process(delta):
 						translate(mesh_xform.basis.xform(Vector3(2,3.3,2)))
 			if can_wrun == false:
 				wjmp = false
-				lv.y += g.y * (delta *3)
+#				lv.y += g.y * (delta *3)
 #				lv = Vector3(0,0.0000001,0)
 		elif !wjmp:
 			lv.y += g.y * (delta *3)
-
-#	else:
-#		if attempts == 0:
-#		attempts = 1
-#		timer = 0
-#		pass
-
-#	print('wrun: ', wrun)
+	elif !is_on_wall():
+		!on_ledge
 
 	if on_ledge:
 		wrun = []
-		lv.y = 0
+		lv = mesh_xform.basis.xform(Vector3(0,0,lv.z))
 		if jmp_att:
 			on_ledge = false
 			translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
 		if Input.is_action_just_pressed("arm_r"):
 			mesh.rotate(up, 185)
 			on_ledge = false
-#			lv += g * (delta * 3)
 
 	if Input.is_action_just_pressed("head"):
 #		body_apply_impulse(self, ppos, mesh_xform.basis.xform(Vector3(-2,0,0)))
 #		translate(mesh_xform.basis.xform(Vector3(-2,4.2,-2)))
 		pass
-
+	
 	elif !on_ledge:
 		lv += g * (delta *3)
-	
-#	if on_ledge:
-#		lin_vel = move_and_slide(Vector3(0,0,lv.z),up)
-#	else:
+
 	lin_vel = move_and_slide(lv, up)
-	
+
 	player_fp(delta)
-#	parkour()
-#	ledge()
 
 func player_fp(delta):
 	var animate = $animationTree
 	var curr = $scripts/shift
 	cam = $cam
-	
+
 	animate.set_active(true)
 	if cam.has_method("set_enabled"):
 		cam.set_enabled(true)
@@ -395,7 +370,10 @@ func player_fp(delta):
 		anim = 7
 
 	if wrun == ['vert']:
-		anim = 8
+		if col_result == ['front']:
+			anim = 8
+		else:
+			anim = 3
 	elif wrun == ['horz']:
 		if col_result == ['right']:
 			anim = 10
