@@ -14,7 +14,7 @@ const DEADZONE = 0.1
 var view_sensitivity = 0.2
 var focus_view_sensv = 0.1
 var curfov
-var cam
+onready var cam = $cam
 
 #Movement
 var ppos
@@ -58,6 +58,10 @@ export var attempts = 1
 var timer = 0
 #var time_start = 0
 #var time_now = 0
+
+func _ready():
+	if cam.has_method("set_enabled"):
+		cam.set_enabled(true)
 
 func js_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -251,8 +255,8 @@ func _physics_process(delta):
 #			mesh.rotate_y(col_f.normal.z)
 #			mesh.rotate_y(65)
 			if can_wrun == true:
-				lv.y = 4.2
-				lv.y -= lv.y + delta/delta# * 0.9
+#				lv.y = 4.2
+				lv.y -= lv.y + delta/(delta * 1.11)# * 0.9
 				if jmp_att:
 					if col_result == ['right']:
 						translate(mesh_xform.basis.xform(Vector3(-2,3.3,-2)))
@@ -292,11 +296,8 @@ func _physics_process(delta):
 func player_fp(delta):
 	var animate = $animationTree
 	var curr = $scripts/shift
-	cam = $cam
 
 	animate.set_active(true)
-	if cam.has_method("set_enabled"):
-		cam.set_enabled(true)
 
 	cam.add_collision_exception(self)
 	cam.cam_radius = 2.5

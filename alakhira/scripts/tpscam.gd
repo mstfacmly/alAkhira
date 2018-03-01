@@ -31,32 +31,26 @@ var ds;
 var is_enabled = false;
 var collision_exception = [];
 
-export(NodePath) var cam;
-export(NodePath) var pivot;
+export(NodePath) onready var cam = $cam
+export(NodePath) onready var pivot = $pivot
 
 const DEADZONE = 0.1
 
 func _ready():
-	cam = get_node("cam");
-	pivot = get_node("pivot");
-
 	cam_fov = cam.get_fov();
 	ds = get_world().get_direct_space_state();
-	
-#	set_process(true)
-#	set_physics_process(true)
 
 func set_enabled(enabled):
 	if enabled:
 		Input.set_mouse_mode(2);
 		set_process(true);
-#		set_fixed_process(true);
+		set_physics_process(true)
 		set_process_input(true);
 		is_enabled = true;
 	else:
 		Input.set_mouse_mode(0);
 		set_process(false);
-		set_fixed_process(false);
+		set_physics_process(false);
 		set_process_input(false);
 		is_enabled = false;
 
@@ -70,12 +64,12 @@ func _input(ev):
 	if !is_enabled:
 		return;
 
-	if ev == InputEventMouseMotion:
-		cam_pitch = max(min(cam_pitch+(ev.relative_y*cam_view_sensitivity),cam_pitch_minmax.x),cam_pitch_minmax.y);
+	if ev is InputEventMouseMotion:
+		cam_pitch = max(min(cam_pitch+(ev.relative.y * cam_view_sensitivity),cam_pitch_minmax.x),cam_pitch_minmax.y);
 		if cam_smooth_movement:
-			cam_yaw = cam_yaw-(ev.relative_x*cam_view_sensitivity);
+			cam_yaw = cam_yaw-(ev.relative.x * cam_view_sensitivity);
 		else:
-			cam_yaw = fmod(cam_yaw-(ev.relative_x*cam_view_sensitivity),360);
+			cam_yaw = fmod(cam_yaw-(ev.relative.x * cam_view_sensitivity),360);
 			cam_currentradius = cam_radius;
 			cam_update();
 
@@ -85,13 +79,13 @@ func js_input():
 	var Jy = Input.get_joy_axis(0,3)
 
 	if abs(Jy) >= DEADZONE:
-		cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * js_accel_y) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
+		cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * js_accel_y * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y);
 
 	if abs(Jx) >= DEADZONE:
 		if cam_smooth_movement:
-			cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x));
+			cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10));
 		else:
-			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x)),360);
+			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10)),360);
 			cam_currentradius = cam_radius;
 			cam_update();
 
