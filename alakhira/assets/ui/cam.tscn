@@ -5,6 +5,7 @@
 [node name="cam" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
+_sections_unfolded = [ "Transform", "Visibility" ]
 cam_fov = 64.0
 min_distance = 0.5
 max_distance = 7.2
@@ -41,7 +42,7 @@ light_indirect_energy = 1.0
 light_negative = false
 light_specular = 0.5
 light_bake_mode = 1
-light_cull_mask = -1
+light_cull_mask = -1048575
 shadow_enabled = false
 shadow_color = Color( 0, 0, 0, 1 )
 shadow_bias = 0.1
@@ -57,6 +58,7 @@ directional_shadow_normal_bias = 0.1
 directional_shadow_bias_split_scale = 0.25
 directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
+_sections_unfolded = [ "Light" ]
 
 [node name="pivot" type="Position3D" parent="." index="1"]
 

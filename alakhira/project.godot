@@ -12,7 +12,9 @@ config_version=3
 
 config/name="alAkhira"
 run/main_scene="res://env/test/testroom.tscn"
+run/low_processor_mode=true
 boot_splash/image="res://StudiosLUNE.png"
+config/icon="res://icon.png"
 config/auto_accept_quit=false
 
 [display]
@@ -60,9 +62,9 @@ select=[ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource
 
 [rendering]
 
-quality/directional_shadow/size=1024
-quality/shadow_atlas/size=1024
+quality/filters/anisotropic_filter_level=1
 quality/shadows/filter_mode=2
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
-limits/rendering/max_renderable_elements=5461
+quality/subsurface_scattering/quality=0
+quality/voxel_cone_tracing/high_quality=false

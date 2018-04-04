@@ -40,7 +40,7 @@ var can_wrun
 var wrun = []
 var dist = 4
 var collision_exception=[ self ]
-var col_f
+var col_normal = Vector3()
 var col_result = []
 var ledge_col = Vector3()
 var on_ledge = false
@@ -55,6 +55,7 @@ var facing_dir = Vector3(1, 0, 0)
 var result
 export var attempts = 1
 
+onready var mesh = $body/skeleton 
 var timer = 0
 #var time_start = 0
 #var time_now = 0
@@ -104,7 +105,6 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         return (n*cos(ang) + t*sin(ang)) * p_facing.length()
 
 func _physics_process(delta):
-	var mesh = $body/skeleton 
 	var cam_node = $cam/cam
 	js_input(delta)
 
@@ -200,7 +200,7 @@ func _physics_process(delta):
 	lv = hvel + up * vvel
 
 	parkour()
-
+	
 	if !is_on_floor():
 		ledge()
 		if hspeed >= run:
@@ -220,6 +220,8 @@ func _physics_process(delta):
 #	print("diff :", ledge_diff)
 #	print(col_result)
 
+	adjust_wall()
+
 	if is_on_wall():
 		ledge()
 		
@@ -231,7 +233,7 @@ func _physics_process(delta):
 				if !jmp_att :
 					lv = Vector3(0,0.0000001,0)
 				elif jmp_att && attempts >= 1:
-					lv += wjmp * mv_spd * 4.2
+					lv += wjmp * mv_spd * 1.33
 #					lv += g * (delta * 3)
 #					vvel = jmp_spd #wjmp# + hvel# + up
 					attempts -= 1
@@ -305,7 +307,6 @@ func player_fp(delta):
 	cam.cam_smooth_movement = true
 	
 	hspeed = lin_vel.length()
-#	var countd = timer.get_wait_time()
 	anim = 0
 
 	if Input.is_key_pressed(KEY_ALT):
@@ -316,22 +317,15 @@ func player_fp(delta):
 		anim = 0
 		cam.cam_radius = 3.7
 		cam.cam_fov = 64
-#	elif timer.get_wait_time() < 0.8:
-#		mv_spd = max(min(mv_spd + (delta),walk),sprint)
 	else:
 		cam.cam_radius = 3.1
 		cam.cam_fov = 64
-#		timer.set_wait_time(3)
 		mv_spd = max(min(mv_spd + (delta * 0.5),walk),run)
 
 	if hspeed >= run - 0.1 and hspeed <= sprint - 1 :
 		anim = 0
 		cam.cam_radius = 4.0
 		cam.cam_fov = 69
-#		if timer.get_wait_time() > 0.05 :
-#			timer.set_wait_time(countd - 0.005)
-#		else:
-#			pass
 	elif hspeed >= run + 1.3:
 		anim = 2
 		cam.cam_radius = 4.2
@@ -340,10 +334,6 @@ func player_fp(delta):
 		anim = 1
 		cam.cam_radius = 3.7
 		cam.cam_fov = 64
-#		if timer.get_wait_time() < 3:
-#			timer.set_wait_time(3)
-#		else:
-#			pass
 	else:
 		pass
 
@@ -409,27 +399,32 @@ func parkour():
 	var col_b = ds.intersect_ray(ppos,-ptarget + delta,collision_exception)
 
 	if (!col_l.empty() && col_r.empty()):
+		col_normal = col_l.normal
 		col_result = ['left']
 		return col_result
 	elif (!col_r.empty() && col_l.empty()):
+		col_normal = col_r.normal
 		col_result = ['right']
 		return col_result
 	elif (!col_f.empty() && !col_l.empty() && col_r.empty()):
+		col_normal = col_l.normal
 		col_result = ['left']
 		return col_result
 	elif (!col_f.empty() && !col_r.empty() && col_l.empty()):
+		col_normal = col_r.normal
 		col_result = ['right']
 		return col_result
 	elif (!col_f.empty()): # && col_left.empty() && col_right.empty()):
+		col_normal = col_f.normal
 		col_result = ['front']
 		return col_result
 	elif (!col_b.empty()):
 		col_result = ['back']
 		return col_result
 	else:
+		col_normal = Vector3()
 		col_result = []
 		return col_result
-	print(col_result)
 
 func ledge():
 	var ds = get_world().get_direct_space_state()
@@ -445,6 +440,38 @@ func ledge():
 		ledgecol.translated(Vector3(-0, 5.5,3))
 		ledge_col = Vector3()
 		return ledge_col
+
+func adjust_wall():
+#	print(col_normal)
+
+#	if col_result == ['left']:
+#		print(col_normal)
+#		print(col_f.normal)
+#		mesh.set_transform(Transform(mesh_basis, Vector3(col_f.normal.z,0,0)))
+#		mesh.look_at(col_normal, up)
+#		mesh.set_rotation(Vector3(0,col_f.normal.z,0))
+
+	#Find the axis with the smallest component
+	var min_ind = 0
+	var min_axis = abs(col_normal.z)
+
+	if abs(col_normal.y) < min_axis:
+        min_ind = 1
+        min_axis = abs(col_normal.y)
+	if abs(col_normal.x) < min_axis:
+        min_ind = 2
+	var right
+	#Leave the minimum axis in its place, swap the two other to get a vector perpendicular to the normal vector
+	if min_ind == 0:
+    	right = Vector3(col_normal.x, -col_normal.z, col_normal.y)
+	elif min_ind == 1:
+    	right = Vector3(-col_normal.z, col_normal.y, col_normal.x)
+	elif min_ind == 2:
+    	right = Vector3(-col_normal.y, col_normal.x, col_normal.z)
+
+	var up = col_normal.cross(right)
+	var basis = Basis(right, up, col_normal)
+
 
 func translateMove(dist):
 	var localTranslate = Vector3(0,0,dist)
