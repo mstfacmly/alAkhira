@@ -29,7 +29,7 @@ var mv_spd = run
 var turn_speed = 42
 var sharp_turn_threshold = 130
 #var climbspeed = 2
-var jmp_spd = -g * 1.84 
+var jmp_spd = Vector3(0,9.8,0) * 1.84 
 var hvel = Vector3()
 var hspeed
 var parkour_f = false
@@ -42,6 +42,7 @@ var dist = 4
 var collision_exception=[ self ]
 var col_normal = Vector3()
 var col_result = []
+var col_basis
 var ledge_col = Vector3()
 var on_ledge = false
 var ptarget
@@ -51,7 +52,7 @@ var anim
 var climb_platform = null
 var climbing_platform = false
 var hanging = false
-var facing_dir = Vector3(1, 0, 0)
+var facing_dir = Vector3(0, 0, 1)
 var result
 export var attempts = 1
 
@@ -148,7 +149,7 @@ func _physics_process(delta):
 	var facing_mesh = -mesh_basis.normalized()
 	facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()	
 
-	if is_on_floor() or on_ledge:# or (is_on_wall() && parkour_f):
+	if is_on_floor():# or on_ledge:# or (is_on_wall() && parkour_f):
 		wrun = []
 		falling = false
 		var can_wrun = true
@@ -175,7 +176,7 @@ func _physics_process(delta):
 	
 		hvel = hdir * hspeed
 		
-		if hspeed > 0.01 and is_on_floor():
+		if hspeed > 0.01:# and is_on_floor():
 			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
 	
@@ -218,9 +219,7 @@ func _physics_process(delta):
 	var ledge_diff = ledge_col.y - ptarget.y
 #	print(ledge_col)
 #	print("diff :", ledge_diff)
-#	print(col_result)
-
-	adjust_wall()
+#	print(col_normal)
 
 	if is_on_wall():
 		ledge()
@@ -237,7 +236,7 @@ func _physics_process(delta):
 #					lv += g * (delta * 3)
 #					vvel = jmp_spd #wjmp# + hvel# + up
 					attempts -= 1
-				if Input.is_action_just_pressed('arm_r'):
+				if Input.is_action_just_pressed('action'):
 					mesh.rotate_y(179)
 	
 			elif col_result == ['back']:
@@ -254,10 +253,10 @@ func _physics_process(delta):
 #					!is_on_wall()
 	
 		if wrun == ['horz']:
-#			mesh.rotate_y(col_f.normal.z)
-#			mesh.rotate_y(65)
+			facing_mesh = adjust_facing(facing_mesh, col_normal,delta,1.0 / (hspeed * 0.75),up)
+			var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
+			mesh.set_transform(Transform(m3, mesh_xform.origin))
 			if can_wrun == true:
-#				lv.y = 4.2
 				lv.y -= lv.y + delta/(delta * 1.11)# * 0.9
 				if jmp_att:
 					if col_result == ['right']:
@@ -266,8 +265,6 @@ func _physics_process(delta):
 						translate(mesh_xform.basis.xform(Vector3(2,3.3,2)))
 			if can_wrun == false:
 				wjmp = false
-#				lv.y += g.y * (delta *3)
-#				lv = Vector3(0,0.0000001,0)
 		elif !wjmp:
 			lv.y += g.y * (delta *3)
 	elif !is_on_wall():
@@ -279,13 +276,15 @@ func _physics_process(delta):
 		if jmp_att:
 			on_ledge = false
 			translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
-		if Input.is_action_just_pressed("arm_r"):
+		if Input.is_action_just_pressed("action"):
 			mesh.rotate(up, 185)
 			on_ledge = false
 
 	if Input.is_action_just_pressed("head"):
 #		body_apply_impulse(self, ppos, mesh_xform.basis.xform(Vector3(-2,0,0)))
 #		translate(mesh_xform.basis.xform(Vector3(-2,4.2,-2)))
+#		jumping = true
+#		vvel = mesh_xform.basis.xform(Vector3(20,9.8,0))
 		pass
 	
 	elif !on_ledge:
@@ -440,38 +439,6 @@ func ledge():
 		ledgecol.translated(Vector3(-0, 5.5,3))
 		ledge_col = Vector3()
 		return ledge_col
-
-func adjust_wall():
-#	print(col_normal)
-
-#	if col_result == ['left']:
-#		print(col_normal)
-#		print(col_f.normal)
-#		mesh.set_transform(Transform(mesh_basis, Vector3(col_f.normal.z,0,0)))
-#		mesh.look_at(col_normal, up)
-#		mesh.set_rotation(Vector3(0,col_f.normal.z,0))
-
-	#Find the axis with the smallest component
-	var min_ind = 0
-	var min_axis = abs(col_normal.z)
-
-	if abs(col_normal.y) < min_axis:
-        min_ind = 1
-        min_axis = abs(col_normal.y)
-	if abs(col_normal.x) < min_axis:
-        min_ind = 2
-	var right
-	#Leave the minimum axis in its place, swap the two other to get a vector perpendicular to the normal vector
-	if min_ind == 0:
-    	right = Vector3(col_normal.x, -col_normal.z, col_normal.y)
-	elif min_ind == 1:
-    	right = Vector3(-col_normal.z, col_normal.y, col_normal.x)
-	elif min_ind == 2:
-    	right = Vector3(-col_normal.y, col_normal.x, col_normal.z)
-
-	var up = col_normal.cross(right)
-	var basis = Basis(right, up, col_normal)
-
 
 func translateMove(dist):
 	var localTranslate = Vector3(0,0,dist)
