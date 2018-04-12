@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/test/testroombase.dae" type="PackedScene" id=1]
 [ext_resource path="res://assets/test/boxes.tscn" type="PackedScene" id=2]
@@ -6,11 +6,14 @@
 [ext_resource path="res://assets/test/plat_l.dae" type="PackedScene" id=4]
 [ext_resource path="res://assets/env.tscn" type="PackedScene" id=5]
 [ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/test/plat_s.dae" type="PackedScene" id=7]
 
 [node name="scene" index="0" instance=ExtResource( 1 )]
 
 [node name="testroom" parent="." index="0"]
 
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.019531, 0 )
 cast_shadow = 0
 _sections_unfolded = [ "Transform" ]
 
@@ -26,10 +29,12 @@ editor/display_folded = false
 
 [node name="Scene Root" parent="ledge_l" index="2" instance=ExtResource( 4 )]
 
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.3398, 0, 0 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.3398, -2, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="env" parent="." index="3" instance=ExtResource( 5 )]
+
+editor/display_folded = true
 
 [node name="OmniLight" type="OmniLight" parent="." index="4"]
 
@@ -57,7 +62,17 @@ _sections_unfolded = [ "Editor", "Light", "Shadow" ]
 
 [node name="az" parent="." index="5" instance=ExtResource( 6 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.566321, 0 )
+
+[node name="plats" type="Spatial" parent="." index="6"]
+
+[node name="plat" parent="plats" index="0" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.6998, 6.90763, 0 )
+
+[node name="plat2" parent="plats" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.6998, 10.3934, 17.4383 )
 
 
 [editable path="env"]

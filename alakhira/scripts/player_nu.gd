@@ -21,7 +21,7 @@ var ppos
 var lin_vel = Vector3()
 const ACCEL = 6
 const DEACCEL = ACCEL * 2.13
-export var run = 4.44
+export var run = 6.94
 var walk = run / 1.75
 var sprint = run * 2.12 #7.77
 #var mv_dir = Vector3()
@@ -218,7 +218,7 @@ func _physics_process(delta):
 	var wjmp = jmp_spd + (hvel)# * 0.5)
 	var ledge_diff = ledge_col.y - ptarget.y
 #	print(ledge_col)
-#	print("diff :", ledge_diff)
+	print("diff :", ledge_diff)
 #	print(col_normal)
 
 	if is_on_wall():
@@ -233,8 +233,6 @@ func _physics_process(delta):
 					lv = Vector3(0,0.0000001,0)
 				elif jmp_att && attempts >= 1:
 					lv += wjmp * mv_spd * 1.33
-#					lv += g * (delta * 3)
-#					vvel = jmp_spd #wjmp# + hvel# + up
 					attempts -= 1
 				if Input.is_action_just_pressed('action'):
 					mesh.rotate_y(179)
@@ -245,15 +243,15 @@ func _physics_process(delta):
 				elif jmp_att:
 					translate(mesh_xform.basis.xform(Vector3(-jmp_spd.y * .33,jmp_spd.y * .25 ,0)))
 	
-			if ledge_col.y > 3.33 && ledge_diff <= 1.2 && ledge_diff >= 0.2:
-				global_translate(ledge_col - (ledge_col * 1.23) - facing_mesh.slide(Vector3(0,1.2,0)))
+			if ledge_col.y > 3.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
+				global_translate(ledge_col - (ledge_col ) - facing_mesh.slide(Vector3(0,1.2,0)))
 				on_ledge = true
 			else:
 				on_ledge = false
 #					!is_on_wall()
 	
 		if wrun == ['horz']:
-			facing_mesh = adjust_facing(facing_mesh, col_normal,delta,1.0 / (hspeed * 0.75),up)
+			facing_mesh = adjust_facing(facing_mesh, col_normal,delta,1.0 / (hspeed * 0.42),up)
 			var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
 			mesh.set_transform(Transform(m3, mesh_xform.origin))
 			if can_wrun == true:
@@ -279,6 +277,9 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("action"):
 			mesh.rotate(up, 185)
 			on_ledge = false
+	
+	elif !on_ledge:
+		lv += g * (delta *3)
 
 	if Input.is_action_just_pressed("head"):
 #		body_apply_impulse(self, ppos, mesh_xform.basis.xform(Vector3(-2,0,0)))
@@ -286,9 +287,6 @@ func _physics_process(delta):
 #		jumping = true
 #		vvel = mesh_xform.basis.xform(Vector3(20,9.8,0))
 		pass
-	
-	elif !on_ledge:
-		lv += g * (delta *3)
 
 	lin_vel = move_and_slide(lv, up)
 
