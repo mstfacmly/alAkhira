@@ -67,6 +67,7 @@ action=[ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource
 
 quality/filters/anisotropic_filter_level=1
 quality/shadows/filter_mode=2
+quality/shadows/filter_mode.mobile=2
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/subsurface_scattering/quality=0

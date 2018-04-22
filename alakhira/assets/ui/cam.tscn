@@ -36,12 +36,12 @@ _sections_unfolded = [ "Transform" ]
 [node name="dirlight" type="DirectionalLight" parent="cam" index="0"]
 
 layers = 1
-light_color = Color( 1, 1, 1, 1 )
+light_color = Color( 0.90625, 0.934082, 1, 1 )
 light_energy = 0.72
 light_indirect_energy = 1.0
 light_negative = false
-light_specular = 0.5
-light_bake_mode = 1
+light_specular = 0.0
+light_bake_mode = 0
 light_cull_mask = -1048575
 shadow_enabled = false
 shadow_color = Color( 0, 0, 0, 1 )
