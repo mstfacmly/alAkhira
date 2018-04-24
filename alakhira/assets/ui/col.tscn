@@ -3,12 +3,12 @@
 [sub_resource type="CapsuleShape" id=1]
 
 radius = 0.510096
-height = 1.02561
+height = 1.78
 
-[node name="col" type="CollisionShape"]
+[node name="col" type="CollisionShape" index="0"]
 
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00145626, 1.00603, 0.0173196 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.001456, 1.4, 0.01732 )
 shape = SubResource( 1 )
 disabled = false
 _sections_unfolded = [ "Transform" ]

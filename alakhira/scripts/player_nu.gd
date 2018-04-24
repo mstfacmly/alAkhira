@@ -224,9 +224,10 @@ func _physics_process(delta):
 	if is_on_wall():
 		ledge()
 		var walln = get_slide_collision(0).normal.abs()
+		var modlv = lv.slide(up).slide(walln)
 		print(walln)
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 10, jmp_spd.y * 0.84, jmp_spd.y * 10))
-		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y, jmp_spd.y * 0.51, jmp_spd.y * 5))
+		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.51, jmp_spd.y * 5))
 		
 		if col_result == ['back']:
 			wrun = ['vert']
@@ -264,9 +265,11 @@ func _physics_process(delta):
 				if jmp_att:
 					if col_result == ['right']:
 						lv += (-walln / 2) * wrjmp
+						lv += modlv * wrjmp
 						lv += up * wrjmp
 					if col_result == ['left']:
 						lv += (walln / 2) * wrjmp
+						lv += modlv * wrjmp
 						lv += up * wrjmp
 			if can_wrun == false:
 				wjmp = false
