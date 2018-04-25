@@ -223,9 +223,9 @@ func _physics_process(delta):
 
 	if is_on_wall():
 		ledge()
+		print(col_result)
 		var walln = get_slide_collision(0).normal.abs()
-		var modlv = lv.slide(up).slide(walln)
-		print(walln)
+		var modlv = lv.slide(up).slide(walln).abs()
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 10, jmp_spd.y * 0.84, jmp_spd.y * 10))
 		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.51, jmp_spd.y * 5))
 		
@@ -260,16 +260,20 @@ func _physics_process(delta):
 			facing_mesh = adjust_facing(facing_mesh, col_normal,delta,1.0 / (hspeed * 0.42),up)
 			var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
 			mesh.set_transform(Transform(m3, mesh_xform.origin))
+			lv += modlv * 0.33
 			if can_wrun == true:
 				lv.y -= lv.y + delta/(delta * 1.11)# * 0.9
-				if jmp_att:
-					if col_result == ['right']:
+				if col_result == ['right']:
+					lv += -modlv * 0.33					
+					if jmp_att:
 						lv += (-walln / 2) * wrjmp
-						lv += modlv * wrjmp
+						lv += -modlv * wrjmp
 						lv += up * wrjmp
-					if col_result == ['left']:
+				if col_result == ['left']:
+					lv += -modlv * 0.33
+					if jmp_att:
 						lv += (walln / 2) * wrjmp
-						lv += modlv * wrjmp
+						lv += -modlv * wrjmp
 						lv += up * wrjmp
 			if can_wrun == false:
 				wjmp = false
