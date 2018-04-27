@@ -2,15 +2,15 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/angle2.dae-049a5d606a3d946a03e72502473f88bc.scn"
+path="res://.import/p_floor.dae-ee58b9498fbb64df9336830bb20de8bf.scn"
 
 [deps]
 
-source_file="res://assets/test/angle2.dae"
-source_md5="eb27168dcb168b17f2d08ccfb2e0b881"
+source_file="res://assets/test/p_floor.dae"
+source_md5="08c4175c7a8120d08a7adc37c151f520"
 
-dest_files=[ "res://.import/angle2.dae-049a5d606a3d946a03e72502473f88bc.scn" ]
-dest_md5="f925b01c445331f1e7fcf8a63c60e0a1"
+dest_files=[ "res://.import/p_floor.dae-ee58b9498fbb64df9336830bb20de8bf.scn" ]
+dest_md5="13b09526098176ecdb8a959a24a70c48"
 
 [params]
 
@@ -19,19 +19,19 @@ nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-materials/location=0
-materials/storage=0
+materials/location=1
+materials/storage=1
 materials/keep_on_reimport=true
 meshes/compress=true
 meshes/ensure_tangents=true
-meshes/storage=true
+meshes/storage=0
 meshes/light_baking=0
 meshes/lightmap_texel_size=0.1
 external_files/store_in_subdir=false
 animation/import=true
 animation/fps=15
 animation/filter_script=""
-animation/storage=true
+animation/storage=false
 animation/keep_custom_tracks=false
 animation/optimizer/enabled=true
 animation/optimizer/max_linear_error=0.05

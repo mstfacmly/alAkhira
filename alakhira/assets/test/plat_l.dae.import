@@ -4,19 +4,35 @@ importer="scene"
 type="PackedScene"
 path="res://.import/plat_l.dae-22dccc0f80aca7ee75c7e16778d5a671.scn"
 
+[deps]
+
+source_file="res://assets/test/plat_l.dae"
+source_md5="f8ac8fc8006c4f6749d2aeb94ea3d3e9"
+
+dest_files=[ "res://.import/plat_l.dae-22dccc0f80aca7ee75c7e16778d5a671.scn" ]
+dest_md5="9341e3adee7215ad3d250f002ea65033"
+
 [params]
 
 nodes/root_type="MeshInstance"
 nodes/root_name="Scene Root"
+nodes/root_scale=1.0
 nodes/custom_script=""
+nodes/storage=0
 materials/location=1
 materials/storage=0
-geometry/compress=true
-geometry/ensure_tangents=true
-geometry/storage=0
+materials/keep_on_reimport=true
+meshes/compress=true
+meshes/ensure_tangents=true
+meshes/storage=true
+meshes/light_baking=0
+meshes/lightmap_texel_size=0.1
+external_files/store_in_subdir=false
 animation/import=false
 animation/fps=15
 animation/filter_script=""
+animation/storage=true
+animation/keep_custom_tracks=false
 animation/optimizer/enabled=true
 animation/optimizer/max_linear_error=0.05
 animation/optimizer/max_angular_error=0.01

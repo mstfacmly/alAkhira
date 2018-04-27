@@ -4,19 +4,35 @@ importer="scene"
 type="PackedScene"
 path="res://.import/angle1.dae-57abb3335789b616c34604bc084a2a3d.scn"
 
+[deps]
+
+source_file="res://assets/test/angle1.dae"
+source_md5="60f47aeb18ce57a7c5392b48ed59f30a"
+
+dest_files=[ "res://.import/angle1.dae-57abb3335789b616c34604bc084a2a3d.scn" ]
+dest_md5="2d1a5ef48dd517d9927bed4c9630e685"
+
 [params]
 
 nodes/root_type="Spatial"
 nodes/root_name="Scene Root"
+nodes/root_scale=1.0
 nodes/custom_script=""
+nodes/storage=0
 materials/location=0
 materials/storage=0
-geometry/compress=true
-geometry/ensure_tangents=true
-geometry/storage=0
+materials/keep_on_reimport=true
+meshes/compress=true
+meshes/ensure_tangents=true
+meshes/storage=true
+meshes/light_baking=0
+meshes/lightmap_texel_size=0.1
+external_files/store_in_subdir=false
 animation/import=true
 animation/fps=15
 animation/filter_script=""
+animation/storage=true
+animation/keep_custom_tracks=false
 animation/optimizer/enabled=true
 animation/optimizer/max_linear_error=0.05
 animation/optimizer/max_angular_error=0.01

@@ -1,12 +1,142 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/test/testroombase.dae" type="PackedScene" id=1]
 [ext_resource path="res://assets/test/boxes.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/test/ledge_l.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/test/plat_l.dae" type="PackedScene" id=4]
-[ext_resource path="res://assets/env.tscn" type="PackedScene" id=5]
-[ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/test/plat_s.dae" type="PackedScene" id=7]
+[ext_resource path="res://assets/env.tscn" type="PackedScene" id=3]
+[ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/test/plat_s.dae" type="PackedScene" id=5]
+[ext_resource path="res://assets/test/plat_l_gr.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/test/column.dae" type="PackedScene" id=7]
+[ext_resource path="res://assets/test/column_dest.dae" type="PackedScene" id=8]
+[ext_resource path="res://assets/test/h_floor.dae" type="PackedScene" id=9]
+[ext_resource path="res://assets/test/ledge_l.tscn" type="PackedScene" id=10]
+
+[sub_resource type="Animation" id=1]
+
+resource_name = "shift"
+length = 1.0
+loop = false
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("column_dest_08:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.42 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( -0.630934, -0.901067, 0, 0.901067, -0.630934, 0, 0, 0, 1.1, -17.2, -6.2, 0.3 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("column_dest_07:transform")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.52 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("column_dest_06:transform")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.14, 0.32 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.898538, 0.63453, 0, -0.63453, 0.898538, 0, 0, 0, 1.1, -29.2266, -4.76837e-07, 5.48857 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("column_dest_05:transform")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.31, 0.66 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.630934, 0, -0.901067, -0.897638, 0.0958713, -0.628533, 0.0785332, 1.09581, 0.0549895, -11.5, -2.2, -16 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("column_dest_04:transform")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.23, 0.79 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.630934, 0.901067, 0, -0.901067, 0.630934, 0, 0, 0, 1.1, -26.8, -10.2, 3.4 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("column_dest_03:transform")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0.31, 0.66 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.996939, 0, -0.46488, 0, 1.1, 0, 0.46488, 0, 0.996939, -21.1, -9.5, -6.5 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("column_dest_02:transform")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0.2, 0.45 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( -0.630934, 0.901067, 0, -0.901067, -0.630934, 0, 0, 0, 1.1, -12.2, -5.9, 5.5 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("column_dest_01:transform")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0.37 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("column_dest_00:transform")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0.12, 0.29 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( -4.80825e-08, -1.1, 0, 1.1, -4.80825e-08, 0, 0, 0, 1.1, -11.3, -6.9, 0 ), Transform( 1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("column_dest_06:translation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = false
+tracks/9/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"update": 0,
+"values": [  ]
+}
 
 [node name="scene" index="0" instance=ExtResource( 1 )]
 
@@ -14,6 +144,7 @@ _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
 
 [node name="testroom" parent="." index="0"]
 
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.019531, 0 )
 layers = 2
 cast_shadow = 0
@@ -25,25 +156,13 @@ _sections_unfolded = [ "Collision" ]
 
 [node name="boxes" parent="." index="1" instance=ExtResource( 2 )]
 
-[node name="ledge_l" parent="." index="2" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.3 )
 
-_sections_unfolded = [ "Transform", "Visibility" ]
+[node name="boxes2" parent="." index="2" instance=ExtResource( 2 )]
 
-[node name="Scene Root" parent="ledge_l" index="2" instance=ExtResource( 4 )]
+transform = Transform( 0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, 9.2, 0, 11.2 )
 
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.3398, -2, 0 )
-layers = 2
-_sections_unfolded = [ "Transform" ]
-
-[node name="Scene Root2" parent="ledge_l" index="3" instance=ExtResource( 4 )]
-
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -31.9398, -2, -16 )
-layers = 2
-_sections_unfolded = [ "Transform" ]
-
-[node name="env" parent="." index="3" instance=ExtResource( 5 )]
-
-editor/display_folded = true
+[node name="env" parent="." index="3" instance=ExtResource( 3 )]
 
 [node name="OmniLight" type="OmniLight" parent="." index="4"]
 
@@ -57,7 +176,7 @@ light_negative = false
 light_specular = 0.0
 light_bake_mode = 1
 light_cull_mask = -1048574
-shadow_enabled = true
+shadow_enabled = false
 shadow_color = Color( 0, 0, 0, 1 )
 shadow_bias = 0.0
 shadow_contact = 0.0
@@ -69,26 +188,27 @@ omni_shadow_mode = 1
 omni_shadow_detail = 1
 _sections_unfolded = [ "Editor", "Light", "Omni", "Shadow" ]
 
-[node name="az" parent="." index="5" instance=ExtResource( 6 )]
+[node name="az" parent="." index="5" instance=ExtResource( 4 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.566321, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9, 0.566321, 8.4 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="plats" type="Spatial" parent="." index="6"]
 
+editor/display_folded = true
 _sections_unfolded = [ "Transform", "Visibility" ]
 
-[node name="plat" parent="plats" index="0" instance=ExtResource( 7 )]
+[node name="plat" parent="plats" index="0" instance=ExtResource( 5 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.6998, 6.90763, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.6998, 6.90763, -10 )
 _sections_unfolded = [ "Visibility" ]
 
-[node name="plat2" parent="plats" index="1" instance=ExtResource( 7 )]
+[node name="plat_gr" parent="." index="7" instance=ExtResource( 6 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.6998, 10.3934, 17.4383 )
-_sections_unfolded = [ "Visibility" ]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -16.4, -4, -17.3 )
+_sections_unfolded = [ "Transform" ]
 
-[node name="SpotLight" type="SpotLight" parent="." index="7"]
+[node name="SpotLight" type="SpotLight" parent="." index="8"]
 
 transform = Transform( 0.573576, -0.469846, 0.67101, -2.50718e-08, 0.819152, 0.573576, -0.819152, -0.32899, 0.469846, 62.7, 30.1, 29.1 )
 layers = 1
@@ -111,5 +231,278 @@ spot_angle = 45.0
 spot_angle_attenuation = 1.0
 _sections_unfolded = [ "Editor", "Light", "Shadow", "Spot", "Visibility" ]
 
+[node name="columns" type="Spatial" parent="." index="9"]
+
+[node name="column" parent="columns" index="0" instance=ExtResource( 7 )]
+
+[node name="column6" parent="columns" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.9, 0 )
+
+[node name="column3" parent="columns" index="2" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.94635, 0 )
+visible = false
+
+[node name="column2" parent="columns" index="3" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+
+[node name="column7" parent="columns" index="4" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9, 0 )
+
+[node name="column4" parent="columns" index="5" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.9464, 0 )
+
+[node name="col_dest" parent="columns" index="6" instance=ExtResource( 8 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.952, 0 )
+
+[node name="column_dest_00" parent="columns/col_dest" index="0"]
+
+editor/display_folded = true
+transform = Transform( 0.0872717, -1.09653, 0, 1.09653, 0.0872717, 0, 0, 0, 1.1, -10.7434, -6.56011, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_01" parent="columns/col_dest" index="1"]
+
+editor/display_folded = true
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_02" parent="columns/col_dest" index="2"]
+
+editor/display_folded = true
+transform = Transform( -0.608608, 0.916295, 0, -0.916295, -0.608608, 0, 0, 0, 1.1, -12.0665, -5.83543, 5.43981 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_03" parent="columns/col_dest" index="3"]
+
+editor/display_folded = true
+transform = Transform( 1.01283, 0, -0.429155, 0, 1.1, 0, 0.429155, 0, 1.01283, -19.427, -8.74676, -5.98462 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_04" parent="columns/col_dest" index="4"]
+
+editor/display_folded = true
+transform = Transform( 0.654498, 0.884099, 0, -0.884099, 0.654498, 0, 0, 0, 1.1, -26.081, -9.92635, 3.30878 )
+_sections_unfolded = [ "Transform", "Visibility" ]
+
+[node name="column_dest_05" parent="columns/col_dest" index="5"]
+
+editor/display_folded = true
+transform = Transform( 0.687974, 0.0593406, -0.856254, -0.847824, 0.217976, -0.666094, 0.133742, 1.07655, 0.182066, -10.5882, -2.02557, -14.7314 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_06" parent="columns/col_dest" index="6"]
+
+editor/display_folded = true
+transform = Transform( 0.961964, 0.533502, 0, -0.533502, 0.961964, 0, 0, 0, 1.1, -24.1894, -3.94654e-07, 4.54261 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_07" parent="columns/col_dest" index="7"]
+
+editor/display_folded = true
+_sections_unfolded = [ "Transform" ]
+
+[node name="column_dest_08" parent="columns/col_dest" index="8"]
+
+editor/display_folded = true
+transform = Transform( -0.616023, -0.911326, 0, 0.911326, -0.616023, 0, 0, 0, 1.1, -17.0739, -6.15456, 0.297801 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="AnimationPlayer" parent="columns/col_dest" index="9"]
+
+anims/shift = SubResource( 1 )
+
+[node name="col_bridge" type="Spatial" parent="." index="10"]
+
+editor/display_folded = true
+
+[node name="column5" parent="col_bridge" index="0" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.9, 7.01528, 0 )
+
+[node name="column6" parent="col_bridge" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -24.7, 7.01528, 0 )
+
+[node name="column7" parent="col_bridge" index="2" instance=ExtResource( 7 )]
+
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -20.8, 7.01528, 0 )
+
+[node name="columns5" type="Spatial" parent="." index="11"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 27.4 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column" parent="columns5" index="0" instance=ExtResource( 7 )]
+
+[node name="column6" parent="columns5" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.9, 0 )
+
+[node name="column3" parent="columns5" index="2" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.94635, 0 )
+
+[node name="column2" parent="columns5" index="3" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+
+[node name="column7" parent="columns5" index="4" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9, 0 )
+
+[node name="column4" parent="columns5" index="5" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.9464, 0 )
+
+[node name="columns4" type="Spatial" parent="." index="12"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27.4 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column" parent="columns4" index="0" instance=ExtResource( 7 )]
+
+[node name="column6" parent="columns4" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.9, 0 )
+
+[node name="column3" parent="columns4" index="2" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.94635, 0 )
+
+[node name="column2" parent="columns4" index="3" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+
+[node name="column7" parent="columns4" index="4" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9, 0 )
+
+[node name="column4" parent="columns4" index="5" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.9464, 0 )
+
+[node name="columns3" type="Spatial" parent="." index="13"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.4, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column" parent="columns3" index="0" instance=ExtResource( 7 )]
+
+[node name="column6" parent="columns3" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.9, 0 )
+
+[node name="column3" parent="columns3" index="2" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.94635, 0 )
+
+[node name="column2" parent="columns3" index="3" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+
+[node name="column7" parent="columns3" index="4" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9, 0 )
+
+[node name="column4" parent="columns3" index="5" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.9464, 0 )
+
+[node name="columns2" type="Spatial" parent="." index="14"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 27.2967, 0, 0 )
+
+[node name="column" parent="columns2" index="0" instance=ExtResource( 7 )]
+
+[node name="column6" parent="columns2" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.9, 0 )
+
+[node name="column3" parent="columns2" index="2" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.94635, 0 )
+
+[node name="column2" parent="columns2" index="3" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+
+[node name="column7" parent="columns2" index="4" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.9, 0 )
+
+[node name="column4" parent="columns2" index="5" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.9464, 0 )
+
+[node name="hfloor" type="Spatial" parent="." index="15"]
+
+editor/display_folded = true
+
+[node name="hfloor" parent="hfloor" index="0" instance=ExtResource( 9 )]
+
+[node name="hfloor3" parent="hfloor" index="1" instance=ExtResource( 9 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14.6 )
+
+[node name="hfloor2" parent="hfloor" index="2" instance=ExtResource( 9 )]
+
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 30, 0, 0 )
+
+[node name="h_plat" type="Spatial" parent="." index="16"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0, 0 )
+
+[node name="h_ledges" type="Spatial" parent="h_plat" index="0"]
+
+editor/display_folded = true
+
+[node name="ledge_l" parent="h_plat/h_ledges" index="0" instance=ExtResource( 10 )]
+
+[node name="ledge_l4" parent="h_plat/h_ledges" index="1" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8, 0, 0 )
+
+[node name="ledge_l5" parent="h_plat/h_ledges" index="2" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.6, 0, 0 )
+
+[node name="ledge_l8" parent="h_plat/h_ledges" index="3" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 0, 0 )
+
+[node name="ledge_l10" parent="h_plat/h_ledges" index="4" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.2, 0, 0 )
+
+[node name="ledge_l2" parent="h_plat/h_ledges" index="5" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, 0 )
+
+[node name="ledge_l3" parent="h_plat/h_ledges" index="6" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6, 0, 0 )
+
+[node name="ledge_l6" parent="h_plat/h_ledges" index="7" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 29.4, 0, 0 )
+
+[node name="ledge_l7" parent="h_plat/h_ledges" index="8" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.2, 0, 0 )
+
+[node name="ledge_l9" parent="h_plat/h_ledges" index="9" instance=ExtResource( 10 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 0 )
+
 
 [editable path="env"]
+[editable path="columns/col_dest"]
