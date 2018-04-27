@@ -1,7 +1,6 @@
 extends KinematicBody
 
-#onready var timer = get_node("timer")
-#onready var health = get_node("ui/healthb")
+onready var health = get_node("ui/healthb")
 
 # Environment
 var g = Vector3(0,-9.8,0)
@@ -57,9 +56,6 @@ var result
 export var attempts = 1
 
 onready var mesh = $body/skeleton 
-var timer = 0
-#var time_start = 0
-#var time_now = 0
 
 func _ready():
 	if cam.has_method("set_enabled"):
@@ -197,7 +193,6 @@ func _physics_process(delta):
 		vvel = jmp_spd
 	elif is_on_wall() && jmp_att:
 		jumping = true
-#		parkour_f = true
 	elif !is_on_floor() && !jmp_att or !is_on_wall() && !jmp_att:
 		jumping = false
 
@@ -223,10 +218,9 @@ func _physics_process(delta):
 
 	if is_on_wall():
 		ledge()
-		print(col_result)
 		var walln = get_slide_collision(0).normal.abs()
 		var modlv = lv.slide(up).slide(walln).abs()
-		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 10, jmp_spd.y * 0.84, jmp_spd.y * 10))
+		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
 		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.51, jmp_spd.y * 5))
 		
 		if col_result == ['back']:
