@@ -7,7 +7,7 @@ path="res://.import/h_floor.dae-65afd3cb2aa97882165e581d5509b0be.scn"
 [deps]
 
 source_file="res://assets/test/h_floor.dae"
-source_md5="1009ae76496e9178c688cb63d8c77e98"
+source_md5="f4d68dca6f198f3765b82e4053d95f38"
 
 dest_files=[ "res://.import/h_floor.dae-65afd3cb2aa97882165e581d5509b0be.scn" ]
 dest_md5="f4b9890759665a788cf8dc33116e535a"
