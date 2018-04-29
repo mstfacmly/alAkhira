@@ -39,7 +39,7 @@ var vvel
 var can_wrun
 var wrun = []
 var dist = 4
-var collision_exception=[ self ]
+var collision_exception=[ self, "chkpt_shape" ]
 var col_normal = Vector3()
 var col_result = []
 var col_basis
@@ -247,7 +247,7 @@ func _physics_process(delta):
 					lv += up * wjmp
 	
 			if ledge_col.y > 3.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
-				global_translate(ledge_col - (ledge_col ) - facing_mesh.slide(Vector3(0,1.2,0)))
+				global_translate(ledge_col - (ledge_col ))# - facing_mesh.slide(Vector3(0,-1.2,0)))
 				on_ledge = true
 			else:
 				on_ledge = false
