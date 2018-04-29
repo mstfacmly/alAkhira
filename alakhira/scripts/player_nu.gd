@@ -1,6 +1,7 @@
 extends KinematicBody
 
 onready var health = get_node("ui/healthb")
+onready var chkpt = get_node("../chkpt")
 
 # Environment
 var g = Vector3(0,-9.8,0)
@@ -60,6 +61,8 @@ onready var mesh = $body/skeleton
 func _ready():
 	if cam.has_method("set_enabled"):
 		cam.set_enabled(true)
+		
+	chkpt()
 
 func _input(event):	
 	Input.add_joy_mapping("030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,", true)
@@ -444,6 +447,14 @@ func ledge():
 		ledgecol.translated(Vector3(-0, 5.5,3))
 		ledge_col = Vector3()
 		return ledge_col
+
+func dead():
+	if health == 0:
+		print('dead')
+	pass
+
+func chkpt():
+	set_transform(chkpt.get_global_transform())
 
 func translateMove(dist):
 	var localTranslate = Vector3(0,0,dist)
