@@ -39,7 +39,7 @@ var vvel
 var can_wrun
 var wrun = []
 var dist = 4
-var collision_exception=[ self, "chkpt_shape" ]
+var collision_exception = [ self ]
 var col_normal = Vector3()
 var col_result = []
 var col_basis
