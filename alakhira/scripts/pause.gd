@@ -1,11 +1,12 @@
-extends Control
+extends MarginContainer
 
 var paused = false
-onready var t = get_node("timer")
-onready var root = get_node("/root/")
-onready var az = root.get_node("scene/az")
-onready var ui = root.get_node("scene/az/ui/healthb")
-onready var pmenu = get_node("pause_menu")
+onready var az = get_node("/root/scene/az")
+onready var ui = $org/right/healthb
+onready var t = $org/right/pause/timer
+onready var debug = $org/left
+onready var pmenu = $org/right/pause/pause_menu
+onready var shift = az.get_node("scripts/shift")
 
 func _input(ev):
 	if Input.is_key_pressed(KEY_F11):
@@ -30,18 +31,22 @@ func _input(ev):
 		timer
 
 func _on_pause():
-	pmenu.set_exclusive(true)
-	pmenu.popup()
+#	pmenu.set_exclusive(true)
+#	pmenu.popup()
+	pmenu.show()
 	get_tree().set_pause(true)
 	az.hide()
 	ui.hide()
+	debug.hide()
 	paused = true
+		
 
 func _on_unpause():
 	pmenu.hide()
 	get_tree().set_pause(false)
 	az.show()
 	ui.show()
+	debug.show()
 	paused = false
 
 func _on_timer_timeout():

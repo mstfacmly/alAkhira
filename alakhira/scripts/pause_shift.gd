@@ -29,7 +29,7 @@ var t
 var transition_time = 0.5
 
 onready var root = get_node("/root/")
-
+onready var env = root.get_node("scene/env")
 #onready var pause = get_parent().get_node("../pause")
 
 func _ready():
@@ -51,6 +51,7 @@ func _input(ev):
 	var pause = ev.is_action_pressed("pause") && !ev.is_echo()
 
 	if pause:
+		env.set_process(2)
 		if az.curr == 'phys':
 			_phys()
 		elif az.curr == 'spi':
@@ -116,13 +117,13 @@ func post_toggle(a, b):
 
 func env_transition(speed):
 	for a in anim:
-		if(a.get_name() == 'PhysToSpir'):
+		if(a.get_name() == 'shift'):
 			var animList = a.get_animation_list()
 			for b in animList:
 				a.play(b,  -1, speed, (speed < 0))
-			print("PhysToSpir found")
+			print("shift found")
 		else:
-			a.play('PhysToSpir', -1, speed, (speed < 0))
+			a.play('shift', -1, speed, (speed < 0))
 
 func traverse(nodes):
 	var nm = ''
@@ -140,7 +141,7 @@ func traverse(nodes):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
-			if(nm.matchn('PhysToSpir') or node.has_animation('PhysToSpir')):
+			if(nm.matchn('PhysToSpir') or node.has_animation('shift')):
 				anim.push_back(node)
 
 		elif node.get_child_count():

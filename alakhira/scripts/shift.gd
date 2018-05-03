@@ -51,6 +51,7 @@ func _input(ev):
 	var shift = cast && attack
 
 	if shift:
+		shifting = true
 		if curr == 'phys':
 			toggle(phys, spi)
 			spir_peek(spi, false)

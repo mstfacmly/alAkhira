@@ -19,7 +19,7 @@ onready var cam = $cam
 #Movement
 var ppos
 var lin_vel = Vector3()
-const ACCEL = 6
+const ACCEL = 7.77
 const DEACCEL = ACCEL * 2.13
 export var run = 6.94
 var walk = run / 1.75
@@ -304,7 +304,7 @@ func _physics_process(delta):
 
 func player_fp(delta):
 	var animate = $animationTree
-	var curr = $scripts/shift
+	var shift = $scripts/shift
 
 	animate.set_active(true)
 
@@ -390,9 +390,9 @@ func player_fp(delta):
 	var physfov
 	var spifov
 
-	if curr.curr != 'spir' && curr.shifting :
+	if shift.curr != 'spir' && shift.shifting :
 		cam.cam_fov += 13
-	elif curr.curr == 'phys' && curr.shifting :
+	elif shift.curr == 'phys' && shift.shifting :
 		cam.cam_fov -= 13
 
 func parkour():
