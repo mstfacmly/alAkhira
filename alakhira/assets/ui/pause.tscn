@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://scripts/pause.gd" type="Script" id=1]
-[ext_resource path="res://scripts/pause_shift.gd" type="Script" id=2]
+[ext_resource path="res://scripts/pause_shift.gd" type="Script" id=1]
 
-[node name="pause" type="Control"]
+[node name="pause" type="MarginContainer" index="0"]
 
 pause_mode = 2
 anchor_left = 0.0
@@ -16,48 +15,51 @@ margin_bottom = -1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-script = ExtResource( 1 )
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="timer" type="Timer" parent="."]
+[node name="timer" type="Timer" parent="." index="0"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = false
 autostart = false
 
-[node name="pause_menu" type="PopupPanel" parent="."]
+[node name="pause_menu" type="VBoxContainer" parent="." index="1"]
 
+visible = false
 self_modulate = Color( 1, 1, 1, 0.25 )
 anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -2.0
-margin_bottom = 2.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 8.0
+margin_right = 1026.0
+margin_bottom = 598.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-popup_exclusive = false
+alignment = 0
 _sections_unfolded = [ "Anchor", "Grow Direction", "Popup", "Rect" ]
 
-[node name="title" type="Label" parent="pause_menu"]
+[node name="title" type="Label" parent="pause_menu" index="0"]
 
-anchor_left = 0.838088
+anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 0.166647
-margin_left = 0.797974
-margin_top = 31.0
-margin_right = -17.0
-margin_bottom = -15.6551
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1018.0
+margin_bottom = 14.0
 grow_vertical = 0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 0
 text = "al akhira"
@@ -68,20 +70,20 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect" ]
 
-[node name="hold to quit" type="Label" parent="pause_menu"]
+[node name="hold to quit" type="Label" parent="pause_menu" index="1"]
 
-anchor_left = 0.76521
+anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 0.242407
-margin_left = 1.4245
-margin_top = 51.0
-margin_right = -16.0
-margin_bottom = -35.444
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 18.0
+margin_right = 1018.0
+margin_bottom = 32.0
 grow_vertical = 0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 0
 text = "Hold pause key to Quit"
@@ -91,9 +93,11 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Margin", "Rect" ]
 
-[node name="shift" type="Spatial" parent="pause_menu"]
+[node name="shift" type="Spatial" parent="pause_menu" index="2"]
 
-script = ExtResource( 2 )
+pause_mode = 2
+script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
 
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
