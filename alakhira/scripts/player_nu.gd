@@ -390,7 +390,7 @@ func player_fp(delta):
 	var physfov
 	var spifov
 
-	if shift.curr != 'spir' && shift.shifting :
+	if shift.curr == 'spi' && shift.shifting :
 		cam.cam_fov += 13
 	elif shift.curr == 'phys' && shift.shifting :
 		cam.cam_fov -= 13

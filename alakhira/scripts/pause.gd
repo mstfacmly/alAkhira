@@ -3,10 +3,12 @@ extends MarginContainer
 var paused = false
 onready var az = get_node("/root/scene/az")
 onready var ui = $org/right/healthb
-onready var t = $org/right/pause/timer
+onready var t = $timer
 onready var debug = $org/left
 onready var pmenu = $org/right/pause/pause_menu
 onready var shift = az.get_node("scripts/shift")
+onready var envanim = get_node("/root/scene/env/AnimationPlayer")
+var spd = 2
 
 func _input(ev):
 	if Input.is_key_pressed(KEY_F11):
@@ -25,6 +27,7 @@ func _input(ev):
 	if ev.is_action_pressed("pause"):
 		if paused == true:
 			t.start()
+			print(t.start())
 	elif ev.is_action("pause") && !ev.is_pressed():
 		t.stop()
 	else:
@@ -39,7 +42,14 @@ func _on_pause():
 	ui.hide()
 	debug.hide()
 	paused = true
-		
+	
+	if envanim.has_animation('shift'):
+		if shift.curr != 'spi':
+			envanim.play('shift', -1, spd, (spd < 0))
+			shift.curr = 'spi'
+		elif shift.curr != 'phys':
+			envanim.play('shift', -1, -spd, (-spd < 0))
+			shift.curr = 'phys'
 
 func _on_unpause():
 	pmenu.hide()
@@ -48,6 +58,14 @@ func _on_unpause():
 	ui.show()
 	debug.show()
 	paused = false
+
+	if envanim.has_animation('shift'):
+		if shift.curr != 'phys':
+			envanim.play('shift', -1, -spd, (-spd < 0))
+			shift.curr = 'phys'
+		elif shift.curr != 'spi':
+			envanim.play('shift', -1, spd, (spd < 0))
+			shift.curr = 'spi'
 
 func _on_timer_timeout():
 	get_tree().quit()

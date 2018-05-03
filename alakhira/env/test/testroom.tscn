@@ -315,8 +315,6 @@ _sections_unfolded = [ "Collision" ]
 
 [node name="env" parent="." index="1" instance=ExtResource( 2 )]
 
-editor/display_folded = true
-
 [node name="OmniLight" type="OmniLight" parent="." index="2"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25.1, 26.205, -10.1316 )
@@ -343,6 +341,7 @@ _sections_unfolded = [ "Editor", "Light", "Omni", "Shadow" ]
 
 [node name="az" parent="." index="3" instance=ExtResource( 3 )]
 
+editor/display_folded = true
 _sections_unfolded = [ "Transform", "Visibility" ]
 run = 5.13
 
@@ -403,6 +402,24 @@ data = {
 "type": "blend2"
 }, {
 "filter": [  ],
+"from": "17-wrun-r",
+"id": "anim 2",
+"position": Vector2( 612, 489 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "07_run_jump_fall",
+"id": "anim 8",
+"position": Vector2( 459, 375 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "01_walk-cycle",
+"id": "anim 3",
+"position": Vector2( 448, 17 ),
+"type": "animation"
+}, {
+"filter": [  ],
 "from": "06_run_jump_rise",
 "id": "anim 7",
 "position": Vector2( 454, 262 ),
@@ -433,12 +450,6 @@ data = {
 "type": "animation"
 }, {
 "filter": [  ],
-"from": "01_walk-cycle",
-"id": "anim 3",
-"position": Vector2( 448, 17 ),
-"type": "animation"
-}, {
-"filter": [  ],
 "from": "16_wrun-f",
 "id": "anim 10",
 "position": Vector2( 481, 491 ),
@@ -454,18 +465,6 @@ data = {
 "from": "18-wrun-l",
 "id": "anim 11",
 "position": Vector2( 636, 649 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "17-wrun-r",
-"id": "anim 2",
-"position": Vector2( 612, 489 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "07_run_jump_fall",
-"id": "anim 8",
-"position": Vector2( 459, 375 ),
 "type": "animation"
 } ]
 }

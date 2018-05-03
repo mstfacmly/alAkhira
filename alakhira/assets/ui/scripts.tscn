@@ -2,12 +2,14 @@
 
 [ext_resource path="res://scripts/shift.gd" type="Script" id=1]
 
-[node name="scripts" type="Spatial"]
+[node name="scripts" type="Spatial" index="0"]
 
 transform = Transform( 0.99955, 0.030009, 0, -0.030009, 0.99955, 0, 0, 0, 1, 0, 0, 0 )
+_sections_unfolded = [ "Pause" ]
 
 [node name="shift" type="Spatial" parent="." index="0"]
 
 script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
 
 

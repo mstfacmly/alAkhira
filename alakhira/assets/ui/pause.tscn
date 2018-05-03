@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://scripts/pause_shift.gd" type="Script" id=1]
+[gd_scene format=2]
 
 [node name="pause" type="MarginContainer" index="0"]
 
@@ -18,16 +16,9 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-_sections_unfolded = [ "Size Flags" ]
+_sections_unfolded = [ "Pause", "Size Flags" ]
 
-[node name="timer" type="Timer" parent="." index="0"]
-
-process_mode = 1
-wait_time = 1.0
-one_shot = false
-autostart = false
-
-[node name="pause_menu" type="VBoxContainer" parent="." index="1"]
+[node name="pause_menu" type="VBoxContainer" parent="." index="0"]
 
 visible = false
 self_modulate = Color( 1, 1, 1, 0.25 )
@@ -92,13 +83,5 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Margin", "Rect" ]
-
-[node name="shift" type="Spatial" parent="pause_menu" index="2"]
-
-pause_mode = 2
-script = ExtResource( 1 )
-_sections_unfolded = [ "Pause" ]
-
-[connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 

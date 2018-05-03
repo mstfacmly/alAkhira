@@ -191,4 +191,13 @@ script = ExtResource( 4 )
 _sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect", "Size Flags", "Theme" ]
 state = "alive"
 
+[node name="timer" type="Timer" parent="." index="1"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
+
 
