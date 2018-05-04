@@ -1,13 +1,24 @@
 extends KinematicBody
 
-onready var health = get_node("ui/healthb")
-onready var chkpt = get_node("../chkpt")
+# Signals
+signal hlth_chng
+signal died
+
+# Health
+export var max_hlth = 100
+var hlth = max_hlth
+
+enum states {ALIVE, DEAD}
+var state = ALIVE
+
+onready var chkpt = $"../chkpt"
+onready var ui = $ui
+onready var shift = $scripts/shift
 
 # Environment
 var g = Vector3(0,-9.8,0)
 var up = -g.normalized()
 
-const CHAR_SCALE = Vector3(1,1,1)
 const DEADZONE = 0.1
 
 # Camera
@@ -59,6 +70,8 @@ export var attempts = 1
 onready var mesh = $body/skeleton 
 
 func _ready():
+	connect("hlth_chng", ui, "updt_hlth")
+	
 	if cam.has_method("set_enabled"):
 		cam.set_enabled(true)
 		
@@ -110,6 +123,7 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 func _physics_process(delta):
 	var cam_node = $cam/cam
 	js_input(delta)
+	hlth_drn(delta)
 
 	# Velocity
 	var lv = lin_vel
@@ -180,7 +194,7 @@ func _physics_process(delta):
 		
 		if hspeed > 0.01:# and is_on_floor():
 			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
-		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
+		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())
 	
 		mesh.set_transform(Transform(m3, mesh_xform.origin))
 	
@@ -255,7 +269,7 @@ func _physics_process(delta):
 	
 		if wrun == ['horz']:
 			facing_mesh = adjust_facing(facing_mesh, col_normal,delta,1.0 / (hspeed * 0.42),up)
-			var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())#.scaled(CHAR_SCALE)
+			var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())
 			mesh.set_transform(Transform(m3, mesh_xform.origin))
 			lv += modlv * 0.33
 			if can_wrun == true:
@@ -304,7 +318,6 @@ func _physics_process(delta):
 
 func player_fp(delta):
 	var animate = $animationTree
-	var shift = $scripts/shift
 
 	animate.set_active(true)
 
@@ -448,10 +461,34 @@ func ledge():
 		ledge_col = Vector3()
 		return ledge_col
 
-func dead():
-	if health == 0:
-		print('dead')
-	pass
+func hlth_drn(delta):
+	var div = 5
+	var rnd = delta * 5
+	var curr = shift.curr
+	
+	if hlth >= 0:
+		if curr == 'phys':
+			hlth -= delta / div
+		elif curr == 'spi':
+			hlth -= rand_range(-rnd,rnd * 1.001)
+		
+		if Input.is_action_pressed("cast") && Input.is_action_just_pressed("arm_l"):
+			hlth = hlth - 10
+	
+		emit_signal('hlth_chng', hlth)
+
+func dmg(hit):
+	if state == DEAD:
+		return
+	
+	hlth -= hit
+	
+	if hlth <= 0:
+		hlth = 0
+		state = DEAD
+		emit_signal('died')
+	
+		emit_signal('hlth_chng', hlth)
 
 func chkpt():
 	set_transform(chkpt.get_global_transform())
