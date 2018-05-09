@@ -1,12 +1,14 @@
-
 extends Spatial
 
-# NOTE: this scripts assumes that every _phys and _spir node has only children of the
+# NOTE: this scripts assumes that every _phys and _spi node has only children of the
 # same type or none and will also be switched
 
 var DIFFUSE = SpatialMaterial.DIFFUSE_LAMBERT
 var MIX = SpatialMaterial.BLEND_MODE_MIX
 var ADD = SpatialMaterial.BLEND_MODE_ADD
+
+enum states {ALIVE,DEAD}
+var state
 
 var phys = {
 	'materials': [],
@@ -20,7 +22,7 @@ var anim = []
 var players = []
 var curr = 'phys'
 var overlay = 'none'
-onready var root = get_node('/root/')
+onready var root = get_node('/root')
 #onready var env = $env
 
 var showing = false
@@ -30,8 +32,6 @@ var shifting = false
 var t
 var transition_time = 0.5
 
-var paus
-
 func _ready():
 
 #	var root = get_node('/root/')
@@ -40,7 +40,7 @@ func _ready():
 	unique_materials(spi)
 
 	#initialize on phys
-	spir_peek(spi, true)
+	peek(spi, true)
 	toggle(spi, phys)
 
 	pass
@@ -50,18 +50,18 @@ func _input(ev):
 	var attack = Input.is_action_just_pressed("arm_l")
 	var shift = cast && attack
 
-	if shift:
+	if shift && state != DEAD:
 #		shifting = true
 		if curr == 'phys':
 			toggle(phys, spi)
-			spir_peek(spi, false)
+			peek(spi, false)
 			curr = 'spi'
 			env_transition(1)
 #			env_spir()
 			shifting = true
 		elif curr == 'spi':
 			toggle(spi, phys)
-			spir_peek(spi, true)
+			peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
 #			env_phys()
@@ -104,7 +104,7 @@ func interpolate(show, hide, delta):
 		post_toggle(hide, show)
 
 
-func spir_peek(store, activate):
+func peek(store, activate):
 	if activate:
 		for mat in store['materials'] :
 			mat.set_blend_mode(ADD)
@@ -116,7 +116,7 @@ func spir_peek(store, activate):
 func toggle(a, b):
 	if b:
 		for obj in b.nodes:
-			obj.set_fixed_process(true)
+			obj.set_physics_process(true)
 			obj.show()
 	showing = b
 	hiding = a
@@ -126,7 +126,7 @@ func toggle(a, b):
 func post_toggle(a, b):
 	if a:
 		for obj in a.nodes:
-			obj.set_fixed_process(false)
+			obj.set_physics_process(false)
 			obj.hide()
 	showing = false
 	hiding = false
@@ -137,7 +137,6 @@ func env_transition(speed):
 			var animList = a.get_animation_list()
 			for b in animList:
 				a.play(b,  -1, speed, (speed < 0))
-			print("shift found")
 		else:
 			a.play('shift', -1, speed, (speed < 0))
 
@@ -167,7 +166,7 @@ func get_next_material(root):
 	var res = []
 	var surfaces
 	var mesh
-	var mat
+	
 	if root.is_class('MeshInstance'):
 		mesh = root.get_mesh()
 		surfaces = mesh.get_surface_count()
@@ -181,14 +180,13 @@ func get_next_material(root):
 
 func get_materials(root):
 	var res = []
-	var surfaces
-	var mesh
-	var mat
+	var nm = int(str(root))
+	
 	if root.is_class('MeshInstance'):
-		mat = root.get_material_override()
+		var mat = root.get_surface_material(nm)
 		if mat == null:
-			mesh = root.get_mesh()
-			surfaces = mesh.get_surface_count()
+			var mesh = root.get_mesh()
+			var surfaces = mesh.get_surface_count()
 			for i in range(surfaces):
 				res.push_back(mesh.surface_get_material(i))
 		else:
@@ -203,9 +201,10 @@ func unique_materials(store):
 	var record = []
 	var new = []
 	var resource
+	
 	for i in range(store['materials'].size()):
 		resource = store['materials'][i]
-		if typeof(resource) == typeof(Material) and not resource.get_rid() in record:
+		if typeof(resource) == TYPE_AABB and not resource.get_rid() in record:
 			new.push_back(resource)
 			record.push_back(resource.get_rid())
 	store['materials'] = new

@@ -13,7 +13,7 @@ var state = ALIVE
 
 onready var chkpt = $"../chkpt"
 onready var ui = $ui
-onready var shift = $scripts/shift
+onready var shifter = $scripts/shift
 
 # Environment
 var g = Vector3(0,-9.8,0)
@@ -27,12 +27,19 @@ var focus_view_sensv = 0.1
 var curfov
 onready var cam = $cam
 
+# Input
+var mv_f
+var mv_b
+var mv_l
+var mv_r
+var jmp_att
+
 #Movement
 var ppos
 var lin_vel = Vector3()
 const ACCEL = 7.77
 const DEACCEL = ACCEL * 2.13
-export var run = 6.94
+export var run = 5.13
 var walk = run / 1.75
 var sprint = run * 2.12 #7.77
 #var mv_dir = Vector3()
@@ -77,8 +84,17 @@ func _ready():
 		
 	chkpt()
 
-func _input(event):	
+func input(event):	
 	Input.add_joy_mapping("030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,", true)
+	
+	mv_f = Input.is_action_pressed("mv_f")
+	mv_b = Input.is_action_pressed("mv_b")
+	mv_l = Input.is_action_pressed("mv_l")
+	mv_r = Input.is_action_pressed("mv_r")
+	
+	jmp_att = Input.is_action_just_pressed("feet")
+	
+	js_input(event)
 
 func js_input(delta):
 	var x = abs(Input.get_joy_axis(0,0))
@@ -94,7 +110,6 @@ func js_input(delta):
 			mv_spd = walk
 	else :
 		pass
-#	print(axis_value)
 
 func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         var n = p_target # Normal
@@ -122,8 +137,13 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 
 func _physics_process(delta):
 	var cam_node = $cam/cam
-	js_input(delta)
-	hlth_drn(delta)
+#	js_input(delta)
+
+	if state != DEAD:
+		input(true)
+		hlth_drn(delta)
+		dmg(delta)
+		print(state)
 
 	# Velocity
 	var lv = lin_vel
@@ -142,13 +162,6 @@ func _physics_process(delta):
 
 	var dir = Vector3()
 	var cam_xform = cam_node.get_global_transform()
-
-	# Input
-	var mv_f = Input.is_action_pressed("mv_f")
-	var mv_b = Input.is_action_pressed("mv_b")
-	var mv_l = Input.is_action_pressed("mv_l")
-	var mv_r = Input.is_action_pressed("mv_r")
-	var jmp_att = Input.is_action_just_pressed("feet")
 
 	if mv_f:
 		dir += -cam_xform.basis[2]
@@ -245,11 +258,13 @@ func _physics_process(delta):
 			
 		if wrun == ['vert']:
 			if col_result == ['front']:
-				if !jmp_att :
-					lv = Vector3(0,0.0000001,0)
-				elif jmp_att && attempts >= 1:
-					lv += jmp_spd * mv_spd * 1.33
+				#if !jmp_att :
+				#	lv = Vector3(0,0.0000001,0)
+				if jmp_att && attempts >= 1:
+					lv += jmp_spd * mv_spd * 0.72
 					attempts -= 1
+				else:
+					lv = Vector3(0,0.0000001,0)
 				if Input.is_action_just_pressed('action'):
 					mesh.rotate_y(179)
 	
@@ -403,9 +418,9 @@ func player_fp(delta):
 	var physfov
 	var spifov
 
-	if shift.curr == 'spi' && shift.shifting :
+	if shifter.curr == 'spi' && shifter.shifting :
 		cam.cam_fov += 13
-	elif shift.curr == 'phys' && shift.shifting :
+	elif shifter.curr == 'phys' && shifter.shifting :
 		cam.cam_fov -= 13
 
 func parkour():
@@ -464,7 +479,7 @@ func ledge():
 func hlth_drn(delta):
 	var div = 5
 	var rnd = delta * 5
-	var curr = shift.curr
+	var curr = shifter.curr
 	
 	if hlth >= 0:
 		if curr == 'phys':
@@ -486,6 +501,7 @@ func dmg(hit):
 	if hlth <= 0:
 		hlth = 0
 		state = DEAD
+		shifter.state = DEAD
 		emit_signal('died')
 	
 		emit_signal('hlth_chng', hlth)
