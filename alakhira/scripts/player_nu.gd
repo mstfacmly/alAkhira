@@ -13,7 +13,7 @@ var state = ALIVE
 
 onready var chkpt = $"../chkpt"
 onready var ui = $ui
-onready var shifter = $scripts/shift
+onready var shifter = shift
 
 # Environment
 var g = Vector3(0,-9.8,0)
@@ -143,7 +143,6 @@ func _physics_process(delta):
 		input(true)
 		hlth_drn(delta)
 		dmg(delta)
-		print(state)
 
 	# Velocity
 	var lv = lin_vel

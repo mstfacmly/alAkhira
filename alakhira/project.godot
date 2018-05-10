@@ -16,9 +16,15 @@ boot_splash/image="res://StudiosLUNE.png"
 config/icon="res://icon.png"
 config/auto_accept_quit=false
 
+[autoload]
+
+shift="*res://scripts/shift.gd"
+MainMenu="*res://assets/ui/MainMenu.tscn"
+
 [display]
 
 window/size/resizable=false
+window/vsync/use_vsync=false
 
 [gdnative]
 

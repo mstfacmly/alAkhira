@@ -5,7 +5,7 @@ signal quit
 
 func menu():
 	# Hide Menu Items
-	$org/right/menuList/dbg.hide()
+	$org/right/menuList/dbg.show()
 	$org/right/menuList/contd.hide()
 	$org/right/menuList/new_game.show()
 	$org/right/menuList/res.hide()
@@ -44,6 +44,9 @@ func ui_button_pressed(button_name):
 	
 	if button_name == 'options':
 		options_menu()
+		
+	if button_name == 'debug':
+		pass
 	
 	if button_name == 'quit':
 		get_tree().quit()
@@ -75,7 +78,7 @@ func options_button_pressed(button_name):
 
 	
 	if button_name == 'vsync':
-		if OS.is_vsync_enabled() != true:
+		if OS.is_vsync_enabled() == true:
 			OS.set_use_vsync(true)
 		else:
 			OS.set_use_vsync(false)

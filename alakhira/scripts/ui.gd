@@ -7,7 +7,7 @@ onready var tween = $tween
 onready var t = $timer
 onready var debug = $org/left
 #onready var pmenu = $pause
-onready var shift = az.get_node("scripts/shift")
+onready var shifter = shift
 onready var envanim = get_node("/root/scene/env/AnimationPlayer")
 
 # variables
@@ -48,13 +48,13 @@ func _on_pause():
 	$pause/org/right/menuList/res.show()
 	$pause/org/right/menuList/new_game.hide()
 
-	if envanim.has_animation('shift'):
-		if shift.curr != 'spi':
-			envanim.play('shift', -1, spd, (spd < 0))
-			shift.curr = 'spi'
-		elif shift.curr != 'phys':
-			envanim.play('shift', -1, -spd, (-spd < 0))
-			shift.curr = 'phys'
+	if envanim.has_animation('shifter'):
+		if shifter.curr != 'spi':
+			envanim.play('shifter', -1, spd, (spd < 0))
+			shifter.curr = 'spi'
+		elif shifter.curr != 'phys':
+			envanim.play('shifter', -1, -spd, (-spd < 0))
+			shifter.curr = 'phys'
 
 func _on_unpause():
 	$pause.hide()
@@ -66,13 +66,13 @@ func _on_unpause():
 	Input.set_mouse_mode(2)
 	$pause/org/right/menuList/res.show()
 
-	if envanim.has_animation('shift'):
-		if shift.curr != 'phys':
-			envanim.play('shift', -1, -spd, (-spd < 0))
-			shift.curr = 'phys'
-		elif shift.curr != 'spi':
-			envanim.play('shift', -1, spd, (spd < 0))
-			shift.curr = 'spi'
+	if envanim.has_animation('shifter'):
+		if shifter.curr != 'phys':
+			envanim.play('shifter', -1, -spd, (-spd < 0))
+			shifter.curr = 'phys'
+		elif shifter.curr != 'spi':
+			envanim.play('shifter', -1, spd, (spd < 0))
+			shifter.curr = 'spi'
 
 func _on_timer_timeout():
 	get_tree().quit()
@@ -83,6 +83,9 @@ func _ready():
 	updt_hlth(max_hlth)
 	
 	$pause.hide()
+	$org/left/debug_info.hide()
+
+	$pause/org/right/menuList/dbg.connect("pressed", self, "on_btn_press", ['dbg'])
 	
 	set_process_input(true)
 	
@@ -102,3 +105,14 @@ func _process(delta):
 func _on_btn_press(btn):
 	if btn == 'res':
 		_on_unpause()
+		
+	if btn == 'dbg':
+		show_debug()
+
+func show_debug():
+	var dbg_txt = $org/left/debug_info
+
+	if dbg_txt.hide() != false:
+		dbg_txt.show()
+	else:
+		dbg_txt.hide()
