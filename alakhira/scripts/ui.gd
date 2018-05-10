@@ -6,7 +6,7 @@ onready var bar = $org/right/hlth
 onready var tween = $tween
 onready var t = $timer
 onready var debug = $org/left
-onready var pmenu = $org/right/pause/pause_menu
+#onready var pmenu = $pause
 onready var shift = az.get_node("scripts/shift")
 onready var envanim = get_node("/root/scene/env/AnimationPlayer")
 
@@ -38,12 +38,15 @@ func _input(ev):
 		timer
 
 func _on_pause():
-	pmenu.show()
+	$pause.show()
 	get_tree().set_pause(true)
 	az.hide()
 	bar.hide()
 	debug.hide()
 	paused = true
+	Input.set_mouse_mode(0)
+	$pause/org/right/menuList/res.show()
+	$pause/org/right/menuList/new_game.hide()
 
 	if envanim.has_animation('shift'):
 		if shift.curr != 'spi':
@@ -54,12 +57,14 @@ func _on_pause():
 			shift.curr = 'phys'
 
 func _on_unpause():
-	pmenu.hide()
+	$pause.hide()
 	get_tree().set_pause(false)
 	az.show()
 	bar.show()
 	debug.show()
 	paused = false
+	Input.set_mouse_mode(2)
+	$pause/org/right/menuList/res.show()
 
 	if envanim.has_animation('shift'):
 		if shift.curr != 'phys':
@@ -77,7 +82,11 @@ func _ready():
 	bar.max_value = max_hlth
 	updt_hlth(max_hlth)
 	
+	$pause.hide()
+	
 	set_process_input(true)
+	
+	$pause/org/right/menuList/res.connect("pressed", self, "_on_btn_press", ['res'])
 	
 func _on_hlth_chng(hlth):
 	updt_hlth(hlth)
@@ -89,3 +98,7 @@ func updt_hlth(new_val):
 		
 func _process(delta):
 	bar.value = anim_hlth
+
+func _on_btn_press(btn):
+	if btn == 'res':
+		_on_unpause()
