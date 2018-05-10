@@ -30,8 +30,7 @@ func _input(ev):
 		_on_unpause()
 
 	if ev.is_action_pressed("pause"):
-		if paused == true:
-			t.start()
+		t.start()
 	elif ev.is_action("pause") && !ev.is_pressed():
 		t.stop()
 	else:
@@ -85,11 +84,10 @@ func _ready():
 	$pause.hide()
 	$org/left/debug_info.hide()
 
-	$pause/org/right/menuList/dbg.connect("pressed", self, "on_btn_press", ['dbg'])
+	$pause/org/right/menuList/dbg.connect("pressed", self, "_on_btn_press", ['dbg'])
+	$pause/org/right/menuList/res.connect("pressed", self, "_on_btn_press", ['res'])
 	
 	set_process_input(true)
-	
-	$pause/org/right/menuList/res.connect("pressed", self, "_on_btn_press", ['res'])
 	
 func _on_hlth_chng(hlth):
 	updt_hlth(hlth)
@@ -107,12 +105,13 @@ func _on_btn_press(btn):
 		_on_unpause()
 		
 	if btn == 'dbg':
-		show_debug()
+		_show_debug()
 
-func show_debug():
+func _show_debug():
 	var dbg_txt = $org/left/debug_info
+	print(dbg_txt.is_visible())
 
-	if dbg_txt.hide() != false:
-		dbg_txt.show()
+	if dbg_txt.is_visible() != true:	
+		dbg_txt.set_visible(true)
 	else:
-		dbg_txt.hide()
+		dbg_txt.set_visible(false)

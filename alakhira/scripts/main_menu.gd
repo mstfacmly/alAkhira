@@ -15,9 +15,13 @@ func menu():
 	$org/center/container/optionsMenu.hide()
 	$org/center/container/optionsMenu/lang.disabled = true
 	$org/center/container/optionsMenu/ctrls.disabled = true
+	$org/center/container/optionsMenu/res.disabled = true
+	$org/center/container/optionsMenu/aa.disabled = true
 	
 	if OS.is_window_fullscreen() != false:
 		$org/center/container/optionsMenu/fullscreen.set_pressed(true)
+	if OS.is_vsync_enabled() != false:
+		$org/center/container/optionsMenu/vsync.set_pressed(true)
 	
 	# Main Menu
 	$org/right/menuList/new_game.connect("pressed", self, "ui_button_pressed", ['new_game'])
