@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scripts/ui.gd" type="Script" id=1]
 [ext_resource path="res://scripts/debug_text.gd" type="Script" id=2]
-[ext_resource path="res://assets/ui/pause.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/ui/MainMenu.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -93,6 +93,7 @@ playback/speed = 1.0
 
 [node name="org" type="HBoxContainer" parent="." index="1"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -100,7 +101,7 @@ anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 579.0
+margin_bottom = 584.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -112,13 +113,12 @@ _sections_unfolded = [ "Margin" ]
 
 [node name="left" type="VBoxContainer" parent="org" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 310.0
-margin_bottom = 558.0
+margin_bottom = 563.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -135,7 +135,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 310.0
-margin_bottom = 277.0
+margin_bottom = 279.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -146,7 +146,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 script = ExtResource( 2 )
-_sections_unfolded = [ "Size Flags" ]
+_sections_unfolded = [ "Grow Direction", "Size Flags" ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="org/left" index="1"]
 
@@ -154,9 +154,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 281.0
+margin_top = 283.0
 margin_right = 310.0
-margin_bottom = 558.0
+margin_bottom = 563.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -174,7 +174,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 314.0
 margin_right = 624.0
-margin_bottom = 558.0
+margin_bottom = 563.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -192,7 +192,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 628.0
 margin_right = 940.0
-margin_bottom = 558.0
+margin_bottom = 563.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -202,24 +202,14 @@ size_flags_vertical = 3
 alignment = 2
 _sections_unfolded = [ "Grow Direction", "Rect", "Size Flags" ]
 
-[node name="pause" parent="org/right" index="0" instance=ExtResource( 3 )]
-
-editor/display_folded = true
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 0.0
-margin_right = 312.0
-margin_bottom = 273.0
-
-[node name="separator" type="VBoxContainer" parent="org/right" index="1"]
+[node name="separator" type="VBoxContainer" parent="org/right" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 277.0
 margin_right = 312.0
-margin_bottom = 550.0
+margin_bottom = 556.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -229,15 +219,15 @@ size_flags_vertical = 3
 alignment = 0
 _sections_unfolded = [ "Size Flags" ]
 
-[node name="hlth" type="ProgressBar" parent="org/right" index="2"]
+[node name="hlth" type="ProgressBar" parent="org/right" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 554.0
+margin_top = 560.0
 margin_right = 312.0
-margin_bottom = 557.5
+margin_bottom = 563.5
 rect_min_size = Vector2( 0, 3.5 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -266,6 +256,34 @@ wait_time = 1.0
 one_shot = false
 autostart = false
 
+[node name="pause" parent="." index="3" instance=ExtResource( 3 )]
+
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 42.0
+margin_top = 21.0
+margin_right = 982.0
+margin_bottom = 584.0
+
+[node name="org" parent="pause" index="0"]
+
+margin_right = 820.0
+margin_bottom = 483.0
+
+[node name="center" parent="pause/org" index="0"]
+
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 606.0
+margin_bottom = 403.0
+
+[node name="right" parent="pause/org" index="1"]
+
+margin_left = 610.0
+margin_right = 700.0
+margin_bottom = 403.0
+
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 
+[editable path="pause"]
