@@ -6,6 +6,7 @@
 
 [node name="mainMenu" type="MarginContainer" index="0"]
 
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -42,6 +43,11 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="center" parent="org" index="0" instance=ExtResource( 2 )]
+
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 690.0
+margin_bottom = 440.0
 
 [node name="right" parent="org" index="1" instance=ExtResource( 3 )]
 

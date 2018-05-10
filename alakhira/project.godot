@@ -24,7 +24,6 @@ MainMenu="*res://assets/ui/MainMenu.tscn"
 [display]
 
 window/size/resizable=false
-window/vsync/use_vsync=false
 
 [gdnative]
 

@@ -113,6 +113,7 @@ _sections_unfolded = [ "Margin" ]
 
 [node name="left" type="VBoxContainer" parent="org" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -259,6 +260,7 @@ autostart = false
 
 [node name="pause" parent="." index="3" instance=ExtResource( 3 )]
 
+visible = true
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 42.0
@@ -273,8 +275,6 @@ margin_bottom = 483.0
 
 [node name="center" parent="pause/org" index="0"]
 
-margin_left = 0.0
-margin_top = 0.0
 margin_right = 606.0
 margin_bottom = 403.0
 
@@ -284,7 +284,47 @@ margin_left = 610.0
 margin_right = 700.0
 margin_bottom = 403.0
 
+[node name="menuList" parent="pause/org/right" index="1"]
+
+margin_bottom = 390.0
+
+[node name="dbg" parent="pause/org/right/menuList" index="0"]
+
+margin_top = 89.0
+margin_bottom = 115.0
+
+[node name="contd" parent="pause/org/right/menuList" index="1"]
+
+margin_top = 126.0
+margin_bottom = 152.0
+
+[node name="new_game" parent="pause/org/right/menuList" index="2"]
+
+margin_top = 163.0
+margin_bottom = 189.0
+
+[node name="res" parent="pause/org/right/menuList" index="3"]
+
+margin_top = 200.0
+margin_bottom = 226.0
+
+[node name="options" parent="pause/org/right/menuList" index="4"]
+
+margin_top = 237.0
+margin_bottom = 263.0
+
+[node name="quit" parent="pause/org/right/menuList" index="5"]
+
+margin_top = 274.0
+margin_bottom = 300.0
+
+[node name="version" parent="pause/org/right" index="2"]
+
+margin_top = 390.0
+margin_bottom = 403.0
+
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 
 [editable path="pause"]
+[editable path="pause/org/right"]
