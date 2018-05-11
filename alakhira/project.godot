@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="alAkhira"
-run/main_scene="res://env/test/testroom.tscn"
+run/main_scene="res://assets/ui/MainMenu.tscn"
 boot_splash/image="res://StudiosLUNE.png"
 config/icon="res://icon.png"
 config/auto_accept_quit=false
@@ -19,11 +19,12 @@ config/auto_accept_quit=false
 [autoload]
 
 shift="*res://scripts/shift.gd"
-MainMenu="*res://assets/ui/MainMenu.tscn"
+global="*res://scripts/global.gd"
 
 [display]
 
 window/size/resizable=false
+window/vsync/use_vsync=false
 
 [gdnative]
 

@@ -22,7 +22,7 @@ custom_constants/margin_left = 120
 custom_constants/margin_bottom = 80
 script = ExtResource( 1 )
 _sections_unfolded = [ "custom_constants" ]
-test_area = null
+test = "res://env/test/testroom.tscn"
 
 [node name="org" type="HBoxContainer" parent="." index="0"]
 
