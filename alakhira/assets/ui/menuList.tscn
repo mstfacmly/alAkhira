@@ -146,7 +146,7 @@ flat = true
 align = 2
 _sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
-[node name="res" type="Button" parent="menuList" index="3"]
+[node name="rsm" type="Button" parent="menuList" index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
