@@ -3,12 +3,14 @@ extends MarginContainer
 signal start
 signal quit
 
+export (String, FILE) var test = "res://env/test/testroom.tscn"
+
 func menu():
 	# Hide Menu Items
-	$org/right/menuList/dbg.show()
+	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
 	$org/right/menuList/new_game.show()
-	$org/right/menuList/res.hide()
+	$org/right/menuList/rsm.hide()
 	$org/right/menuList/options.show()
 	$org/right/menuList/quit.show()
 	
@@ -44,7 +46,8 @@ func end():
 	
 func ui_button_pressed(button_name):
 	if button_name == 'new_game':
-		print(button_name)
+		self.hide()
+		get_node("/root/global").load_scene(test)
 	
 	if button_name == 'options':
 		options_menu()

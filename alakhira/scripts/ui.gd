@@ -44,8 +44,9 @@ func _on_pause():
 	debug.hide()
 	paused = true
 	Input.set_mouse_mode(0)
-	$pause/org/right/menuList/res.show()
+	$pause/org/right/menuList/rsm.show()
 	$pause/org/right/menuList/new_game.hide()
+	$pause/org/right/menuList/dbg.show()
 
 	if envanim.has_animation('shifter'):
 		if shifter.curr != 'spi':
@@ -63,7 +64,8 @@ func _on_unpause():
 	debug.show()
 	paused = false
 	Input.set_mouse_mode(2)
-	$pause/org/right/menuList/res.show()
+	$pause/org/right/menuList/rsm.show()
+	$pause/org/right/menuList/dbg.hide()
 
 	if envanim.has_animation('shifter'):
 		if shifter.curr != 'phys':
@@ -85,7 +87,7 @@ func _ready():
 	$org/left/debug_info.hide()
 
 	$pause/org/right/menuList/dbg.connect("pressed", self, "_on_btn_press", ['dbg'])
-	$pause/org/right/menuList/res.connect("pressed", self, "_on_btn_press", ['res'])
+	$pause/org/right/menuList/rsm.connect("pressed", self, "_on_btn_press", ['rsm'])
 	
 	set_process_input(true)
 	
@@ -101,7 +103,7 @@ func _process(delta):
 	bar.value = anim_hlth
 
 func _on_btn_press(btn):
-	if btn == 'res':
+	if btn == 'rsm':
 		_on_unpause()
 		
 	if btn == 'dbg':

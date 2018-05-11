@@ -1,4 +1,4 @@
-extends Spatial
+extends Node
 
 # NOTE: this scripts assumes that every _phys and _spi node has only children of the
 # same type or none and will also be switched
@@ -22,7 +22,7 @@ var anim = []
 var players = []
 var curr = 'phys'
 var overlay = 'none'
-onready var root = get_node('/root')
+onready var root = $'/root'
 #onready var env = $env
 
 var showing = false
@@ -33,9 +33,8 @@ var t
 var transition_time = 0.5
 
 func _ready():
-
-#	var root = get_node('/root/')
 	traverse(root.get_children())
+	print(root)
 	unique_materials(phys)
 	unique_materials(spi)
 
