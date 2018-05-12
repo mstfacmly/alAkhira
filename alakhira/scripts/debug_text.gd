@@ -13,6 +13,7 @@ func _physics_process(delta):
 		update = 0.0
 		var txt
 		txt = str("OS: ", OS.get_name())
+		txt += str("\nRAM: ", OS.get_dynamic_memory_usage() / 1024, "Mbs")
 		txt += str("\nFPS: ", int(Engine.get_frames_per_second()), "/s")
 		txt += str("\nDrawn Vertices: ", Performance.get_monitor(Performance.RENDER_VERTICES_IN_FRAME))
 		txt += str("\nDrawn Objects: ", Performance.get_monitor(Performance.RENDER_OBJECTS_IN_FRAME))

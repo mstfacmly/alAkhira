@@ -48,12 +48,12 @@ func _on_pause():
 	$pause/org/right/menuList/new_game.hide()
 	$pause/org/right/menuList/dbg.show()
 
-	if envanim.has_animation('shifter'):
+	if envanim.has_animation('shift'):
 		if shifter.curr != 'spi':
-			envanim.play('shifter', -1, spd, (spd < 0))
+			envanim.play('shift', -1, spd, (spd < 0))
 			shifter.curr = 'spi'
 		elif shifter.curr != 'phys':
-			envanim.play('shifter', -1, -spd, (-spd < 0))
+			envanim.play('shift', -1, -spd, (-spd < 0))
 			shifter.curr = 'phys'
 
 func _on_unpause():
@@ -67,12 +67,12 @@ func _on_unpause():
 	$pause/org/right/menuList/rsm.show()
 	$pause/org/right/menuList/dbg.hide()
 
-	if envanim.has_animation('shifter'):
+	if envanim.has_animation('shift'):
 		if shifter.curr != 'phys':
-			envanim.play('shifter', -1, -spd, (-spd < 0))
+			envanim.play('shift', -1, -spd, (-spd < 0))
 			shifter.curr = 'phys'
 		elif shifter.curr != 'spi':
-			envanim.play('shifter', -1, spd, (spd < 0))
+			envanim.play('shift', -1, spd, (spd < 0))
 			shifter.curr = 'spi'
 
 func _on_timer_timeout():
@@ -88,6 +88,8 @@ func _ready():
 
 	$pause/org/right/menuList/dbg.connect("pressed", self, "_on_btn_press", ['dbg'])
 	$pause/org/right/menuList/rsm.connect("pressed", self, "_on_btn_press", ['rsm'])
+	az.connect("died", self, "_over")
+	$pause/org/center/container/over/lune_site.connect("pressed", self, "_on_btn_press", ['site'])
 	
 	set_process_input(true)
 	
@@ -108,6 +110,10 @@ func _on_btn_press(btn):
 		
 	if btn == 'dbg':
 		_show_debug()
+		
+	if btn == 'site':
+		OS.shell_open('https://studioslune.com/')
+		get_tree().quit()
 
 func _show_debug():
 	var dbg_txt = $org/left/debug_info
@@ -117,3 +123,11 @@ func _show_debug():
 		dbg_txt.set_visible(true)
 	else:
 		dbg_txt.set_visible(false)
+		
+func _over():
+	$pause.show()
+	$pause/org/right.hide()
+	$pause/org/center/container/over/thanks.show()
+	$pause/org/center/container/over/lune_site.show()
+	$pause/org/center/container/over/quit.show()
+	Input.set_mouse_mode(0)

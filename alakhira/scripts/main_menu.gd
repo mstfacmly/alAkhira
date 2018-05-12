@@ -3,18 +3,22 @@ extends MarginContainer
 signal start
 signal quit
 
-export (String, FILE) var test = "res://env/test/testroom.tscn"
+export (String, FILE) var test = 'res://env/test/testroom.tscn'
 
 func menu():
-	# Hide Menu Items
+	# Show/Hide Menu Items
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
 	$org/right/menuList/new_game.show()
 	$org/right/menuList/rsm.hide()
 	$org/right/menuList/options.show()
 	$org/right/menuList/quit.show()
+	$org/center/container/over/thanks.hide()
+	$org/center/container/over/lune_site.show()
 	
 	$org/center/container/optionsMenu.hide()
+	$org/center/container/over/quit.hide()
+	
 	$org/center/container/optionsMenu/lang.disabled = true
 	$org/center/container/optionsMenu/ctrls.disabled = true
 	$org/center/container/optionsMenu/res.disabled = true
@@ -35,6 +39,9 @@ func menu():
 	$org/center/container/optionsMenu/vsync.connect("pressed", self, "options_button_pressed", ['vsync'])
 	$org/center/container/optionsMenu/fullscreen.connect("pressed", self, "options_button_pressed", ['fullscreen'])
 	$org/center/container/optionsMenu/back.connect("pressed", self, "options_button_pressed", ['back'])
+	$org/center/container/over/quit.connect("pressed", self, "ui_button_pressed", ['quit'])
+	
+	$org/center/container/over/lune_site.connect("pressed", self, "ui_button_pressed", ['site'])
 
 func show_msg(txt):
 	$Label.text = txt
@@ -50,6 +57,7 @@ func ui_button_pressed(button_name):
 		get_node("/root/global").load_scene(test)
 	
 	if button_name == 'options':
+		$org/center/container/over.hide()
 		options_menu()
 		
 	if button_name == 'debug':
@@ -59,6 +67,10 @@ func ui_button_pressed(button_name):
 		get_tree().quit()
 	pass
 	
+	if button_name == 'site':
+		print(button_name)
+		OS.shell_open('http://studioslune.com/')
+	
 func options_menu():
 	var menu = $org/center/container/optionsMenu
 
@@ -66,7 +78,7 @@ func options_menu():
 		menu.set_visible(true)
 	else:
 		menu.set_visible(false)
-		
+	
 	var type = $org/right/menuList.get_children()
 	for i in type:
 		if i.get_class() == 'Button':
@@ -74,15 +86,13 @@ func options_menu():
 				i.disabled = true
 			else:
 				i.disabled = false
-				
+
 func options_button_pressed(button_name):
 	if button_name == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
 			OS.set_window_fullscreen(true)
 		else:
 			OS.set_window_fullscreen(false)
-
-
 	
 	if button_name == 'vsync':
 		if OS.is_vsync_enabled() == true:
@@ -92,6 +102,7 @@ func options_button_pressed(button_name):
 		print(OS.is_vsync_enabled())
 	
 	if button_name == 'back':
+		$org/center/container/over.show()
 		options_menu()
 
 func _ready():
