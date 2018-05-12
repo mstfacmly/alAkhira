@@ -130,4 +130,6 @@ func _over():
 	$pause/org/center/container/over/thanks.show()
 	$pause/org/center/container/over/lune_site.show()
 	$pause/org/center/container/over/quit.show()
+	az.hide()
+	az.get_node('cam').set_enabled(false)
 	Input.set_mouse_mode(0)
