@@ -93,7 +93,6 @@ playback/speed = 1.0
 
 [node name="org" type="HBoxContainer" parent="." index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -101,7 +100,7 @@ anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 584.0
+margin_bottom = 658.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -119,7 +118,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 310.0
-margin_bottom = 563.0
+margin_bottom = 637.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -136,7 +135,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 310.0
-margin_bottom = 279.0
+margin_bottom = 316.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -155,9 +154,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 283.0
+margin_top = 320.0
 margin_right = 310.0
-margin_bottom = 563.0
+margin_bottom = 637.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -175,7 +174,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 314.0
 margin_right = 624.0
-margin_bottom = 563.0
+margin_bottom = 637.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -194,7 +193,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 628.0
 margin_right = 940.0
-margin_bottom = 563.0
+margin_bottom = 637.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -211,7 +210,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 312.0
-margin_bottom = 556.0
+margin_bottom = 630.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -227,9 +226,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 560.0
+margin_top = 634.0
 margin_right = 312.0
-margin_bottom = 563.5
+margin_bottom = 637.5
 rect_min_size = Vector2( 0, 3.5 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -260,68 +259,69 @@ autostart = false
 
 [node name="pause" parent="." index="3" instance=ExtResource( 3 )]
 
-visible = true
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 584.0
+margin_bottom = 658.0
 
 [node name="org" parent="pause" index="0"]
 
 margin_right = 820.0
-margin_bottom = 483.0
 
 [node name="center" parent="pause/org" index="0"]
 
 margin_right = 606.0
-margin_bottom = 403.0
 
 [node name="right" parent="pause/org" index="1"]
 
 margin_left = 610.0
 margin_right = 700.0
-margin_bottom = 403.0
 
 [node name="menuList" parent="pause/org/right" index="1"]
 
-margin_bottom = 390.0
+margin_bottom = 464.0
 
 [node name="dbg" parent="pause/org/right/menuList" index="0"]
 
-margin_top = 89.0
-margin_bottom = 115.0
+margin_top = 108.0
+margin_bottom = 134.0
 
 [node name="contd" parent="pause/org/right/menuList" index="1"]
 
-margin_top = 126.0
-margin_bottom = 152.0
+margin_top = 145.0
+margin_bottom = 171.0
 
-[node name="new_game" parent="pause/org/right/menuList" index="2"]
+[node name="rld" parent="pause/org/right/menuList" index="2"]
 
-margin_top = 163.0
-margin_bottom = 189.0
+margin_top = 182.0
+margin_bottom = 208.0
 
-[node name="res" parent="pause/org/right/menuList" index="3"]
+[node name="new_game" parent="pause/org/right/menuList" index="3"]
 
-margin_top = 200.0
-margin_bottom = 226.0
+margin_top = 219.0
+margin_bottom = 245.0
 
-[node name="options" parent="pause/org/right/menuList" index="4"]
+[node name="rsm" parent="pause/org/right/menuList" index="4"]
 
-margin_top = 237.0
-margin_bottom = 263.0
+margin_top = 256.0
+margin_bottom = 282.0
 
-[node name="quit" parent="pause/org/right/menuList" index="5"]
+[node name="options" parent="pause/org/right/menuList" index="5"]
 
-margin_top = 274.0
-margin_bottom = 300.0
+margin_top = 293.0
+margin_bottom = 319.0
+
+[node name="quit" parent="pause/org/right/menuList" index="6"]
+
+margin_top = 330.0
+margin_bottom = 356.0
 
 [node name="version" parent="pause/org/right" index="2"]
 
-margin_top = 390.0
-margin_bottom = 403.0
+margin_top = 464.0
+margin_bottom = 477.0
 
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
