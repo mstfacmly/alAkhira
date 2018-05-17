@@ -53,14 +53,14 @@ func _input(ev):
 #		shifting = true
 		if curr == 'phys':
 			toggle(phys, spi)
-			peek(spi, false)
+#			peek(spi, false)
 			curr = 'spi'
 			env_transition(1)
 #			env_spir()
 			shifting = true
 		elif curr == 'spi':
 			toggle(spi, phys)
-			peek(spi, true)
+#			peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
 #			env_phys()

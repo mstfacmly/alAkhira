@@ -9,6 +9,7 @@ func menu():
 	# Show/Hide Menu Items
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
+	$org/right/menuList/rld.hide()
 	$org/right/menuList/new_game.show()
 	$org/right/menuList/rsm.hide()
 	$org/right/menuList/options.show()
@@ -33,6 +34,7 @@ func menu():
 	$org/right/menuList/new_game.connect("pressed", self, "ui_button_pressed", ['new_game'])
 	$org/right/menuList/options.connect("pressed", self, "ui_button_pressed", ['options'])
 	$org/right/menuList/quit.connect("pressed", self, "ui_button_pressed", ['quit'])
+	$org/right/menuList/rld.connect("pressed", self, "ui_button_pressed", ['rld'])
 
 	# Options Menu
 	$org/center/container/optionsMenu/ctrls.connect("pressed", self, "options_button_pressed", ['ctrls'])
@@ -51,24 +53,27 @@ func end():
 	show_msg("Thank you")
 	pass
 	
-func ui_button_pressed(button_name):
-	if button_name == 'new_game':
+func ui_button_pressed(btn):
+	if btn == 'new_game':
 		self.hide()
 		get_node("/root/global").load_scene(test)
+		
+	if btn == 'rld':
+		get_node("/root/global").load_scene(test)
 	
-	if button_name == 'options':
+	if btn == 'options':
 		$org/center/container/over.hide()
 		options_menu()
 		
-	if button_name == 'debug':
+	if btn == 'debug':
 		pass
 	
-	if button_name == 'quit':
+	if btn == 'quit':
 		get_tree().quit()
 	pass
 	
-	if button_name == 'site':
-		print(button_name)
+	if btn == 'site':
+		print(btn)
 		OS.shell_open('http://studioslune.com/')
 	
 func options_menu():
@@ -87,24 +92,27 @@ func options_menu():
 			else:
 				i.disabled = false
 
-func options_button_pressed(button_name):
-	if button_name == 'fullscreen':
+func options_button_pressed(btn):
+	if btn == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
 			OS.set_window_fullscreen(true)
 		else:
 			OS.set_window_fullscreen(false)
 	
-	if button_name == 'vsync':
+	if btn == 'vsync':
 		if OS.is_vsync_enabled() == true:
 			OS.set_use_vsync(true)
 		else:
 			OS.set_use_vsync(false)
 		print(OS.is_vsync_enabled())
 	
-	if button_name == 'back':
+	if btn == 'back':
 		$org/center/container/over.show()
 		options_menu()
 
 func _ready():
 	menu()
-	pass
+
+func _input(ev):
+	if Input.is_key_pressed(KEY_F11):
+		OS.set_window_fullscreen(!OS.window_fullscreen)

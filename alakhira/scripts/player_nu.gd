@@ -477,17 +477,17 @@ func ledge():
 
 func hlth_drn(delta):
 	var div = 5
-	var rnd = delta * 5
+	var rnd = delta * div
 	var curr = shifter.curr
 	
 	if hlth >= 0:
-		if curr == 'phys':
+		if curr != 'spi':
 			hlth -= delta / div
 		elif curr == 'spi':
-			hlth -= rand_range(-rnd,rnd * 1.001)
+			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
 		
 		if Input.is_action_pressed("cast") && Input.is_action_just_pressed("arm_l"):
-			hlth = hlth - 10
+			hlth = hlth - 7
 	
 		emit_signal('hlth_chng', hlth)
 

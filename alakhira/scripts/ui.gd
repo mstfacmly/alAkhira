@@ -16,9 +16,6 @@ var anim_hlth = 0
 var spd = 2
 
 func _input(ev):
-	if Input.is_key_pressed(KEY_F11):
-		OS.set_window_fullscreen(!OS.window_fullscreen)
-
 	var wait = 2
 	var timer = t.set_wait_time(wait)
 
@@ -45,6 +42,7 @@ func _on_pause():
 	paused = true
 	Input.set_mouse_mode(0)
 	$pause/org/right/menuList/rsm.show()
+	$pause/org/right/menuList/rld.show()
 	$pause/org/right/menuList/new_game.hide()
 	$pause/org/right/menuList/dbg.show()
 
@@ -88,6 +86,7 @@ func _ready():
 
 	$pause/org/right/menuList/dbg.connect("pressed", self, "_on_btn_press", ['dbg'])
 	$pause/org/right/menuList/rsm.connect("pressed", self, "_on_btn_press", ['rsm'])
+
 	az.connect("died", self, "_over")
 	$pause/org/center/container/over/lune_site.connect("pressed", self, "_on_btn_press", ['site'])
 	
@@ -110,10 +109,6 @@ func _on_btn_press(btn):
 		
 	if btn == 'dbg':
 		_show_debug()
-		
-	if btn == 'site':
-		OS.shell_open('https://studioslune.com/')
-		get_tree().quit()
 
 func _show_debug():
 	var dbg_txt = $org/left/debug_info
