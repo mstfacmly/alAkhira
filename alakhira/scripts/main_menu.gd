@@ -57,9 +57,9 @@ func ui_button_pressed(btn):
 	if btn == 'new_game':
 		self.hide()
 		get_node("/root/global").load_scene(test)
-		
+	
 	if btn == 'rld':
-		get_node("/root/global").load_scene(test)
+		get_tree().reload_current_scene()
 	
 	if btn == 'options':
 		$org/center/container/over.hide()

@@ -88,7 +88,6 @@ group = null
 text = "Debug"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
 [node name="contd" type="Button" parent="menuList" index="1"]
 
@@ -116,7 +115,6 @@ group = null
 text = "Continue"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
 [node name="rld" type="Button" parent="menuList" index="2"]
 
@@ -144,7 +142,6 @@ group = null
 text = "Restart"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors" ]
 
 [node name="new_game" type="Button" parent="menuList" index="3"]
 
@@ -172,7 +169,6 @@ group = null
 text = "New Game"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
 [node name="rsm" type="Button" parent="menuList" index="4"]
 
@@ -200,7 +196,6 @@ group = null
 text = "Resume"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors" ]
 
 [node name="options" type="Button" parent="menuList" index="5"]
 
@@ -228,7 +223,6 @@ group = null
 text = "Options"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
 [node name="quit" type="Button" parent="menuList" index="6"]
 
@@ -256,7 +250,6 @@ group = null
 text = "Quit"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
 [node name="version" type="Label" parent="." index="2"]
 

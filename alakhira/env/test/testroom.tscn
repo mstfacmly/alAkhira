@@ -14,8 +14,8 @@
 [ext_resource path="res://assets/test/boxes.tscn" type="PackedScene" id=12]
 [ext_resource path="res://StudiosLUNE.png" type="Texture" id=13]
 [ext_resource path="res://scripts/checkpoint.gd" type="Script" id=14]
-[ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=15]
-[ext_resource path="res://assets/test/box_l.tscn" type="PackedScene" id=16]
+[ext_resource path="res://assets/test/box_l.tscn" type="PackedScene" id=15]
+[ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=16]
 
 [sub_resource type="Animation" id=1]
 
@@ -315,6 +315,7 @@ _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
 
 [node name="testroom" parent="." index="0"]
 
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.419531, 0 )
 layers = 2
 cast_shadow = 0
@@ -350,6 +351,29 @@ spot_attenuation = 0.0
 spot_angle = 45.0
 spot_angle_attenuation = 1.0
 _sections_unfolded = [ "Editor", "Light", "Shadow", "Spot", "Visibility" ]
+
+[node name="OmniLight" type="OmniLight" parent="SpotLight" index="0"]
+
+transform = Transform( 1, -1.49012e-07, 2.68221e-07, 0, 1, -1.19209e-07, 2.98023e-08, 2.38419e-07, 1, -12.2407, 39.1269, -55.879 )
+visible = false
+layers = 1
+light_color = Color( 1, 1, 1, 1 )
+light_energy = 1.0
+light_indirect_energy = 1.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 1
+light_cull_mask = -1
+shadow_enabled = false
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.15
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+omni_range = 45.3725
+omni_attenuation = 1.0
+omni_shadow_mode = 1
+omni_shadow_detail = 1
 
 [node name="plats" type="Spatial" parent="." index="3"]
 
@@ -470,7 +494,6 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="AnimationPlayer" parent="columns/col_dest" index="9"]
 
-pause_mode = 2
 anims/shift = SubResource( 1 )
 _sections_unfolded = [ "Pause" ]
 
@@ -581,7 +604,6 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="AnimationPlayer" parent="col_bridge/dest01" index="9"]
 
-pause_mode = 2
 anims/shift = SubResource( 2 )
 _sections_unfolded = [ "Pause" ]
 
@@ -993,177 +1015,48 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0 )
 shape = SubResource( 3 )
 disabled = false
 
-[node name="az" parent="." index="19" instance=ExtResource( 15 )]
+[node name="highboxes" type="Spatial" parent="." index="19"]
 
 editor/display_folded = true
-_sections_unfolded = [ "Transform", "Visibility" ]
-run = 5.13
-
-[node name="animationTree" parent="az" index="2"]
-
-data = {
-"active": false,
-"connections": [ "run", "scale", 0, "scale", "state", 0, "anim 3", "state", 1, "anim 4", "state", 2, "anim 5", "state", 3, "anim 6", "state", 4, "anim 7", "state", 5, "anim 8", "state", 6, "anim 9", "state", 7, "anim 10", "state", 8, "anim 2", "state", 9, "anim 11", "state", 10, "state", "out", 0, "anim", "run", 0, "ru", "run", 1 ],
-"master": NodePath("../animation"),
-"nodes": [ {
-"id": "scale",
-"position": Vector2( 308, 47 ),
-"scale": 1.2,
-"type": "timescale"
-}, {
-"id": "state",
-"position": Vector2( 821, 55 ),
-"transitions": [ {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-} ],
-"type": "transition",
-"xfade": 0.18
-}, {
-"filter": [  ],
-"from": "00_idle-cycle",
-"id": "anim",
-"position": Vector2( 30, 56 ),
-"type": "animation"
-}, {
-"id": "out",
-"position": Vector2( 1023, 38 ),
-"type": "output"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "run",
-"position": Vector2( 171, 62 ),
-"type": "blend2"
-}, {
-"filter": [  ],
-"from": "17-wrun-r",
-"id": "anim 2",
-"position": Vector2( 612, 489 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "07_run_jump_fall",
-"id": "anim 8",
-"position": Vector2( 459, 375 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "01_walk-cycle",
-"id": "anim 3",
-"position": Vector2( 448, 17 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "06_run_jump_rise",
-"id": "anim 7",
-"position": Vector2( 454, 262 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "03_sprint-cycle",
-"id": "anim 4",
-"position": Vector2( 443, 132 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "05_stand_jump_fall",
-"id": "anim 6",
-"position": Vector2( 318, 286 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "04_stand_jump_rise",
-"id": "anim 5",
-"position": Vector2( 322, 168 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "20_ledge_idle-cycle",
-"id": "anim 9",
-"position": Vector2( 339, 417 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "16_wrun-f",
-"id": "anim 10",
-"position": Vector2( 481, 491 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "02_run-cycle",
-"id": "ru",
-"position": Vector2( 22, 215 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "18-wrun-l",
-"id": "anim 11",
-"position": Vector2( 636, 649 ),
-"type": "animation"
-} ]
-}
-
-[node name="highboxes" type="Spatial" parent="." index="20"]
-
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.9 )
 
-[node name="box_l" parent="highboxes" index="0" instance=ExtResource( 16 )]
+[node name="box_l" parent="highboxes" index="0" instance=ExtResource( 15 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 6, 5.1 )
 
-[node name="box_l2" parent="highboxes" index="1" instance=ExtResource( 16 )]
+[node name="box_l2" parent="highboxes" index="1" instance=ExtResource( 15 )]
 
 transform = Transform( 0.258819, 0.965926, 4.2222e-08, 0, -4.37114e-08, 1, 0.965926, -0.258819, -1.13133e-08, -32, 10.5, 12.3 )
 
-[node name="box_l3" parent="highboxes" index="2" instance=ExtResource( 16 )]
+[node name="box_l3" parent="highboxes" index="2" instance=ExtResource( 15 )]
 
 transform = Transform( 0.707107, 0.707107, 3.09086e-08, 0, -4.37114e-08, 1, 0.707107, -0.707107, -3.09086e-08, -29.2, 10.5, 16.1 )
 
-[node name="box_l4" parent="highboxes" index="3" instance=ExtResource( 16 )]
+[node name="box_l4" parent="highboxes" index="3" instance=ExtResource( 15 )]
 
 transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -23.8, 10.5, 18.1 )
 
-[node name="box_l5" parent="highboxes" index="4" instance=ExtResource( 16 )]
+[node name="box_l5" parent="highboxes" index="4" instance=ExtResource( 15 )]
 
 transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 10.5, 18.1 )
 
-[node name="box_l6" parent="highboxes" index="5" instance=ExtResource( 16 )]
+[node name="box_l6" parent="highboxes" index="5" instance=ExtResource( 15 )]
 
 transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 10.5, 13.7 )
 
-[node name="box_l7" parent="highboxes" index="6" instance=ExtResource( 16 )]
+[node name="box_l7" parent="highboxes" index="6" instance=ExtResource( 15 )]
 
 transform = Transform( -4.37114e-08, 4.37114e-08, -1, 1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -21.2661, 12.3817, 22.5 )
 
-[node name="box_l9" parent="highboxes" index="7" instance=ExtResource( 16 )]
+[node name="box_l9" parent="highboxes" index="7" instance=ExtResource( 15 )]
 
 transform = Transform( -4.37114e-08, 4.37114e-08, -1, 1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -21.2661, 8.6, 22.5 )
 
-[node name="box_l8" parent="highboxes" index="8" instance=ExtResource( 16 )]
+[node name="box_l8" parent="highboxes" index="8" instance=ExtResource( 15 )]
 
 transform = Transform( -3.34849e-08, 0.642788, -0.766044, 1, 1.91069e-15, -4.37114e-08, -2.80971e-08, -0.766044, -0.642788, -28.4661, 12.3817, 19.9 )
 
-[node name="box_l10" parent="highboxes" index="9" instance=ExtResource( 16 )]
+[node name="box_l10" parent="highboxes" index="9" instance=ExtResource( 15 )]
 
 transform = Transform( -3.34849e-08, 0.642788, -0.766044, 1, 1.91069e-15, -4.37114e-08, -2.80971e-08, -0.766044, -0.642788, -28.4661, 8.6, 19.9 )
 
@@ -1177,6 +1070,8 @@ _sections_unfolded = [ "Transform" ]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -27.3, 7.01528, -4.9 )
 _sections_unfolded = [ "Transform" ]
 
+[node name="az" parent="." index="20" instance=ExtResource( 16 )]
+
 
 [editable path="env"]
 [editable path="columns/col_spi"]
@@ -1186,4 +1081,3 @@ _sections_unfolded = [ "Transform" ]
 [editable path="hfloor/hfloor"]
 [editable path="h_plat/h_ledges/ledge_l"]
 [editable path="h_plat/h_ledges/ledge_l/plat_l"]
-[editable path="az"]

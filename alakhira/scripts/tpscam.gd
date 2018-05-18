@@ -44,13 +44,13 @@ func set_enabled(enabled):
 	if enabled:
 		Input.set_mouse_mode(2)
 		set_process(true)
-		set_physics_process(true)
+#		set_physics_process(true)
 		set_process_input(true)
 		is_enabled = true
 	else:
 		Input.set_mouse_mode(0)
 		set_process(false)
-		set_physics_process(false)
+#		set_physics_process(false)
 		set_process_input(false)
 		is_enabled = false
 
@@ -71,11 +71,8 @@ func _input(ev):
 		else:
 			cam_yaw = fmod(cam_yaw-(ev.relative.x * cam_view_sensitivity),360)
 			cam_currentradius = cam_radius
-			cam_update()
-			autoturn_cam()
 
 func js_input():
-
 	var Jx = Input.get_joy_axis(0,2)
 	var Jy = Input.get_joy_axis(0,3)
 
@@ -88,8 +85,6 @@ func js_input():
 		else:
 			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10)),360)
 			cam_currentradius = cam_radius
-			cam_update()
-			autoturn_cam()
 
 
 func cam_update():
@@ -126,6 +121,7 @@ func cam_update():
 		pos = cam_pos
 
 	cam.look_at_from_position(pos, pivot.get_global_transform().origin, up)
+
 
 func autoturn_cam(dt):
 	var delta = cam_pos - target #regular delta follow
@@ -164,10 +160,9 @@ func _process(delta):
 
 	js_input()
 	cam_update()
-
-func _physics_process(delta):
 	autoturn_cam(delta)
 
+func _physics_process(delta):
 	if !is_enabled:
 		return
 

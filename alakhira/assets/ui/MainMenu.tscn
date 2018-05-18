@@ -33,7 +33,7 @@ anchor_bottom = 0.0
 margin_left = 120.0
 margin_top = 80.0
 margin_right = 904.0
-margin_bottom = 557.0
+margin_bottom = 585.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -46,11 +46,12 @@ alignment = 0
 
 margin_left = 0.0
 margin_top = 0.0
-margin_right = 690.0
-margin_bottom = 477.0
+margin_right = 659.0
+margin_bottom = 505.0
 
 [node name="right" parent="org" index="1" instance=ExtResource( 3 )]
 
-margin_bottom = 477.0
+margin_left = 663.0
+margin_bottom = 505.0
 
 

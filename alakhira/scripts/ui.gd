@@ -81,6 +81,8 @@ func _ready():
 	bar.max_value = max_hlth
 	updt_hlth(max_hlth)
 	
+	az.connect('hlth_chng', self, '_on_hlth_chng')
+	
 	$pause.hide()
 	$org/left/debug_info.hide()
 

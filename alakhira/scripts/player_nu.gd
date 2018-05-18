@@ -11,7 +11,7 @@ var hlth = max_hlth
 enum states {ALIVE, DEAD}
 var state = ALIVE
 
-onready var chkpt = $"../chkpt"
+onready var chkpt = $'/root/scene/chkpt'
 onready var ui = $ui
 onready var shifter = shift
 
@@ -250,7 +250,7 @@ func _physics_process(delta):
 		var walln = get_slide_collision(0).normal.abs()
 		var modlv = lv.slide(up).slide(walln).abs()
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
-		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.51, jmp_spd.y * 5))
+		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.72, jmp_spd.y * 5))
 		
 		if col_result == ['back']:
 			wrun = ['vert']
@@ -474,6 +474,10 @@ func ledge():
 		ledgecol.translated(Vector3(-0, 5.5,3))
 		ledge_col = Vector3()
 		return ledge_col
+	else:
+		ledge_col = Vector3()
+		return ledge_col
+		
 
 func hlth_drn(delta):
 	var div = 5
@@ -487,7 +491,7 @@ func hlth_drn(delta):
 			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
 		
 		if Input.is_action_pressed("cast") && Input.is_action_just_pressed("arm_l"):
-			hlth = hlth - 7
+			hlth -= 7
 	
 		emit_signal('hlth_chng', hlth)
 
