@@ -1,66 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/ui.gd" type="Script" id=1]
 [ext_resource path="res://scripts/debug_text.gd" type="Script" id=2]
-[ext_resource path="res://assets/ui/MainMenu.tscn" type="PackedScene" id=3]
-
-[sub_resource type="StyleBoxFlat" id=1]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-bg_color = Color( 1, 1, 1, 1 )
-draw_center = true
-border_width_left = 0
-border_width_top = 0
-border_width_right = 0
-border_width_bottom = 0
-border_color = Color( 0.8, 0.8, 0.8, 1 )
-border_blend = false
-corner_radius_top_left = 7
-corner_radius_top_right = 42
-corner_radius_bottom_right = 42
-corner_radius_bottom_left = 7
-corner_detail = 8
-expand_margin_left = 0.0
-expand_margin_right = 0.0
-expand_margin_top = 0.0
-expand_margin_bottom = 0.0
-shadow_color = Color( 1, 1, 1, 0.6 )
-shadow_size = 7
-anti_aliasing = true
-anti_aliasing_size = 1
-_sections_unfolded = [ "Corner Radius", "Shadow" ]
-
-[sub_resource type="StyleBoxFlat" id=2]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-bg_color = Color( 0, 0, 0, 0.243098 )
-draw_center = true
-border_width_left = 0
-border_width_top = 0
-border_width_right = 0
-border_width_bottom = 0
-border_color = Color( 0.8, 0.8, 0.8, 1 )
-border_blend = false
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 8
-expand_margin_left = 0.0
-expand_margin_right = 0.0
-expand_margin_top = 0.0
-expand_margin_bottom = 0.0
-shadow_color = Color( 0, 0, 0, 0.132588 )
-shadow_size = 3
-anti_aliasing = true
-anti_aliasing_size = 1
-_sections_unfolded = [ "Border Width", "Corner Radius", "Expand Margin", "Shadow" ]
+[ext_resource path="res://assets/ui/options.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/ui/menuList.tscn" type="PackedScene" id=4]
 
 [node name="ui" type="MarginContainer" index="0"]
 
@@ -81,6 +24,7 @@ custom_constants/margin_left = 42
 custom_constants/margin_bottom = 21
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause", "custom_constants" ]
+test = "res://env/test/testroom.tscn"
 
 [node name="tween" type="Tween" parent="." index="0"]
 
@@ -93,6 +37,7 @@ playback/speed = 1.0
 
 [node name="org" type="HBoxContainer" parent="." index="1"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -100,7 +45,7 @@ anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 658.0
+margin_bottom = 579.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -117,8 +62,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 310.0
-margin_bottom = 637.0
+margin_right = 186.0
+margin_bottom = 558.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -130,12 +75,13 @@ _sections_unfolded = [ "Size Flags" ]
 
 [node name="debug_info" type="Label" parent="org/left" index="0"]
 
+pause_mode = 1
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 310.0
-margin_bottom = 316.0
+margin_right = 186.0
+margin_bottom = 558.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -146,109 +92,136 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 script = ExtResource( 2 )
-_sections_unfolded = [ "Grow Direction", "Size Flags" ]
+_sections_unfolded = [ "Grow Direction", "Pause", "Size Flags" ]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="org/left" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 320.0
-margin_right = 310.0
-margin_bottom = 637.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags", "Theme" ]
-
-[node name="center" type="CenterContainer" parent="org" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 314.0
-margin_right = 624.0
-margin_bottom = 637.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-use_top_left = false
-_sections_unfolded = [ "Size Flags" ]
-
-[node name="right" type="VBoxContainer" parent="org" index="2"]
+[node name="center" parent="org" index="1" instance=ExtResource( 3 )]
 
 editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 628.0
+margin_left = 190.0
+margin_top = 0.0
+margin_right = 750.0
+margin_bottom = 558.0
+
+[node name="container" parent="org/center" index="0"]
+
+margin_left = 0.0
+margin_top = 26.0
+margin_right = 560.0
+margin_bottom = 531.0
+
+[node name="options" parent="org/center/container" index="0"]
+
+margin_right = 440.0
+
+[node name="title" parent="org/center/container/options" index="0"]
+
+margin_right = 320.0
+
+[node name="sep_top" parent="org/center/container/options" index="1"]
+
+margin_right = 320.0
+
+[node name="ctrls" parent="org/center/container/options" index="2"]
+
+margin_right = 320.0
+
+[node name="lang" parent="org/center/container/options" index="3"]
+
+margin_right = 320.0
+
+[node name="res" parent="org/center/container/options" index="4"]
+
+margin_right = 320.0
+
+[node name="aa" parent="org/center/container/options" index="5"]
+
+margin_right = 320.0
+
+[node name="vsync" parent="org/center/container/options" index="6"]
+
+margin_right = 320.0
+
+[node name="fullscreen" parent="org/center/container/options" index="7"]
+
+margin_right = 320.0
+
+[node name="sep_bot" parent="org/center/container/options" index="8"]
+
+margin_right = 320.0
+
+[node name="back" parent="org/center/container/options" index="9"]
+
+margin_right = 320.0
+
+[node name="over" parent="org/center/container" index="1"]
+
+editor/display_folded = true
+visible = false
+
+[node name="right" parent="org" index="2" instance=ExtResource( 4 )]
+
+editor/display_folded = true
+margin_left = 754.0
 margin_right = 940.0
-margin_bottom = 637.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 558.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 2
-_sections_unfolded = [ "Grow Direction", "Rect", "Size Flags" ]
 
-[node name="separator" type="VBoxContainer" parent="org/right" index="0"]
+[node name="sep2" parent="org/right" index="1"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 312.0
-margin_bottom = 630.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
+margin_right = 186.0
+margin_bottom = 122.0
 
-[node name="hlth" type="ProgressBar" parent="org/right" index="1"]
+[node name="menuList" parent="org/right" index="2"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 634.0
-margin_right = 312.0
-margin_bottom = 637.5
-rect_min_size = Vector2( 0, 3.5 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-size_flags_stretch_ratio = 0.5
-custom_styles/fg = SubResource( 1 )
-custom_styles/bg = SubResource( 2 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-min_value = 0.0
-max_value = 100.0
-step = -0.1
-page = 0.0
-value = 33.0
-exp_edit = false
-rounded = false
-percent_visible = false
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Percent", "Rect", "Size Flags", "Theme", "custom_colors", "custom_styles" ]
+margin_top = 122.0
+margin_right = 186.0
+margin_bottom = 419.0
+
+[node name="dbg" parent="org/right/menuList" index="0"]
+
+margin_right = 186.0
+
+[node name="contd" parent="org/right/menuList" index="1"]
+
+margin_right = 186.0
+
+[node name="rld" parent="org/right/menuList" index="2"]
+
+margin_right = 186.0
+
+[node name="start" parent="org/right/menuList" index="3"]
+
+margin_right = 186.0
+
+[node name="rsm" parent="org/right/menuList" index="4"]
+
+margin_right = 186.0
+
+[node name="options" parent="org/right/menuList" index="5"]
+
+margin_right = 186.0
+
+[node name="quit" parent="org/right/menuList" index="6"]
+
+margin_right = 186.0
+
+[node name="sep" parent="org/right" index="3"]
+
+margin_top = 419.0
+margin_right = 186.0
+margin_bottom = 541.0
+
+[node name="version" parent="org/right" index="4"]
+
+margin_top = 541.0
+margin_right = 186.0
+margin_bottom = 554.0
+
+[node name="hlth" parent="org/right" index="5"]
+
+margin_top = 554.0
+margin_right = 186.0
+margin_bottom = 557.5
 
 [node name="timer" type="Timer" parent="." index="2"]
 
@@ -257,74 +230,8 @@ wait_time = 1.0
 one_shot = false
 autostart = false
 
-[node name="pause" parent="." index="3" instance=ExtResource( 3 )]
-
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 42.0
-margin_top = 21.0
-margin_right = 982.0
-margin_bottom = 658.0
-
-[node name="org" parent="pause" index="0"]
-
-margin_right = 820.0
-
-[node name="center" parent="pause/org" index="0"]
-
-margin_right = 606.0
-
-[node name="right" parent="pause/org" index="1"]
-
-margin_left = 610.0
-margin_right = 700.0
-
-[node name="menuList" parent="pause/org/right" index="1"]
-
-margin_bottom = 464.0
-
-[node name="dbg" parent="pause/org/right/menuList" index="0"]
-
-margin_top = 108.0
-margin_bottom = 134.0
-
-[node name="contd" parent="pause/org/right/menuList" index="1"]
-
-margin_top = 145.0
-margin_bottom = 171.0
-
-[node name="rld" parent="pause/org/right/menuList" index="2"]
-
-margin_top = 182.0
-margin_bottom = 208.0
-
-[node name="new_game" parent="pause/org/right/menuList" index="3"]
-
-margin_top = 219.0
-margin_bottom = 245.0
-
-[node name="rsm" parent="pause/org/right/menuList" index="4"]
-
-margin_top = 256.0
-margin_bottom = 282.0
-
-[node name="options" parent="pause/org/right/menuList" index="5"]
-
-margin_top = 293.0
-margin_bottom = 319.0
-
-[node name="quit" parent="pause/org/right/menuList" index="6"]
-
-margin_top = 330.0
-margin_bottom = 356.0
-
-[node name="version" parent="pause/org/right" index="2"]
-
-margin_top = 464.0
-margin_bottom = 477.0
-
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 
-[editable path="pause"]
-[editable path="pause/org/right"]
+[editable path="org/center"]
+[editable path="org/right"]
