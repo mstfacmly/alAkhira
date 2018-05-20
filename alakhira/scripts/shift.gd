@@ -34,7 +34,7 @@ var transition_time = 0.5
 
 func _ready():
 	traverse(root.get_children())
-	print(root)
+#	print(root)
 	unique_materials(phys)
 	unique_materials(spi)
 

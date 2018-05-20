@@ -1,10 +1,18 @@
 extends Label
 
-onready var az = $"../../../../../az"
-onready var cam = $"../../../../cam"
-onready var curr = shift
+var az
+var cam
 var js_axis = Input
 var update = 0.0
+var curr = shift
+
+func _ready():
+	if get_parent().has_node('../../../../az'):
+		az = get_parent().get_node('../../../../az')
+		cam = az.get_node('cam')
+		set_physics_process(true)
+	else:
+		set_physics_process(false)
 
 func _physics_process(delta):
 	if update < 1.0:

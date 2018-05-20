@@ -77,11 +77,12 @@ export var attempts = 1
 onready var mesh = $body/skeleton 
 
 func _ready():
-	connect("hlth_chng", ui, "updt_hlth")
+	connect("hlth_chng", ui, "_updt_hlth")
+	connect('pause', ui, '_on_pause')
 	
 	if cam.has_method("set_enabled"):
 		cam.set_enabled(true)
-		
+	
 	chkpt()
 
 func input(event):	
@@ -510,7 +511,8 @@ func dmg(hit):
 		emit_signal('hlth_chng', hlth)
 
 func chkpt():
-	set_transform(chkpt.get_global_transform())
+	if get_parent().has_node('chkpt'):
+		set_transform(chkpt.get_global_transform())
 
 func translateMove(dist):
 	var localTranslate = Vector3(0,0,dist)

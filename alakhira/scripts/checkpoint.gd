@@ -1,6 +1,6 @@
 extends Area
 
-onready var chkpt = $"../chkpt"
+onready var chkpt = $"/root/scene/chkpt"
 
 func _ready():
 	# Connect signal body enter
