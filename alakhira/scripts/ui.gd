@@ -27,11 +27,12 @@ func _ready():
 	if get_parent().get_name() == 'az':
 		_gen_ui()
 		envanim = az.get_parent().get_node('env/AnimationPlayer')
+		az.set_physics_process(true)
+		az.get_node('cam').set_enabled(true)
 	else:
 		_main_menu()
 		
 	_opts_container()
-		
 	set_process_input(true)
 
 func _input(ev):
@@ -40,7 +41,7 @@ func _input(ev):
 
 	var pause = ev.is_action_pressed("pause") && !ev.is_echo()
 
-	if get_parent().get_name() == 'az':
+	if get_parent().get_name() == 'az' && az.state != 1:
 		if !paused && pause:
 			_on_pause()
 		elif paused && pause:
@@ -62,14 +63,15 @@ func _signals():
 	$org/right/menuList/dbg.connect("pressed", self, "_ui_btn_pressed", ['dbg'])
 	$org/right/menuList/rsm.connect("pressed", self, "_ui_btn_pressed", ['rsm'])
 	$org/right/menuList/start.connect("pressed", self, "_ui_btn_pressed", ['start'])
-	$org/right/menuList/options.connect("pressed", self, "_ui_btn_pressed", ['options'])
+	$org/right/menuList/opts.connect("pressed", self, "_ui_btn_pressed", ['opts'])
 	$org/right/menuList/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
 
 	# Options Menu
-	$org/center/container/options/ctrls.connect("pressed", self, "_opts_btn_pressed", ['ctrls'])
-	$org/center/container/options/vsync.connect("pressed", self, "_opts_btn_pressed", ['vsync'])
-	$org/center/container/options/fullscreen.connect("pressed", self, "_opts_btn_pressed", ['fullscreen'])
-	$org/center/container/options/back.connect("pressed", self, "_opts_btn_pressed", ['back'])
+	$org/center/container/opts/ctrls.connect("pressed", self, "_opts_btn_pressed", ['ctrls'])
+	$org/center/container/opts/vsync.connect("pressed", self, "_opts_btn_pressed", ['vsync'])
+	$org/center/container/opts/fullscreen.connect("pressed", self, "_opts_btn_pressed", ['fullscreen'])
+	$org/center/container/opts/back.connect("pressed", self, "_opts_btn_pressed", ['back'])
+	$org/center/container/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
 	$org/center/container/over/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
 	
 	$org/center/container/over/lune_site.connect("pressed", self, "_ui_btn_pressed", ['site'])
@@ -83,25 +85,26 @@ func _main_menu():
 	$org/right/menuList/rld.hide()
 	$org/right/menuList/start.show()
 	$org/right/menuList/rsm.hide()
-	$org/right/menuList/options.show()
+	$org/right/menuList/opts.show()
 	$org/right/menuList/quit.show()
 	$org/right/hlth.hide()
 	
-	$org/center/container/options.hide()
+	$org/center/container/opts.hide()
 	$org/center/container/over/thanks.hide()
+	$org/center/container/over/rld.hide()
 	$org/center/container/over/quit.hide()
-	$org/center/container/over/lune_site.show()
+	$org/center/container/over/lune_site.hide()
 
 func _opts_container():
-	$org/center/container/options/lang.disabled = true
-	$org/center/container/options/ctrls.disabled = true
-	$org/center/container/options/res.disabled = true
-	$org/center/container/options/aa.disabled = true
+	$org/center/container/opts/lang.disabled = true
+	$org/center/container/opts/ctrls.disabled = true
+	$org/center/container/opts/res.disabled = true
+	$org/center/container/opts/aa.disabled = true
 	
 	if OS.is_window_fullscreen() != false:
-		$org/center/container/options/fullscreen.set_pressed(true)
+		$org/center/container/opts/fullscreen.set_pressed(true)
 	if OS.is_vsync_enabled() != false:
-		$org/center/container/options/vsync.set_pressed(true)
+		$org/center/container/opts/vsync.set_pressed(true)
 
 func _gen_ui():
 	az = get_parent()
@@ -111,15 +114,12 @@ func _gen_ui():
 		max_hlth = az.max_hlth
 		bar.max_value = max_hlth
 		updt_hlth(max_hlth)
+		az.get_node('cam').set_enabled(true)
 	
-		az.connect('hlth_chng', self, '_on_hlth_chng')
-		az.connect("died", self, "_over")
-		
 	$org/left/debug_info.hide()
 
-#	$org/center/container/over/logo.hide()
 	$org/center/container/over.hide()
-	$org/center/container/options.hide()
+	$org/center/container/opts.hide()
 
 	$org/right/menuList.hide()
 	$org/right/version.hide()
@@ -153,7 +153,7 @@ func _on_unpause():
 	paused = false
 	Input.set_mouse_mode(2)
 	$org/right/menuList.hide()
-	$org/center/container/options.hide()
+	$org/center/container/opts.hide()
 	
 	var type = $org/right/menuList.get_children()
 	for i in type:
@@ -183,15 +183,14 @@ func _process(delta):
 func _ui_btn_pressed(btn):
 #	print(btn)
 	if btn == 'start':
-#		self.hide()
 		_gen_ui()
 		get_node("/root/global").load_scene(test)
 	
 	if btn == 'rld':
-		get_tree().reload_current_scene()
 		get_tree().set_pause(false)
+		get_tree().reload_current_scene()
 	
-	if btn == 'options':
+	if btn == 'opts':
 		_opts_menu()
 		
 	if btn == 'debug':
@@ -211,7 +210,7 @@ func _ui_btn_pressed(btn):
 		_show_debug()
 
 func _opts_menu():
-	var menu = $org/center/container/options
+	var menu = $org/center/container/opts
 
 	if menu.is_visible() != true:	
 		menu.set_visible(true)
@@ -238,33 +237,24 @@ func _opts_btn_pressed(btn):
 			OS.set_use_vsync(true)
 		else:
 			OS.set_use_vsync(false)
-#		print(OS.is_vsync_enabled())
 	
 	if btn == 'back':
 		_opts_menu()
 
 func _show_debug():
 	var dbg_txt = $org/left/debug_info
-#	print(dbg_txt.is_visible())
 
 	if dbg_txt.is_visible() != true:	
 		dbg_txt.set_visible(true)
 	else:
 		dbg_txt.set_visible(false)
 
-func _show_msg(txt):
-	$Label.text = txt
-	$Label.show()
-
-func _end():
-	show_msg("Thank you")
-	pass
-
 func _over():
-	$org/right.hide()
-	$org/center/container/over/thanks.show()
-	$org/center/container/over/lune_site.show()
-	$org/center/container/over/quit.show()
+	$org/right/menuList.hide()
+	$org/center/container/over.show()
 	az.hide()
+	$'../../az_spi'.show()
+	az.set_physics_process(false)
+	az.set_process(false)
 	az.get_node('cam').set_enabled(false)
 	Input.set_mouse_mode(0)

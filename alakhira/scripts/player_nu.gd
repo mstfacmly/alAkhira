@@ -8,12 +8,12 @@ signal died
 export var max_hlth = 100
 var hlth = max_hlth
 
-enum states {ALIVE, DEAD}
+enum states {ALIVE, DEAD, GONE}
 var state = ALIVE
 
 onready var chkpt = $'/root/scene/chkpt'
 onready var ui = $ui
-onready var shifter = shift
+var shifter = shift
 
 # Environment
 var g = Vector3(0,-9.8,0)
@@ -77,8 +77,11 @@ export var attempts = 1
 onready var mesh = $body/skeleton 
 
 func _ready():
-	connect("hlth_chng", ui, "_updt_hlth")
+	connect('hlth_chng', ui, '_updt_hlth')
+	connect('died', ui, '_over')
 	connect('pause', ui, '_on_pause')
+	
+	shifter.state = ALIVE
 	
 	if cam.has_method("set_enabled"):
 		cam.set_enabled(true)
@@ -495,6 +498,12 @@ func hlth_drn(delta):
 			hlth -= 7
 	
 		emit_signal('hlth_chng', hlth)
+
+func heal(tch):
+	if state == GONE:
+		return
+		
+	hlth += tch
 
 func dmg(hit):
 	if state == DEAD:

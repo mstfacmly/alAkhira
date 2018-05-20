@@ -11,3 +11,4 @@ func entered(body):
 		# Set checkpoint position to this area position
 		chkpt.global_transform = global_transform
 #		print(global_transform)
+		body.heal(5)
