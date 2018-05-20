@@ -7,7 +7,7 @@ var DIFFUSE = SpatialMaterial.DIFFUSE_LAMBERT
 var MIX = SpatialMaterial.BLEND_MODE_MIX
 var ADD = SpatialMaterial.BLEND_MODE_ADD
 
-enum states {ALIVE,DEAD}
+enum states {ALIVE,DEAD, GONE}
 var state
 
 var phys = {
@@ -23,7 +23,6 @@ var players = []
 var curr = 'phys'
 var overlay = 'none'
 onready var root = $'/root'
-#onready var env = $env
 
 var showing = false
 var hiding = false
@@ -34,7 +33,6 @@ var transition_time = 0.5
 
 func _ready():
 	traverse(root.get_children())
-#	print(root)
 	unique_materials(phys)
 	unique_materials(spi)
 
@@ -42,7 +40,6 @@ func _ready():
 	peek(spi, true)
 	toggle(spi, phys)
 
-	pass
 
 func _input(ev):
 	var cast = Input.is_action_pressed("cast")
@@ -155,7 +152,7 @@ func traverse(nodes):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
-			if(nm.matchn('phystospir') or node.has_animation('shift')):
+			if(nm.matchn('shift') or node.has_animation('shift')):
 				anim.push_back(node)
 
 		elif node.get_child_count():
