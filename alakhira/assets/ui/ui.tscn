@@ -62,7 +62,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 558.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -80,7 +80,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 558.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -97,130 +97,81 @@ _sections_unfolded = [ "Grow Direction", "Pause", "Size Flags" ]
 [node name="center" parent="org" index="1" instance=ExtResource( 3 )]
 
 editor/display_folded = true
-margin_left = 190.0
+margin_left = 309.0
 margin_top = 0.0
-margin_right = 750.0
+margin_right = 631.0
 margin_bottom = 558.0
 
 [node name="container" parent="org/center" index="0"]
 
 margin_left = 0.0
-margin_top = 26.0
-margin_right = 560.0
-margin_bottom = 531.0
-
-[node name="options" parent="org/center/container" index="0"]
-
-margin_right = 440.0
-
-[node name="title" parent="org/center/container/options" index="0"]
-
-margin_right = 320.0
-
-[node name="sep_top" parent="org/center/container/options" index="1"]
-
-margin_right = 320.0
-
-[node name="ctrls" parent="org/center/container/options" index="2"]
-
-margin_right = 320.0
-
-[node name="lang" parent="org/center/container/options" index="3"]
-
-margin_right = 320.0
-
-[node name="res" parent="org/center/container/options" index="4"]
-
-margin_right = 320.0
-
-[node name="aa" parent="org/center/container/options" index="5"]
-
-margin_right = 320.0
-
-[node name="vsync" parent="org/center/container/options" index="6"]
-
-margin_right = 320.0
-
-[node name="fullscreen" parent="org/center/container/options" index="7"]
-
-margin_right = 320.0
-
-[node name="sep_bot" parent="org/center/container/options" index="8"]
-
-margin_right = 320.0
-
-[node name="back" parent="org/center/container/options" index="9"]
-
-margin_right = 320.0
-
-[node name="over" parent="org/center/container" index="1"]
-
-editor/display_folded = true
-visible = false
+margin_top = 106.0
+margin_right = 322.0
+margin_bottom = 451.0
 
 [node name="right" parent="org" index="2" instance=ExtResource( 4 )]
 
-editor/display_folded = true
-margin_left = 754.0
+margin_left = 635.0
 margin_right = 940.0
 margin_bottom = 558.0
 size_flags_horizontal = 3
 
 [node name="sep2" parent="org/right" index="1"]
 
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 122.0
 
 [node name="menuList" parent="org/right" index="2"]
 
+editor/display_folded = true
 margin_top = 122.0
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 419.0
 
 [node name="dbg" parent="org/right/menuList" index="0"]
 
-margin_right = 186.0
+margin_right = 305.0
 
 [node name="contd" parent="org/right/menuList" index="1"]
 
-margin_right = 186.0
+margin_right = 305.0
 
 [node name="rld" parent="org/right/menuList" index="2"]
 
-margin_right = 186.0
+margin_right = 305.0
 
 [node name="start" parent="org/right/menuList" index="3"]
 
-margin_right = 186.0
+margin_right = 305.0
 
 [node name="rsm" parent="org/right/menuList" index="4"]
 
-margin_right = 186.0
+margin_right = 305.0
 
-[node name="options" parent="org/right/menuList" index="5"]
+[node name="opts" parent="org/right/menuList" index="5"]
 
-margin_right = 186.0
+margin_right = 305.0
 
 [node name="quit" parent="org/right/menuList" index="6"]
 
-margin_right = 186.0
+margin_right = 305.0
 
 [node name="sep" parent="org/right" index="3"]
 
 margin_top = 419.0
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 541.0
 
 [node name="version" parent="org/right" index="4"]
 
 margin_top = 541.0
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 554.0
 
 [node name="hlth" parent="org/right" index="5"]
 
 margin_top = 554.0
-margin_right = 186.0
+margin_right = 305.0
 margin_bottom = 557.5
 
 [node name="timer" type="Timer" parent="." index="2"]

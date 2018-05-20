@@ -10,25 +10,25 @@ source_file="res://assets/test/column.dae"
 source_md5="9b61b8e605aee986a88153325b49558d"
 
 dest_files=[ "res://.import/column.dae-317e76f54dddbeb7f4af9ac308b47d74.scn" ]
-dest_md5="c3859070638231fde61e458defdb3075"
+dest_md5="a65176a28581d3d985f0950ceab589fd"
 
 [params]
 
-nodes/root_type="Spatial"
-nodes/root_name="Scene Root"
+nodes/root_type="MeshInstance"
+nodes/root_name="column"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-materials/location=1
-materials/storage=1
-materials/keep_on_reimport=true
+materials/location=0
+materials/storage=0
+materials/keep_on_reimport=false
 meshes/compress=true
 meshes/ensure_tangents=true
 meshes/storage=0
 meshes/light_baking=0
 meshes/lightmap_texel_size=0.1
 external_files/store_in_subdir=false
-animation/import=true
+animation/import=false
 animation/fps=15
 animation/filter_script=""
 animation/storage=false
