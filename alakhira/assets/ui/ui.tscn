@@ -37,7 +37,6 @@ playback/speed = 1.0
 
 [node name="org" type="HBoxContainer" parent="." index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -96,7 +95,6 @@ _sections_unfolded = [ "Grow Direction", "Pause", "Size Flags" ]
 
 [node name="center" parent="org" index="1" instance=ExtResource( 3 )]
 
-editor/display_folded = true
 margin_left = 309.0
 margin_top = 0.0
 margin_right = 631.0
@@ -105,12 +103,74 @@ margin_bottom = 558.0
 [node name="container" parent="org/center" index="0"]
 
 margin_left = 0.0
-margin_top = 106.0
+margin_top = 123.0
 margin_right = 322.0
-margin_bottom = 451.0
+margin_bottom = 435.0
+
+[node name="opts" parent="org/center/container" index="0"]
+
+margin_bottom = 312.0
+
+[node name="sep_top" parent="org/center/container/opts" index="1"]
+
+margin_bottom = 46.0
+
+[node name="ctrls" parent="org/center/container/opts" index="2"]
+
+margin_top = 57.0
+margin_bottom = 77.0
+
+[node name="lang" parent="org/center/container/opts" index="3"]
+
+margin_top = 88.0
+margin_bottom = 121.0
+
+[node name="res" parent="org/center/container/opts" index="4"]
+
+margin_top = 132.0
+margin_bottom = 140.0
+select_mode = 0
+allow_reselect = false
+icon_mode = 1
+fixed_icon_size = Vector2( 0, 0 )
+
+[node name="aa" parent="org/center/container/opts" index="5"]
+
+margin_top = 151.0
+margin_bottom = 159.0
+select_mode = 0
+allow_reselect = false
+icon_mode = 1
+fixed_icon_size = Vector2( 0, 0 )
+
+[node name="vsync" parent="org/center/container/opts" index="6"]
+
+margin_top = 170.0
+margin_bottom = 210.0
+
+[node name="fullscreen" parent="org/center/container/opts" index="7"]
+
+margin_top = 221.0
+margin_bottom = 261.0
+
+[node name="sep_bot" parent="org/center/container/opts" index="8"]
+
+margin_top = 272.0
+margin_bottom = 280.0
+
+[node name="back" parent="org/center/container/opts" index="9"]
+
+margin_top = 291.0
+margin_bottom = 311.0
+
+[node name="over" parent="org/center/container" index="1"]
+
+margin_top = 70.0
+margin_bottom = 242.0
 
 [node name="right" parent="org" index="2" instance=ExtResource( 4 )]
 
+editor/display_folded = true
 margin_left = 635.0
 margin_right = 940.0
 margin_bottom = 558.0
