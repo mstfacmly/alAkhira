@@ -289,12 +289,13 @@ func _res_calc():
 		res.add_item(str(x) + ' x ' + str(y))
 
 func _res_select(ID):
-	print(disp_rez[ID], disp_rez[ID] / ratio_div)
 	OS.set_window_size(Vector2(disp_rez[ID], disp_rez[ID] / ratio_div))
-
-#	$org/center/disp_opt/res/res.get_popup().get_index()
-#	print($org/center/disp_opt/res/res.get_popup().get_item_text(ID))
-#	pass
+	
+	if OS.window_fullscreen != true:
+		pass
+	else:
+		OS.set_window_fullscreen(false)
+		OS.set_window_fullscreen(true)
 
 func _aa_select(ID):
 	get_viewport().msaa = ID
