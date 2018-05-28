@@ -21,7 +21,7 @@ var anim_hlth = 0
 var spd = 2
 
 const languages = [
-	'none',
+	'English',
 ]
 
 const disp_rez = [
@@ -30,7 +30,6 @@ const disp_rez = [
 	800,
 	1024,
 	1280,
-	1366,
 	1600,
 	1920,
 	2560,
@@ -42,6 +41,14 @@ const ratio = [
 	'4:3',
 	'16:9',
 	'16:10',
+]
+
+const aalist = [
+	'Disabled',
+	'2x',
+	'4x',
+	'8x',
+	'16x'
 ]
 
 func _ready():
@@ -64,7 +71,7 @@ func _input(ev):
 	var wait = 2
 	var timer = t.set_wait_time(wait)
 
-	var pause = ev.is_action_pressed("pause") && !ev.is_echo()
+	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
 
 	if get_parent().get_name() == 'az' && az.state != 1:
 		if !paused && pause:
@@ -72,9 +79,9 @@ func _input(ev):
 		elif paused && pause:
 			_on_unpause()
 
-	if ev.is_action_pressed("pause"):
+	if ev.is_action_pressed('pause'):
 		t.start()
-	elif ev.is_action("pause") && !ev.is_pressed():
+	elif ev.is_action('pause') && !ev.is_pressed():
 		t.stop()
 	else:
 		timer
@@ -84,28 +91,28 @@ func _input(ev):
 
 func _signals():
 	# Main Menu
-	$org/right/menuList/rld.connect("pressed", self, "_ui_btn_pressed", ['rld'])
-	$org/right/menuList/dbg.connect("pressed", self, "_ui_btn_pressed", ['dbg'])
-	$org/right/menuList/rsm.connect("pressed", self, "_ui_btn_pressed", ['rsm'])
-	$org/right/menuList/start.connect("pressed", self, "_ui_btn_pressed", ['start'])
-	$org/right/menuList/opts.connect("pressed", self, "_ui_btn_pressed", ['opts'])
-	$org/right/menuList/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
+	$org/right/menuList/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
+	$org/right/menuList/dbg.connect('pressed', self, '_ui_btn_pressed', ['dbg'])
+	$org/right/menuList/rsm.connect('pressed', self, '_ui_btn_pressed', ['rsm'])
+	$org/right/menuList/start.connect('pressed', self, '_ui_btn_pressed', ['start'])
+	$org/right/menuList/opts.connect('pressed', self, '_ui_btn_pressed', ['opts'])
+	$org/right/menuList/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 
 	# Options Menu
-	$org/center/opts/ctrls.connect("pressed", self, "_opts_btn_pressed", ['ctrls'])
+	$org/center/opts/ctrls.connect('pressed', self, '_opts_btn_pressed', ['ctrls'])
 	$org/center/opts/disp_opt.connect('pressed', self, '_ui_btn_pressed', ['disp'])
-	$org/center/opts/back.connect("pressed", self, "_opts_btn_pressed", ['back'])
+	$org/center/opts/back.connect('pressed', self, '_opts_btn_pressed', ['back'])
 	$org/center/disp_opt/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
 	$org/center/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
-	$org/center/over/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
+	$org/center/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 	
-	$org/center/disp_opt/vsync/vsync.connect("pressed", self, "_opts_btn_pressed", ['vsync'])
-	$org/center/disp_opt/fs/fullscreen.connect("pressed", self, "_opts_btn_pressed", ['fullscreen'])
+	$org/center/disp_opt/vsync/vsync.connect('pressed', self, '_opts_btn_pressed', ['vsync'])
+	$org/center/disp_opt/fs/fullscreen.connect('pressed', self, '_opts_btn_pressed', ['fullscreen'])
 	$org/center/disp_opt/ratio/ratio.connect('item_selected', self, '_opts_btn_pressed', ['ratio'])
-	$org/center/disp_opt/res/res.connect('item_selected', self, '_opts_btn_pressed', ['res'])
-	$org/center/disp_opt/fsaa/aa.connect('item_selected', self, '_opts_btn_pressed', ['aa'])
+	$org/center/disp_opt/res/res.get_popup().connect('id_pressed', self, '_res_select')
+	$org/center/disp_opt/fsaa/aa.get_popup().connect('id_pressed', self, '_aa_select')
 	
-	$org/center/over/lune_site.connect("pressed", self, "_ui_btn_pressed", ['site'])
+	$org/center/over/lune_site.connect('pressed', self, '_ui_btn_pressed', ['site'])
 
 func _main_menu():
 	# Show/Hide Menu Items
@@ -150,7 +157,6 @@ func _opts_container():
 		var d2 = d / 1.777777778
 		res.add_item(str(d) + ' x ' + str(d2))
 
-	var aalist = ['Disabled', '2x', '4x', '8x', '16x']
 	for i in aalist:
 		aa.add_item(i)
 
@@ -228,10 +234,9 @@ func _process(delta):
 	bar.value = anim_hlth
 
 func _ui_btn_pressed(btn):
-#	print(btn)
 	if btn == 'start':
 		_gen_ui()
-		get_node("/root/global").load_scene(test)
+		get_node('/root/global').load_scene(test)
 	
 	if btn == 'rld':
 		get_tree().set_pause(false)
@@ -259,6 +264,22 @@ func _ui_btn_pressed(btn):
 	if btn == 'dbg':
 		_show_debug()
 
+func _res_select(ID):
+	pass
+
+func _aa_select(ID):	
+	if ID == 0:
+		get_viewport().MSAA_DISABLED
+	elif ID == 1:
+		get_viewport().MSAA_2X
+	elif ID == 2:
+		get_viewport().MSAA_4X
+	elif ID == 3:
+		get_viewport().MSAA_8X
+	elif ID == 4:
+		get_viewport().MSAA_16X
+	print(ID)
+	
 func _opts_menu():
 	var menu = $org/center/opts
 
@@ -290,6 +311,7 @@ func _disp_opts():
 		opts.set_visible(false)
 
 func _opts_btn_pressed(btn):
+	print(btn)
 	if btn == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
 			OS.set_window_fullscreen(true)
@@ -301,18 +323,6 @@ func _opts_btn_pressed(btn):
 			OS.set_use_vsync(true)
 		else:
 			OS.set_use_vsync(false)
-	
-	if btn == 'aa':
-		if get_selected_id() == 0:
-			Viewport.MSAA_DISABLED
-		elif get_selected_id() == 1:
-			Viewport.MSAA_2X
-		elif get_selected_id() == 2:
-			Viewport.MSAA_4X
-		elif get_selected_id() == 3:
-			Viewport.MSAA_8X
-		elif get_selected_id() == 4:
-			Viewport.MSAA_16X
 	
 	if btn == 'back':
 		_opts_menu()
