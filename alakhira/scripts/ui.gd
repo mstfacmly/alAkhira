@@ -37,6 +37,7 @@ const disp_rez = [
 	3840
 ]
 
+var ratio_div
 const ratio = [
 	'4:3',
 	'16:9',
@@ -55,6 +56,8 @@ func _ready():
 	$org/right/version.text = str(0.11)
 	shifter.curr
 	_signals()
+	var ID = $org/center/disp_opt/ratio/ratio.get_selected_id()
+	_ratio_select(ID)
 	
 	if get_parent().get_name() == 'az':
 		_gen_ui()
@@ -108,7 +111,8 @@ func _signals():
 	
 	$org/center/disp_opt/vsync/vsync.connect('pressed', self, '_opts_btn_pressed', ['vsync'])
 	$org/center/disp_opt/fs/fullscreen.connect('pressed', self, '_opts_btn_pressed', ['fullscreen'])
-	$org/center/disp_opt/ratio/ratio.connect('item_selected', self, '_opts_btn_pressed', ['ratio'])
+	
+	$org/center/disp_opt/ratio/ratio.get_popup().connect('id_pressed', self, '_ratio_select')
 	$org/center/disp_opt/res/res.get_popup().connect('id_pressed', self, '_res_select')
 	$org/center/disp_opt/fsaa/aa.get_popup().connect('id_pressed', self, '_aa_select')
 	
@@ -153,9 +157,9 @@ func _opts_container():
 	for r in ratio:
 		rat.add_item(str(r))
 
-	for d in disp_rez:
-		var d2 = d / 1.777777778
-		res.add_item(str(d) + ' x ' + str(d2))
+#	for d in disp_rez:
+#		var d2 = d / ratio_div
+#		res.add_item(str(d) + ' x ' + str(d2))
 
 	for i in aalist:
 		aa.add_item(i)
@@ -264,10 +268,33 @@ func _ui_btn_pressed(btn):
 	if btn == 'dbg':
 		_show_debug()
 
+func _ratio_select(ID):
+	if ID == 0:
+		ratio_div = 1.333333333
+	elif ID == 1:
+		ratio_div = 1.777777778
+	elif ID == 2:
+		ratio_div = 1.6
+	
+#	return ratio_div
+
+	print('ratio: ',ratio_div)
+	_res_calc()
+
+func _res_calc():
+	var res = $org/center/disp_opt/res/res
+
+	res.clear()
+
+	for d in disp_rez:
+		var d2 = d / ratio_div
+		res.add_item(str(d) + ' x ' + str(d2))
+
 func _res_select(ID):
 	pass
 
-func _aa_select(ID):	
+func _aa_select(ID):
+#	print(ID)
 	if ID == 0:
 		get_viewport().MSAA_DISABLED
 	elif ID == 1:
@@ -278,7 +305,6 @@ func _aa_select(ID):
 		get_viewport().MSAA_8X
 	elif ID == 4:
 		get_viewport().MSAA_16X
-	print(ID)
 	
 func _opts_menu():
 	var menu = $org/center/opts
