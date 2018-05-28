@@ -277,39 +277,27 @@ func _ratio_select(ID):
 		ratio_div = 1.777777778
 	elif ID == 2:
 		ratio_div = 1.6
-	
-#	return ratio_div
 
-#	print('ratio: ',ratio_div)
 	_res_calc()
 
 func _res_calc():
 	var res = $org/center/disp_opt/res/res
-
+	var i = 0
 	res.clear()
-
-	for d in disp_rez:
-		var d2 = d / ratio_div
-		res.add_item(str(d) + ' x ' + str(d2))
+	for x in disp_rez:
+		var y = x / ratio_div
+		res.add_item(str(x) + ' x ' + str(y))
 
 func _res_select(ID):
-	pass
+	print(disp_rez[ID], disp_rez[ID] / ratio_div)
+	OS.set_window_size(Vector2(disp_rez[ID], disp_rez[ID] / ratio_div))
+
+#	$org/center/disp_opt/res/res.get_popup().get_index()
+#	print($org/center/disp_opt/res/res.get_popup().get_item_text(ID))
+#	pass
 
 func _aa_select(ID):
-	print(ID)
-#	if ID == 0:
-#		get_viewport().msaa = Viewport.MSAA_DISABLED
-#	elif ID == 1:
-#		get_viewport().msaa = Viewport.MSAA_2X
-#	elif ID == 2:
-#		get_viewport().msaa = Viewport.MSAA_4X
-#	elif ID == 3:
-#		get_viewport().msaa = Viewport.MSAA_8X
-#	elif ID == 4:
-#		get_viewport().msaa = Viewport.MSAA_16X
-#	VisualServer.viewport_set_msaa(get_viewport(), ID)
 	get_viewport().msaa = ID
-	print(get_viewport().msaa)
 	
 func _opts_menu():
 	var menu = $org/center/opts
@@ -342,7 +330,6 @@ func _disp_opts():
 		opts.set_visible(false)
 
 func _opts_btn_pressed(btn):
-	print(btn)
 	if btn == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
 			OS.set_window_fullscreen(true)
