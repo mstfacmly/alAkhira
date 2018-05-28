@@ -30,6 +30,7 @@ const disp_rez = [
 	800,
 	1024,
 	1280,
+	1366,
 	1600,
 	1920,
 	2560,
@@ -56,6 +57,7 @@ func _ready():
 	$org/right/version.text = str(0.11)
 	shifter.curr
 	_signals()
+	
 	var ID = $org/center/disp_opt/ratio/ratio.get_selected_id()
 	_ratio_select(ID)
 	
@@ -278,7 +280,7 @@ func _ratio_select(ID):
 	
 #	return ratio_div
 
-	print('ratio: ',ratio_div)
+#	print('ratio: ',ratio_div)
 	_res_calc()
 
 func _res_calc():
@@ -294,17 +296,20 @@ func _res_select(ID):
 	pass
 
 func _aa_select(ID):
-#	print(ID)
-	if ID == 0:
-		get_viewport().MSAA_DISABLED
-	elif ID == 1:
-		get_viewport().MSAA_2X
-	elif ID == 2:
-		get_viewport().MSAA_4X
-	elif ID == 3:
-		get_viewport().MSAA_8X
-	elif ID == 4:
-		get_viewport().MSAA_16X
+	print(ID)
+#	if ID == 0:
+#		get_viewport().msaa = Viewport.MSAA_DISABLED
+#	elif ID == 1:
+#		get_viewport().msaa = Viewport.MSAA_2X
+#	elif ID == 2:
+#		get_viewport().msaa = Viewport.MSAA_4X
+#	elif ID == 3:
+#		get_viewport().msaa = Viewport.MSAA_8X
+#	elif ID == 4:
+#		get_viewport().msaa = Viewport.MSAA_16X
+#	VisualServer.viewport_set_msaa(get_viewport(), ID)
+	get_viewport().msaa = ID
+	print(get_viewport().msaa)
 	
 func _opts_menu():
 	var menu = $org/center/opts
