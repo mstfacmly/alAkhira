@@ -212,6 +212,7 @@ func _on_unpause():
 	Input.set_mouse_mode(2)
 	$org/right/menuList.hide()
 	$org/center/opts.hide()
+	$org/center/disp_opt.hide()
 	get_tree().set_pause(false)
 	
 	var type = $org/right/menuList.get_children()
