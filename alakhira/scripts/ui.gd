@@ -20,7 +20,32 @@ var paused = false
 var anim_hlth = 0
 var spd = 2
 
+const languages = [
+	'none',
+]
+
+const disp_rez = [
+	320, 
+	640,
+	800,
+	1024,
+	1280,
+	1366,
+	1600,
+	1920,
+	2560,
+	3200,
+	3840
+]
+
+const ratio = [
+	'4:3',
+	'16:9',
+	'16:10',
+]
+
 func _ready():
+	$org/right/version.text = str(0.11)
 	shifter.curr
 	_signals()
 	
@@ -67,14 +92,20 @@ func _signals():
 	$org/right/menuList/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
 
 	# Options Menu
-	$org/center/container/opts/ctrls.connect("pressed", self, "_opts_btn_pressed", ['ctrls'])
-	$org/center/container/opts/vsync.connect("pressed", self, "_opts_btn_pressed", ['vsync'])
-	$org/center/container/opts/fullscreen.connect("pressed", self, "_opts_btn_pressed", ['fullscreen'])
-	$org/center/container/opts/back.connect("pressed", self, "_opts_btn_pressed", ['back'])
-	$org/center/container/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
-	$org/center/container/over/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
+	$org/center/opts/ctrls.connect("pressed", self, "_opts_btn_pressed", ['ctrls'])
+	$org/center/opts/disp_opt.connect('pressed', self, '_ui_btn_pressed', ['disp'])
+	$org/center/opts/back.connect("pressed", self, "_opts_btn_pressed", ['back'])
+	$org/center/disp_opt/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
+	$org/center/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
+	$org/center/over/quit.connect("pressed", self, "_ui_btn_pressed", ['quit'])
 	
-	$org/center/container/over/lune_site.connect("pressed", self, "_ui_btn_pressed", ['site'])
+	$org/center/disp_opt/vsync/vsync.connect("pressed", self, "_opts_btn_pressed", ['vsync'])
+	$org/center/disp_opt/fs/fullscreen.connect("pressed", self, "_opts_btn_pressed", ['fullscreen'])
+	$org/center/disp_opt/ratio/ratio.connect('item_selected', self, '_opts_btn_pressed', ['ratio'])
+	$org/center/disp_opt/res/res.connect('item_selected', self, '_opts_btn_pressed', ['res'])
+	$org/center/disp_opt/fsaa/aa.connect('item_selected', self, '_opts_btn_pressed', ['aa'])
+	
+	$org/center/over/lune_site.connect("pressed", self, "_ui_btn_pressed", ['site'])
 
 func _main_menu():
 	# Show/Hide Menu Items
@@ -89,22 +120,39 @@ func _main_menu():
 	$org/right/menuList/quit.show()
 	$org/right/hlth.hide()
 	
-	$org/center/container/opts.hide()
-	$org/center/container/over/thanks.hide()
-	$org/center/container/over/rld.hide()
-	$org/center/container/over/quit.hide()
-	$org/center/container/over/lune_site.hide()
+	$org/center/opts.hide()
+	$org/center/disp_opt.hide()
+	$org/center/ctrls.hide()
+	$org/center/over/thanks.hide()
+	$org/center/over/rld.hide()
+	$org/center/over/quit.hide()
+	$org/center/over/lune_site.hide()
 
 func _opts_container():
-	$org/center/container/opts/lang.disabled = true
-	$org/center/container/opts/ctrls.disabled = true
-	$org/center/container/opts/res.disabled = true
-	$org/center/container/opts/aa.disabled = true
+	$org/center/opts/ctrls.disabled = true
+	var lang = $org/center/opts/lang/lang
+	var rat = $org/center/disp_opt/ratio/ratio
+	var res = $org/center/disp_opt/res/res
+	var aa = $org/center/disp_opt/fsaa/aa
 	
 	if OS.is_window_fullscreen() != false:
-		$org/center/container/opts/fullscreen.set_pressed(true)
+		$org/center/disp_opt/fs/fullscreen.set_pressed(true)
 	if OS.is_vsync_enabled() != false:
-		$org/center/container/opts/vsync.set_pressed(true)
+		$org/center/disp_opt/vsync/vsync.set_pressed(true)
+		
+	for l in languages:
+		lang.add_item(str(l))
+
+	for r in ratio:
+		rat.add_item(str(r))
+
+	for d in disp_rez:
+		var d2 = d / 1.777777778
+		res.add_item(str(d) + ' x ' + str(d2))
+
+	var aalist = ['Disabled', '2x', '4x', '8x', '16x']
+	for i in aalist:
+		aa.add_item(i)
 
 func _gen_ui():
 	az = get_parent()
@@ -118,8 +166,9 @@ func _gen_ui():
 	
 	$org/left/debug_info.hide()
 
-	$org/center/container/over.hide()
-	$org/center/container/opts.hide()
+	$org/center/over.hide()
+	$org/center/opts.hide()
+	$org/center/disp_opt.hide()
 
 	$org/right/menuList.hide()
 	$org/right/version.hide()
@@ -130,13 +179,12 @@ func _gen_ui():
 	$org/right/menuList/rsm.show()
 
 func _on_pause():
-	get_tree().set_pause(true)
-	if get_parent().get_name() == 'az':
-		az.hide()
+	az.hide()
 	bar.hide()
 	paused = true
 	Input.set_mouse_mode(0)
 	$org/right/menuList.show()
+	get_tree().set_pause(true)
 
 	if shifter.curr != 'spi':
 		envanim.play('shift', -1, spd, (spd < 0))
@@ -146,14 +194,13 @@ func _on_pause():
 		shifter.curr = 'phys'
 
 func _on_unpause():
-	get_tree().set_pause(false)
-	if get_parent().get_name() == 'az':
-		az.show()
+	az.show()
 	bar.show()
 	paused = false
 	Input.set_mouse_mode(2)
 	$org/right/menuList.hide()
-	$org/center/container/opts.hide()
+	$org/center/opts.hide()
+	get_tree().set_pause(false)
 	
 	var type = $org/right/menuList.get_children()
 	for i in type:
@@ -193,6 +240,9 @@ func _ui_btn_pressed(btn):
 	if btn == 'opts':
 		_opts_menu()
 		
+	if btn == 'disp':
+		_disp_opts()
+	
 	if btn == 'debug':
 		pass
 	
@@ -210,7 +260,7 @@ func _ui_btn_pressed(btn):
 		_show_debug()
 
 func _opts_menu():
-	var menu = $org/center/container/opts
+	var menu = $org/center/opts
 
 	if menu.is_visible() != true:	
 		menu.set_visible(true)
@@ -225,6 +275,20 @@ func _opts_menu():
 			else:
 				i.disabled = false
 
+func _disp_opts():
+	var opts = $org/center/opts
+	var disp = $org/center/disp_opt
+	
+	if disp.is_visible() != true:
+		disp.set_visible(true)
+	else:
+		disp.set_visible(false)
+		
+	if opts.is_visible() != true:
+		opts.set_visible(true)
+	else:
+		opts.set_visible(false)
+
 func _opts_btn_pressed(btn):
 	if btn == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
@@ -238,8 +302,23 @@ func _opts_btn_pressed(btn):
 		else:
 			OS.set_use_vsync(false)
 	
+	if btn == 'aa':
+		if get_selected_id() == 0:
+			Viewport.MSAA_DISABLED
+		elif get_selected_id() == 1:
+			Viewport.MSAA_2X
+		elif get_selected_id() == 2:
+			Viewport.MSAA_4X
+		elif get_selected_id() == 3:
+			Viewport.MSAA_8X
+		elif get_selected_id() == 4:
+			Viewport.MSAA_16X
+	
 	if btn == 'back':
 		_opts_menu()
+		
+	if btn == 'disp_b':
+		_disp_opts()
 
 func _show_debug():
 	var dbg_txt = $org/left/debug_info
@@ -251,7 +330,7 @@ func _show_debug():
 
 func _over():
 	$org/right/menuList.hide()
-	$org/center/container/over.show()
+	$org/center/over.show()
 	az.hide()
 	$'../../az_spi'.show()
 	az.set_physics_process(false)
