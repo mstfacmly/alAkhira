@@ -28,7 +28,7 @@ window/size/resizable=false
 window/size/borderless=true
 window/vsync/use_vsync=false
 window/stretch/mode="viewport"
-window/stretch/aspect="keep_height"
+window/stretch/aspect="expand"
 
 [gdnative]
 
