@@ -42,8 +42,8 @@ func _ready():
 
 
 func _input(ev):
-	var cast = Input.is_action_pressed("cast")
-	var attack = Input.is_action_just_pressed("arm_l")
+	var cast = Input.is_action_pressed('cast')
+	var attack = Input.is_action_just_pressed('arm_l')
 	var shift = cast && attack
 
 	if shift && state != DEAD:

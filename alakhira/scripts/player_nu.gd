@@ -83,20 +83,20 @@ func _ready():
 	
 	shifter.state = ALIVE
 	
-	if cam.has_method("set_enabled"):
+	if cam.has_method('set_enabled'):
 		cam.set_enabled(true)
 	
 	chkpt()
 
 func input(event):	
-	Input.add_joy_mapping("030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,", true)
+	Input.add_joy_mapping('030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,', true)
 	
-	mv_f = Input.is_action_pressed("mv_f")
-	mv_b = Input.is_action_pressed("mv_b")
-	mv_l = Input.is_action_pressed("mv_l")
-	mv_r = Input.is_action_pressed("mv_r")
+	mv_f = Input.is_action_pressed('mv_f')
+	mv_b = Input.is_action_pressed('mv_b')
+	mv_l = Input.is_action_pressed('mv_l')
+	mv_r = Input.is_action_pressed('mv_r')
 	
-	jmp_att = Input.is_action_just_pressed("feet")
+	jmp_att = Input.is_action_just_pressed('feet')
 	
 	js_input(event)
 
@@ -268,7 +268,7 @@ func _physics_process(delta):
 					attempts -= 1
 				else:
 					lv = Vector3(0,0.0000001,0)
-				if Input.is_action_just_pressed('action'):
+				if Input.is_action_just_pressed('act'):
 					mesh.rotate_y(179)
 	
 			elif col_result == ['back']:
@@ -317,14 +317,14 @@ func _physics_process(delta):
 		if jmp_att:
 			on_ledge = false
 			translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
-		if Input.is_action_just_pressed("action"):
+		if Input.is_action_just_pressed('act'):
 			mesh.rotate(up, 185)
 			on_ledge = false
 	
 	elif !on_ledge:
 		lv += g * (delta *3)
 
-	if Input.is_action_just_pressed("head"):
+	if Input.is_action_just_pressed('head'):
 #		body_apply_impulse(self, ppos, mesh_xform.basis.xform(Vector3(-2,0,0)))
 #		translate(mesh_xform.basis.xform(Vector3(-2,4.2,-2)))
 #		hvel = mesh_xform.basis.xform(Vector3(jmp_spd.y, jmp_spd.y ,0))
@@ -410,8 +410,8 @@ func player_fp(delta):
 			anim = 9
 
 	if is_on_floor():
-		animate.blend2_node_set_amount("run", hspeed / mv_spd)
-	animate.transition_node_set_current("state", anim)
+		animate.blend2_node_set_amount('run', hspeed / mv_spd)
+	animate.transition_node_set_current('state', anim)
 
 	if !is_on_floor() or (!col_result.empty() and col_result != ['back'] and hspeed >= run):
 		cam.cam_radius = 4.7
@@ -494,7 +494,7 @@ func hlth_drn(delta):
 		elif curr == 'spi':
 			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
 		
-		if Input.is_action_pressed("cast") && Input.is_action_just_pressed("arm_l"):
+		if Input.is_action_pressed('cast') && Input.is_action_just_pressed('arm_l'):
 			hlth -= 7
 	
 		emit_signal('hlth_chng', hlth)

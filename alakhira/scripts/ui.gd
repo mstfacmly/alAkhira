@@ -9,7 +9,7 @@ export (String, FILE) var test = 'res://env/test/testroom.tscn'
 onready var bar = $org/right/hlth
 onready var tween = $tween
 onready var t = $timer
-onready var debug = $org/left
+#onready var debug = $org/left
 onready var shifter = shift
 
 # variables
@@ -53,12 +53,38 @@ const aalist = [
 	'16x'
 ]
 
+const INPUT_CFG = [
+	'mv_f', 
+	'mv_b',
+	'mv_l',
+	'mv_r',
+	'arm_l',
+	'arm_r',
+	'head',
+	'feet',
+	'cast',
+	'act',
+]
+
+const CFG_FILE = 'user://config.cfg'
+var acts
+var btn
+
 func _ready():
 	$org/right/version.text = str(0.11)
+
+#	_load_cfg()
+	
+	for acts in INPUT_CFG:
+		var input_ev = InputMap.get_action_list(acts)[0]
+		var btn = $org/right/ctrls.get_node(acts).get_node('btn')
+		btn.text = input_ev.as_text()
+#		btn.connect('pressed', self, 'wait_for_input', [acts])
+
 	shifter.curr
 	_signals()
 	
-	var ID = $org/center/disp_opt/ratio/ratio.get_selected_id()
+	var ID = $org/right/disp/ratio/ratio.get_selected_id()
 	_ratio_select(ID)
 	
 	if get_parent().get_name() == 'az':
@@ -70,6 +96,41 @@ func _ready():
 		_main_menu()
 		
 	_opts_container()
+	set_process_input(true)
+
+func _load_cfg():
+	var cfg = ConfigFile.new()
+	var err = cfg.load(CFG_FILE)
+	
+	if err:
+		for act_name in INPUT_CFG:
+			var act_list = InputMap.get_action_list(act_name)
+			var scancode = OS.get_scancode_string(act_list[0].scancode)
+			cfg.set_value('input', act_name, scancode)
+		cfg.save(CFG_FILE)
+	else:
+		for act_name in cfg.get_section_keys('input'):
+			var scancode = OS.find_scancode_from_string(cfg.get_value('input', act_name))
+			var ev = InputEventKey.new()
+			ev.scancode = scancode
+			for old_ev in InputMap.get_action_list(act_name):
+				if old_ev is InputEventKey:
+					InputMap.action_erase_event(acts, old_ev)
+			InputMap.action_add_event(act_name, ev)
+
+func _save_cfg(sect, key, val):
+	var cfg = ConfigFile.new()
+	var err = cfg.load(CFG_FILE)
+	if err:
+		print('Error on loading config file: ', err)
+	else:
+		cfg.set_value(sect, key, val)
+		cfg.save(CFG_FILE)
+	
+func wait_for_input(bind):
+	acts = bind
+	btn = $org/right/ctrls.get_node(acts).get_node('btn')
+	
 	set_process_input(true)
 
 func _input(ev):
@@ -104,25 +165,27 @@ func _signals():
 	$org/right/menuList/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 
 	# Options Menu
-	$org/center/opts/ctrls.connect('pressed', self, '_opts_btn_pressed', ['ctrls'])
-	$org/center/opts/disp_opt.connect('pressed', self, '_ui_btn_pressed', ['disp'])
-	$org/center/opts/back.connect('pressed', self, '_opts_btn_pressed', ['back'])
-	$org/center/disp_opt/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
-	$org/center/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
-	$org/center/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
+	$org/right/opts/ctrls.connect('pressed', self, '_ui_btn_pressed', ['ctrls'])
+	$org/right/opts/disp.connect('pressed', self, '_ui_btn_pressed', ['disp'])
+	$org/right/opts/back.connect('pressed', self, '_opts_btn_pressed', ['back'])
+	$org/right/disp/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
+	$org/right/ctrls/back.connect('pressed', self, '_opts_btn_pressed', ['ctrls_b'])	
+	$org/left/org/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
+	$org/left/org/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 	
-	$org/center/disp_opt/vsync/vsync.connect('pressed', self, '_opts_btn_pressed', ['vsync'])
-	$org/center/disp_opt/fs/fullscreen.connect('pressed', self, '_opts_btn_pressed', ['fullscreen'])
+	$org/right/disp/vsync/vsync.connect('pressed', self, '_opts_btn_pressed', ['vsync'])
+	$org/right/disp/fs/fullscreen.connect('pressed', self, '_opts_btn_pressed', ['fullscreen'])
 	
-	$org/center/disp_opt/ratio/ratio.get_popup().connect('id_pressed', self, '_ratio_select')
-	$org/center/disp_opt/res/res.get_popup().connect('id_pressed', self, '_res_select')
-	$org/center/disp_opt/fsaa/aa.get_popup().connect('id_pressed', self, '_aa_select')
+	$org/right/disp/ratio/ratio.get_popup().connect('id_pressed', self, '_ratio_select')
+	$org/right/disp/res/res.get_popup().connect('id_pressed', self, '_res_select')
+	$org/right/disp/fsaa/aa.get_popup().connect('id_pressed', self, '_aa_select')
 	
-	$org/center/over/lune_site.connect('pressed', self, '_ui_btn_pressed', ['site'])
+	$org/left/org/over/lune_site.connect('pressed', self, '_ui_btn_pressed', ['site'])
 
 func _main_menu():
 	# Show/Hide Menu Items
-	$org/left/debug_info.show()
+#	$org/left/debug_info.show()
+	$org/left/dbg.hide()
 	
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
@@ -132,36 +195,38 @@ func _main_menu():
 	$org/right/menuList/opts.show()
 	$org/right/menuList/quit.show()
 	$org/right/hlth.hide()
+	$org/right/opts.hide()
+	$org/right/disp.hide()
+	$org/right/ctrls.hide()
 	
-	$org/center/opts.hide()
-	$org/center/disp_opt.hide()
-	$org/center/ctrls.hide()
-	$org/center/over/thanks.hide()
-	$org/center/over/rld.hide()
-	$org/center/over/quit.hide()
-	$org/center/over/lune_site.hide()
+	$org/left/org/over/thanks.hide()
+	$org/left/org/over/rld.hide()
+	$org/left/org/over/quit.hide()
+	$org/left/org/over/lune_site.hide()
 
 func _opts_container():
-	$org/center/opts/ctrls.disabled = true
-	var lang = $org/center/opts/lang/lang
-	var rat = $org/center/disp_opt/ratio/ratio
-	var res = $org/center/disp_opt/res/res
-	var aa = $org/center/disp_opt/fsaa/aa
+	$org/right/opts/lang.disabled = true
+	
+	var rat = $org/right/disp/ratio/ratio
+	var res = $org/right/disp/res/res
+	var aa = $org/right/disp/fsaa/aa
 	
 	if OS.is_window_fullscreen() != false:
-		$org/center/disp_opt/fs/fullscreen.set_pressed(true)
+		$org/right/disp/fs/fullscreen.text = 'On'
+	else:
+		$org/right/disp/fs/fullscreen.text = 'Off'
+	
 	if OS.is_vsync_enabled() != false:
-		$org/center/disp_opt/vsync/vsync.set_pressed(true)
-		
+		$org/right/disp/vsync/vsync.text = 'On'
+	else:
+		$org/right/disp/vsync/vsync.text = 'Off'
+	
 	for l in languages:
-		lang.add_item(str(l))
+#		lang.add_item(str(l))
+		pass
 
 	for r in ratio:
 		rat.add_item(str(r))
-
-#	for d in disp_rez:
-#		var d2 = d / ratio_div
-#		res.add_item(str(d) + ' x ' + str(d2))
 
 	for i in aalist:
 		aa.add_item(i)
@@ -176,11 +241,13 @@ func _gen_ui():
 		updt_hlth(max_hlth)
 		az.get_node('cam').set_enabled(true)
 	
-	$org/left/debug_info.hide()
-
-	$org/center/over.hide()
-	$org/center/opts.hide()
-	$org/center/disp_opt.hide()
+#	$org/left/debug_info.hide()
+	$org/left/dbg.hide()
+	
+	$org/left/org/over.hide()
+	$org/right/opts.hide()
+	$org/right/disp.hide()
+	$org/right/ctrls.hide()
 
 	$org/right/menuList.hide()
 	$org/right/version.hide()
@@ -211,13 +278,14 @@ func _on_unpause():
 	paused = false
 	Input.set_mouse_mode(2)
 	$org/right/menuList.hide()
-	$org/center/opts.hide()
-	$org/center/disp_opt.hide()
+	$org/right/opts.hide()
+	$org/right/disp.hide()
+	$org/right/ctrls.hide()
 	get_tree().set_pause(false)
 	
-	var type = $org/right/menuList.get_children()
-	for i in type:
-				i.disabled = false
+#	var type = $org/right/menuList.get_children()
+#	for i in type:
+#				i.disabled = false
 
 	if shifter.curr != 'phys':
 		envanim.play('shift', -1, -spd, (-spd < 0))
@@ -241,6 +309,7 @@ func _process(delta):
 	bar.value = anim_hlth
 
 func _ui_btn_pressed(btn):
+#	print(btn)
 	if btn == 'start':
 		_gen_ui()
 		get_node('/root/global').load_scene(test)
@@ -253,23 +322,49 @@ func _ui_btn_pressed(btn):
 		_opts_menu()
 		
 	if btn == 'disp':
-		_disp_opts()
-	
-	if btn == 'debug':
-		pass
+		_disps()
+		
+	if btn == 'ctrls':
+		_ctrls()
 	
 	if btn == 'quit':
 		get_tree().quit()
-	pass
-	
-	if btn == 'site':
-		OS.shell_open('http://studioslune.com/')
 	
 	if btn == 'rsm':
 		_on_unpause()
 		
 	if btn == 'dbg':
-		_show_debug()
+		_show_dbg()
+	
+	if btn == 'site':
+		OS.shell_open('http://studioslune.com/')
+
+
+func _opts_btn_pressed(btn):
+	if btn == 'fullscreen':
+		if OS.is_window_fullscreen() != true:
+			OS.set_window_fullscreen(true)
+			$org/right/disp/fs/fullscreen.text = 'On'
+		else:
+			OS.set_window_fullscreen(false)
+			$org/right/disp/fs/fullscreen.text = 'Off'
+	
+	if btn == 'vsync':
+		if OS.is_vsync_enabled() != true:
+			OS.set_use_vsync(true)
+			$org/right/disp/vsync/vsync.text = 'On'
+		else:
+			OS.set_use_vsync(false)
+			$org/right/disp/vsync/vsync.text = 'Off'
+	
+	if btn == 'back':
+		_opts_menu()
+		
+	if btn == 'disp_b':
+		_disps()
+		
+	if btn == 'ctrls_b':
+		_ctrls()
 
 func _ratio_select(ID):
 	if ID == 0:
@@ -282,7 +377,7 @@ func _ratio_select(ID):
 	_res_calc()
 
 func _res_calc():
-	var res = $org/center/disp_opt/res/res
+	var res = $org/right/disp/res/res
 	var i = 0
 	res.clear()
 	for x in disp_rez:
@@ -302,24 +397,29 @@ func _aa_select(ID):
 	get_viewport().msaa = ID
 	
 func _opts_menu():
-	var menu = $org/center/opts
+	var opts = $org/right/opts
 
+	if opts.is_visible() != true:	
+		opts.set_visible(true)
+	else:
+		opts.set_visible(false)
+	
+	var menu = $org/right/menuList
 	if menu.is_visible() != true:	
 		menu.set_visible(true)
 	else:
 		menu.set_visible(false)
-	
-	var type = $org/right/menuList.get_children()
-	for i in type:
-		if i.get_class() == 'Button':
-			if i.disabled != true:
-				i.disabled = true
-			else:
-				i.disabled = false
+#	var type = $org/right/menuList.get_children()
+#	for i in type:
+#		if i.get_class() == 'Button':
+#			if i.disabled != true:
+#				i.disabled = true
+#			else:
+#				i.disabled = false
 
-func _disp_opts():
-	var opts = $org/center/opts
-	var disp = $org/center/disp_opt
+func _disps():
+	var opts = $org/right/opts
+	var disp = $org/right/disp
 	
 	if disp.is_visible() != true:
 		disp.set_visible(true)
@@ -330,37 +430,34 @@ func _disp_opts():
 		opts.set_visible(true)
 	else:
 		opts.set_visible(false)
-
-func _opts_btn_pressed(btn):
-	if btn == 'fullscreen':
-		if OS.is_window_fullscreen() != true:
-			OS.set_window_fullscreen(true)
-		else:
-			OS.set_window_fullscreen(false)
-	
-	if btn == 'vsync':
-		if OS.is_vsync_enabled() == true:
-			OS.set_use_vsync(true)
-		else:
-			OS.set_use_vsync(false)
-	
-	if btn == 'back':
-		_opts_menu()
 		
-	if btn == 'disp_b':
-		_disp_opts()
+func _ctrls():
+	var opts = $org/right/opts
+	var ctrls = $org/right/ctrls
+	
+	if ctrls.is_visible() != true:
+		ctrls.set_visible(true)
+	else:
+		ctrls.set_visible(false)
+		
+	if opts.is_visible() != true:
+		opts.set_visible(true)
+	else:
+		opts.set_visible(false)
 
-func _show_debug():
-	var dbg_txt = $org/left/debug_info
+func _show_dbg():
+	var dbg_txt = $org/left/dbg
 
-	if dbg_txt.is_visible() != true:	
+	if dbg_txt.is_visible() != true:
 		dbg_txt.set_visible(true)
 	else:
 		dbg_txt.set_visible(false)
 
 func _over():
 	$org/right/menuList.hide()
-	$org/center/over.show()
+	$org/left/dbg.hide()
+	$org/left/org/over.show()
+	$org/right/hlth.hide()
 	az.hide()
 	$'../../az_spi'.show()
 	az.set_physics_process(false)
