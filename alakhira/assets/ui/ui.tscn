@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/ui.gd" type="Script" id=1]
-[ext_resource path="res://scripts/debug_text.gd" type="Script" id=2]
-[ext_resource path="res://assets/ui/options.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/ui/menuList.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/ui/left.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/ui/menuList.tscn" type="PackedScene" id=3]
 
 [node name="ui" type="MarginContainer" index="0"]
 
@@ -37,7 +36,6 @@ playback/speed = 1.0
 
 [node name="org" type="HBoxContainer" parent="." index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -45,7 +43,7 @@ anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 579.0
+margin_bottom = 1157.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -53,148 +51,22 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
-_sections_unfolded = [ "Margin" ]
+_sections_unfolded = [ "Margin", "Size Flags" ]
 
-[node name="left" type="VBoxContainer" parent="org" index="0"]
+[node name="left" parent="org" index="0" instance=ExtResource( 2 )]
 
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 306.0
-margin_bottom = 558.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
-
-[node name="debug_info" type="Label" parent="org/left" index="0"]
-
-pause_mode = 1
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 306.0
-margin_bottom = 558.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 3
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-script = ExtResource( 2 )
-_sections_unfolded = [ "Grow Direction", "Pause", "Size Flags" ]
-
-[node name="center" parent="org" index="1" instance=ExtResource( 3 )]
-
-editor/display_folded = true
-margin_left = 310.0
+margin_left = 0.0
 margin_top = 0.0
-margin_right = 630.0
-margin_bottom = 558.0
+margin_right = 616.0
+margin_bottom = 1136.0
+size_flags_stretch_ratio = 2.0
 
-[node name="opts" parent="org/center" index="0"]
-
-margin_left = 0.0
-margin_top = 173.0
-margin_right = 320.0
-margin_bottom = 384.0
-
-[node name="disp_opt" parent="org/center" index="1"]
-
-margin_left = 0.0
-margin_top = 162.0
-margin_right = 320.0
-margin_bottom = 395.0
-
-[node name="ctrls" parent="org/center" index="2"]
-
-margin_left = 0.0
-margin_top = 243.0
-margin_right = 320.0
-margin_bottom = 314.0
-
-[node name="over" parent="org/center" index="3"]
-
-margin_left = -1.0
-margin_top = 193.0
-margin_right = 321.0
-margin_bottom = 365.0
-
-[node name="right" parent="org" index="2" instance=ExtResource( 4 )]
+[node name="right" parent="org" index="1" instance=ExtResource( 3 )]
 
 editor/display_folded = true
-margin_left = 634.0
+margin_left = 620.0
 margin_right = 940.0
-margin_bottom = 558.0
-size_flags_horizontal = 3
-
-[node name="sep2" parent="org/right" index="1"]
-
-margin_right = 306.0
-margin_bottom = 122.0
-
-[node name="menuList" parent="org/right" index="2"]
-
-editor/display_folded = true
-margin_top = 122.0
-margin_right = 306.0
-margin_bottom = 419.0
-
-[node name="dbg" parent="org/right/menuList" index="0"]
-
-margin_right = 306.0
-
-[node name="contd" parent="org/right/menuList" index="1"]
-
-margin_right = 306.0
-
-[node name="rld" parent="org/right/menuList" index="2"]
-
-margin_right = 306.0
-
-[node name="start" parent="org/right/menuList" index="3"]
-
-margin_right = 306.0
-
-[node name="rsm" parent="org/right/menuList" index="4"]
-
-margin_right = 306.0
-
-[node name="opts" parent="org/right/menuList" index="5"]
-
-margin_right = 306.0
-
-[node name="quit" parent="org/right/menuList" index="6"]
-
-margin_right = 306.0
-
-[node name="sep" parent="org/right" index="3"]
-
-margin_top = 419.0
-margin_right = 306.0
-margin_bottom = 541.0
-
-[node name="version" parent="org/right" index="4"]
-
-margin_top = 541.0
-margin_right = 306.0
-margin_bottom = 554.0
-
-[node name="hlth" parent="org/right" index="5"]
-
-margin_top = 554.0
-margin_right = 306.0
-margin_bottom = 557.5
+margin_bottom = 1136.0
 
 [node name="timer" type="Timer" parent="." index="2"]
 
@@ -206,5 +78,4 @@ autostart = false
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 
-[editable path="org/center"]
 [editable path="org/right"]
