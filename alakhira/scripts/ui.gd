@@ -24,7 +24,7 @@ var ev_mod = 0
 const languages = [
 	'English',
 	'Français',
-#	'العربية',
+	'العربية',
 ]
 
 const disp_rez = [
@@ -67,6 +67,11 @@ const INPUT_CFG = [
 	'feet',
 	'cast',
 	'act',
+]
+
+const axis = [
+	'x',
+	'y',
 ]
 
 const CFG_FILE = 'user://config.cfg'
@@ -183,8 +188,6 @@ func _input(ev):
 #			InputMap.action_add_event(acts, ev)
 #			_save_cfg('input', acts, scancode)
 
-	_opts_container()
-
 func _signals():
 	# Main Menu
 	$org/right/menuList/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
@@ -197,11 +200,13 @@ func _signals():
 	# Options Menu
 	$org/right/opts/ctrls.connect('pressed', self, '_ui_btn_pressed', ['ctrls'])
 	$org/right/opts/lang.connect('pressed', self, '_ui_btn_pressed', ['langs'])
+	$org/right/opts/cam.connect('pressed', self, '_ui_btn_pressed', ['cam'])
 	$org/right/opts/disp.connect('pressed', self, '_ui_btn_pressed', ['disp'])
 	$org/right/opts/back.connect('pressed', self, '_opts_btn_pressed', ['back'])
 	$org/right/disp/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
 	$org/right/ctrls/back.connect('pressed', self, '_opts_btn_pressed', ['ctrls_b'])
 	$org/right/langs/back.connect('pressed', self, '_opts_btn_pressed', ['langs_b'])
+	$org/right/cam/back.connect('pressed', self, '_opts_btn_pressed', ['cam_b'])
 	$org/left/org/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
 	$org/left/org/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 	
@@ -231,6 +236,7 @@ func _main_menu():
 	$org/right/disp.hide()
 	$org/right/ctrls.hide()
 	$org/right/langs.hide()
+	$org/right/cam.hide()
 	
 	$org/left/org/over/thanks.hide()
 	$org/left/org/over/rld.hide()
@@ -295,12 +301,13 @@ func _gen_ui():
 		az.get_node('cam').set_enabled(true)
 	
 	$org/left/dbg.hide()
-	
 	$org/left/org/over.hide()
+	
 	$org/right/opts.hide()
 	$org/right/disp.hide()
 	$org/right/ctrls.hide()
 	$org/right/langs.hide()
+	$org/right/cam.hide()
 
 	$org/right/menuList.hide()
 	$org/right/version.hide()
@@ -381,6 +388,9 @@ func _ui_btn_pressed(btn):
 		
 	if btn == 'ctrls':
 		_ctrls()
+		
+	if btn == 'cam':
+		_cam()
 	
 	if btn == 'quit':
 		get_tree().quit()
@@ -420,6 +430,9 @@ func _opts_btn_pressed(btn):
 		
 	if btn == 'ctrls_b':
 		_ctrls()
+		
+	if btn == 'cam_b':
+		_cam()
 		
 	if btn == 'langs_b':
 		_langs()
@@ -511,6 +524,25 @@ func _ctrls():
 		ctrls.set_visible(true)
 	else:
 		ctrls.set_visible(false)
+		
+	if opts.is_visible() != true:
+		opts.set_visible(true)
+	else:
+		opts.set_visible(false)
+
+func _cam():
+	var opts = $org/right/opts
+	var cam = $org/right/cam
+	
+	for a in axis:
+		var btn = $org/right/cam.get_node('cam_'+(a)).get_node('btn')
+	
+		btn.set_text(a)
+	
+	if cam.is_visible() != true:
+		cam.set_visible(true)
+	else:
+		cam.set_visible(false)
 		
 	if opts.is_visible() != true:
 		opts.set_visible(true)

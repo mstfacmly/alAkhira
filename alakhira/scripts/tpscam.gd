@@ -22,8 +22,10 @@ var cam_smooth_lerp = 6.16
 var cam_pitch_minmax = Vector2(69, -28)
 var turn = Vector2()
 
-export var js_accel_x = 2.3
-export var js_accel_y = 1.3
+var js_accel_x = global.jscam_x
+var js_accel_y = global.jscam_y
+#export var js_accel_x = 2.3
+#export var js_accel_y = 1.3
 
 var up = Vector3(0,1,0)
 var ds
