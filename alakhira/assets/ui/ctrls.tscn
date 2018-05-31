@@ -99,15 +99,32 @@ custom_constants/separation = 11
 alignment = 0
 _sections_unfolded = [ "Grow Direction", "Margin" ]
 
-[node name="mv_f" type="HBoxContainer" parent="." index="0"]
+[node name="sep_top" type="CenterContainer" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 320.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+use_top_left = false
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="mv_f" type="HBoxContainer" parent="." index="1"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
+margin_top = 11.0
 margin_right = 320.0
-margin_bottom = 27.0
+margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -164,16 +181,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="mv_b" type="HBoxContainer" parent="." index="1"]
+[node name="mv_b" type="HBoxContainer" parent="." index="2"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 38.0
+margin_top = 49.0
 margin_right = 320.0
-margin_bottom = 65.0
+margin_bottom = 76.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -230,16 +247,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="mv_l" type="HBoxContainer" parent="." index="2"]
+[node name="mv_l" type="HBoxContainer" parent="." index="3"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 76.0
+margin_top = 87.0
 margin_right = 320.0
-margin_bottom = 103.0
+margin_bottom = 114.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -296,16 +313,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="mv_r" type="HBoxContainer" parent="." index="3"]
+[node name="mv_r" type="HBoxContainer" parent="." index="4"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 114.0
+margin_top = 125.0
 margin_right = 320.0
-margin_bottom = 141.0
+margin_bottom = 152.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -362,16 +379,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="arm_l" type="HBoxContainer" parent="." index="4"]
+[node name="arm_l" type="HBoxContainer" parent="." index="5"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 152.0
+margin_top = 163.0
 margin_right = 320.0
-margin_bottom = 179.0
+margin_bottom = 190.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -428,16 +445,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="arm_r" type="HBoxContainer" parent="." index="5"]
+[node name="arm_r" type="HBoxContainer" parent="." index="6"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 190.0
+margin_top = 201.0
 margin_right = 320.0
-margin_bottom = 217.0
+margin_bottom = 228.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -494,16 +511,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="head" type="HBoxContainer" parent="." index="6"]
+[node name="head" type="HBoxContainer" parent="." index="7"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 228.0
+margin_top = 239.0
 margin_right = 320.0
-margin_bottom = 255.0
+margin_bottom = 266.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -560,16 +577,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="feet" type="HBoxContainer" parent="." index="7"]
+[node name="feet" type="HBoxContainer" parent="." index="8"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 266.0
+margin_top = 277.0
 margin_right = 320.0
-margin_bottom = 293.0
+margin_bottom = 304.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -626,15 +643,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="cast" type="HBoxContainer" parent="." index="8"]
+[node name="cast" type="HBoxContainer" parent="." index="9"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 304.0
+margin_top = 315.0
 margin_right = 320.0
-margin_bottom = 331.0
+margin_bottom = 342.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -691,15 +709,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="act" type="HBoxContainer" parent="." index="9"]
+[node name="act" type="HBoxContainer" parent="." index="10"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 342.0
+margin_top = 353.0
 margin_right = 320.0
-margin_bottom = 369.0
+margin_bottom = 380.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -756,15 +775,33 @@ flat = true
 align = 2
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="back" type="Button" parent="." index="10"]
+[node name="sep_bot" type="CenterContainer" parent="." index="11"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 380.0
+margin_top = 391.0
 margin_right = 320.0
-margin_bottom = 413.0
+margin_bottom = 391.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+use_top_left = false
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="back" type="Button" parent="." index="12"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 402.0
+margin_right = 320.0
+margin_bottom = 435.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2

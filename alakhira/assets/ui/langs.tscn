@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/ui/menufont.tres" type="DynamicFont" id=1]
 
-[node name="opts" type="VBoxContainer" index="0"]
+[node name="langs" type="VBoxContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -23,37 +23,14 @@ custom_constants/separation = 11
 alignment = 0
 _sections_unfolded = [ "Grow Direction", "Margin", "Size Flags", "Theme" ]
 
-[node name="title" type="Label" parent="." index="0"]
-
-visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 320.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = ExtResource( 1 )
-text = "Options"
-align = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_fonts" ]
-
-[node name="sep_top" type="CenterContainer" parent="." index="1"]
+[node name="sep_top" type="CenterContainer" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 320.0
-margin_bottom = 36.0
+margin_bottom = 42.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -63,15 +40,15 @@ size_flags_vertical = 3
 use_top_left = false
 _sections_unfolded = [ "Size Flags" ]
 
-[node name="lang" type="Button" parent="." index="2"]
+[node name="btn0" type="Button" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 47.0
+margin_top = 53.0
 margin_right = 320.0
-margin_bottom = 83.0
+margin_bottom = 95.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -84,20 +61,20 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Language"
+text = "lang"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_fonts" ]
+_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="disp" type="Button" parent="." index="3"]
+[node name="btn1" type="Button" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 94.0
+margin_top = 106.0
 margin_right = 320.0
-margin_bottom = 130.0
+margin_bottom = 148.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -110,20 +87,20 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Display"
+text = "lang"
 flat = true
 align = 2
-_sections_unfolded = [ "custom_fonts" ]
+_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="ctrls" type="Button" parent="." index="4"]
+[node name="btn2" type="Button" parent="." index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 141.0
+margin_top = 159.0
 margin_right = 320.0
-margin_bottom = 177.0
+margin_bottom = 201.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -136,20 +113,20 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Controls"
+text = "lang"
 flat = true
 align = 2
-_sections_unfolded = [ "Grow Direction", "Size Flags", "custom_fonts" ]
+_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="cam" type="Button" parent="." index="5"]
+[node name="btn3" type="Button" parent="." index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 188.0
+margin_top = 212.0
 margin_right = 320.0
-margin_bottom = 224.0
+margin_bottom = 254.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -162,20 +139,20 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Camera"
+text = "lang"
 flat = true
 align = 2
-_sections_unfolded = [ "Grow Direction", "Size Flags", "custom_fonts" ]
+_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="sep_bot" type="CenterContainer" parent="." index="6"]
+[node name="sep_bot" type="CenterContainer" parent="." index="5"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 235.0
+margin_top = 265.0
 margin_right = 320.0
-margin_bottom = 271.0
+margin_bottom = 307.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -183,16 +160,17 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 use_top_left = false
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="back" type="Button" parent="." index="7"]
+[node name="back" type="Button" parent="." index="6"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 282.0
+margin_top = 318.0
 margin_right = 320.0
-margin_bottom = 319.0
+margin_bottom = 363.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2

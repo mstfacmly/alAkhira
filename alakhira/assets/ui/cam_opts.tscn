@@ -78,16 +78,16 @@ OptionButton/styles/normal = null
 OptionButton/styles/pressed = null
 _sections_unfolded = [ "Dialogs/constants", "ItemList", "ItemList/styles", "OptionButton/styles" ]
 
-[node name="disp" type="VBoxContainer" index="0"]
+[node name="cam" type="VBoxContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 124.0
-margin_top = 117.0
+margin_top = 27.0
 margin_right = 444.0
-margin_bottom = 350.0
+margin_bottom = 440.0
 rect_min_size = Vector2( 320, 0 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -106,6 +106,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 320.0
+margin_bottom = 73.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -113,17 +114,18 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 use_top_left = false
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="ratio" type="HBoxContainer" parent="." index="1"]
+[node name="cam_x" type="HBoxContainer" parent="." index="1"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 11.0
+margin_top = 84.0
 margin_right = 320.0
-margin_bottom = 38.0
+margin_bottom = 157.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -133,14 +135,14 @@ size_flags_vertical = 3
 alignment = 0
 _sections_unfolded = [ "Size Flags" ]
 
-[node name="RATIO" type="Label" parent="ratio" index="0"]
+[node name="NAME" type="Label" parent="cam_x" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 158.0
-margin_bottom = 27.0
+margin_bottom = 73.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -148,14 +150,14 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
-text = "Screen Ratio"
+text = "Camera X Axis"
 valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="ratio" type="OptionButton" parent="ratio" index="1"]
+[node name="btn" type="Button" parent="cam_x" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -163,7 +165,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 162.0
 margin_right = 320.0
-margin_bottom = 27.0
+margin_bottom = 73.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -171,7 +173,6 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
-custom_fonts/font = ExtResource( 2 )
 toggle_mode = false
 action_mode = 0
 enabled_focus_mode = 0
@@ -179,89 +180,18 @@ shortcut = null
 group = null
 flat = true
 align = 2
-items = [  ]
-selected = -1
-_sections_unfolded = [ "Theme", "custom_fonts" ]
-
-[node name="res" type="HBoxContainer" parent="." index="2"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 49.0
-margin_right = 320.0
-margin_bottom = 76.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
-
-[node name="RES" type="Label" parent="res" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 158.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_fonts/font = ExtResource( 1 )
-text = "Resolution"
-valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
-
-[node name="res" type="OptionButton" parent="res" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 162.0
-margin_right = 320.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = SubResource( 2 )
-custom_fonts/font = ExtResource( 2 )
-toggle_mode = false
-action_mode = 0
-enabled_focus_mode = 0
-shortcut = null
-group = null
-flat = true
-align = 2
-items = [  ]
-selected = -1
 _sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="fsaa" type="HBoxContainer" parent="." index="3"]
+[node name="cam_y" type="HBoxContainer" parent="." index="2"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 87.0
+margin_top = 168.0
 margin_right = 320.0
-margin_bottom = 114.0
+margin_bottom = 241.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -269,16 +199,16 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 0
-_sections_unfolded = [ "Margin", "Size Flags" ]
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="FSAA" type="Label" parent="fsaa" index="0"]
+[node name="NAME" type="Label" parent="cam_y" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 158.0
-margin_bottom = 27.0
+margin_bottom = 73.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -286,15 +216,14 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
-custom_constants/line_spacing = 4
-text = "FSAA"
+text = "Camera Y Axis"
 valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="aa" type="OptionButton" parent="fsaa" index="1"]
+[node name="btn" type="Button" parent="cam_y" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -302,170 +231,32 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 162.0
 margin_right = 320.0
-margin_bottom = 27.0
+margin_bottom = 73.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
-custom_fonts/font = ExtResource( 2 )
 toggle_mode = false
 action_mode = 0
-enabled_focus_mode = 2
+enabled_focus_mode = 0
 shortcut = null
 group = null
 flat = true
 align = 2
-items = [  ]
-selected = -1
-_sections_unfolded = [ "Columns", "Theme", "custom_fonts" ]
+_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="vsync" type="HBoxContainer" parent="." index="4"]
+[node name="sep_bot" type="CenterContainer" parent="." index="3"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 125.0
+margin_top = 252.0
 margin_right = 320.0
-margin_bottom = 152.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags", "custom_constants" ]
-
-[node name="VSYNC" type="Label" parent="vsync" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 158.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 5
-custom_fonts/font = ExtResource( 1 )
-custom_constants/line_spacing = 4
-text = "VSync"
-valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Margin", "Size Flags", "custom_fonts" ]
-
-[node name="vsync" type="Button" parent="vsync" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 162.0
-margin_right = 320.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 11
-size_flags_vertical = 1
-theme = SubResource( 2 )
-toggle_mode = true
-enabled_focus_mode = 2
-shortcut = null
-group = null
-flat = true
-align = 2
-_sections_unfolded = [ "Margin", "Size Flags", "Theme", "custom_constants" ]
-
-[node name="fs" type="HBoxContainer" parent="." index="5"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 163.0
-margin_right = 320.0
-margin_bottom = 190.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags", "custom_constants" ]
-
-[node name="FS" type="Label" parent="fs" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 158.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 5
-custom_fonts/font = ExtResource( 1 )
-custom_constants/line_spacing = 4
-text = "Fullscreen"
-valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Margin", "Size Flags", "custom_fonts" ]
-
-[node name="fullscreen" type="Button" parent="fs" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 162.0
-margin_right = 320.0
-margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme = SubResource( 2 )
-toggle_mode = true
-enabled_focus_mode = 2
-shortcut = null
-group = null
-flat = true
-align = 2
-_sections_unfolded = [ "Margin", "Size Flags", "Theme" ]
-
-[node name="sep_bot" type="CenterContainer" parent="." index="6"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 201.0
-margin_right = 320.0
-margin_bottom = 201.0
+margin_bottom = 325.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -473,16 +264,17 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 use_top_left = false
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="back" type="Button" parent="." index="7"]
+[node name="back" type="Button" parent="." index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 212.0
+margin_top = 336.0
 margin_right = 320.0
-margin_bottom = 245.0
+margin_bottom = 413.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
