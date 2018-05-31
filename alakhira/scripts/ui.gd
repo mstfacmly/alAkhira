@@ -19,9 +19,12 @@ var max_hlth
 var paused = false
 var anim_hlth = 0
 var spd = 2
+var ev_mod = 0
 
 const languages = [
 	'English',
+	'Français',
+#	'العربية',
 ]
 
 const disp_rez = [
@@ -72,6 +75,7 @@ var btn
 
 func _ready():
 	$org/right/version.text = str(0.11)
+	set_process_input(true)
 	
 	shifter.curr
 	_signals()
@@ -86,9 +90,8 @@ func _ready():
 		az.get_node('cam').set_enabled(true)
 	else:
 		_main_menu()
-		
+	
 	_opts_container()
-	set_process_input(true)
 
 func _load_cfg():
 	var cfg = ConfigFile.new()
@@ -97,6 +100,7 @@ func _load_cfg():
 	if err:
 		for act_name in INPUT_CFG:
 			var act_list = InputMap.get_action_list(act_name)
+#			var scancode = InputMap.get_action_list(act_name)[0].as_text()
 			var scancode = OS.get_scancode_string(act_list[0].scancode)
 			cfg.set_value('input', act_name, scancode)
 		cfg.save(CFG_FILE)
@@ -107,7 +111,7 @@ func _load_cfg():
 			ev.scancode = scancode
 			for old_ev in InputMap.get_action_list(act_name):
 				if old_ev is InputEventKey:
-					InputMap.action_erase_event(acts, old_ev)
+					InputMap.action_erase_event(act_name, old_ev)
 			InputMap.action_add_event(act_name, ev)
 
 func _save_cfg(sect, key, val):
@@ -119,7 +123,7 @@ func _save_cfg(sect, key, val):
 		cfg.set_value(sect, key, val)
 		cfg.save(CFG_FILE)
 	
-func wait_for_input(bind):
+func _wait_for_input(bind):
 	acts = bind
 	btn = $org/right/ctrls.get_node(acts).get_node('btn')
 	
@@ -147,6 +151,40 @@ func _input(ev):
 	if Input.is_key_pressed(KEY_F11):
 		OS.set_window_fullscreen(!OS.window_fullscreen)
 
+	if ev is InputEventKey or ev is InputEventMouse:
+		ev_mod = 0
+	elif ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
+		ev_mod = 1
+
+	for acts in INPUT_CFG:
+		var input_ev = InputMap.get_action_list(acts)[ev_mod]
+		var btn = $org/right/ctrls.get_node(acts).get_node('btn')
+#		print(input_ev.as_text())
+	#	var js_acts = input_ev
+		if input_ev is InputEventJoypadButton:
+			btn.set_text(Input.get_joy_button_string(input_ev.button_index))
+		elif input_ev is InputEventJoypadMotion:
+			btn.set_text(Input.get_joy_axis_string(input_ev.axis))
+		elif input_ev is InputEventKey:
+			btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
+		if btn.is_connected('pressed', self, '_wait_for_input') == false:
+			btn.connect('pressed', self, '_wait_for_input', [acts])
+		else:
+			pass
+
+#	if ev is InputEventKey:
+#		get_tree().set_input_as_handled()
+#		set_process_input(false)
+#		if !ev.is_action('ui_cancel'):
+#			var scancode = OS.get_scancode_string(ev.scancode)
+#			btn.text = scancode
+#			for old_ev in InputMap.get_action_list(acts):
+#				InputMap.action_erase_event(acts, old_ev)
+#			InputMap.action_add_event(acts, ev)
+#			_save_cfg('input', acts, scancode)
+
+	_opts_container()
+
 func _signals():
 	# Main Menu
 	$org/right/menuList/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
@@ -158,10 +196,12 @@ func _signals():
 
 	# Options Menu
 	$org/right/opts/ctrls.connect('pressed', self, '_ui_btn_pressed', ['ctrls'])
+	$org/right/opts/lang.connect('pressed', self, '_ui_btn_pressed', ['langs'])
 	$org/right/opts/disp.connect('pressed', self, '_ui_btn_pressed', ['disp'])
 	$org/right/opts/back.connect('pressed', self, '_opts_btn_pressed', ['back'])
 	$org/right/disp/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
-	$org/right/ctrls/back.connect('pressed', self, '_opts_btn_pressed', ['ctrls_b'])	
+	$org/right/ctrls/back.connect('pressed', self, '_opts_btn_pressed', ['ctrls_b'])
+	$org/right/langs/back.connect('pressed', self, '_opts_btn_pressed', ['langs_b'])
 	$org/left/org/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
 	$org/left/org/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 	
@@ -190,6 +230,7 @@ func _main_menu():
 	$org/right/opts.hide()
 	$org/right/disp.hide()
 	$org/right/ctrls.hide()
+	$org/right/langs.hide()
 	
 	$org/left/org/over/thanks.hide()
 	$org/left/org/over/rld.hide()
@@ -197,11 +238,12 @@ func _main_menu():
 	$org/left/org/over/lune_site.hide()
 
 func _opts_container():
-	$org/right/opts/lang.disabled = true
+	$org/right/opts/lang.disabled = false
 	
 	var rat = $org/right/disp/ratio/ratio
 	var res = $org/right/disp/res/res
 	var aa = $org/right/disp/fsaa/aa
+	var lang = $org/right/langs
 	
 	if OS.is_window_fullscreen() != false:
 		$org/right/disp/fs/fullscreen.text = 'On'
@@ -210,12 +252,29 @@ func _opts_container():
 	
 	if OS.is_vsync_enabled() != false:
 		$org/right/disp/vsync/vsync.text = 'On'
+		$org/right/disp/vsync/vsync.pressed
 	else:
 		$org/right/disp/vsync/vsync.text = 'Off'
-	
+		
 	for l in languages:
+#		print(l)
+		var num = str(int(l))
+#		lang.find_node('btn'+num, true).hide()
+		var btn = lang.find_node('btn'+num, true).set_text(l)
+#		print(btn)
+#		btn = lang.find_node('btn*')
+#		btn.set_text(l)
+#		print(btn)
+#		for Button in btn:
+#			Button.set_text(l)
+##			Button.duplicate()
+	#	print(btn)
+#		lang.get_node('btn'[int(l)]).set_text(l)
+#		var btn = lang.get_node('btn'[int(l)])
+#		print($org/right/langs/btn[int(l)])
+#		print(lang.get_node(btn[int(l)]))
 #		lang.add_item(str(l))
-		pass
+#		pass
 	
 	for r in ratio:
 		rat.add_item(str(r))
@@ -224,13 +283,6 @@ func _opts_container():
 		aa.add_item(i)
 	
 #	_load_cfg()
-	
-	for acts in INPUT_CFG:
-		var input_ev = InputMap.get_action_list(acts)[0]
-		print(InputMap.get_action_list(acts)[0].as_text())
-		var btn = $org/right/ctrls.get_node(acts).get_node('btn')
-		btn.text = input_ev.as_text()
-#		btn.connect('pressed', self, 'wait_for_input', [acts])
 
 func _gen_ui():
 	az = get_parent()
@@ -248,6 +300,7 @@ func _gen_ui():
 	$org/right/opts.hide()
 	$org/right/disp.hide()
 	$org/right/ctrls.hide()
+	$org/right/langs.hide()
 
 	$org/right/menuList.hide()
 	$org/right/version.hide()
@@ -321,6 +374,8 @@ func _ui_btn_pressed(btn):
 	if btn == 'opts':
 		_opts_menu()
 		
+	if btn == 'langs':
+		_langs()
 	if btn == 'disp':
 		_disps()
 		
@@ -365,6 +420,9 @@ func _opts_btn_pressed(btn):
 		
 	if btn == 'ctrls_b':
 		_ctrls()
+		
+	if btn == 'langs_b':
+		_langs()
 
 func _ratio_select(ID):
 	if ID == 0:
@@ -416,6 +474,20 @@ func _opts_menu():
 #				i.disabled = true
 #			else:
 #				i.disabled = false
+
+func _langs():
+	var opts = $org/right/opts
+	var lang = $org/right/langs
+	
+	if lang.is_visible() != true:
+		lang.set_visible(true)
+	else:
+		lang.set_visible(false)
+		
+	if opts.is_visible() != true:
+		opts.set_visible(true)
+	else:
+		opts.set_visible(false)
 
 func _disps():
 	var opts = $org/right/opts
