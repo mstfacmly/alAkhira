@@ -72,15 +72,7 @@ var btn
 
 func _ready():
 	$org/right/version.text = str(0.11)
-
-#	_load_cfg()
 	
-	for acts in INPUT_CFG:
-		var input_ev = InputMap.get_action_list(acts)[0]
-		var btn = $org/right/ctrls.get_node(acts).get_node('btn')
-		btn.text = input_ev.as_text()
-#		btn.connect('pressed', self, 'wait_for_input', [acts])
-
 	shifter.curr
 	_signals()
 	
@@ -224,12 +216,21 @@ func _opts_container():
 	for l in languages:
 #		lang.add_item(str(l))
 		pass
-
+	
 	for r in ratio:
 		rat.add_item(str(r))
-
+	
 	for i in aalist:
 		aa.add_item(i)
+	
+#	_load_cfg()
+	
+	for acts in INPUT_CFG:
+		var input_ev = InputMap.get_action_list(acts)[0]
+		print(InputMap.get_action_list(acts)[0].as_text())
+		var btn = $org/right/ctrls.get_node(acts).get_node('btn')
+		btn.text = input_ev.as_text()
+#		btn.connect('pressed', self, 'wait_for_input', [acts])
 
 func _gen_ui():
 	az = get_parent()
@@ -241,7 +242,6 @@ func _gen_ui():
 		updt_hlth(max_hlth)
 		az.get_node('cam').set_enabled(true)
 	
-#	$org/left/debug_info.hide()
 	$org/left/dbg.hide()
 	
 	$org/left/org/over.hide()
