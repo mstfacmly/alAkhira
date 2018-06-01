@@ -77,13 +77,21 @@ func _input(ev):
 func js_input():
 	var Jx = Input.get_joy_axis(0,2)
 	var Jy = Input.get_joy_axis(0,3)
+	var invert_x = global.invert_x
+	var invert_y = global.invert_y
 
 	if abs(Jy) >= DEADZONE:
-		cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * js_accel_y * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y)
+		if invert_y != true:
+			cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * js_accel_y * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y)
+		else:
+			cam_pitch = max(min(cam_pitch + (Jy * (cam_view_sensitivity * js_accel_y * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y)
 
 	if abs(Jx) >= DEADZONE:
 		if cam_smooth_movement:
-			cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10))
+			if invert_x != true:
+				cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10))
+			else:
+				cam_yaw = cam_yaw + (Jx * (cam_view_sensitivity * js_accel_x * 10))
 		else:
 			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10)),360)
 			cam_currentradius = cam_radius

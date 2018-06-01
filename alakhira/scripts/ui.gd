@@ -74,6 +74,9 @@ const axis = [
 	'y',
 ]
 
+onready var btn_x = $org/right/cam/cam_x/btn
+onready var btn_y = $org/right/cam/cam_y/btn
+
 const CFG_FILE = 'user://config.cfg'
 var acts
 var btn
@@ -206,6 +209,8 @@ func _signals():
 	$org/right/disp/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
 	$org/right/ctrls/back.connect('pressed', self, '_opts_btn_pressed', ['ctrls_b'])
 	$org/right/langs/back.connect('pressed', self, '_opts_btn_pressed', ['langs_b'])
+	$org/right/cam/cam_x/btn.connect('pressed', self, '_cam_btn', ['x'])
+	$org/right/cam/cam_y/btn.connect('pressed', self, '_cam_btn', ['y'])
 	$org/right/cam/back.connect('pressed', self, '_opts_btn_pressed', ['cam_b'])
 	$org/left/org/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
 	$org/left/org/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
@@ -341,6 +346,7 @@ func _on_unpause():
 	$org/right/opts.hide()
 	$org/right/disp.hide()
 	$org/right/ctrls.hide()
+	$org/right/cam.hide()
 	get_tree().set_pause(false)
 	
 #	var type = $org/right/menuList.get_children()
@@ -534,10 +540,15 @@ func _cam():
 	var opts = $org/right/opts
 	var cam = $org/right/cam
 	
-	for a in axis:
-		var btn = $org/right/cam.get_node('cam_'+(a)).get_node('btn')
-	
-		btn.set_text(a)
+	if global.invert_x != true:
+		btn_x.set_text('Standard')
+	else:
+		btn_x.set_text('Inverted')
+		
+	if global.invert_y != true:
+		btn_y.set_text('Standard')
+	else:
+		btn_y.set_text('The Devil\'s Configuration')
 	
 	if cam.is_visible() != true:
 		cam.set_visible(true)
@@ -548,6 +559,25 @@ func _cam():
 		opts.set_visible(true)
 	else:
 		opts.set_visible(false)
+
+func _cam_btn(btn):
+	if btn == 'x':
+		if global.invert_x != true:
+			btn_x.set_text('Inverted')
+			global.invert_x = true
+		elif global.invert_x != false:
+			btn_x.set_text('Standard')
+			global.invert_x = false
+	if btn == 'y':
+		if global.invert_y != true:
+			btn_y.set_text('The Devil\'s Configuration')
+			global.invert_y = true
+		elif global.invert_y != false:
+			btn_y.set_text('Standard')
+			global.invert_y = false
+			
+	print(global.invert_x)
+	print(global.invert_y)
 
 func _show_dbg():
 	var dbg_txt = $org/left/dbg
