@@ -80,10 +80,10 @@ onready var btn_y = $org/right/cam/cam_y/btn
 const CFG_FILE = 'user://config.cfg'
 var acts
 var btn
+var ctrls_men = false
 
 func _ready():
 	$org/right/version.text = str(0.11)
-	set_process_input(true)
 	
 	shifter.curr
 	_signals()
@@ -164,21 +164,22 @@ func _input(ev):
 	elif ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
 		ev_mod = 1
 
-	for acts in INPUT_CFG:
-		var input_ev = InputMap.get_action_list(acts)[ev_mod]
-		var btn = $org/right/ctrls.get_node(acts).get_node('btn')
-#		print(input_ev.as_text())
-	#	var js_acts = input_ev
-		if input_ev is InputEventJoypadButton:
-			btn.set_text(Input.get_joy_button_string(input_ev.button_index))
-		elif input_ev is InputEventJoypadMotion:
-			btn.set_text(Input.get_joy_axis_string(input_ev.axis))
-		elif input_ev is InputEventKey:
-			btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
-		if btn.is_connected('pressed', self, '_wait_for_input') == false:
-			btn.connect('pressed', self, '_wait_for_input', [acts])
-		else:
-			pass
+	if ctrls_men:
+		for acts in INPUT_CFG:
+			var input_ev = InputMap.get_action_list(acts)[ev_mod]
+			var btn = $org/right/ctrls.get_node(acts).get_node('btn')
+#			print(input_ev.as_text())
+#			var js_acts = input_ev
+			if input_ev is InputEventJoypadButton:
+				btn.set_text(Input.get_joy_button_string(input_ev.button_index))
+			elif input_ev is InputEventJoypadMotion:
+				btn.set_text(Input.get_joy_axis_string(input_ev.axis))
+			elif input_ev is InputEventKey:
+				btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
+			if btn.is_connected('pressed', self, '_wait_for_input') == false:
+				btn.connect('pressed', self, '_wait_for_input', [acts])
+	else:
+		pass
 
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()
@@ -522,15 +523,17 @@ func _disps():
 	else:
 		opts.set_visible(false)
 		
-func _ctrls():
+func _ctrls():	
 	var opts = $org/right/opts
 	var ctrls = $org/right/ctrls
 	
 	if ctrls.is_visible() != true:
 		ctrls.set_visible(true)
+		ctrls_men = true
 	else:
 		ctrls.set_visible(false)
-		
+		ctrls_men = false
+
 	if opts.is_visible() != true:
 		opts.set_visible(true)
 	else:

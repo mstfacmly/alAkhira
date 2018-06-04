@@ -153,7 +153,7 @@ func autoturn_cam(dt):
 		#do nothing otherwise, left and right are occluded but center is not, so do not autoturn
 		pass
 
-func _process(delta):
+func _physics_process(delta):
 	if !is_enabled:
 		return
 
@@ -168,13 +168,9 @@ func _process(delta):
 		cam_cyaw = lerp(cam_cyaw, cam_yaw, 10 * delta)
 		cam_currentradius = lerp(cam_currentradius, cam_radius, 5 * delta)
 
+	if ds != null:
+		cam_ray_result = ds.intersect_ray(pivot.get_global_transform().origin, cam_pos, collision_exception)
+
 	js_input()
 	cam_update()
 	autoturn_cam(delta)
-
-func _physics_process(delta):
-	if !is_enabled:
-		return
-
-	if ds != null:
-		cam_ray_result = ds.intersect_ray(pivot.get_global_transform().origin, cam_pos, collision_exception)

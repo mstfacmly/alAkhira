@@ -33,6 +33,7 @@ var mv_b
 var mv_l
 var mv_r
 var jmp_att
+var act
 
 #Movement
 var ppos
@@ -79,7 +80,7 @@ onready var mesh = $body/skeleton
 func _ready():
 	connect('hlth_chng', ui, '_updt_hlth')
 	connect('died', ui, '_over')
-	connect('pause', ui, '_on_pause')
+#	connect('pause', ui, '_on_pause')
 	
 	shifter.state = ALIVE
 	
@@ -97,6 +98,7 @@ func input(event):
 	mv_r = Input.is_action_pressed('mv_r')
 	
 	jmp_att = Input.is_action_just_pressed('feet')
+	act = Input.is_action_just_pressed('act')
 	
 	js_input(event)
 
@@ -139,14 +141,14 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 
         return (n*cos(ang) + t*sin(ang)) * p_facing.length()
 
-func _physics_process(delta):
-	var cam_node = $cam/cam
-#	js_input(delta)
-
+func _process(delta):
 	if state != DEAD:
 		input(true)
 		hlth_drn(delta)
 		dmg(delta)
+
+func _physics_process(delta):
+	var cam_node = $cam/cam
 
 	# Velocity
 	var lv = lin_vel
@@ -254,7 +256,7 @@ func _physics_process(delta):
 		var walln = get_slide_collision(0).normal.abs()
 		var modlv = lv.slide(up).slide(walln).abs()
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
-		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.72, jmp_spd.y * 5))
+		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y * 0.84, jmp_spd.y * 3))
 		
 		if col_result == ['back']:
 			wrun = ['vert']
@@ -268,7 +270,7 @@ func _physics_process(delta):
 					attempts -= 1
 				else:
 					lv = Vector3(0,0.0000001,0)
-				if Input.is_action_just_pressed('act'):
+				if act:
 					mesh.rotate_y(179)
 	
 			elif col_result == ['back']:
@@ -317,7 +319,7 @@ func _physics_process(delta):
 		if jmp_att:
 			on_ledge = false
 			translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
-		if Input.is_action_just_pressed('act'):
+		if act:
 			mesh.rotate(up, 185)
 			on_ledge = false
 	
