@@ -43,7 +43,7 @@ anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 1157.0
+margin_bottom = 1607.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -55,18 +55,117 @@ _sections_unfolded = [ "Margin", "Size Flags" ]
 
 [node name="left" parent="org" index="0" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 616.0
-margin_bottom = 1136.0
+margin_bottom = 1586.0
 size_flags_stretch_ratio = 2.0
+
+[node name="dbg" parent="org/left" index="0"]
+
+margin_top = 786.0
+margin_right = 204.0
+margin_bottom = 800.0
+
+[node name="org" parent="org/left" index="1"]
+
+margin_left = 208.0
+margin_right = 616.0
+margin_bottom = 1586.0
+
+[node name="over" parent="org/left/org" index="0"]
+
+margin_left = 43.0
+margin_top = 707.0
+margin_right = 365.0
+margin_bottom = 879.0
 
 [node name="right" parent="org" index="1" instance=ExtResource( 3 )]
 
-editor/display_folded = true
 margin_left = 620.0
 margin_right = 940.0
-margin_bottom = 1136.0
+margin_bottom = 1586.0
+_sections_unfolded = [ "Focus", "Size Flags", "custom_constants" ]
+
+[node name="menuList" parent="org/right" index="2"]
+
+margin_bottom = 297.0
+
+[node name="dbg" parent="org/right/menuList" index="0"]
+
+margin_top = 0.0
+margin_bottom = 33.0
+
+[node name="contd" parent="org/right/menuList" index="1"]
+
+margin_top = 44.0
+margin_bottom = 77.0
+
+[node name="start" parent="org/right/menuList" index="2"]
+
+margin_top = 88.0
+margin_bottom = 121.0
+
+[node name="rsm" parent="org/right/menuList" index="3"]
+
+margin_top = 132.0
+margin_bottom = 165.0
+
+[node name="opts" parent="org/right/menuList" index="4"]
+
+margin_top = 176.0
+margin_bottom = 209.0
+
+[node name="rld" parent="org/right/menuList" index="5"]
+
+margin_top = 220.0
+margin_bottom = 253.0
+
+[node name="quit" parent="org/right/menuList" index="6"]
+
+margin_top = 264.0
+margin_bottom = 297.0
+
+[node name="opts" parent="org/right" index="3"]
+
+margin_top = 297.0
+margin_bottom = 528.0
+
+[node name="langs" parent="org/right" index="4"]
+
+margin_top = 528.0
+margin_bottom = 759.0
+
+[node name="disp" parent="org/right" index="5"]
+
+margin_top = 759.0
+margin_bottom = 1004.0
+
+[node name="ctrls" parent="org/right" index="6"]
+
+margin_top = 1004.0
+margin_bottom = 1439.0
+
+[node name="cam" parent="org/right" index="7"]
+
+margin_top = 1439.0
+margin_bottom = 1570.0
+
+[node name="sep_bot" parent="org/right" index="8"]
+
+margin_top = 1570.0
+margin_bottom = 1570.0
+
+[node name="version" parent="org/right" index="9"]
+
+margin_top = 1570.0
+margin_bottom = 1583.0
+
+[node name="hlth" parent="org/right" index="10"]
+
+margin_top = 1583.0
+margin_bottom = 1586.5
 
 [node name="timer" type="Timer" parent="." index="2"]
 
@@ -78,4 +177,5 @@ autostart = false
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 
+[editable path="org/left"]
 [editable path="org/right"]

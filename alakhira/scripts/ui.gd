@@ -81,6 +81,7 @@ const CFG_FILE = 'user://config.cfg'
 var acts
 var btn
 var ctrls_men = false
+const btns = []
 
 func _ready():
 	$org/right/version.text = str(0.11)
@@ -256,15 +257,9 @@ func _main_menu():
 	$org/left/org/over/thanks.hide()
 	$org/left/org/over/rld.hide()
 	$org/left/org/over/quit.hide()
-	$org/left/org/over/lune_site.hide()
+	$org/left/org/over/lune_site.show()
 	
-	grab_menu()
-
-func grab_menu():
-	for b in $org/right/menuList.get_children():
-		if b.is_visible() != false:
-			if b.get_index() <= 2 && b.get_index() >= 0:
-				b.grab_focus()
+	_grab_menu()
 
 func _opts_container():
 	$org/right/opts/lang.disabled = false
@@ -339,6 +334,8 @@ func _gen_ui():
 	$org/right/menuList/rld.show()
 	$org/right/menuList/start.hide()
 	$org/right/menuList/rsm.show()
+	
+	_grab_menu()
 
 func _on_pause():
 	az.hide()
@@ -346,6 +343,7 @@ func _on_pause():
 	paused = true
 	Input.set_mouse_mode(0)
 	$org/right/menuList.show()
+	_grab_menu()
 	get_tree().set_pause(true)
 
 	if shifter.curr != 'spi':
@@ -504,6 +502,9 @@ func _opts_menu():
 		menu.set_visible(true)
 	else:
 		menu.set_visible(false)
+	
+	_grab_menu()
+	
 #	var type = $org/right/menuList.get_children()
 #	for i in type:
 #		if i.get_class() == 'Button':
@@ -525,6 +526,8 @@ func _langs():
 		opts.set_visible(true)
 	else:
 		opts.set_visible(false)
+		
+	_grab_menu()
 
 func _disps():
 	var opts = $org/right/opts
@@ -539,7 +542,9 @@ func _disps():
 		opts.set_visible(true)
 	else:
 		opts.set_visible(false)
-		
+	
+	_grab_menu()
+
 func _ctrls():	
 	var opts = $org/right/opts
 	var ctrls = $org/right/ctrls
@@ -555,6 +560,8 @@ func _ctrls():
 		opts.set_visible(true)
 	else:
 		opts.set_visible(false)
+	
+	_grab_menu()
 
 func _cam():
 	var opts = $org/right/opts
@@ -579,6 +586,8 @@ func _cam():
 		opts.set_visible(true)
 	else:
 		opts.set_visible(false)
+	
+	_grab_menu()
 
 func _cam_btn(btn):
 	if btn == 'x':
@@ -595,9 +604,9 @@ func _cam_btn(btn):
 		elif global.invert_y != false:
 			btn_y.set_text('Standard')
 			global.invert_y = false
-			
-	print(global.invert_x)
-	print(global.invert_y)
+	
+#	print(global.invert_x)
+#	print(global.invert_y)
 
 func _show_dbg():
 	var dbg_txt = $org/left/dbg
@@ -608,6 +617,7 @@ func _show_dbg():
 		dbg_txt.set_visible(false)
 
 func _over():
+	_grab_menu()
 	$org/right/menuList.hide()
 	$org/left/dbg.hide()
 	$org/left/org/over.show()
@@ -618,3 +628,23 @@ func _over():
 	az.set_process(false)
 	az.get_node('cam').set_enabled(false)
 	Input.set_mouse_mode(0)
+
+func _grab_menu():
+	var menlist = ['menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'org/over']
+	var dir = ['left', 'right']
+	
+	for d in dir:
+		var lr = $org.get_node(d)
+#		print(lr.get_name())
+		for m in menlist:
+#		btns.clear()
+			var men = lr.get_node(m)
+#			print(men)
+			if men != null && men.is_visible() != false:
+				btns.clear()
+				for b in men.get_children():
+#					print(btns)
+					if b.is_visible() != false && b.get_focus_mode():
+#						print(b)
+						btns.append(b)
+						btns[0].grab_focus()
