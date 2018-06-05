@@ -137,6 +137,15 @@ func _wait_for_input(bind):
 	
 	set_process_input(true)
 
+func _gui_input(ev):
+	if ev.is_action_pressed('ui_down'):
+		focus_next
+	if ev.is_action_pressed('ui_up'):
+		focus_previous
+	if ev.is_action_pressed('ui_accept'):
+		_ui_btn_pressed(btn)
+	pass
+
 func _input(ev):
 	var wait = 2
 	var timer = t.set_wait_time(wait)
@@ -248,6 +257,14 @@ func _main_menu():
 	$org/left/org/over/rld.hide()
 	$org/left/org/over/quit.hide()
 	$org/left/org/over/lune_site.hide()
+	
+	grab_menu()
+
+func grab_menu():
+	for b in $org/right/menuList.get_children():
+		if b.is_visible() != false:
+			if b.get_index() <= 2 && b.get_index() >= 0:
+				b.grab_focus()
 
 func _opts_container():
 	$org/right/opts/lang.disabled = false

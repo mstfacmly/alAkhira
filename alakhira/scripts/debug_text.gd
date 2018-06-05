@@ -11,10 +11,10 @@ func _ready():
 		az = get_parent().get_node('../../../../az')
 		cam = az.get_node('cam')
 		set_physics_process(true)
-		print('az found')
+#		print('az found')
 	else:
 		set_physics_process(false)
-		print('az not found')
+#		print('az not found')
 
 func _physics_process(delta):
 	if update < 1.0:
