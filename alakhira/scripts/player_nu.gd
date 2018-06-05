@@ -255,6 +255,7 @@ func _physics_process(delta):
 		ledge()
 		var walln = get_slide_collision(0).normal.abs()
 		var modlv = lv.slide(up).slide(walln).abs()
+		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, (jmp_spd.y + mv_spd) * 0.64, jmp_spd.y * 0))
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
 		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y * 0.84, jmp_spd.y * 3))
 		
@@ -266,7 +267,7 @@ func _physics_process(delta):
 				#if !jmp_att :
 				#	lv = Vector3(0,0.0000001,0)
 				if jmp_att && attempts >= 1:
-					lv += jmp_spd * mv_spd * 0.72
+					lv += whop #* mv_spd * 0.72
 					attempts -= 1
 				else:
 					lv = Vector3(0,0.0000001,0)
