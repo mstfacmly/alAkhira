@@ -88,83 +88,91 @@ margin_right = 940.0
 margin_bottom = 1586.0
 _sections_unfolded = [ "Focus", "Size Flags", "custom_constants" ]
 
+[node name="sep_top" parent="org/right" index="1"]
+
+margin_right = 320.0
+margin_bottom = 0.0
+
 [node name="menuList" parent="org/right" index="2"]
 
+margin_top = 0.0
+margin_right = 320.0
 margin_bottom = 297.0
 
 [node name="dbg" parent="org/right/menuList" index="0"]
 
-margin_top = 0.0
-margin_bottom = 33.0
+margin_right = 320.0
 
 [node name="contd" parent="org/right/menuList" index="1"]
 
-margin_top = 44.0
-margin_bottom = 77.0
+margin_right = 320.0
 
 [node name="start" parent="org/right/menuList" index="2"]
 
-margin_top = 88.0
-margin_bottom = 121.0
+margin_right = 320.0
 
 [node name="rsm" parent="org/right/menuList" index="3"]
 
-margin_top = 132.0
-margin_bottom = 165.0
+margin_right = 320.0
 
 [node name="opts" parent="org/right/menuList" index="4"]
 
-margin_top = 176.0
-margin_bottom = 209.0
+margin_right = 320.0
 
 [node name="rld" parent="org/right/menuList" index="5"]
 
-margin_top = 220.0
-margin_bottom = 253.0
+margin_right = 320.0
 
 [node name="quit" parent="org/right/menuList" index="6"]
 
-margin_top = 264.0
-margin_bottom = 297.0
+margin_right = 320.0
 
 [node name="opts" parent="org/right" index="3"]
 
 margin_top = 297.0
+margin_right = 320.0
 margin_bottom = 528.0
 
 [node name="langs" parent="org/right" index="4"]
 
 margin_top = 528.0
+margin_right = 320.0
 margin_bottom = 759.0
 
 [node name="disp" parent="org/right" index="5"]
 
 margin_top = 759.0
+margin_right = 320.0
 margin_bottom = 1004.0
 
 [node name="ctrls" parent="org/right" index="6"]
 
 margin_top = 1004.0
+margin_right = 320.0
 margin_bottom = 1439.0
 
 [node name="cam" parent="org/right" index="7"]
 
 margin_top = 1439.0
+margin_right = 320.0
 margin_bottom = 1570.0
 
 [node name="sep_bot" parent="org/right" index="8"]
 
 margin_top = 1570.0
+margin_right = 320.0
 margin_bottom = 1570.0
 
 [node name="version" parent="org/right" index="9"]
 
 margin_top = 1570.0
+margin_right = 320.0
 margin_bottom = 1583.0
 
 [node name="hlth" parent="org/right" index="10"]
 
 margin_top = 1583.0
+margin_right = 320.0
 margin_bottom = 1586.5
 
 [node name="timer" type="Timer" parent="." index="2"]

@@ -276,10 +276,10 @@ func _opts_container():
 	
 	if OS.is_vsync_enabled() != false:
 		$org/right/disp/vsync/vsync.text = 'On'
-		$org/right/disp/vsync/vsync.pressed
+#		$org/right/disp/vsync/vsync.pressed = true
 	else:
 		$org/right/disp/vsync/vsync.text = 'Off'
-		
+	
 	for l in languages:
 #		print(l)
 		var num = str(int(l))
@@ -440,9 +440,11 @@ func _opts_btn_pressed(btn):
 		if OS.is_vsync_enabled() != true:
 			OS.set_use_vsync(true)
 			$org/right/disp/vsync/vsync.text = 'On'
+			print(OS.is_vsync_enabled())
 		else:
 			OS.set_use_vsync(false)
 			$org/right/disp/vsync/vsync.text = 'Off'
+			print(OS.is_vsync_enabled())
 	
 	if btn == 'back':
 		_opts_menu()
@@ -630,21 +632,28 @@ func _over():
 	Input.set_mouse_mode(0)
 
 func _grab_menu():
-	var menlist = ['menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'org/over']
-	var dir = ['left', 'right']
+	var menlist = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam' ]
+	var dir = [ 'left', 'right' ]
 	
 	for d in dir:
-		var lr = $org.get_node(d)
+		if d == 'left':
+			pass
+#			for b in $org/left/org/over.get_children():
+#				if b.is_visible() != false && b.get_focus_mode():
+#					btns.append(b)
+#					btns[0].grab_focus()
+		elif d == 'right':
+#		var lr = $org.get_node(d)
 #		print(lr.get_name())
-		for m in menlist:
+			for m in menlist:
 #		btns.clear()
-			var men = lr.get_node(m)
-#			print(men)
-			if men != null && men.is_visible() != false:
-				btns.clear()
-				for b in men.get_children():
-#					print(btns)
-					if b.is_visible() != false && b.get_focus_mode():
-#						print(b)
-						btns.append(b)
-						btns[0].grab_focus()
+				var men = $org/right.get_node(m)
+#				print(men)
+				if men != null && men.is_visible() != false:
+					btns.clear()
+					for b in men.get_children():
+#						print(btns)
+						if b.is_visible() != false && b.get_focus_mode():
+#							print(b)
+							btns.append(b)
+							btns[0].grab_focus()
