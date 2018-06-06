@@ -178,8 +178,6 @@ func _input(ev):
 		for acts in INPUT_CFG:
 			var input_ev = InputMap.get_action_list(acts)[ev_mod]
 			var btn = $org/right/ctrls.get_node(acts).get_node('btn')
-#			print(input_ev.as_text())
-#			var js_acts = input_ev
 			if input_ev is InputEventJoypadButton:
 				btn.set_text(Input.get_joy_button_string(input_ev.button_index))
 			elif input_ev is InputEventJoypadMotion:
@@ -237,7 +235,6 @@ func _signals():
 
 func _main_menu():
 	# Show/Hide Menu Items
-#	$org/left/debug_info.show()
 	$org/left/dbg.hide()
 	
 	$org/right/menuList/dbg.hide()
@@ -276,7 +273,6 @@ func _opts_container():
 	
 	if OS.is_vsync_enabled() != false:
 		$org/right/disp/vsync/vsync.text = 'On'
-#		$org/right/disp/vsync/vsync.pressed = true
 	else:
 		$org/right/disp/vsync/vsync.text = 'Off'
 	
@@ -365,10 +361,6 @@ func _on_unpause():
 	$org/right/cam.hide()
 	get_tree().set_pause(false)
 	
-#	var type = $org/right/menuList.get_children()
-#	for i in type:
-#				i.disabled = false
-
 	if shifter.curr != 'phys':
 		envanim.play('shift', -1, -spd, (-spd < 0))
 		shifter.curr = 'phys'
@@ -378,15 +370,15 @@ func _on_unpause():
 
 func _on_timer_timeout():
 	get_tree().quit()
-	
+
 func _on_hlth_chng(hlth):
 	_updt_hlth(hlth)
-	
+
 func _updt_hlth(new_val):
 	tween.interpolate_property(self, 'anim_hlth', anim_hlth, new_val, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	if !tween.is_active():
 		tween.start()
-		
+
 func _process(delta):
 	bar.value = anim_hlth
 
@@ -425,7 +417,6 @@ func _ui_btn_pressed(btn):
 	
 	if btn == 'site':
 		OS.shell_open('http://studioslune.com/')
-
 
 func _opts_btn_pressed(btn):
 	if btn == 'fullscreen':
@@ -468,7 +459,7 @@ func _ratio_select(ID):
 		ratio_div = 1.777777778
 	elif ID == 2:
 		ratio_div = 1.6
-
+	
 	_res_calc()
 
 func _res_calc():
@@ -490,10 +481,10 @@ func _res_select(ID):
 
 func _aa_select(ID):
 	get_viewport().msaa = ID
-	
+
 func _opts_menu():
 	var opts = $org/right/opts
-
+	
 	if opts.is_visible() != true:	
 		opts.set_visible(true)
 	else:
@@ -606,9 +597,6 @@ func _cam_btn(btn):
 		elif global.invert_y != false:
 			btn_y.set_text('Standard')
 			global.invert_y = false
-	
-#	print(global.invert_x)
-#	print(global.invert_y)
 
 func _show_dbg():
 	var dbg_txt = $org/left/dbg
@@ -637,23 +625,17 @@ func _grab_menu():
 	
 	for d in dir:
 		if d == 'left':
-			pass
-#			for b in $org/left/org/over.get_children():
-#				if b.is_visible() != false && b.get_focus_mode():
-#					btns.append(b)
-#					btns[0].grab_focus()
+			for b in $org/left/org/over.get_children():
+				btns.clear()
+				if b.is_visible() != false && b.get_focus_mode():
+					btns.append(b)
+					btns[0].grab_focus()
 		elif d == 'right':
-#		var lr = $org.get_node(d)
-#		print(lr.get_name())
 			for m in menlist:
-#		btns.clear()
 				var men = $org/right.get_node(m)
-#				print(men)
 				if men != null && men.is_visible() != false:
 					btns.clear()
 					for b in men.get_children():
-#						print(btns)
 						if b.is_visible() != false && b.get_focus_mode():
-#							print(b)
 							btns.append(b)
 							btns[0].grab_focus()
