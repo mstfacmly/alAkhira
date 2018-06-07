@@ -9,7 +9,6 @@ export (String, FILE) var test = 'res://env/test/testroom.tscn'
 onready var bar = $org/right/hlth
 onready var tween = $tween
 onready var t = $timer
-#onready var debug = $org/left
 onready var shifter = shift
 
 # variables
@@ -109,7 +108,6 @@ func _load_cfg():
 	if err:
 		for act_name in INPUT_CFG:
 			var act_list = InputMap.get_action_list(act_name)
-#			var scancode = InputMap.get_action_list(act_name)[0].as_text()
 			var scancode = OS.get_scancode_string(act_list[0].scancode)
 			cfg.set_value('input', act_name, scancode)
 		cfg.save(CFG_FILE)
@@ -150,30 +148,29 @@ func _gui_input(ev):
 func _input(ev):
 	var wait = 2
 	var timer = t.set_wait_time(wait)
-
 	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
-
+	
 	if get_parent().get_name() == 'az' && az.state != 1:
 		if !paused && pause:
 			_on_pause()
 		elif paused && pause:
 			_on_unpause()
-
+	
 	if ev.is_action_pressed('pause'):
 		t.start()
 	elif ev.is_action('pause') && !ev.is_pressed():
 		t.stop()
 	else:
 		timer
-		
+	
 	if Input.is_key_pressed(KEY_F11):
 		OS.set_window_fullscreen(!OS.window_fullscreen)
-
+	
 	if ev is InputEventKey or ev is InputEventMouse:
 		ev_mod = 0
 	elif ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
 		ev_mod = 1
-
+	
 	if ctrls_men:
 		for acts in INPUT_CFG:
 			var input_ev = InputMap.get_action_list(acts)[ev_mod]
@@ -188,7 +185,7 @@ func _input(ev):
 				btn.connect('pressed', self, '_wait_for_input', [acts])
 	else:
 		pass
-
+	
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()
 #		set_process_input(false)
@@ -260,7 +257,6 @@ func _main_menu():
 
 func _opts_container():
 	$org/right/opts/lang.disabled = false
-	
 	var rat = $org/right/disp/ratio/ratio
 	var res = $org/right/disp/res/res
 	var aa = $org/right/disp/fsaa/aa
@@ -276,25 +272,10 @@ func _opts_container():
 	else:
 		$org/right/disp/vsync/vsync.text = 'Off'
 	
-	for l in languages:
-#		print(l)
-		var num = str(int(l))
-#		lang.find_node('btn'+num, true).hide()
-		var btn = lang.find_node('btn'+num, true).set_text(l)
-#		print(btn)
-#		btn = lang.find_node('btn*')
-#		btn.set_text(l)
-#		print(btn)
-#		for Button in btn:
-#			Button.set_text(l)
-##			Button.duplicate()
-	#	print(btn)
-#		lang.get_node('btn'[int(l)]).set_text(l)
-#		var btn = lang.get_node('btn'[int(l)])
-#		print($org/right/langs/btn[int(l)])
-#		print(lang.get_node(btn[int(l)]))
-#		lang.add_item(str(l))
-#		pass
+	for l in range(languages.size()):
+		var btn = lang.get_node('btn' + str(l))
+		btn.set_text(languages[l])
+		btn.connect('pressed', self, '_lang_select', [btn.get_text()])
 	
 	for r in ratio:
 		rat.add_item(str(r))
@@ -431,11 +412,11 @@ func _opts_btn_pressed(btn):
 		if OS.is_vsync_enabled() != true:
 			OS.set_use_vsync(true)
 			$org/right/disp/vsync/vsync.text = 'On'
-			print(OS.is_vsync_enabled())
+#			print(OS.is_vsync_enabled())
 		else:
 			OS.set_use_vsync(false)
 			$org/right/disp/vsync/vsync.text = 'Off'
-			print(OS.is_vsync_enabled())
+#			print(OS.is_vsync_enabled())
 	
 	if btn == 'back':
 		_opts_menu()
@@ -451,6 +432,9 @@ func _opts_btn_pressed(btn):
 		
 	if btn == 'langs_b':
 		_langs()
+
+func _lang_select(btn):
+	print(btn)
 
 func _ratio_select(ID):
 	if ID == 0:
