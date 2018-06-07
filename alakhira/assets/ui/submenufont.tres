@@ -1,14 +1,12 @@
 [gd_resource type="DynamicFont" load_steps=2 format=2]
 
-[sub_resource type="DynamicFontData" id=1]
-
-font_path = "res://assets/ui/fonts/Raleway-Light.ttf"
+[ext_resource path="res://assets/ui/fonts/Mada-Light.otf" type="DynamicFontData" id=1]
 
 [resource]
 
 size = 16
 use_mipmaps = false
 use_filter = true
-font_data = SubResource( 1 )
+font_data = ExtResource( 1 )
 _sections_unfolded = [ "Font", "Settings" ]
 

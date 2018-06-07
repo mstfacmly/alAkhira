@@ -10,7 +10,10 @@ func _ready():
 	if get_parent().has_node('../../../../az'):
 		az = get_parent().get_node('../../../../az')
 		cam = az.get_node('cam')
-		set_physics_process(true)
+		if self.is_visible() != false:
+			set_physics_process(true)
+		else:
+			set_physics_process(false)
 #		print('az found')
 	else:
 		set_physics_process(false)

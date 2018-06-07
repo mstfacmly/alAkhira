@@ -26,34 +26,9 @@ const languages = [
 	'العربية',
 ]
 
-const disp_rez = [
-	320, 
-	640,
-	800,
-	1024,
-	1280,
-	1366,
-	1600,
-	1920,
-	2560,
-	3200,
-	3840
-]
-
 var ratio_div
-const ratio = [
-	'4:3',
-	'16:9',
-	'16:10',
-]
-
-const aalist = [
-	'Disabled',
-	'2x',
-	'4x',
-	'8x',
-	'16x'
-]
+const ratio = [ '4:3', '16:9', '16:10' ]
+const aalist = [ 'Disabled', '2x', '4x', '8x', '16x' ]
 
 const INPUT_CFG = [
 	'mv_f', 
@@ -68,19 +43,31 @@ const INPUT_CFG = [
 	'act',
 ]
 
-const axis = [
-	'x',
-	'y',
+const disp_rez = [
+	320, 
+	640,
+	800,
+	1024,
+	1280,
+	1366,
+	1600,
+	1920,
+	2560,
+	3200,
+	3840
 ]
+
+const axis = [ 'x', 'y' ]
+const dir = [ 'left', 'right' ]
 
 onready var btn_x = $org/right/cam/cam_x/btn
 onready var btn_y = $org/right/cam/cam_y/btn
 
-const CFG_FILE = 'user://config.cfg'
 var acts
 var btn
 var ctrls_men = false
 const btns = []
+const CFG_FILE = 'user://config.cfg'
 
 func _ready():
 	$org/right/version.text = str(0.11)
@@ -137,13 +124,15 @@ func _wait_for_input(bind):
 	set_process_input(true)
 
 func _gui_input(ev):
-	if ev.is_action_pressed('ui_down'):
-		focus_next
-	if ev.is_action_pressed('ui_up'):
-		focus_previous
-	if ev.is_action_pressed('ui_accept'):
-		_ui_btn_pressed(btn)
-	pass
+	if !InputEventMouseMotion:
+		if ev.is_action_just_pressed('ui_down'):
+			focus_next
+		if ev.is_action_just_pressed('ui_up'):
+			focus_previous
+		if ev.is_action_just_pressed('ui_accept'):
+			_ui_btn_pressed(btn)
+		if ev.is_action_just_pressed('ui_cancel'):
+			pass
 
 func _input(ev):
 	var wait = 2
@@ -199,41 +188,25 @@ func _input(ev):
 
 func _signals():
 	# Main Menu
-	$org/right/menuList/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
-	$org/right/menuList/dbg.connect('pressed', self, '_ui_btn_pressed', ['dbg'])
-	$org/right/menuList/rsm.connect('pressed', self, '_ui_btn_pressed', ['rsm'])
-	$org/right/menuList/start.connect('pressed', self, '_ui_btn_pressed', ['start'])
-	$org/right/menuList/opts.connect('pressed', self, '_ui_btn_pressed', ['opts'])
-	$org/right/menuList/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
-
-	# Options Menu
-	$org/right/opts/ctrls.connect('pressed', self, '_ui_btn_pressed', ['ctrls'])
-	$org/right/opts/lang.connect('pressed', self, '_ui_btn_pressed', ['langs'])
-	$org/right/opts/cam.connect('pressed', self, '_ui_btn_pressed', ['cam'])
-	$org/right/opts/disp.connect('pressed', self, '_ui_btn_pressed', ['disp'])
-	$org/right/opts/back.connect('pressed', self, '_opts_btn_pressed', ['back'])
-	$org/right/disp/back.connect('pressed', self, '_opts_btn_pressed', ['disp_b'])
-	$org/right/ctrls/back.connect('pressed', self, '_opts_btn_pressed', ['ctrls_b'])
-	$org/right/langs/back.connect('pressed', self, '_opts_btn_pressed', ['langs_b'])
+	for lr in dir:
+		for m in $org.get_node(lr).get_children():
+			if m.get_class() == 'VBoxContainer':
+				for i in m.get_children():
+					if i.get_class() == 'Button':
+						i.connect('pressed', self, '_ui_btn_pressed', [i.get_name()])
+		
 	$org/right/cam/cam_x/btn.connect('pressed', self, '_cam_btn', ['x'])
 	$org/right/cam/cam_y/btn.connect('pressed', self, '_cam_btn', ['y'])
-	$org/right/cam/back.connect('pressed', self, '_opts_btn_pressed', ['cam_b'])
-	$org/left/org/over/rld.connect('pressed', self, '_ui_btn_pressed', ['rld'])
-	$org/left/org/over/quit.connect('pressed', self, '_ui_btn_pressed', ['quit'])
 	
-	$org/right/disp/vsync/vsync.connect('pressed', self, '_opts_btn_pressed', ['vsync'])
-	$org/right/disp/fs/fullscreen.connect('pressed', self, '_opts_btn_pressed', ['fullscreen'])
+	$org/right/disp/vsync/vsync.connect('pressed', self, '_ui_btn_pressed', ['vsync'])
+	$org/right/disp/fs/fullscreen.connect('pressed', self, '_ui_btn_pressed', ['fullscreen'])
 	
 	$org/right/disp/ratio/ratio.get_popup().connect('id_pressed', self, '_ratio_select')
 	$org/right/disp/res/res.get_popup().connect('id_pressed', self, '_res_select')
 	$org/right/disp/fsaa/aa.get_popup().connect('id_pressed', self, '_aa_select')
-	
-	$org/left/org/over/lune_site.connect('pressed', self, '_ui_btn_pressed', ['site'])
 
 func _main_menu():
 	# Show/Hide Menu Items
-	$org/left/dbg.hide()
-	
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
 	$org/right/menuList/rld.hide()
@@ -248,15 +221,15 @@ func _main_menu():
 	$org/right/langs.hide()
 	$org/right/cam.hide()
 	
-	$org/left/org/over/thanks.hide()
-	$org/left/org/over/rld.hide()
-	$org/left/org/over/quit.hide()
-	$org/left/org/over/lune_site.show()
+	$org/left/dbg.hide()
+	$org/left/over/thanks.hide()
+	$org/left/over/rld.hide()
+	$org/left/over/quit.hide()
+	$org/left/over/site.show()
 	
 	_grab_menu()
 
 func _opts_container():
-	$org/right/opts/lang.disabled = false
 	var rat = $org/right/disp/ratio/ratio
 	var res = $org/right/disp/res/res
 	var aa = $org/right/disp/fsaa/aa
@@ -276,6 +249,7 @@ func _opts_container():
 		var btn = lang.get_node('btn' + str(l))
 		btn.set_text(languages[l])
 		btn.connect('pressed', self, '_lang_select', [btn.get_text()])
+		lang.get_node('langs_b').connect('pressed', self, '_ui_btn_pressed', ['langs_b'])
 	
 	for r in ratio:
 		rat.add_item(str(r))
@@ -296,7 +270,7 @@ func _gen_ui():
 		az.get_node('cam').set_enabled(true)
 	
 	$org/left/dbg.hide()
-	$org/left/org/over.hide()
+	$org/left/over.hide()
 	
 	$org/right/opts.hide()
 	$org/right/disp.hide()
@@ -373,33 +347,28 @@ func _ui_btn_pressed(btn):
 		get_tree().set_pause(false)
 		get_tree().reload_current_scene()
 	
-	if btn == 'opts':
+	if btn == 'opts' or btn == 'opts_b':
 		_opts_menu()
-		
-	if btn == 'langs':
+	if btn == 'langs' or btn == 'langs_b':
 		_langs()
-	if btn == 'disp':
+	if btn == 'disp' or btn == 'disp_b':
 		_disps()
-		
-	if btn == 'ctrls':
+	if btn == 'ctrls' or btn == 'ctrls_b':
 		_ctrls()
-		
-	if btn == 'cam':
+	if btn == 'cam' or btn == 'cam_b':
 		_cam()
 	
 	if btn == 'quit':
 		get_tree().quit()
-	
 	if btn == 'rsm':
 		_on_unpause()
-		
 	if btn == 'dbg':
 		_show_dbg()
 	
 	if btn == 'site':
 		OS.shell_open('http://studioslune.com/')
+	
 
-func _opts_btn_pressed(btn):
 	if btn == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
 			OS.set_window_fullscreen(true)
@@ -417,23 +386,12 @@ func _opts_btn_pressed(btn):
 			OS.set_use_vsync(false)
 			$org/right/disp/vsync/vsync.text = 'Off'
 #			print(OS.is_vsync_enabled())
-	
-	if btn == 'back':
-		_opts_menu()
-		
-	if btn == 'disp_b':
-		_disps()
-		
-	if btn == 'ctrls_b':
-		_ctrls()
-		
-	if btn == 'cam_b':
-		_cam()
-		
-	if btn == 'langs_b':
-		_langs()
 
 func _lang_select(btn):
+	if btn == 'English':
+		TranslationServer.set_locale('enGB')
+	if btn == 'Français':
+		TranslationServer.set_locale('frFR')
 	print(btn)
 
 func _ratio_select(ID):
@@ -594,7 +552,7 @@ func _over():
 	_grab_menu()
 	$org/right/menuList.hide()
 	$org/left/dbg.hide()
-	$org/left/org/over.show()
+	$org/left/over.show()
 	$org/right/hlth.hide()
 	az.hide()
 	$'../../az_spi'.show()
@@ -605,11 +563,10 @@ func _over():
 
 func _grab_menu():
 	var menlist = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam' ]
-	var dir = [ 'left', 'right' ]
 	
 	for d in dir:
 		if d == 'left':
-			for b in $org/left/org/over.get_children():
+			for b in $org/left/over.get_children():
 				btns.clear()
 				if b.is_visible() != false && b.get_focus_mode():
 					btns.append(b)
