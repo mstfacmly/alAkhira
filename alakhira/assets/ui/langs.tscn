@@ -54,16 +54,18 @@ rect_clip_content = false
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 1
+size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
+_sections_unfolded = [ "custom_colors" ]
 
 [node name="btn1" type="Button" parent="." index="2"]
 
@@ -79,16 +81,18 @@ rect_clip_content = false
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 1
+size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
+_sections_unfolded = [ "custom_colors" ]
 
 [node name="btn2" type="Button" parent="." index="3"]
 
@@ -104,16 +108,18 @@ rect_clip_content = false
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 1
+size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
+_sections_unfolded = [ "custom_colors" ]
 
 [node name="sep_bot" type="CenterContainer" parent="." index="4"]
 
@@ -150,6 +156,8 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -157,6 +165,6 @@ group = null
 text = "Back"
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
+_sections_unfolded = [ "Size Flags", "custom_colors" ]
 
 
