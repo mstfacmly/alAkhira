@@ -14,10 +14,8 @@ func _ready():
 			set_physics_process(true)
 		else:
 			set_physics_process(false)
-#		print('az found')
 	else:
 		set_physics_process(false)
-#		print('az not found')
 
 func _physics_process(delta):
 	if update < 1.0:
@@ -32,6 +30,7 @@ func _physics_process(delta):
 		txt += str('\nDrawn Vertices: ', Performance.get_monitor(Performance.RENDER_VERTICES_IN_FRAME))
 		txt += str('\nDrawn Objects: ', Performance.get_monitor(Performance.RENDER_OBJECTS_IN_FRAME))
 		txt += str('\nDraw Calls: ', Performance.get_monitor(Performance.RENDER_DRAW_CALLS_IN_FRAME))
+		txt += str('\nLocale: ', TranslationServer.get_locale())
 		txt += str('\nMSAA: ', get_viewport().msaa)
 		txt += str('\nOn Floor: ', az.is_on_floor())
 		txt += str('\nWall Run: ', az.wrun)

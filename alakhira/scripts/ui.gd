@@ -117,22 +117,11 @@ func _save_cfg(sect, key, val):
 		cfg.set_value(sect, key, val)
 		cfg.save(CFG_FILE)
 	
-func _wait_for_input(bind):
+func _get_input(bind):
 	acts = bind
 	btn = $org/right/ctrls.get_node(acts).get_node('btn')
 	
 	set_process_input(true)
-
-func _gui_input(ev):
-	if !InputEventMouseMotion:
-		if ev.is_action_just_pressed('ui_down'):
-			focus_next
-		if ev.is_action_just_pressed('ui_up'):
-			focus_previous
-		if ev.is_action_just_pressed('ui_accept'):
-			_ui_btn_pressed(btn)
-		if ev.is_action_just_pressed('ui_cancel'):
-			pass
 
 func _input(ev):
 	var wait = 2
@@ -170,10 +159,7 @@ func _input(ev):
 				btn.set_text(Input.get_joy_axis_string(input_ev.axis))
 			elif input_ev is InputEventKey:
 				btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
-			if btn.is_connected('pressed', self, '_wait_for_input') == false:
-				btn.connect('pressed', self, '_wait_for_input', [acts])
-	else:
-		pass
+			btn.connect('pressed', self, '_get_input', [acts])
 	
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()
@@ -186,6 +172,17 @@ func _input(ev):
 #			InputMap.action_add_event(acts, ev)
 #			_save_cfg('input', acts, scancode)
 
+func _gui_input(ev):
+	if !InputEventMouseMotion:
+		if ev.is_action_just_pressed('ui_down'):
+			focus_next
+		if ev.is_action_just_pressed('ui_up'):
+			focus_previous
+		if ev.is_action_just_pressed('ui_accept'):
+			_ui_btn_pressed(btn)
+		if ev.is_action_just_pressed('ui_cancel'):
+			pass
+
 func _signals():
 	# Main Menu
 	for lr in dir:
@@ -194,16 +191,15 @@ func _signals():
 				for i in m.get_children():
 					if i.get_class() == 'Button':
 						i.connect('pressed', self, '_ui_btn_pressed', [i.get_name()])
-		
+					else:
+						for l in i.get_children():
+							if l.get_class() == 'Button':
+								l.connect('pressed', self, '_ui_btn_pressed', [l.get_name()])
+							elif l.get_class() == 'OptionButton':
+								l.get_popup().connect('id_pressed', self, '_'+i.get_name()+'_select')		
+							
 	$org/right/cam/cam_x/btn.connect('pressed', self, '_cam_btn', ['x'])
 	$org/right/cam/cam_y/btn.connect('pressed', self, '_cam_btn', ['y'])
-	
-	$org/right/disp/vsync/vsync.connect('pressed', self, '_ui_btn_pressed', ['vsync'])
-	$org/right/disp/fs/fullscreen.connect('pressed', self, '_ui_btn_pressed', ['fullscreen'])
-	
-	$org/right/disp/ratio/ratio.get_popup().connect('id_pressed', self, '_ratio_select')
-	$org/right/disp/res/res.get_popup().connect('id_pressed', self, '_res_select')
-	$org/right/disp/fsaa/aa.get_popup().connect('id_pressed', self, '_aa_select')
 
 func _main_menu():
 	# Show/Hide Menu Items
@@ -225,16 +221,11 @@ func _main_menu():
 	$org/left/over/thanks.hide()
 	$org/left/over/rld.hide()
 	$org/left/over/quit.hide()
-	$org/left/over/site.show()
+	$org/left/over/site.hide()
 	
 	_grab_menu()
 
 func _opts_container():
-	var rat = $org/right/disp/ratio/ratio
-	var res = $org/right/disp/res/res
-	var aa = $org/right/disp/fsaa/aa
-	var lang = $org/right/langs
-	
 	if OS.is_window_fullscreen() != false:
 		$org/right/disp/fs/fullscreen.text = 'On'
 	else:
@@ -246,16 +237,15 @@ func _opts_container():
 		$org/right/disp/vsync/vsync.text = 'Off'
 	
 	for l in range(languages.size()):
-		var btn = lang.get_node('btn' + str(l))
+		var btn = $org/right/langs.get_node('btn' + str(l))
 		btn.set_text(languages[l])
 		btn.connect('pressed', self, '_lang_select', [btn.get_text()])
-		lang.get_node('langs_b').connect('pressed', self, '_ui_btn_pressed', ['langs_b'])
 	
 	for r in ratio:
-		rat.add_item(str(r))
+		$org/right/disp/ratio/ratio.add_item(str(r))
 	
 	for i in aalist:
-		aa.add_item(i)
+		$org/right/disp/fsaa/aa.add_item(i)
 	
 #	_load_cfg()
 
@@ -268,6 +258,8 @@ func _gen_ui():
 		bar.max_value = max_hlth
 		updt_hlth(max_hlth)
 		az.get_node('cam').set_enabled(true)
+	
+	var menlist = ['dbg', 'rld', 'rsm', 'quit']
 	
 	$org/left/dbg.hide()
 	$org/left/over.hide()
@@ -338,7 +330,6 @@ func _process(delta):
 	bar.value = anim_hlth
 
 func _ui_btn_pressed(btn):
-#	print(btn)
 	if btn == 'start':
 		_gen_ui()
 		get_node('/root/global').load_scene(test)
@@ -368,7 +359,6 @@ func _ui_btn_pressed(btn):
 	if btn == 'site':
 		OS.shell_open('http://studioslune.com/')
 	
-
 	if btn == 'fullscreen':
 		if OS.is_window_fullscreen() != true:
 			OS.set_window_fullscreen(true)
@@ -381,18 +371,17 @@ func _ui_btn_pressed(btn):
 		if OS.is_vsync_enabled() != true:
 			OS.set_use_vsync(true)
 			$org/right/disp/vsync/vsync.text = 'On'
-#			print(OS.is_vsync_enabled())
 		else:
 			OS.set_use_vsync(false)
 			$org/right/disp/vsync/vsync.text = 'Off'
-#			print(OS.is_vsync_enabled())
 
 func _lang_select(btn):
 	if btn == 'English':
-		TranslationServer.set_locale('enGB')
+		TranslationServer.set_locale('en')
 	if btn == 'Français':
-		TranslationServer.set_locale('frFR')
-	print(btn)
+		TranslationServer.set_locale('fr')
+	if btn == 'العربية':
+		TranslationServer.set_locale('ar')
 
 func _ratio_select(ID):
 	if ID == 0:
@@ -480,7 +469,7 @@ func _disps():
 	
 	_grab_menu()
 
-func _ctrls():	
+func _ctrls():
 	var opts = $org/right/opts
 	var ctrls = $org/right/ctrls
 	
@@ -563,7 +552,6 @@ func _over():
 
 func _grab_menu():
 	var menlist = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam' ]
-	
 	for d in dir:
 		if d == 'left':
 			for b in $org/left/over.get_children():
