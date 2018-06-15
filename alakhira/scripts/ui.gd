@@ -19,6 +19,7 @@ var paused = false
 var anim_hlth = 0
 var spd = 2
 var ev_mod = 0
+var thread = Thread.new()
 
 const languages = [
 	'English',
@@ -329,10 +330,17 @@ func _updt_hlth(new_val):
 func _process(delta):
 	bar.value = anim_hlth
 
+func _ld_cplt():
+	var stage = thread.wait_to_finish()
+	global.load_scene(test)
+
 func _ui_btn_pressed(btn):
 	if btn == 'start':
 		_gen_ui()
-		get_node('/root/global').load_scene(test)
+		var stage = ResourceLoader.load(test)
+		call_deferred('_ld_cplt')
+		
+#		get_node('/root/global').load_scene(test)
 	
 	if btn == 'rld':
 		get_tree().set_pause(false)
