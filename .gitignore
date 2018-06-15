@@ -1,3 +1,4 @@
+godot/
 blender/
 music/
 reference/
@@ -5,6 +6,7 @@ text/
 exports/
 *.blend1
 *.blend2
+*.bphys
 ~*
 .*
 ignore
@@ -12,3 +14,4 @@ ignore
 *.dae
 *.pck
 *.orig
+bkup/
