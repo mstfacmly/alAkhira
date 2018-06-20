@@ -3,6 +3,7 @@ extends KinematicBody
 # Signals
 signal hlth_chng
 signal died
+signal az_ready
 
 # Health
 export var max_hlth = 100
@@ -28,6 +29,7 @@ var curfov
 onready var cam = $cam
 
 # Input
+var mv
 var mv_f
 var mv_b
 var mv_l
@@ -74,14 +76,14 @@ var hanging = false
 var facing_dir = Vector3(0, 0, 1)
 var result
 export var attempts = 1
-
-onready var mesh = $body/skeleton 
+onready var mesh = $body/skeleton
+var walln
+var modlv
 
 func _ready():
-	connect('hlth_chng', ui, '_updt_hlth')
+	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
-#	connect('pause', ui, '_on_pause')
-	
+		
 	shifter.state = ALIVE
 	
 	if cam.has_method('set_enabled'):
@@ -89,7 +91,7 @@ func _ready():
 	
 	chkpt()
 
-func input(event):	
+func input(event):
 	Input.add_joy_mapping('030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,', true)
 	
 	mv_f = Input.is_action_pressed('mv_f')
@@ -144,10 +146,13 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 func _process(delta):
 	if state != DEAD:
 		input(true)
-		hlth_drn(delta)
+#		hlth_drn(delta)
 		dmg(delta)
 
 func _physics_process(delta):
+	if state !=DEAD:
+		hlth_drn(delta)
+
 	var cam_node = $cam/cam
 
 	# Velocity
@@ -196,8 +201,8 @@ func _physics_process(delta):
 			if hspeed >= walk -1: # 0.001:
 				hdir = adjust_facing(hdir, target_dir, delta, 1.0 / hspeed * turn_speed, up)
 				facing_dir = hdir
-			elif on_ledge:
-				hdir = mesh_basis + Vector3(0,0,target_dir.z)
+#			elif on_ledge:
+#				hdir = mesh_basis + Vector3(modlv.x,0,modlv.z)
 			else:
 				hdir = target_dir
 	
@@ -231,13 +236,16 @@ func _physics_process(delta):
 	elif !is_on_floor() && !jmp_att or !is_on_wall() && !jmp_att:
 		jumping = false
 
-	lv = hvel + up * vvel
+	if is_on_floor() && jmp_att:
+		lv = (hvel * 11.1) + up * vvel
+	else:
+		lv = hvel + up * vvel
 
 	parkour()
 	
 	if !is_on_floor():
 		ledge()
-		if hspeed >= run:
+		if hspeed >= walk -1:
 			if col_result == ['front']:
 				wrun = ['vert']
 			elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
@@ -252,9 +260,8 @@ func _physics_process(delta):
 	var ledge_diff = ledge_col.y - ptarget.y
 
 	if is_on_wall():
-		ledge()
-		var walln = get_slide_collision(0).normal.abs()
-		var modlv = lv.slide(up).slide(walln).abs()
+		walln = get_slide_collision(0).normal.abs()
+		modlv = lv.slide(up).slide(walln).abs()
 		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, (jmp_spd.y + mv_spd) * 0.64, jmp_spd.y * 0))
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
 		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y * 0.84, jmp_spd.y * 3))
@@ -315,14 +322,17 @@ func _physics_process(delta):
 		!on_ledge
 
 	if on_ledge:
-		wrun = []
-		lv = mesh_xform.basis.xform(Vector3(0,0,lv.z))
-		if jmp_att:
-			on_ledge = false
-			translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
-		if act:
-			mesh.rotate(up, 185)
-			on_ledge = false
+		if col_result == ['front']:
+			wrun = []
+			lv = mesh_xform.basis.xform(Vector3(0,0,0))
+			if jmp_att:
+				on_ledge = false
+				translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
+			if act:
+				mesh.rotate(up, 185)
+				on_ledge = false
+		else:
+			!on_ledge
 	
 	elif !on_ledge:
 		lv += g * (delta *3)

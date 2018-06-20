@@ -43,7 +43,7 @@ func _physics_process(delta):
 		txt += str('\nCam FOV: ', cam.cam_fov)
 #		txt += str('\nTimer: ', timer.get_wait_time())
 		txt += str('\nChar State: ', az.state)
-		txt += str('\nChar State: ', shifter.state)
+		txt += str('\nWorld State: ', shifter.state)
 		txt += str('\nWorld: ', shifter.curr)
 		txt += str('\nMouse Mode: ', Input.get_mouse_mode())
 		txt += str('\nJoystick X: ', js_axis.get_joy_axis(0,0) )

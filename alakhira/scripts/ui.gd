@@ -20,6 +20,7 @@ var anim_hlth = 0
 var spd = 2
 var ev_mod = 0
 var thread = Thread.new()
+var stage
 
 const languages = [
 	'English',
@@ -71,7 +72,7 @@ const btns = []
 const CFG_FILE = 'user://config.cfg'
 
 func _ready():
-	$org/right/version.text = str(0.11)
+	$org/right/version.text = '0.11.1'
 	
 	shifter.curr
 	_signals()
@@ -80,12 +81,14 @@ func _ready():
 	_ratio_select(ID)
 	
 	if get_parent().get_name() == 'az':
+		az = get_parent()
 		_gen_ui()
 		envanim = az.get_parent().get_node('env/AnimationPlayer')
 		az.set_physics_process(true)
 		az.get_node('cam').set_enabled(true)
 	else:
 		_main_menu()
+		stage = ResourceLoader.load(test)
 	
 	_opts_container()
 
@@ -251,13 +254,12 @@ func _opts_container():
 #	_load_cfg()
 
 func _gen_ui():
-	az = get_parent()
 	if az.request_ready() != true:
 		pass
 	else:
 		max_hlth = az.max_hlth
 		bar.max_value = max_hlth
-		updt_hlth(max_hlth)
+		_updt_hlth(max_hlth)
 		az.get_node('cam').set_enabled(true)
 	
 	var menlist = ['dbg', 'rld', 'rsm', 'quit']
@@ -331,16 +333,12 @@ func _process(delta):
 	bar.value = anim_hlth
 
 func _ld_cplt():
-	var stage = thread.wait_to_finish()
+	stage = thread.wait_to_finish()
 	global.load_scene(test)
 
 func _ui_btn_pressed(btn):
 	if btn == 'start':
-		_gen_ui()
-		var stage = ResourceLoader.load(test)
 		call_deferred('_ld_cplt')
-		
-#		get_node('/root/global').load_scene(test)
 	
 	if btn == 'rld':
 		get_tree().set_pause(false)
