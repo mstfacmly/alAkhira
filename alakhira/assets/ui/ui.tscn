@@ -89,6 +89,7 @@ margin_bottom = 0.0
 
 [node name="menuList" parent="org/right" index="2"]
 
+editor/display_folded = false
 margin_top = 0.0
 margin_right = 320.0
 margin_bottom = 297.0
