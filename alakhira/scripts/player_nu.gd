@@ -35,6 +35,7 @@ var mv_b
 var mv_l
 var mv_r
 var jmp_att
+var hop_att
 var act
 
 #Movement
@@ -42,6 +43,7 @@ var ppos
 var lin_vel = Vector3()
 const ACCEL = 7.77
 const DEACCEL = ACCEL * 2.13
+const MAX_SLOPE = 57
 export var run = 5.13
 var walk = run / 1.75
 var sprint = run * 2.12 #7.77
@@ -79,6 +81,7 @@ export var attempts = 1
 onready var mesh = $body/skeleton
 var walln
 var modlv
+onready var col_feet = $col_feet
 
 func _ready():
 	connect('hlth_chng', ui, '_on_hlth_chng')
@@ -91,7 +94,7 @@ func _ready():
 	
 	chkpt()
 
-func input(event):
+func _input(event):
 	Input.add_joy_mapping('030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,', true)
 	
 	mv_f = Input.is_action_pressed('mv_f')
@@ -145,7 +148,6 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
 
 func _process(delta):
 	if state != DEAD:
-		input(true)
 #		hlth_drn(delta)
 		dmg(delta)
 
@@ -226,22 +228,30 @@ func _physics_process(delta):
 			hvel += target_dir * (ACCEL * 0.2) * delta
 			if hvel.length() > mv_spd:
 				hvel = hvel.normalized() * mv_spd
-
+	
+	if Input.is_action_just_pressed('head'):
+#		translate(mesh_xform.basis.xform(Vector3(-2,0,0)))
+#		hvel = mesh_xform.basis.xform(Vector3(jmp_spd.y, jmp_spd.y ,0))
+		hvel += hvel + mesh_xform.basis.xform(Vector3(0.1,0,0))
+		pass
+	
 	if is_on_floor() && jmp_att:
 		jumping = true
 		can_wrun = true
 		vvel = jmp_spd
 	elif is_on_wall() && jmp_att:
 		jumping = true
-	elif !is_on_floor() && !jmp_att or !is_on_wall() && !jmp_att:
+	else:
 		jumping = false
-
+	
 	if is_on_floor() && jmp_att:
 		lv = (hvel * 11.1) + up * vvel
 	else:
 		lv = hvel + up * vvel
-
+	
 	parkour()
+	
+#	col_feet.set_rotation_degrees(mesh.get_rotation_degrees())
 	
 	if !is_on_floor():
 		ledge()
@@ -255,10 +265,10 @@ func _physics_process(delta):
 				wrun = []
 		if !jumping:
 			falling = true
-
+	
 #	var wjmp = jmp_spd + (hvel)# * 0.5)
 	var ledge_diff = ledge_col.y - ptarget.y
-
+	
 	if is_on_wall():
 		walln = get_slide_collision(0).normal.abs()
 		modlv = lv.slide(up).slide(walln).abs()
@@ -287,6 +297,7 @@ func _physics_process(delta):
 				elif jmp_att:
 					lv += -walln * wjmp
 					lv += up * wjmp
+					attempts = 1
 	
 			if ledge_col.y > 3.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
 				global_translate(ledge_col - (ledge_col ))# - facing_mesh.slide(Vector3(0,-1.2,0)))
@@ -320,7 +331,7 @@ func _physics_process(delta):
 			lv.y += g.y * (delta *3)
 	elif !is_on_wall():
 		!on_ledge
-
+	
 	if on_ledge:
 		if col_result == ['front']:
 			wrun = []
@@ -336,15 +347,9 @@ func _physics_process(delta):
 	
 	elif !on_ledge:
 		lv += g * (delta *3)
-
-	if Input.is_action_just_pressed('head'):
-#		body_apply_impulse(self, ppos, mesh_xform.basis.xform(Vector3(-2,0,0)))
-#		translate(mesh_xform.basis.xform(Vector3(-2,4.2,-2)))
-#		hvel = mesh_xform.basis.xform(Vector3(jmp_spd.y, jmp_spd.y ,0))
-		pass
-
-	lin_vel = move_and_slide(lv, up)
-
+	
+	lin_vel = move_and_slide(lv, up, 0.05, 4, deg2rad(MAX_SLOPE))
+	
 	player_fp(delta)
 
 func player_fp(delta):
