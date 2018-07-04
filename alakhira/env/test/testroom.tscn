@@ -8,12 +8,12 @@
 [ext_resource path="res://assets/test/col_spi.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/test/column_dest.dae" type="PackedScene" id=7]
 [ext_resource path="res://assets/test/col_bridge_dest_01.tscn" type="PackedScene" id=8]
-[ext_resource path="res://assets/test/h_floor.dae" type="PackedScene" id=9]
-[ext_resource path="res://assets/test/ledge_l.tscn" type="PackedScene" id=10]
-[ext_resource path="res://assets/test/p_floor.dae" type="PackedScene" id=11]
-[ext_resource path="res://assets/test/boxes.tscn" type="PackedScene" id=12]
-[ext_resource path="res://assets/script_nodes/chkpt.tscn" type="PackedScene" id=13]
-[ext_resource path="res://scripts/chkpt.gd" type="Script" id=14]
+[ext_resource path="res://scripts/chkpt.gd" type="Script" id=9]
+[ext_resource path="res://assets/test/h_floor.dae" type="PackedScene" id=10]
+[ext_resource path="res://assets/test/ledge_l.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/test/p_floor.dae" type="PackedScene" id=12]
+[ext_resource path="res://assets/test/boxes.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/script_nodes/chkpt.tscn" type="PackedScene" id=14]
 [ext_resource path="res://assets/test/box_l.tscn" type="PackedScene" id=15]
 [ext_resource path="res://player/az_spi.tscn" type="PackedScene" id=16]
 [ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=17]
@@ -330,7 +330,11 @@ tracks/13/keys = {
 "values": [ Vector3( 0, 0, -5 ), Vector3( 0, 0, 0 ) ]
 }
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="BoxShape" id=3]
+
+extents = Vector3( 1, 3.05848, 3.64281 )
+
+[sub_resource type="SpatialMaterial" id=4]
 
 render_priority = 0
 flags_transparent = false
@@ -389,9 +393,8 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Emission", "Parameters", "Rim" ]
 
-[sub_resource type="ArrayMesh" id=4]
+[sub_resource type="ArrayMesh" id=5]
 
-resource_name = "hfloor-col"
 blend_shape_mode = 1
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 surfaces/0 = {
@@ -401,17 +404,13 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 98051,
 "index_count": 24,
-"material": SubResource( 3 ),
+"material": SubResource( 4 ),
 "name": "Material",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 18
 }
 _sections_unfolded = [ "surface_1" ]
-
-[sub_resource type="BoxShape" id=5]
-
-extents = Vector3( 1, 3.05848, 3.64281 )
 
 [sub_resource type="BoxShape" id=6]
 
@@ -424,7 +423,7 @@ _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
 [node name="testroom" parent="." index="0"]
 
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.419531, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 layers = 2
 cast_shadow = 0
 _sections_unfolded = [ "Geometry", "Transform", "Visibility", "material" ]
@@ -513,7 +512,7 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="plat_gr" parent="." index="5" instance=ExtResource( 4 )]
 
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -16.4, -4, -17.3 )
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -16.4, -1, -18.0145 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="columns" type="Spatial" parent="." index="6"]
@@ -625,6 +624,7 @@ _sections_unfolded = [ "Pause" ]
 
 [node name="col_bridge" type="Spatial" parent="." index="7"]
 
+editor/display_folded = true
 _sections_unfolded = [ "Transform" ]
 
 [node name="column5" parent="col_bridge" index="0" instance=ExtResource( 5 )]
@@ -777,6 +777,49 @@ editor/display_folded = true
 editor/display_folded = true
 transform = Transform( 1.1, -3.67482e-22, 0, -3.67482e-22, 1.1, 0, 0, 0, 1.1, 0, 0, 0 )
 
+[node name="chkpt_area3" type="Area" parent="col_bridge" index="11"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 10.3, -0.0999999 )
+input_ray_pickable = false
+input_capture_on_drag = false
+space_override = 0
+gravity_point = false
+gravity_distance_scale = 0.0
+gravity_vec = Vector3( 0, -1, 0 )
+gravity = 9.8
+linear_damp = 0.1
+angular_damp = 1.0
+priority = 0.0
+monitoring = true
+monitorable = true
+collision_layer = 1
+collision_mask = 1
+audio_bus_override = false
+audio_bus_name = "Master"
+reverb_bus_enable = false
+reverb_bus_name = "Master"
+reverb_bus_amount = 0.0
+reverb_bus_uniformity = 0.0
+script = ExtResource( 9 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="chkpt_shape" type="CollisionShape" parent="col_bridge/chkpt_area3" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0 )
+shape = SubResource( 3 )
+disabled = false
+
+[node name="column" parent="col_bridge" index="12" instance=ExtResource( 5 )]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -25.3, 7, 1 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="column2" parent="col_bridge" index="13" instance=ExtResource( 5 )]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -27.3, 7, 1 )
+_sections_unfolded = [ "Transform" ]
+
 [node name="columns5" type="Spatial" parent="." index="8"]
 
 editor/display_folded = true
@@ -893,22 +936,22 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.9464, 0 )
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2 )
 
-[node name="hfloor" parent="hfloor" index="0" instance=ExtResource( 9 )]
+[node name="hfloor" parent="hfloor" index="0" instance=ExtResource( 10 )]
 
 editor/display_folded = true
 transform = Transform( 0.996194, 0.0871557, 0, -0.0871557, 0.996194, 0, 0, 0, 1, 0, 0, -0.4 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="hfloor3" parent="hfloor" index="1" instance=ExtResource( 9 )]
+[node name="hfloor3" parent="hfloor" index="1" instance=ExtResource( 10 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14.6 )
 
-[node name="hfloor2" parent="hfloor" index="2" instance=ExtResource( 9 )]
+[node name="hfloor2" parent="hfloor" index="2" instance=ExtResource( 10 )]
 
 transform = Transform( -1.1589e-07, -0.5, -0.866025, -8.14603e-08, 0.866025, -0.5, 1, 1.26019e-08, -1.41093e-07, 30, 0, -0.4 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="hfloor_spi" parent="hfloor" index="3" instance=ExtResource( 9 )]
+[node name="hfloor_spi" parent="hfloor" index="3" instance=ExtResource( 10 )]
 
 editor/display_folded = true
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 30, 0, -0.4 )
@@ -916,7 +959,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="hfloor" parent="hfloor/hfloor_spi" index="0"]
 
-mesh = SubResource( 4 )
+mesh = SubResource( 5 )
 
 [node name="col" parent="hfloor/hfloor_spi/hfloor" index="0"]
 
@@ -928,45 +971,48 @@ _sections_unfolded = [ "Collision" ]
 
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 0 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="h_ledges" type="Spatial" parent="h_plat" index="0"]
 
-[node name="ledge_l" parent="h_plat/h_ledges" index="0" instance=ExtResource( 10 )]
+editor/display_folded = true
 
-[node name="ledge_l4" parent="h_plat/h_ledges" index="1" instance=ExtResource( 10 )]
+[node name="ledge_l" parent="h_plat/h_ledges" index="0" instance=ExtResource( 11 )]
+
+[node name="ledge_l4" parent="h_plat/h_ledges" index="1" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0 )
 
-[node name="ledge_l5" parent="h_plat/h_ledges" index="2" instance=ExtResource( 10 )]
+[node name="ledge_l5" parent="h_plat/h_ledges" index="2" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="ledge_l8" parent="h_plat/h_ledges" index="3" instance=ExtResource( 10 )]
+[node name="ledge_l8" parent="h_plat/h_ledges" index="3" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.9841, 0, 0 )
 
-[node name="ledge_l10" parent="h_plat/h_ledges" index="4" instance=ExtResource( 10 )]
+[node name="ledge_l10" parent="h_plat/h_ledges" index="4" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.9841, 0, 0 )
 
-[node name="ledge_l2" parent="h_plat/h_ledges" index="5" instance=ExtResource( 10 )]
+[node name="ledge_l2" parent="h_plat/h_ledges" index="5" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0 )
 
-[node name="ledge_l3" parent="h_plat/h_ledges" index="6" instance=ExtResource( 10 )]
+[node name="ledge_l3" parent="h_plat/h_ledges" index="6" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.9984, 0, 0 )
 
-[node name="ledge_l6" parent="h_plat/h_ledges" index="7" instance=ExtResource( 10 )]
+[node name="ledge_l6" parent="h_plat/h_ledges" index="7" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 29.9841, 0, 0 )
 
-[node name="ledge_l7" parent="h_plat/h_ledges" index="8" instance=ExtResource( 10 )]
+[node name="ledge_l7" parent="h_plat/h_ledges" index="8" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.9841, 0, 0 )
 
-[node name="ledge_l9" parent="h_plat/h_ledges" index="9" instance=ExtResource( 10 )]
+[node name="ledge_l9" parent="h_plat/h_ledges" index="9" instance=ExtResource( 11 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 53.9841, 0, 0 )
 
@@ -974,55 +1020,88 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 53.9841, 0, 0 )
 
 editor/display_folded = true
 
-[node name="h_floors" parent="h_plat/h_plat" index="0" instance=ExtResource( 11 )]
+[node name="h_floors" parent="h_plat/h_plat" index="0" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.414771 )
 
-[node name="h_floors6" parent="h_plat/h_plat" index="1" instance=ExtResource( 11 )]
+[node name="h_floors6" parent="h_plat/h_plat" index="1" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.9888, 0, -0.414771 )
 
-[node name="h_floors3" parent="h_plat/h_plat" index="2" instance=ExtResource( 11 )]
+[node name="h_floors3" parent="h_plat/h_plat" index="2" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9848, 0, -0.414771 )
 
-[node name="h_floors8" parent="h_plat/h_plat" index="3" instance=ExtResource( 11 )]
+[node name="h_floors8" parent="h_plat/h_plat" index="3" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.9811, 0, -0.414771 )
 
-[node name="h_floors9" parent="h_plat/h_plat" index="4" instance=ExtResource( 11 )]
+[node name="h_floors9" parent="h_plat/h_plat" index="4" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.9792, 0, -0.414771 )
 
-[node name="h_floors2" parent="h_plat/h_plat" index="5" instance=ExtResource( 11 )]
+[node name="h_floors2" parent="h_plat/h_plat" index="5" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.00303, 0, -0.414771 )
 
-[node name="h_floors7" parent="h_plat/h_plat" index="6" instance=ExtResource( 11 )]
+[node name="h_floors7" parent="h_plat/h_plat" index="6" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 29.9832, 0, -0.414771 )
 
-[node name="h_floors4" parent="h_plat/h_plat" index="7" instance=ExtResource( 11 )]
+[node name="h_floors4" parent="h_plat/h_plat" index="7" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.9967, 0, -0.414771 )
 
-[node name="h_floors5" parent="h_plat/h_plat" index="8" instance=ExtResource( 11 )]
+[node name="h_floors5" parent="h_plat/h_plat" index="8" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.9785, 0, -0.414771 )
 
-[node name="h_floors10" parent="h_plat/h_plat" index="9" instance=ExtResource( 11 )]
+[node name="h_floors10" parent="h_plat/h_plat" index="9" instance=ExtResource( 12 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 53.9776, 0, -0.414771 )
 
-[node name="boxes" parent="." index="14" instance=ExtResource( 12 )]
+[node name="chkpt_area2" type="Area" parent="h_plat" index="2"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6, 12.4, -25.1 )
+input_ray_pickable = false
+input_capture_on_drag = false
+space_override = 0
+gravity_point = false
+gravity_distance_scale = 0.0
+gravity_vec = Vector3( 0, -1, 0 )
+gravity = 9.8
+linear_damp = 0.1
+angular_damp = 1.0
+priority = 0.0
+monitoring = true
+monitorable = true
+collision_layer = 1
+collision_mask = 1
+audio_bus_override = false
+audio_bus_name = "Master"
+reverb_bus_enable = false
+reverb_bus_name = "Master"
+reverb_bus_amount = 0.0
+reverb_bus_uniformity = 0.0
+script = ExtResource( 9 )
+_sections_unfolded = [ "Collision", "Transform" ]
+
+[node name="chkpt_shape" type="CollisionShape" parent="h_plat/chkpt_area2" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0 )
+shape = SubResource( 3 )
+disabled = false
+
+[node name="boxes" parent="." index="14" instance=ExtResource( 13 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.6 )
 
-[node name="boxes2" parent="." index="15" instance=ExtResource( 12 )]
+[node name="boxes2" parent="." index="15" instance=ExtResource( 13 )]
 
 transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 10.3, 0, 10.3 )
 
-[node name="chkpt" parent="." index="16" instance=ExtResource( 13 )]
+[node name="chkpt" parent="." index="16" instance=ExtResource( 14 )]
 
 [node name="chkpt_area" type="Area" parent="." index="17"]
 
@@ -1048,85 +1127,19 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 14 )
+script = ExtResource( 9 )
 _sections_unfolded = [ "Collision", "Transform" ]
 
 [node name="chkpt_shape" type="CollisionShape" parent="chkpt_area" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0 )
-shape = SubResource( 5 )
+shape = SubResource( 3 )
 disabled = false
 
-[node name="chkpt_area2" type="Area" parent="." index="18"]
+[node name="highboxes" type="Spatial" parent="." index="18"]
 
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4, 12.4, -25.1 )
-input_ray_pickable = false
-input_capture_on_drag = false
-space_override = 0
-gravity_point = false
-gravity_distance_scale = 0.0
-gravity_vec = Vector3( 0, -1, 0 )
-gravity = 9.8
-linear_damp = 0.1
-angular_damp = 1.0
-priority = 0.0
-monitoring = true
-monitorable = true
-collision_layer = 1
-collision_mask = 1
-audio_bus_override = false
-audio_bus_name = "Master"
-reverb_bus_enable = false
-reverb_bus_name = "Master"
-reverb_bus_amount = 0.0
-reverb_bus_uniformity = 0.0
-script = ExtResource( 14 )
-_sections_unfolded = [ "Collision", "Transform" ]
-
-[node name="chkpt_shape" type="CollisionShape" parent="chkpt_area2" index="0"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0 )
-shape = SubResource( 5 )
-disabled = false
-
-[node name="chkpt_area3" type="Area" parent="." index="19"]
-
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 10.3, -0.0999999 )
-input_ray_pickable = false
-input_capture_on_drag = false
-space_override = 0
-gravity_point = false
-gravity_distance_scale = 0.0
-gravity_vec = Vector3( 0, -1, 0 )
-gravity = 9.8
-linear_damp = 0.1
-angular_damp = 1.0
-priority = 0.0
-monitoring = true
-monitorable = true
-collision_layer = 1
-collision_mask = 1
-audio_bus_override = false
-audio_bus_name = "Master"
-reverb_bus_enable = false
-reverb_bus_name = "Master"
-reverb_bus_amount = 0.0
-reverb_bus_uniformity = 0.0
-script = ExtResource( 14 )
-_sections_unfolded = [ "Collision" ]
-
-[node name="chkpt_shape" type="CollisionShape" parent="chkpt_area3" index="0"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0 )
-shape = SubResource( 5 )
-disabled = false
-
-[node name="highboxes" type="Spatial" parent="." index="20"]
-
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.9 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 5.9 )
 
 [node name="box_l" parent="highboxes" index="0" instance=ExtResource( 15 )]
 
@@ -1134,54 +1147,54 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 7.5, 5.1 )
 
 [node name="box_l2" parent="highboxes" index="1" instance=ExtResource( 15 )]
 
-transform = Transform( 0.258819, 0.965926, 4.2222e-08, 0, -4.37114e-08, 1, 0.965926, -0.258819, -1.13133e-08, -32, 12.4, 12.3 )
+transform = Transform( 0.258819, 0.965926, 4.2222e-08, 0, -4.37114e-08, 1, 0.965926, -0.258819, -1.13133e-08, -32, 14, 12.3 )
 
 [node name="box_l3" parent="highboxes" index="2" instance=ExtResource( 15 )]
 
-transform = Transform( 0.707107, 0.707107, 3.09086e-08, 0, -4.37114e-08, 1, 0.707107, -0.707107, -3.09086e-08, -29.2, 12.4, 16.1 )
+transform = Transform( 0.707107, 0.707107, 3.09086e-08, 0, -4.37114e-08, 1, 0.707107, -0.707107, -3.09086e-08, -29.2, 14, 16.1 )
 
 [node name="box_l4" parent="highboxes" index="3" instance=ExtResource( 15 )]
 
-transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -23.8, 12.4, 18.1 )
+transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -23.8, 14, 18.1 )
 
 [node name="box_l5" parent="highboxes" index="4" instance=ExtResource( 15 )]
 
-transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 12.4, 18.1 )
+transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 14, 18.1 )
 
 [node name="box_l6" parent="highboxes" index="5" instance=ExtResource( 15 )]
 
-transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 12.4, 13.7 )
+transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 11.8, 13.7 )
 
-[node name="box_l7" parent="highboxes" index="6" instance=ExtResource( 15 )]
+[node name="box_l11" parent="highboxes" index="6" instance=ExtResource( 15 )]
 
-transform = Transform( -4.37114e-08, 4.37114e-08, -1, 1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -21.2661, 14.2817, 22.5 )
+transform = Transform( 1, 0, -8.88178e-16, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -19.4, 3.6, 13.7 )
 
-[node name="box_l9" parent="highboxes" index="7" instance=ExtResource( 15 )]
+[node name="box_l7" parent="highboxes" index="7" instance=ExtResource( 15 )]
 
-transform = Transform( -4.37114e-08, 4.37114e-08, -1, 1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -21.2661, 10.5, 22.5 )
+transform = Transform( -4.37114e-08, 4.37114e-08, -1, 1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -21.2661, 15.8817, 22.5 )
 
-[node name="box_l8" parent="highboxes" index="8" instance=ExtResource( 15 )]
+[node name="box_l9" parent="highboxes" index="8" instance=ExtResource( 15 )]
 
-transform = Transform( -3.34849e-08, 0.642788, -0.766044, 1, 1.91069e-15, -4.37114e-08, -2.80971e-08, -0.766044, -0.642788, -28.4661, 14.2817, 19.9 )
+transform = Transform( -4.37114e-08, 4.37114e-08, -1, 1, 1.91069e-15, -4.37114e-08, 0, -1, -4.37114e-08, -21.2661, 12.1, 22.5 )
 
-[node name="box_l10" parent="highboxes" index="9" instance=ExtResource( 15 )]
+[node name="box_l8" parent="highboxes" index="9" instance=ExtResource( 15 )]
 
-transform = Transform( -3.34849e-08, 0.642788, -0.766044, 1, 1.91069e-15, -4.37114e-08, -2.80971e-08, -0.766044, -0.642788, -28.4661, 10.5, 19.9 )
+transform = Transform( -3.34849e-08, 0.642788, -0.766044, 1, 1.91069e-15, -4.37114e-08, -2.80971e-08, -0.766044, -0.642788, -28.4661, 15.8817, 19.9 )
 
-[node name="column" parent="highboxes" index="10" instance=ExtResource( 5 )]
+[node name="box_l10" parent="highboxes" index="10" instance=ExtResource( 15 )]
 
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -25.3, 7, -4.9 )
-_sections_unfolded = [ "Transform" ]
+transform = Transform( -3.34849e-08, 0.642788, -0.766044, 1, 1.91069e-15, -4.37114e-08, -2.80971e-08, -0.766044, -0.642788, -28.4661, 12.1, 19.9 )
 
-[node name="column2" parent="highboxes" index="11" instance=ExtResource( 5 )]
-
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -27.3, 7, -4.9 )
-_sections_unfolded = [ "Transform" ]
-
-[node name="exit" type="Area" parent="." index="21"]
+[node name="az_spi" parent="." index="19" instance=ExtResource( 16 )]
 
 editor/display_folded = true
-transform = Transform( 0.707107, 0, 0.707107, 0, 0.999999, 0, -0.707107, 0, 0.707107, -25.5, 16.3, 24.2 )
+transform = Transform( -1.72022, 0, -1.20451, 0, 2.1, 0, 1.20451, 0, -1.72022, -26.5, 19.8, 26.8 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="exit" type="Area" parent="az_spi" index="1"]
+
+editor/display_folded = true
+transform = Transform( -0.468956, 0, -0.0826898, 0, 0.47619, 0, 0.0826898, 0, -0.468956, -1.10021, -0.714286, 0.741056 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -1202,20 +1215,15 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 14 )
+script = ExtResource( 9 )
 
-[node name="exit" type="CollisionShape" parent="exit" index="0"]
+[node name="exit" type="CollisionShape" parent="az_spi/exit" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9799, 2.3, 0.141424 )
 shape = SubResource( 6 )
 disabled = false
 
-[node name="az_spi" parent="." index="22" instance=ExtResource( 16 )]
-
-transform = Transform( -1.72022, 0, -1.20451, 0, 2.1, 0, 1.20451, 0, -1.72022, -26.5, 17.8, 26.8 )
-_sections_unfolded = [ "Transform" ]
-
-[node name="az" parent="." index="23" instance=ExtResource( 17 )]
+[node name="az" parent="." index="20" instance=ExtResource( 17 )]
 
 
 [editable path="env"]
