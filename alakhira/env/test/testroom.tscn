@@ -512,7 +512,7 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="plat_gr" parent="." index="5" instance=ExtResource( 4 )]
 
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -16.4, -1, -18.0145 )
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -16.4, -1, -18.0425 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="columns" type="Spatial" parent="." index="6"]
@@ -970,7 +970,7 @@ _sections_unfolded = [ "Collision" ]
 [node name="h_plat" type="Spatial" parent="." index="13"]
 
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -0.5 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="h_ledges" type="Spatial" parent="h_plat" index="0"]
