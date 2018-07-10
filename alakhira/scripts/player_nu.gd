@@ -508,7 +508,7 @@ func hlth_drn(delta):
 	
 	if hlth >= 0:
 		if curr != 'spi':
-			hlth -= delta / div
+			hlth -= delta / (div * 10)
 		elif curr == 'spi':
 			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
 		

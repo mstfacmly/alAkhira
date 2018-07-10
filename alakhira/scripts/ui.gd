@@ -178,13 +178,13 @@ func _input(ev):
 
 func _gui_input(ev):
 	if !InputEventMouseMotion:
-		if ev.is_action_just_pressed('ui_down'):
+		if ev.is_action_pressed('ui_down'):
 			focus_next
-		if ev.is_action_just_pressed('ui_up'):
+		if ev.is_action_pressed('ui_up'):
 			focus_previous
-		if ev.is_action_just_pressed('ui_accept'):
+		if ev.is_action_pressed('ui_accept'):
 			_ui_btn_pressed(btn)
-		if ev.is_action_just_pressed('ui_cancel'):
+		if ev.is_action_pressed('ui_cancel'):
 			pass
 
 func _signals():
@@ -200,10 +200,12 @@ func _signals():
 							if l.get_class() == 'Button':
 								l.connect('pressed', self, '_ui_btn_pressed', [l.get_name()])
 							elif l.get_class() == 'OptionButton':
-								l.get_popup().connect('id_pressed', self, '_'+i.get_name()+'_select')		
+								l.get_popup().connect('id_pressed', self, '_'+i.get_name()+'_select')
 							
 	$org/right/cam/cam_x/btn.connect('pressed', self, '_cam_btn', ['x'])
 	$org/right/cam/cam_y/btn.connect('pressed', self, '_cam_btn', ['y'])
+	$org/right/cam/cam_x_spd/slide.connect('value_changed', self, '_set_sens', ['x'])
+	$org/right/cam/cam_y_spd/slide.connect('value_changed', self, '_set_sens', ['y'])
 
 func _main_menu():
 	# Show/Hide Menu Items
@@ -235,7 +237,7 @@ func _opts_container():
 	else:
 		$org/right/disp/fs/fullscreen.text = 'Off'
 	
-	if OS.is_vsync_enabled() != false:
+	if OS.is_vsync_enabled() == true:
 		$org/right/disp/vsync/vsync.text = 'On'
 	else:
 		$org/right/disp/vsync/vsync.text = 'Off'
@@ -366,14 +368,14 @@ func _ui_btn_pressed(btn):
 		OS.shell_open('http://studioslune.com/')
 	
 	if btn == 'fullscreen':
-		if OS.is_window_fullscreen() != true:
-			OS.set_window_fullscreen(true)
+		OS.window_fullscreen = !OS.window_fullscreen
+		if OS.is_window_fullscreen() == true:
 			$org/right/disp/fs/fullscreen.text = 'On'
 		else:
-			OS.set_window_fullscreen(false)
 			$org/right/disp/fs/fullscreen.text = 'Off'
 	
 	if btn == 'vsync':
+#		OS.vsync_enabled = !OS.vsync_enabled
 		if OS.is_vsync_enabled() != true:
 			OS.set_use_vsync(true)
 			$org/right/disp/vsync/vsync.text = 'On'
@@ -517,7 +519,16 @@ func _cam():
 	else:
 		opts.set_visible(false)
 	
+	$org/right/cam/cam_x_spd/slide.set_value(global.jscam_x)
+	$org/right/cam/cam_y_spd/slide.set_value(global.jscam_y)
+	
 	_grab_menu()
+
+func _set_sens(i,i):
+	if i == 'x':
+		global.jscam_x = $org/right/cam/cam_x_spd/slide.value
+	if i == 'y':
+		global.jscam_y = $org/right/cam/cam_y_spd/slide.value
 
 func _cam_btn(btn):
 	if btn == 'x':
