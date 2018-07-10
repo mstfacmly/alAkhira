@@ -22,6 +22,10 @@ config/quit_on_go_back=false
 shift="*res://scripts/shift.gd"
 global="*res://scripts/global.gd"
 
+[debug]
+
+settings/fps/force_fps=30
+
 [display]
 
 window/size/height=576
@@ -88,6 +92,7 @@ common/enable_object_picking=false
 
 [rendering]
 
+threads/thread_model=2
 quality/filters/anisotropic_filter_level=1
 quality/shadows/filter_mode=2
 quality/shadows/filter_mode.mobile=2
@@ -95,3 +100,4 @@ quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/subsurface_scattering/quality=0
 quality/voxel_cone_tracing/high_quality=false
+quality/dynamic_fonts/use_oversampling=true
