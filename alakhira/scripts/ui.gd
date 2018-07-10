@@ -206,6 +206,7 @@ func _signals():
 	$org/right/cam/cam_y/btn.connect('pressed', self, '_cam_btn', ['y'])
 	$org/right/cam/cam_x_spd/slide.connect('value_changed', self, '_set_sens', ['x'])
 	$org/right/cam/cam_y_spd/slide.connect('value_changed', self, '_set_sens', ['y'])
+	$org/right/cam/cam_mouse/slide.connect('value_changed', self, '_set_sens', ['m'])
 
 func _main_menu():
 	# Show/Hide Menu Items
@@ -521,14 +522,17 @@ func _cam():
 	
 	$org/right/cam/cam_x_spd/slide.set_value(global.jscam_x)
 	$org/right/cam/cam_y_spd/slide.set_value(global.jscam_y)
+	$org/right/cam/cam_mouse/slide.set_value(global.mouse_sens)
 	
 	_grab_menu()
 
-func _set_sens(i,i):
+func _set_sens(i,i,i):
 	if i == 'x':
 		global.jscam_x = $org/right/cam/cam_x_spd/slide.value
 	if i == 'y':
 		global.jscam_y = $org/right/cam/cam_y_spd/slide.value
+	if i == 'm':
+		global.mouse_sens = $org/right/cam/cam_mouse/slide.value
 
 func _cam_btn(btn):
 	if btn == 'x':
