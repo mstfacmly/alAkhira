@@ -1,0 +1,131 @@
+[gd_scene format=2]
+
+[node name="animationTree" type="AnimationTreePlayer"]
+
+playback_process_mode = 1
+master_player = NodePath("../animation")
+base_path = NodePath("..")
+active = false
+data = {
+"active": false,
+"connections": [ "run", "scale", 0, "scale", "state", 0, "anim 3", "state", 1, "anim 4", "state", 2, "anim 5", "state", 3, "anim 6", "state", 4, "anim 7", "state", 5, "anim 8", "state", 6, "anim 9", "state", 7, "anim 10", "state", 8, "anim 2", "state", 9, "anim 11", "state", 10, "state", "out", 0, "anim", "run", 0, "ru", "run", 1 ],
+"master": NodePath("../animation"),
+"nodes": [ {
+"id": "scale",
+"position": Vector2( 308, 47 ),
+"scale": 1.2,
+"type": "timescale"
+}, {
+"id": "state",
+"position": Vector2( 821, 55 ),
+"transitions": [ {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+}, {
+"auto_advance": false
+} ],
+"type": "transition",
+"xfade": 0.18
+}, {
+"filter": [  ],
+"from": "00_idle-cycle",
+"id": "anim",
+"position": Vector2( 30, 56 ),
+"type": "animation"
+}, {
+"id": "out",
+"position": Vector2( 1023, 38 ),
+"type": "output"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "run",
+"position": Vector2( 171, 62 ),
+"type": "blend2"
+}, {
+"filter": [  ],
+"from": "05_stand_jump_fall",
+"id": "anim 6",
+"position": Vector2( 318, 286 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "18-wrun-l",
+"id": "anim 11",
+"position": Vector2( 636, 649 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "06_run_jump_rise",
+"id": "anim 7",
+"position": Vector2( 454, 262 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "02_run-cycle",
+"id": "ru",
+"position": Vector2( 22, 215 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "03_sprint-cycle",
+"id": "anim 4",
+"position": Vector2( 443, 132 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "16_wrun-f",
+"id": "anim 10",
+"position": Vector2( 481, 491 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "17-wrun-r",
+"id": "anim 2",
+"position": Vector2( 612, 489 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "07_run_jump_fall",
+"id": "anim 8",
+"position": Vector2( 459, 375 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "01_walk-cycle",
+"id": "anim 3",
+"position": Vector2( 448, 17 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "04_stand_jump_rise",
+"id": "anim 5",
+"position": Vector2( 322, 168 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "20_ledge_idle-cycle",
+"id": "anim 9",
+"position": Vector2( 339, 417 ),
+"type": "animation"
+} ]
+}
+
+
