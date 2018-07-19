@@ -16,7 +16,7 @@
 [ext_resource path="res://assets/script_nodes/chkpt.tscn" type="PackedScene" id=14]
 [ext_resource path="res://assets/test/box_l.tscn" type="PackedScene" id=15]
 [ext_resource path="res://player/az_spi.tscn" type="PackedScene" id=16]
-[ext_resource path="res://player/az_tmp2.tscn" type="PackedScene" id=17]
+[ext_resource path="res://player/az.tscn" type="PackedScene" id=17]
 
 [sub_resource type="Animation" id=1]
 

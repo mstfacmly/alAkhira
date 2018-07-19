@@ -21,6 +21,7 @@ var g = Vector3(0,-9.8,0)
 var up = -g.normalized()
 
 const DEADZONE = 0.1
+const JOY_VAL = 0.843
 
 # Camera
 var view_sensitivity = 0.2
@@ -78,7 +79,7 @@ var hanging = false
 var facing_dir = Vector3(0, 0, 1)
 var result
 export var attempts = 1
-onready var mesh = $body/skeleton
+onready var mesh = $body/Skeleton
 var walln
 var modlv
 onready var col_feet = $col_feet
@@ -108,11 +109,14 @@ func _input(event):
 	js_input(event)
 
 func js_input(delta):
-	var x = abs(Input.get_joy_axis(0,0))
-	var y = abs(Input.get_joy_axis(0,1))
+#	var x = abs(Input.get_joy_axis(0,0))
+#	var y = abs(Input.get_joy_axis(0,1))
+	var joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
 
-	var axis_value = atan(x + y)# * PI / 360 * 100
-	if axis_value >= DEADZONE && axis_value <= 0.743:
+#	var axis_value = atan(x + y)# * PI / 360 * 100
+#	print(axis_value)
+	print(joy_vec.length())
+	if joy_vec.length() > DEADZONE && joy_vec.length() < JOY_VAL:
 		if mv_spd > walk:
 			while mv_spd > walk:
 				mv_spd -= 0.05
@@ -168,9 +172,9 @@ func _physics_process(delta):
 	var hspeed = hvel.length()
 	
 	ppos = mesh.get_global_transform().origin
-	var ptarg = $body/skeleton/targets/ptarget
-	ptarget = $body/skeleton/targets/ptarget.get_global_transform().origin
-	ledgecol = $body/skeleton/targets/ledgecol.get_global_transform()
+	var ptarg = $body/Skeleton/targets/ptarget
+	ptarget = $body/Skeleton/targets/ptarget.get_global_transform().origin
+	ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform()
 
 	var dir = Vector3()
 	var cam_xform = cam_node.get_global_transform()
@@ -272,7 +276,7 @@ func _physics_process(delta):
 	if is_on_wall():
 		walln = get_slide_collision(0).normal.abs()
 		modlv = lv.slide(up).slide(walln).abs()
-		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, (jmp_spd.y + mv_spd) * 0.64, jmp_spd.y * 0))
+		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, (jmp_spd.y + (mv_spd / 2)) * 0.64, jmp_spd.y * 0))
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
 		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y * 0.84, jmp_spd.y * 3))
 		
@@ -283,7 +287,7 @@ func _physics_process(delta):
 			if col_result == ['front']:
 				#if !jmp_att :
 				#	lv = Vector3(0,0.0000001,0)
-				if jmp_att && attempts >= 1:
+				if jmp_att && attempts > 0:
 					lv += whop #* mv_spd * 0.72
 					attempts -= 1
 				else:
@@ -300,7 +304,7 @@ func _physics_process(delta):
 					attempts = 1
 	
 			if ledge_col.y > 3.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
-				global_translate(ledge_col - (ledge_col ))# - facing_mesh.slide(Vector3(0,-1.2,0)))
+				global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
 				on_ledge = true
 			else:
 				on_ledge = false
@@ -347,6 +351,8 @@ func _physics_process(delta):
 	
 	elif !on_ledge:
 		lv += g * (delta *3)
+	
+	$body/Skeleton/targets/ptarget.translation.z = (hvel.length() * 0.84) / 2 + 1
 	
 	lin_vel = move_and_slide(lv, up, 0.05, 4, deg2rad(MAX_SLOPE))
 	
@@ -475,6 +481,7 @@ func parkour():
 		col_result = ['front']
 		return col_result
 	elif (!col_b.empty()):
+		col_normal = col_b.normal
 		col_result = ['back']
 		return col_result
 	else:
