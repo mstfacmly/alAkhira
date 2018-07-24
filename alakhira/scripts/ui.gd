@@ -193,12 +193,13 @@ func _signals():
 		for m in $org.get_node(lr).get_children():
 			if m.get_class() == 'VBoxContainer':
 				for i in m.get_children():
+					print(i)
 					if i.get_class() == 'Button':
 						i.connect('pressed', self, '_ui_btn_pressed', [i.get_name()])
 					else:
 						for l in i.get_children():
 							if l.get_class() == 'Button':
-								l.connect('pressed', self, '_ui_btn_pressed', [l.get_name()])
+								l.connect('pressed', self, '_ui_btn_pressed', [l.get_parent().get_name()])
 							elif l.get_class() == 'OptionButton':
 								l.get_popup().connect('id_pressed', self, '_'+i.get_name()+'_select')
 							
@@ -210,7 +211,7 @@ func _signals():
 
 func _main_menu():
 	# Show/Hide Menu Items
-	$org/right/menuList/dbg.hide()
+	$org/right/menuList/dbg.show()
 	$org/right/menuList/contd.hide()
 	$org/right/menuList/rld.hide()
 	$org/right/menuList/start.show()
@@ -223,6 +224,7 @@ func _main_menu():
 	$org/right/ctrls.hide()
 	$org/right/langs.hide()
 	$org/right/cam.hide()
+	$org/right/dbg.hide()
 	
 	$org/left/dbg.hide()
 	$org/left/over/thanks.hide()
@@ -231,30 +233,6 @@ func _main_menu():
 	$org/left/over/site.hide()
 	
 	_grab_menu()
-
-func _opts_container():
-	if OS.is_window_fullscreen() != false:
-		$org/right/disp/fs/fullscreen.text = 'On'
-	else:
-		$org/right/disp/fs/fullscreen.text = 'Off'
-	
-	if OS.is_vsync_enabled() == true:
-		$org/right/disp/vsync/vsync.text = 'On'
-	else:
-		$org/right/disp/vsync/vsync.text = 'Off'
-	
-	for l in range(languages.size()):
-		var btn = $org/right/langs.get_node('btn' + str(l))
-		btn.set_text(languages[l])
-		btn.connect('pressed', self, '_lang_select', [btn.get_text()])
-	
-	for r in ratio:
-		$org/right/disp/ratio/ratio.add_item(str(r))
-	
-	for i in aalist:
-		$org/right/disp/fsaa/aa.add_item(i)
-	
-#	_load_cfg()
 
 func _gen_ui():
 	if az.request_ready() != true:
@@ -275,6 +253,7 @@ func _gen_ui():
 	$org/right/ctrls.hide()
 	$org/right/langs.hide()
 	$org/right/cam.hide()
+	$org/right/dbg.hide()
 
 	$org/right/menuList.hide()
 	$org/right/version.hide()
@@ -285,6 +264,30 @@ func _gen_ui():
 	$org/right/menuList/rsm.show()
 	
 	_grab_menu()
+
+func _opts_container():
+	if OS.is_window_fullscreen() != false:
+		$org/right/disp/fs/btn.text = 'On'
+	else:
+		$org/right/disp/fs/btn.text = 'Off'
+	
+	if OS.is_vsync_enabled() == true:
+		$org/right/disp/vsync/btn.text = 'On'
+	else:
+		$org/right/disp/vsync/btn.text = 'Off'
+	
+	for l in range(languages.size()):
+		var btn = $org/right/langs.get_node('btn' + str(l))
+		btn.set_text(languages[l])
+		btn.connect('pressed', self, '_lang_select', [btn.get_text()])
+	
+	for r in ratio:
+		$org/right/disp/ratio/ratio.add_item(str(r))
+	
+	for i in aalist:
+		$org/right/disp/fsaa/aa.add_item(i)
+	
+#	_load_cfg()
 
 func _on_pause():
 	az.hide()
@@ -312,6 +315,8 @@ func _on_unpause():
 	$org/right/disp.hide()
 	$org/right/ctrls.hide()
 	$org/right/cam.hide()
+	$org/right/dbg.hide()
+	
 	get_tree().set_pause(false)
 	
 	if shifter.curr != 'phys':
@@ -357,32 +362,40 @@ func _ui_btn_pressed(btn):
 		_ctrls()
 	if btn == 'cam' or btn == 'cam_b':
 		_cam()
+	if btn == 'dbg' or btn == 'dbg_b':
+		_dbg()
 	
 	if btn == 'quit':
 		get_tree().quit()
 	if btn == 'rsm':
 		_on_unpause()
-	if btn == 'dbg':
-		_show_dbg()
 	
 	if btn == 'site':
 		OS.shell_open('http://studioslune.com/')
 	
-	if btn == 'fullscreen':
+	if btn == 'fs':
 		OS.window_fullscreen = !OS.window_fullscreen
 		if OS.is_window_fullscreen() == true:
-			$org/right/disp/fs/fullscreen.text = 'On'
+			$org/right/disp/fs/btn.text = 'On'
 		else:
-			$org/right/disp/fs/fullscreen.text = 'Off'
+			$org/right/disp/fs/btn.text = 'Off'
 	
 	if btn == 'vsync':
 #		OS.vsync_enabled = !OS.vsync_enabled
 		if OS.is_vsync_enabled() != true:
 			OS.set_use_vsync(true)
-			$org/right/disp/vsync/vsync.text = 'On'
+			$org/right/disp/vsync/btn.text = 'On'
 		else:
 			OS.set_use_vsync(false)
-			$org/right/disp/vsync/vsync.text = 'Off'
+			$org/right/disp/vsync/btn.text = 'Off'
+			
+	if btn == 'info':
+		_show_dbg()
+	
+	if btn == 'hlth_full':
+		_updt_hlth(max_hlth)
+	
+		
 
 func _lang_select(btn):
 	if btn == 'English':
@@ -525,6 +538,28 @@ func _cam():
 	$org/right/cam/cam_mouse/slide.set_value(global.mouse_sens)
 	
 	_grab_menu()
+	
+func _dbg():
+	var dbg = $org/right/dbg
+	var menu = $org/right/menuList
+	
+	if $org/left/dbg.is_visible() != false:
+		$org/right/dbg/info/btn.set_text('On')
+	else:
+		$org/right/dbg/info/btn.set_text('Off')
+
+	if dbg.is_visible() != true:
+		dbg.set_visible(true)
+	else:
+		dbg.set_visible(false)
+		
+	if menu.is_visible() != true:
+		menu.set_visible(true)
+	else:
+		menu.set_visible(false)
+		
+	_grab_menu()
+
 
 func _set_sens(i,i,i):
 	if i == 'x':
@@ -572,7 +607,7 @@ func _over():
 	Input.set_mouse_mode(0)
 
 func _grab_menu():
-	var menlist = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam' ]
+	var menlist = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]
 	for d in dir:
 		if d == 'left':
 			for b in $org/left/over.get_children():
