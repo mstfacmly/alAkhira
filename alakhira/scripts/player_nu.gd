@@ -8,6 +8,7 @@ signal az_ready
 # Health
 export var max_hlth = 100
 var hlth = max_hlth
+var hlth_drn = true
 
 enum states {ALIVE, DEAD, GONE}
 var state = ALIVE
@@ -115,7 +116,7 @@ func js_input(delta):
 
 #	var axis_value = atan(x + y)# * PI / 360 * 100
 #	print(axis_value)
-	print(joy_vec.length())
+#	print(joy_vec.length())
 	if joy_vec.length() > DEADZONE && joy_vec.length() < JOY_VAL:
 		if mv_spd > walk:
 			while mv_spd > walk:
@@ -151,12 +152,12 @@ func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         return (n*cos(ang) + t*sin(ang)) * p_facing.length()
 
 func _process(delta):
-	if state != DEAD:
+	if state != DEAD and hlth_drn != false:
 #		hlth_drn(delta)
 		dmg(delta)
 
 func _physics_process(delta):
-	if state !=DEAD:
+	if state !=DEAD and hlth_drn != false:
 		hlth_drn(delta)
 
 	var cam_node = $cam/cam

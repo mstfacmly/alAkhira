@@ -211,7 +211,7 @@ func _signals():
 
 func _main_menu():
 	# Show/Hide Menu Items
-	$org/right/menuList/dbg.show()
+	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
 	$org/right/menuList/rld.hide()
 	$org/right/menuList/start.show()
@@ -392,9 +392,17 @@ func _ui_btn_pressed(btn):
 	if btn == 'info':
 		_show_dbg()
 	
-	if btn == 'hlth_full':
-		_updt_hlth(max_hlth)
+	if btn == 'hlth_drn':
+		if az.hlth_drn != false:
+			az.hlth_drn = false
+		else:
+			az.hlth_drn = true
 	
+	if btn == 'hlth_full':
+		az.hlth = az.max_hlth
+	
+	if btn == 'hlth_nil':
+		az.hlth = 0
 		
 
 func _lang_select(btn):
@@ -543,11 +551,20 @@ func _dbg():
 	var dbg = $org/right/dbg
 	var menu = $org/right/menuList
 	
+	$org/right/dbg/hlth_full/btn.set_text('Restore health to max')
+	$org/right/dbg/hlth_nil/btn.set_text('Drain all health')
+	
 	if $org/left/dbg.is_visible() != false:
 		$org/right/dbg/info/btn.set_text('On')
 	else:
 		$org/right/dbg/info/btn.set_text('Off')
-
+	
+	if az.hlth_drn != false:
+		$org/right/dbg/hlth_drn/btn.set_text('Enabled')
+	else:
+		$org/right/dbg/hlth_drn/btn.set_text('Disabled')
+	
+	
 	if dbg.is_visible() != true:
 		dbg.set_visible(true)
 	else:
