@@ -1,13 +1,14 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/ui/AlAkhira.svg" type="Texture" id=1]
 [ext_resource path="res://assets/ui/menufont.tres" type="DynamicFont" id=2]
-[ext_resource path="res://assets/ui/opts.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/ui/langs.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/ui/disp.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/ui/ctrls.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/ui/cam_opts.tscn" type="PackedScene" id=7]
-[ext_resource path="res://assets/ui/versionfont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://assets/ui/dbg.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/ui/opts.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/ui/langs.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/ui/disp.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/ui/ctrls.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/ui/cam_opts.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/ui/versionfont.tres" type="DynamicFont" id=9]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -113,8 +114,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 322.0
-margin_bottom = 86.0
+margin_right = 320.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -131,9 +131,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 86.0
-margin_right = 322.0
-margin_bottom = 383.0
+margin_right = 320.0
+margin_bottom = 297.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -150,7 +149,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 33.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -177,7 +176,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 44.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 77.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -204,7 +203,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 88.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 121.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -231,7 +230,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 132.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 165.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -258,7 +257,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 176.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 209.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -285,7 +284,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 220.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 253.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -312,7 +311,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 264.0
-margin_right = 322.0
+margin_right = 320.0
 margin_bottom = 297.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -332,50 +331,57 @@ text = "Quit"
 flat = true
 align = 2
 
-[node name="opts" parent="." index="3" instance=ExtResource( 3 )]
+[node name="dbg" parent="." index="3" instance=ExtResource( 3 )]
 
 margin_left = 0.0
-margin_top = 383.0
-margin_right = 322.0
-margin_bottom = 614.0
+margin_top = 297.0
+margin_right = 320.0
+margin_bottom = 504.0
 
-[node name="langs" parent="." index="4" instance=ExtResource( 4 )]
-
-margin_left = 0.0
-margin_top = 614.0
-margin_right = 322.0
-margin_bottom = 845.0
-
-[node name="disp" parent="." index="5" instance=ExtResource( 5 )]
+[node name="opts" parent="." index="4" instance=ExtResource( 4 )]
 
 margin_left = 0.0
-margin_top = 845.0
-margin_right = 322.0
-margin_bottom = 1090.0
+margin_top = 504.0
+margin_right = 320.0
+margin_bottom = 735.0
 
-[node name="ctrls" parent="." index="6" instance=ExtResource( 6 )]
-
-margin_left = 0.0
-margin_top = 1090.0
-margin_right = 322.0
-margin_bottom = 1525.0
-
-[node name="cam" parent="." index="7" instance=ExtResource( 7 )]
+[node name="langs" parent="." index="5" instance=ExtResource( 5 )]
 
 margin_left = 0.0
-margin_top = 1525.0
-margin_right = 322.0
-margin_bottom = 1656.0
+margin_top = 735.0
+margin_right = 320.0
+margin_bottom = 922.0
 
-[node name="sep_bot" type="CenterContainer" parent="." index="8"]
+[node name="disp" parent="." index="6" instance=ExtResource( 6 )]
+
+margin_left = 0.0
+margin_top = 922.0
+margin_right = 320.0
+margin_bottom = 1167.0
+
+[node name="ctrls" parent="." index="7" instance=ExtResource( 7 )]
+
+margin_left = 0.0
+margin_top = 1167.0
+margin_right = 320.0
+margin_bottom = 1602.0
+
+[node name="cam" parent="." index="8" instance=ExtResource( 8 )]
+
+margin_left = 0.0
+margin_top = 1602.0
+margin_right = 320.0
+margin_bottom = 1907.0
+
+[node name="sep_bot" type="CenterContainer" parent="." index="9"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 1656.0
-margin_right = 322.0
-margin_bottom = 1742.0
+margin_top = 1907.0
+margin_right = 320.0
+margin_bottom = 1907.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -385,37 +391,37 @@ size_flags_vertical = 3
 use_top_left = false
 _sections_unfolded = [ "Size Flags" ]
 
-[node name="version" type="Label" parent="." index="9"]
+[node name="version" type="Label" parent="." index="10"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 1742.0
-margin_right = 322.0
-margin_bottom = 1755.0
+margin_top = 1907.0
+margin_right = 320.0
+margin_bottom = 1920.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = ExtResource( 8 )
+custom_fonts/font = ExtResource( 9 )
 align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_fonts" ]
 
-[node name="hlth" type="ProgressBar" parent="." index="10"]
+[node name="hlth" type="ProgressBar" parent="." index="11"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 1755.0
-margin_right = 322.0
-margin_bottom = 1758.5
+margin_top = 1920.0
+margin_right = 320.0
+margin_bottom = 1923.5
 rect_min_size = Vector2( 0, 3.5 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false

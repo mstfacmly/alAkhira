@@ -36,6 +36,7 @@ _sections_unfolded = [ "Focus", "Margin", "Size Flags" ]
 
 [node name="dbg" type="Label" parent="." index="0"]
 
+pause_mode = 2
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -53,7 +54,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 script = ExtResource( 1 )
-_sections_unfolded = [ "Anchor", "Size Flags" ]
+_sections_unfolded = [ "Anchor", "Pause", "Size Flags" ]
 
 [node name="over" type="VBoxContainer" parent="." index="1"]
 
