@@ -3,7 +3,7 @@ extends Node
 # NOTE: this scripts assumes that every _phys and _spi node has only children of the
 # same type or none and will also be switched
 
-var DIFFUSE = SpatialMaterial.DIFFUSE_LAMBERT
+var DIFFUSE = SpatialMaterial.DIFFUSE_TOON
 var MIX = SpatialMaterial.BLEND_MODE_MIX
 var ADD = SpatialMaterial.BLEND_MODE_ADD
 
@@ -50,14 +50,14 @@ func _input(ev):
 #		shifting = true
 		if curr == 'phys':
 			toggle(phys, spi)
-#			peek(spi, false)
+			peek(spi, false)
 			curr = 'spi'
 			env_transition(1)
 #			env_spir()
 			shifting = true
 		elif curr == 'spi':
 			toggle(spi, phys)
-#			peek(spi, true)
+			peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
 #			env_phys()
@@ -138,17 +138,19 @@ func env_transition(speed):
 
 func traverse(nodes):
 	var nm = ''
+	var ng
 	var materials
 	for node in nodes:
 		nm = node.get_name()
+		ng = node.get_groups()
 
-		if nm.matchn('*_phys') or nm.matchn('*_spi'):
+		if nm.matchn('*_phys') or nm.matchn('*_spi') or ng.has('spi'):
 			materials = get_materials(node)
 
-			if nm.matchn('*_phys'):
+			if nm.matchn('*_phys') or !ng.has('spi'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
-			elif nm.matchn('*_spi'):
+			elif nm.matchn('*_spi') or ng.has('spi'):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
