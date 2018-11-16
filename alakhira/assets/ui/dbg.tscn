@@ -22,7 +22,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 11
 alignment = 0
-_sections_unfolded = [ "Size Flags" ]
+_sections_unfolded = [ "Pause", "Size Flags" ]
 
 [node name="sep_top" type="CenterContainer" parent="." index="0"]
 
@@ -41,7 +41,6 @@ use_top_left = false
 
 [node name="info" type="HBoxContainer" parent="." index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -106,11 +105,10 @@ shortcut = null
 group = null
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
+_sections_unfolded = [ "Pause", "custom_colors", "custom_constants", "custom_fonts" ]
 
-[node name="lvl_sel" type="HBoxContainer" parent="." index="2"]
+[node name="col_ind" type="HBoxContainer" parent="." index="2"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -118,6 +116,75 @@ anchor_bottom = 0.0
 margin_top = 49.0
 margin_right = 320.0
 margin_bottom = 76.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 0
+_sections_unfolded = [ "Size Flags", "custom_constants" ]
+
+[node name="NAME" type="Label" parent="col_ind" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 193.0
+margin_bottom = 27.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_fonts/font = ExtResource( 1 )
+custom_constants/line_spacing = 4
+text = "Show Collision Range"
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Margin", "Size Flags", "custom_fonts" ]
+
+[node name="btn" type="Button" parent="col_ind" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 197.0
+margin_right = 320.0
+margin_bottom = 27.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = true
+align = 2
+_sections_unfolded = [ "Pause", "custom_colors", "custom_constants", "custom_fonts" ]
+
+[node name="lvl_sel" type="HBoxContainer" parent="." index="3"]
+
+editor/display_folded = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 87.0
+margin_right = 320.0
+margin_bottom = 114.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -177,16 +244,15 @@ flat = true
 align = 2
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
 
-[node name="hlth_drn" type="HBoxContainer" parent="." index="3"]
+[node name="hlth_drn" type="HBoxContainer" parent="." index="4"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 87.0
+margin_top = 125.0
 margin_right = 320.0
-margin_bottom = 114.0
+margin_bottom = 152.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -244,18 +310,18 @@ shortcut = null
 group = null
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
+_sections_unfolded = [ "Pause", "custom_colors", "custom_constants", "custom_fonts" ]
 
-[node name="hlth_full" type="HBoxContainer" parent="." index="4"]
+[node name="hlth_full" type="HBoxContainer" parent="." index="5"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 125.0
+margin_top = 163.0
 margin_right = 320.0
-margin_bottom = 152.0
+margin_bottom = 190.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -315,16 +381,16 @@ flat = true
 align = 2
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
 
-[node name="hlth_nil" type="HBoxContainer" parent="." index="5"]
+[node name="hlth_nil" type="HBoxContainer" parent="." index="6"]
 
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 163.0
+margin_top = 201.0
 margin_right = 320.0
-margin_bottom = 190.0
+margin_bottom = 228.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -384,15 +450,15 @@ flat = true
 align = 2
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
 
-[node name="sep_bot" type="CenterContainer" parent="." index="6"]
+[node name="sep_bot" type="CenterContainer" parent="." index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 201.0
+margin_top = 239.0
 margin_right = 320.0
-margin_bottom = 201.0
+margin_bottom = 239.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -401,15 +467,15 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 use_top_left = false
 
-[node name="dbg_b" type="Button" parent="." index="7"]
+[node name="dbg_b" type="Button" parent="." index="8"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 212.0
+margin_top = 250.0
 margin_right = 320.0
-margin_bottom = 245.0
+margin_bottom = 283.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2

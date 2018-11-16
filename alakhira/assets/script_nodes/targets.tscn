@@ -14,6 +14,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Sprite3D" type="Sprite3D" parent="ptarget" index="0"]
 
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1

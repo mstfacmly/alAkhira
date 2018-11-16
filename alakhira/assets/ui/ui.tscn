@@ -43,7 +43,7 @@ anchor_bottom = 0.0
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 1737.0
+margin_bottom = 1982.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -58,120 +58,89 @@ _sections_unfolded = [ "Margin", "Size Flags" ]
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 616.0
-margin_bottom = 1716.0
+margin_bottom = 1961.0
 size_flags_stretch_ratio = 2.0
 
 [node name="dbg" parent="org/left" index="0"]
 
-margin_top = 851.0
+margin_top = 973.0
 margin_right = 292.0
-margin_bottom = 865.0
+margin_bottom = 987.0
 
 [node name="over" parent="org/left" index="1"]
 
 editor/display_folded = true
 margin_left = 296.0
-margin_top = 771.0
+margin_top = 894.0
 margin_right = 616.0
-margin_bottom = 944.0
+margin_bottom = 1067.0
 
 [node name="right" parent="org" index="1" instance=ExtResource( 3 )]
 
 margin_left = 620.0
 margin_right = 940.0
-margin_bottom = 1716.0
+margin_bottom = 1961.0
 _sections_unfolded = [ "Focus", "Size Flags", "custom_constants" ]
-
-[node name="sep_top" parent="org/right" index="1"]
-
-margin_right = 320.0
-margin_bottom = 0.0
 
 [node name="menuList" parent="org/right" index="2"]
 
 editor/display_folded = false
-margin_top = 0.0
-margin_right = 320.0
-margin_bottom = 297.0
 
 [node name="dbg" parent="org/right/menuList" index="0"]
 
-margin_right = 320.0
 _sections_unfolded = [ "custom_fonts" ]
 
 [node name="contd" parent="org/right/menuList" index="1"]
 
-margin_right = 320.0
 _sections_unfolded = [ "custom_fonts" ]
 
 [node name="start" parent="org/right/menuList" index="2"]
 
-margin_right = 320.0
 _sections_unfolded = [ "custom_styles" ]
 
-[node name="rsm" parent="org/right/menuList" index="3"]
+[node name="dbg" parent="org/right" index="3"]
 
-margin_right = 320.0
+margin_bottom = 542.0
 
-[node name="opts" parent="org/right/menuList" index="4"]
+[node name="opts" parent="org/right" index="4"]
 
-margin_right = 320.0
+margin_top = 542.0
+margin_bottom = 773.0
 
-[node name="rld" parent="org/right/menuList" index="5"]
+[node name="langs" parent="org/right" index="5"]
 
-margin_right = 320.0
-
-[node name="quit" parent="org/right/menuList" index="6"]
-
-margin_right = 320.0
-
-[node name="opts" parent="org/right" index="3"]
-
-margin_top = 297.0
-margin_right = 320.0
-margin_bottom = 528.0
-
-[node name="langs" parent="org/right" index="4"]
-
-margin_top = 528.0
-margin_right = 320.0
-margin_bottom = 715.0
-
-[node name="disp" parent="org/right" index="5"]
-
-margin_top = 715.0
-margin_right = 320.0
+margin_top = 773.0
 margin_bottom = 960.0
 
-[node name="ctrls" parent="org/right" index="6"]
+[node name="disp" parent="org/right" index="6"]
 
 margin_top = 960.0
-margin_right = 320.0
-margin_bottom = 1395.0
+margin_bottom = 1205.0
 
-[node name="cam" parent="org/right" index="7"]
+[node name="ctrls" parent="org/right" index="7"]
 
-margin_top = 1395.0
-margin_right = 320.0
-margin_bottom = 1700.0
+margin_top = 1205.0
+margin_bottom = 1640.0
 
-[node name="sep_bot" parent="org/right" index="8"]
+[node name="cam" parent="org/right" index="8"]
 
-margin_top = 1700.0
-margin_right = 320.0
-margin_bottom = 1700.0
+margin_top = 1640.0
+margin_bottom = 1945.0
 
-[node name="version" parent="org/right" index="9"]
+[node name="sep_bot" parent="org/right" index="9"]
 
-margin_top = 1700.0
-margin_right = 320.0
-margin_bottom = 1713.0
+margin_top = 1945.0
+margin_bottom = 1945.0
 
-[node name="hlth" parent="org/right" index="10"]
+[node name="version" parent="org/right" index="10"]
 
-margin_top = 1713.0
-margin_right = 320.0
-margin_bottom = 1716.5
+margin_top = 1945.0
+margin_bottom = 1958.0
+
+[node name="hlth" parent="org/right" index="11"]
+
+margin_top = 1958.0
+margin_bottom = 1961.5
 
 [node name="timer" type="Timer" parent="." index="2"]
 

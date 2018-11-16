@@ -2,12 +2,11 @@
 
 [sub_resource type="CapsuleShape" id=1]
 
-radius = 0.510096
-height = 1.78
+radius = 0.5
+height = 1.6
 
 [node name="col" type="CollisionShape" index="0"]
 
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.001456, 1.4, 0.01732 )
 shape = SubResource( 1 )
 disabled = false

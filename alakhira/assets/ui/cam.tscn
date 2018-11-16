@@ -4,6 +4,7 @@
 
 [node name="cam" type="Spatial" index="0"]
 
+transform = Transform( -0.374607, -0.531811, 0.759504, 0, 0.819152, 0.573577, -0.927184, 0.214866, -0.30686, 0, 0, 0 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 cam_fov = 64.0
@@ -35,8 +36,8 @@ _sections_unfolded = [ "Transform" ]
 
 layers = 1
 light_color = Color( 0.90625, 0.934082, 1, 1 )
-light_energy = 0.72
-light_indirect_energy = 1.0
+light_energy = 0.21
+light_indirect_energy = 0.0
 light_negative = false
 light_specular = 0.0
 light_bake_mode = 0
