@@ -72,7 +72,7 @@ const btns = []
 const CFG_FILE = 'user://config.cfg'
 
 func _ready():
-	$org/right/version.text = '0.11.1'
+	$org/right/version.text = '0.11.2'
 	
 	shifter.curr
 	_signals()
@@ -193,7 +193,6 @@ func _signals():
 		for m in $org.get_node(lr).get_children():
 			if m.get_class() == 'VBoxContainer':
 				for i in m.get_children():
-					print(i)
 					if i.get_class() == 'Button':
 						i.connect('pressed', self, '_ui_btn_pressed', [i.get_name()])
 					else:
@@ -391,12 +390,25 @@ func _ui_btn_pressed(btn):
 			
 	if btn == 'info':
 		_show_dbg()
+		if $org/left/dbg.is_visible() != true:
+			$org/right/dbg/info/btn.text = 'Off'
+		else:
+			$org/right/dbg/info/btn.text = 'On' 
+	
+	if btn == 'col_ind':
+		_show_col()
+		if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').is_visible() != true:
+			$org/right/dbg/col_ind/btn.text = 'Hide'
+		else:
+			$org/right/dbg/col_ind/btn.text = 'Show'
 	
 	if btn == 'hlth_drn':
 		if az.hlth_drn != false:
 			az.hlth_drn = false
+			$org/right/dbg/hlth_drn/btn.text = 'Disabled'
 		else:
 			az.hlth_drn = true
+			$org/right/dbg/hlth_drn/btn.text = 'Enabled'
 	
 	if btn == 'hlth_full':
 		az.hlth = az.max_hlth
@@ -563,6 +575,11 @@ func _dbg():
 		$org/right/dbg/hlth_drn/btn.set_text('Enabled')
 	else:
 		$org/right/dbg/hlth_drn/btn.set_text('Disabled')
+		
+	if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').is_visible() != true:
+		$org/right/dbg/col_ind/btn.set_text('Hide')
+	else:
+		$org/right/dbg/col_ind/btn.set_text('Show')
 	
 	
 	if dbg.is_visible() != true:
@@ -576,7 +593,6 @@ func _dbg():
 		menu.set_visible(false)
 		
 	_grab_menu()
-
 
 func _set_sens(i,i,i):
 	if i == 'x':
@@ -609,6 +625,14 @@ func _show_dbg():
 		dbg_txt.set_visible(true)
 	else:
 		dbg_txt.set_visible(false)
+
+func _show_col():
+	var col_ind = az.get_node('body/Skeleton/targets/ptarget/Sprite3D')
+	
+	if col_ind.is_visible() != true:
+		col_ind.set_visible(true)
+	else:
+		col_ind.set_visible(false)
 
 func _over():
 	_grab_menu()

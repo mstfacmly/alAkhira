@@ -1,7 +1,7 @@
 extends Node
 
-# NOTE: this scripts assumes that every _phys and _spi node has only children of the
-# same type or none and will also be switched
+# NOTE: this script looks for objects found in the 'spi' group and 
+# shows/hides them as needed
 
 var DIFFUSE = SpatialMaterial.DIFFUSE_TOON
 var MIX = SpatialMaterial.BLEND_MODE_MIX
@@ -35,16 +35,17 @@ func _ready():
 	traverse(root.get_children())
 	unique_materials(phys)
 	unique_materials(spi)
-
+	
 	#initialize on phys
 	peek(spi, true)
 	toggle(spi, phys)
-
 
 func _input(ev):
 	var cast = Input.is_action_pressed('cast')
 	var attack = Input.is_action_just_pressed('arm_l')
 	var shift = cast && attack
+	
+	# NOTE: set shift to be a signal sent by player node
 
 	if shift && state != DEAD:
 #		shifting = true
@@ -84,17 +85,17 @@ func interpolate(show, hide, delta):
 
 	if show:
 		for mat in show['materials']:
-			color = mat.get_parameter(DIFFUSE)
+			color = mat.material_get_param(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 1)
 			step_show = color.linear_interpolate(target, step)
-			mat.set_parameter(DIFFUSE, step_show)
+			mat.material_set_param(DIFFUSE, step_show)
 
 	if hide:
 		for mat in hide['materials']:
-			color = mat.get_parameter(DIFFUSE)
+			color = mat.material_get_param(DIFFUSE)
 			target = Color(color.r, color.g, color.b, 0)
 			step_hide = color.linear_interpolate(target, step)
-			mat.set_parameter(DIFFUSE, step_hide)
+			mat.material_set_param(DIFFUSE, step_hide)
 
 	if t >= transition_time:
 		post_toggle(hide, show)
@@ -102,11 +103,14 @@ func interpolate(show, hide, delta):
 
 func peek(store, activate):
 	if activate:
+#		print(store['materials'])
 		for mat in store['materials'] :
-			mat.set_blend_mode(ADD)
+			mat.set_blend_mode(1)
+			mat.set_cull_mode(1)
 	else:
 		for mat in store['materials'] :
-			mat.set_blend_mode(MIX)
+			mat.set_blend_mode(0)
+			mat.set_cull_mode(2)
 
 #switch from a to b
 func toggle(a, b):
@@ -144,13 +148,17 @@ func traverse(nodes):
 		nm = node.get_name()
 		ng = node.get_groups()
 
-		if nm.matchn('*_phys') or nm.matchn('*_spi') or ng.has('spi'):
+#		if nm.matchn('*_phys') or nm.matchn('*_spi') or ng.has('spi'):
+		if ng.has('spi'):
 			materials = get_materials(node)
+#			print('materials: ', materials)
 
-			if nm.matchn('*_phys') or !ng.has('spi'):
+#			if nm.matchn('*_phys') or !ng.has('spi'):
+			if !ng.has('spi'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
-			elif nm.matchn('*_spi') or ng.has('spi'):
+#			elif nm.matchn('*_spi') or ng.has('spi'):
+			elif ng.has('spi'):
 				spi['nodes'].push_back(node)
 				spi['materials'] += materials
 		elif node.is_class('AnimationPlayer'):
@@ -185,9 +193,12 @@ func get_materials(root):
 		if mat == null:
 			var mesh = root.get_mesh()
 			var surfaces = mesh.get_surface_count()
-			for i in range(surfaces):
+			print('get_materials mesh: ', mesh)
+			print('get_materials surfaces: ', surfaces)
+			
+			for i in surfaces:
+				print('i :', i)
 				res.push_back(mesh.surface_get_material(i))
-		else:
 			res.push_back(mat)
 
 	var nodes = root.get_children()

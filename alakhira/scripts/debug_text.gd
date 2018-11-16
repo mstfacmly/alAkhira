@@ -24,6 +24,8 @@ func _physics_process(delta):
 		update = 0.0
 		var txt
 		txt = str('OS: ', OS.get_name())
+		txt += str('\nScreens: ', OS.get_screen_count())
+		txt += str('\nScreen Res: ', OS.get_screen_size(-1))
 		txt += str('\nDynamic RAM: ', OS.get_dynamic_memory_usage() / 1024 , 'Kbs')
 		txt += str('\nStatic RAM: ', OS.get_static_memory_usage() / (1024 * 1024), 'Mbs')
 		txt += str('\nFPS: ', int(Engine.get_frames_per_second()), '/s')

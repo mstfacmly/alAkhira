@@ -4,6 +4,8 @@ extends KinematicBody
 signal hlth_chng
 signal died
 signal az_ready
+signal peek
+signal shift
 
 # Health
 export var max_hlth = 100
@@ -39,6 +41,7 @@ var mv_r
 var jmp_att
 var hop_att
 var act
+var cast
 
 #Movement
 var ppos
@@ -48,6 +51,7 @@ const DEACCEL = ACCEL * 2.13
 const MAX_SLOPE = 57
 export var run = 5.13
 var walk = run / 2.25
+var fwalk = run / 1.33
 var sprint = run * 1.33 #2.12 #7.77
 #var mv_dir = Vector3()
 var mv_spd = run
@@ -106,6 +110,8 @@ func _input(event):
 	
 	jmp_att = Input.is_action_just_pressed('feet')
 	act = Input.is_action_just_pressed('act')
+	
+	cast = Input.is_action_pressed('cast')
 	
 	js_input(event)
 
@@ -281,7 +287,7 @@ func _physics_process(delta):
 		$body/Skeleton/targets/ptarget.translation.z = 0
 		walln = get_slide_collision(0).normal.abs()
 		modlv = lv.slide(up).slide(walln).abs()
-		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, (jmp_spd.y + (hvel.length() / 2)) * 0.64, jmp_spd.y * 0))
+		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, ((jmp_spd.y + hvel.length()) * 0.9) * 0.64, jmp_spd.y * 0))
 		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
 		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y * 0.84, jmp_spd.y * 3))
 		
