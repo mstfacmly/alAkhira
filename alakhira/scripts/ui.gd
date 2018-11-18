@@ -21,6 +21,7 @@ var spd = 2
 var ev_mod = 0
 var thread = Thread.new()
 var stage
+var back = null
 
 const languages = [
 	'English',
@@ -164,7 +165,14 @@ func _input(ev):
 			elif input_ev is InputEventKey:
 				btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
 			btn.connect('pressed', self, '_get_input', [acts])
-	
+			
+	if ev.is_action_pressed('ui_cancel'):
+		if back != null:
+			if back.call_func() == '_main_menu':
+				pass
+			else:
+				accept_event()
+		
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()
 #		set_process_input(false)
@@ -180,12 +188,13 @@ func _gui_input(ev):
 	if !InputEventMouseMotion:
 		if ev.is_action_pressed('ui_down'):
 			focus_next
+			accept_event()
 		if ev.is_action_pressed('ui_up'):
 			focus_previous
+			accept_event()
 		if ev.is_action_pressed('ui_accept'):
 			_ui_btn_pressed(btn)
-		if ev.is_action_pressed('ui_cancel'):
-			pass
+			accept_event()
 
 func _signals():
 	# Main Menu
@@ -353,16 +362,22 @@ func _ui_btn_pressed(btn):
 	
 	if btn == 'opts' or btn == 'opts_b':
 		_opts_menu()
+		back = funcref(self, '_opts_menu')
 	if btn == 'langs' or btn == 'langs_b':
 		_langs()
+		back = funcref(self, '_langs')
 	if btn == 'disp' or btn == 'disp_b':
 		_disps()
+		back = funcref(self, '_disps')
 	if btn == 'ctrls' or btn == 'ctrls_b':
 		_ctrls()
+		back = funcref(self, '_ctrls')
 	if btn == 'cam' or btn == 'cam_b':
 		_cam()
+		back = funcref(self, '_cam')
 	if btn == 'dbg' or btn == 'dbg_b':
 		_dbg()
+		back = funcref(self, '_dbg')
 	
 	if btn == 'quit':
 		get_tree().quit()
@@ -455,13 +470,24 @@ func _res_select(ID):
 func _aa_select(ID):
 	get_viewport().msaa = ID
 
+func _hide_opts():
+	var opts = $org/right/opts
+	
+	if opts.is_visible() != true:
+		opts.set_visible(true)
+		back = funcref(self, '_opts_menu')
+	else:
+		opts.set_visible(false)
+
 func _opts_menu():
 	var opts = $org/right/opts
 	
-	if opts.is_visible() != true:	
+	if opts.is_visible() != true:
 		opts.set_visible(true)
+		back = funcref(self, '_opts_menu')
 	else:
 		opts.set_visible(false)
+		back = funcref(self, '_main_menu')
 	
 	var menu = $org/right/menuList
 	if menu.is_visible() != true:	
@@ -480,19 +506,15 @@ func _opts_menu():
 #				i.disabled = false
 
 func _langs():
-	var opts = $org/right/opts
 	var lang = $org/right/langs
 	
 	if lang.is_visible() != true:
 		lang.set_visible(true)
+		back = funcref(self, '_langs')
 	else:
 		lang.set_visible(false)
-		
-	if opts.is_visible() != true:
-		opts.set_visible(true)
-	else:
-		opts.set_visible(false)
-		
+	
+	_hide_opts()
 	_grab_menu()
 
 func _disps():
@@ -501,36 +523,28 @@ func _disps():
 	
 	if disp.is_visible() != true:
 		disp.set_visible(true)
+		back = funcref(self, '_disps')
 	else:
 		disp.set_visible(false)
 		
-	if opts.is_visible() != true:
-		opts.set_visible(true)
-	else:
-		opts.set_visible(false)
-	
+	_hide_opts()
 	_grab_menu()
 
 func _ctrls():
-	var opts = $org/right/opts
 	var ctrls = $org/right/ctrls
 	
 	if ctrls.is_visible() != true:
 		ctrls.set_visible(true)
 		ctrls_men = true
+		back = funcref(self, '_ctrls')
 	else:
 		ctrls.set_visible(false)
 		ctrls_men = false
-
-	if opts.is_visible() != true:
-		opts.set_visible(true)
-	else:
-		opts.set_visible(false)
 	
+	_hide_opts()
 	_grab_menu()
 
 func _cam():
-	var opts = $org/right/opts
 	var cam = $org/right/cam
 	
 	if global.invert_x != true:
@@ -548,15 +562,11 @@ func _cam():
 	else:
 		cam.set_visible(false)
 		
-	if opts.is_visible() != true:
-		opts.set_visible(true)
-	else:
-		opts.set_visible(false)
-	
 	$org/right/cam/cam_x_spd/slide.set_value(global.jscam_x)
 	$org/right/cam/cam_y_spd/slide.set_value(global.jscam_y)
 	$org/right/cam/cam_mouse/slide.set_value(global.mouse_sens)
 	
+	_hide_opts()
 	_grab_menu()
 	
 func _dbg():
@@ -580,18 +590,13 @@ func _dbg():
 		$org/right/dbg/col_ind/btn.set_text('Hide')
 	else:
 		$org/right/dbg/col_ind/btn.set_text('Show')
-	
-	
+		
 	if dbg.is_visible() != true:
 		dbg.set_visible(true)
 	else:
 		dbg.set_visible(false)
 		
-	if menu.is_visible() != true:
-		menu.set_visible(true)
-	else:
-		menu.set_visible(false)
-		
+	_hide_opts()
 	_grab_menu()
 
 func _set_sens(i,i,i):
