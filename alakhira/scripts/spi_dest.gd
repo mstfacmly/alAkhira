@@ -21,12 +21,12 @@ func _process(delta):
 
 func _transit(spd):
 	var spdivup = ceil(spd / abs(spd + 1))
-	
+
 	if spd >= 1:
 		transdiv = floor(spd / (spd + 1))
 	elif spd <= -1:
 		transdiv = ceil(spd / abs(spd + 1))
-	
+
 	for i in dest:
 		if i.get_node('AnimationPlayer') != null:
 			anim = i.get_node('AnimationPlayer')

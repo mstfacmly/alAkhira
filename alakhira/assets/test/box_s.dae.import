@@ -7,10 +7,7 @@ path="res://.import/box_s.dae-ed5c126deba98ba99e8df3f8fe176629.scn"
 [deps]
 
 source_file="res://assets/test/box_s.dae"
-source_md5="318c1ae4574ec96f5066819bb0f1f0f5"
-
 dest_files=[ "res://.import/box_s.dae-ed5c126deba98ba99e8df3f8fe176629.scn" ]
-dest_md5="158a9e825b7b65ca3f00dae56f944e05"
 
 [params]
 

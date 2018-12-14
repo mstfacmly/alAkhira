@@ -7,10 +7,7 @@ path="res://.import/testroombase.dae-1fa8a9c1e53e67662216aa35653a210e.scn"
 [deps]
 
 source_file="res://assets/test/testroombase.dae"
-source_md5="593bb2dfd8f92ba7a1d324de911d6f1a"
-
 dest_files=[ "res://.import/testroombase.dae-1fa8a9c1e53e67662216aa35653a210e.scn" ]
-dest_md5="05b6603d00944d8013a639943eaf7018"
 
 [params]
 

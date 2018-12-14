@@ -73,7 +73,7 @@ const btns = []
 const CFG_FILE = 'user://config.cfg'
 
 func _ready():
-	$org/right/version.text = '0.11.2'
+	$org/right/version.text = global.version
 	
 	shifter.curr
 	_signals()
@@ -653,7 +653,7 @@ func _over():
 	$org/left/over.show()
 	$org/right/hlth.hide()
 	az.hide()
-	$'../../az_spi'.show()
+	$'/root/scene/spi_az'.show()
 	az.set_physics_process(false)
 	az.set_process(false)
 	az.get_node('cam').set_enabled(false)

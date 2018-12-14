@@ -7,10 +7,7 @@ path="res://.import/p_floor.dae-ee58b9498fbb64df9336830bb20de8bf.scn"
 [deps]
 
 source_file="res://assets/test/p_floor.dae"
-source_md5="3004a8ac2b268093a7e397db6b296172"
-
 dest_files=[ "res://.import/p_floor.dae-ee58b9498fbb64df9336830bb20de8bf.scn" ]
-dest_md5="2c8bb6292b1d1ccfdaffcf92c63bfcef"
 
 [params]
 
