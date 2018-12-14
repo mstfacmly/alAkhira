@@ -6,7 +6,7 @@ var jscam_y = 1.3
 var invert_x = false
 var invert_y = false
 
-const AZ = preload('res://player/az_tmp2.tscn')
+const AZ = preload('res://player/az.tscn')
 const UI = preload('res://assets/ui/ui.tscn')
 
 func _ready():

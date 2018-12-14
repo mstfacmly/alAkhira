@@ -27,6 +27,7 @@ onready var root = $'/root'
 var showing = false
 var hiding = false
 var shifting = false
+var transit
 
 var t
 var transition_time = 0.5
@@ -44,6 +45,7 @@ func _input(ev):
 	var cast = Input.is_action_pressed('cast')
 	var attack = Input.is_action_just_pressed('arm_l')
 	var shift = cast && attack
+	transit = shift
 	
 	# NOTE: set shift to be a signal sent by player node
 
@@ -193,11 +195,11 @@ func get_materials(root):
 		if mat == null:
 			var mesh = root.get_mesh()
 			var surfaces = mesh.get_surface_count()
-			print('get_materials mesh: ', mesh)
-			print('get_materials surfaces: ', surfaces)
+#			print('get_materials mesh: ', mesh)
+#			print('get_materials surfaces: ', surfaces)
 			
 			for i in surfaces:
-				print('i :', i)
+#				print('i :', i)
 				res.push_back(mesh.surface_get_material(i))
 			res.push_back(mat)
 

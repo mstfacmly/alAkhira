@@ -168,7 +168,7 @@ func _input(ev):
 			
 	if ev.is_action_pressed('ui_cancel'):
 		if back != null:
-			if back.call_func() == '_main_menu':
+			if back.call_func() == '_main_menu' or back.call_func() == 'gen_ui':
 				pass
 			else:
 				accept_event()
@@ -487,7 +487,10 @@ func _opts_menu():
 		back = funcref(self, '_opts_menu')
 	else:
 		opts.set_visible(false)
-		back = funcref(self, '_main_menu')
+		if az == null:
+			back = funcref(self, '_main_menu')
+		else:
+			back = funcref(self, '_gen_ui')
 	
 	var menu = $org/right/menuList
 	if menu.is_visible() != true:	
@@ -596,7 +599,11 @@ func _dbg():
 	else:
 		dbg.set_visible(false)
 		
-	_hide_opts()
+	if menu.is_visible() != true:
+		menu.set_visible(true)
+	else:
+		menu.set_visible(false)
+#	_hide_opts()
 	_grab_menu()
 
 func _set_sens(i,i,i):
