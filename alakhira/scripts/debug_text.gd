@@ -2,7 +2,6 @@ extends Label
 
 var az
 var cam
-var js_axis = Input
 var update = 0.0
 var shifter = shift
 
@@ -25,7 +24,7 @@ func _physics_process(delta):
 		var txt
 		txt = str('OS: ', OS.get_name())
 		txt += str('\nScreens: ', OS.get_screen_count())
-		txt += str('\nScreen Res: ', OS.get_screen_size(-1))
+		txt += str('\nResolution: ', OS.get_real_window_size())
 		txt += str('\nDynamic RAM: ', OS.get_dynamic_memory_usage() / 1024 , 'Kbs')
 		txt += str('\nStatic RAM: ', OS.get_static_memory_usage() / (1024 * 1024), 'Mbs')
 		txt += str('\nFPS: ', int(Engine.get_frames_per_second()), '/s')
@@ -48,7 +47,6 @@ func _physics_process(delta):
 		txt += str('\nWorld State: ', shifter.state)
 		txt += str('\nWorld: ', shifter.curr)
 		txt += str('\nMouse Mode: ', Input.get_mouse_mode())
-		txt += str('\nJoystick X: ', js_axis.get_joy_axis(0,0) )
-		txt += str('\nJoystick Y: ', js_axis.get_joy_axis(0,1))
+		txt += str('\nJoystick Vector: ', Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1)).length_squared())
 
 		set_text(txt)

@@ -8,7 +8,7 @@ var anim
 var spd = 2
 var transdiv
 
-func _process(delta):
+func _physics_process(delta):
 	if shifter.transit:
 		if shifter.curr == 'spi':
 			_transit(1)

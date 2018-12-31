@@ -23,8 +23,9 @@ var shifter = shift
 var g = Vector3(0,-9.8,0)
 var up = -g.normalized()
 
-const DEADZONE = 0.1
-const JOY_VAL = 0.843
+var joy_vec
+const DEADZONE = 0.3
+const JOY_VAL = 0.9
 
 # Camera
 var view_sensitivity = 0.2
@@ -34,12 +35,14 @@ onready var cam = $cam
 
 # Input
 var mv
+#var mv_z
+#var mv_x
 var mv_f
 var mv_b
 var mv_l
 var mv_r
 var jmp_att
-var hop_att
+#var hop_att
 var act
 var cast
 
@@ -50,8 +53,8 @@ const ACCEL = 7.77
 const DEACCEL = ACCEL * 2.13
 const MAX_SLOPE = 57
 export var run = 5.13
-var walk = run / 2.25
-var fwalk = run / 1.33
+var fwalk = run / 2.25
+var walk = run / 1.33
 var sprint = run * 1.33 #2.12 #7.77
 #var mv_dir = Vector3()
 var mv_spd = run
@@ -108,30 +111,24 @@ func _input(event):
 	mv_l = Input.is_action_pressed('mv_l')
 	mv_r = Input.is_action_pressed('mv_r')
 	
+	## Prep work for Godot 3.1
+#	mv_x = Input.get_action_axis_value("mv_x")
+#	mv_z = Input.get_action_axis_value("mv_z")
+	
 	jmp_att = Input.is_action_just_pressed('feet')
 	act = Input.is_action_just_pressed('act')
 	
 	cast = Input.is_action_pressed('cast')
-	
-	js_input(event)
 
 func js_input(delta):
-#	var x = abs(Input.get_joy_axis(0,0))
-#	var y = abs(Input.get_joy_axis(0,1))
-	var joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
+	joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
 
-#	var axis_value = atan(x + y)# * PI / 360 * 100
-#	print(axis_value)
-#	print(joy_vec.length())
-	if joy_vec.length() > DEADZONE && joy_vec.length() < JOY_VAL:
-		if mv_spd > walk:
-			while mv_spd > walk:
-				mv_spd -= 0.05
-#				mv_spd = max(min(mv_spd - (4 * delta),walk * 2.0),walk)
-		else:
+	if (abs(joy_vec.length()) < DEADZONE):
+		joy_vec = 0
+	else:
+		joy_vec = joy_vec.normalized() * ((joy_vec.length() - DEADZONE) / (1 - DEADZONE))
+		if joy_vec.length() >= DEADZONE && joy_vec.length() <= JOY_VAL:
 			mv_spd = walk
-	else :
-		pass
 
 func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
         var n = p_target # Normal
@@ -163,6 +160,8 @@ func _process(delta):
 		dmg(delta)
 
 func _physics_process(delta):
+	js_input(delta)
+	
 	if state !=DEAD and hlth_drn != false:
 		hlth_drn(delta)
 
@@ -194,6 +193,12 @@ func _physics_process(delta):
 		dir += -cam_xform.basis[0]
 	if mv_r:
 		dir += cam_xform.basis[0]
+		
+	## Prep for Godot 3.1
+#	if mv_x:
+#		dir += -cam_xform.basis[0]
+#	if mv_z:
+#		dir += -cam_xform.basis[2]
 
 	var target_dir = (dir - up * dir.dot(up)).normalized()
 	var mesh_xform = mesh.get_transform()
@@ -251,7 +256,7 @@ func _physics_process(delta):
 		can_wrun = true
 		vvel = jmp_spd
 		lv = (hvel * 11.1) + up * vvel
-	elif is_on_wall() && hop_att:
+	elif is_on_wall() && jmp_att:
 		jumping = true
 	else:
 		jumping = false
@@ -287,9 +292,9 @@ func _physics_process(delta):
 		$body/Skeleton/targets/ptarget.translation.z = 0
 		walln = get_slide_collision(0).normal.abs()
 		modlv = lv.slide(up).slide(walln).abs()
-		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, ((jmp_spd.y + hvel.length()) * 0.9) * 0.64, jmp_spd.y * 0))
-		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y * 0.84, jmp_spd.y * 6))
-		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y * 0.84, jmp_spd.y * 3))
+		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, ((jmp_spd.y + hvel.length())) * 0.64, jmp_spd.y * 0))
+		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y , jmp_spd.y * 6))
+		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y, jmp_spd.y * 3))
 		
 #		if col_result == ['back']:
 #			wrun = ['vert']

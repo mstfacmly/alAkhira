@@ -19,8 +19,8 @@ config/quit_on_go_back=false
 
 [autoload]
 
-shift="*res://scripts/shift.gd"
 global="*res://scripts/global.gd"
+shift="*res://scripts/shift.gd"
 
 [debug]
 
