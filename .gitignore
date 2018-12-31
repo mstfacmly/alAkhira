@@ -9,9 +9,7 @@ exports/
 *.bphys
 ~*
 .*
-ignore
 *.fscache
-*.dae
 *.pck
 *.orig
 bkup/
