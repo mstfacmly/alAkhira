@@ -1,7 +1,7 @@
 [gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://player/az/bisht.material" type="Material" id=1]
-[ext_resource path="res://player/cloth_blk.tres" type="Material" id=2]
+[ext_resource path="res://player/mat/cloth_blk.tres" type="Material" id=2]
 [ext_resource path="res://player/blade.tres" type="Material" id=3]
 [ext_resource path="res://player/blk_met.tres" type="Material" id=4]
 [ext_resource path="res://player/az/blue_stone.material" type="Material" id=5]
@@ -15,6 +15,8 @@
 [ext_resource path="res://player/az/kfy.material" type="Material" id=13]
 [ext_resource path="res://player/az/undershirt.material" type="Material" id=14]
 [ext_resource path="res://player/az/cloth_wings.material" type="Material" id=15]
+
+
 
 [sub_resource type="ArrayMesh" id=1]
 

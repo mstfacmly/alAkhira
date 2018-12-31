@@ -7,10 +7,7 @@ path="res://.import/column_dest.dae-fda52d22175c3c2811badcf314ac7ba8.scn"
 [deps]
 
 source_file="res://assets/test/column_dest.dae"
-source_md5="6b59a55ee4db5f644bac0779f525bc42"
-
 dest_files=[ "res://.import/column_dest.dae-fda52d22175c3c2811badcf314ac7ba8.scn" ]
-dest_md5="f76a858de68ae119ba7439af35b47bf9"
 
 [params]
 
