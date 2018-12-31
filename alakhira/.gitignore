@@ -1,0 +1,5 @@
+.import
+generated_image.png
+addons/material_maker/*
+_build
+models/
