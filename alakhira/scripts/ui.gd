@@ -132,6 +132,7 @@ func _input(ev):
 	var wait = 2
 	var timer = t.set_wait_time(wait)
 	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
+	var btn
 	
 	if get_parent().get_name() == 'az' && az.state != 1:
 		if !paused && pause:
@@ -157,21 +158,26 @@ func _input(ev):
 	if ctrls_men:
 		for acts in INPUT_CFG:
 			var input_ev = InputMap.get_action_list(acts)[ev_mod]
-			var btn = $org/right/ctrls.get_node(acts).get_node('btn')
+			btn = $org/right/ctrls.get_node(acts).get_node('btn')
 			if input_ev is InputEventJoypadButton:
 				btn.set_text(Input.get_joy_button_string(input_ev.button_index))
 			elif input_ev is InputEventJoypadMotion:
 				btn.set_text(Input.get_joy_axis_string(input_ev.axis))
 			elif input_ev is InputEventKey:
 				btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
+
+		if  btn.is_connected('pressed', self, '_get_input') != true:
 			btn.connect('pressed', self, '_get_input', [acts])
-			
+		else:
+			pass
+
 	if ev.is_action_pressed('ui_cancel'):
 		if back != null:
-			if back.call_func() == '_main_menu' or back.call_func() == 'gen_ui':
+			if back.call_func() == '_main_menu' or back.call_func() == '_pause_menu':
 				pass
 			else:
 				accept_event()
+				_opts_menu()
 		
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()
@@ -297,15 +303,7 @@ func _opts_container():
 	
 #	_load_cfg()
 
-func _on_pause():
-	az.hide()
-	bar.hide()
-	paused = true
-	Input.set_mouse_mode(0)
-	$org/right/menuList.show()
-	_grab_menu()
-	get_tree().set_pause(true)
-
+func _pause_shift():
 	if shifter.curr != 'spi':
 		envanim.play('shift', -1, spd, (spd < 0))
 		shifter.curr = 'spi'
@@ -313,26 +311,27 @@ func _on_pause():
 		envanim.play('shift', -1, -spd, (-spd < 0))
 		shifter.curr = 'phys'
 
+func _pause_menu():
+	az.hide()
+	bar.hide()
+	Input.set_mouse_mode(0)
+	$org/right/menuList.show()
+	_grab_menu()
+
+func _on_pause():
+	_pause_menu()
+	_pause_shift()
+	paused = true
+	get_tree().set_pause(true)
+
 func _on_unpause():
 	az.show()
 	bar.show()
 	paused = false
 	Input.set_mouse_mode(2)
 	$org/right/menuList.hide()
-	$org/right/opts.hide()
-	$org/right/disp.hide()
-	$org/right/ctrls.hide()
-	$org/right/cam.hide()
-	$org/right/dbg.hide()
-	
+	_pause_shift()
 	get_tree().set_pause(false)
-	
-	if shifter.curr != 'phys':
-		envanim.play('shift', -1, -spd, (-spd < 0))
-		shifter.curr = 'phys'
-	elif shifter.curr != 'spi':
-		envanim.play('shift', -1, spd, (spd < 0))
-		shifter.curr = 'spi'
 
 func _on_timer_timeout():
 	get_tree().quit()
@@ -362,22 +361,16 @@ func _ui_btn_pressed(btn):
 	
 	if btn == 'opts' or btn == 'opts_b':
 		_opts_menu()
-		back = funcref(self, '_opts_menu')
 	if btn == 'langs' or btn == 'langs_b':
 		_langs()
-		back = funcref(self, '_langs')
 	if btn == 'disp' or btn == 'disp_b':
 		_disps()
-		back = funcref(self, '_disps')
 	if btn == 'ctrls' or btn == 'ctrls_b':
 		_ctrls()
-		back = funcref(self, '_ctrls')
 	if btn == 'cam' or btn == 'cam_b':
 		_cam()
-		back = funcref(self, '_cam')
 	if btn == 'dbg' or btn == 'dbg_b':
 		_dbg()
-		back = funcref(self, '_dbg')
 	
 	if btn == 'quit':
 		get_tree().quit()
@@ -385,7 +378,7 @@ func _ui_btn_pressed(btn):
 		_on_unpause()
 	
 	if btn == 'site':
-		OS.shell_open('http://studioslune.com/')
+		OS.shell_open('https://studioslune.com/')
 	
 	if btn == 'fs':
 		OS.window_fullscreen = !OS.window_fullscreen
@@ -481,20 +474,21 @@ func _hide_opts():
 
 func _opts_menu():
 	var opts = $org/right/opts
+	var menu = $org/right/menuList
 	
 	if opts.is_visible() != true:
 		opts.set_visible(true)
 		back = funcref(self, '_opts_menu')
 	else:
 		opts.set_visible(false)
-		if az == null:
-			back = funcref(self, '_main_menu')
+		if az != null:
+			back = funcref(self, '_pause_menu')
 		else:
-			back = funcref(self, '_gen_ui')
+			back = funcref(self, '_main_menu')
 	
-	var menu = $org/right/menuList
 	if menu.is_visible() != true:	
 		menu.set_visible(true)
+		back = funcref(self, '_opts_menu')
 	else:
 		menu.set_visible(false)
 	
@@ -550,24 +544,27 @@ func _ctrls():
 func _cam():
 	var cam = $org/right/cam
 	
-	if global.invert_x != true:
-		btn_x.set_text('Standard')
-	else:
-		btn_x.set_text('Inverted')
-		
-	if global.invert_y != true:
-		btn_y.set_text('Standard')
-	else:
-		btn_y.set_text('The Devil\'s Configuration')
+	if btn_x.text == null:
+		if global.invert_x != true:
+			btn_x.set_text('Standard')
+		else:
+			btn_x.set_text('Inverted')
 	
-	if cam.is_visible() != true:
-		cam.set_visible(true)
-	else:
-		cam.set_visible(false)
-		
+	if btn_y.text == null:
+		if global.invert_y != true:
+			btn_y.set_text('Standard')
+		else:
+			btn_y.set_text('The Devil\'s Configuration')
+	
 	$org/right/cam/cam_x_spd/slide.set_value(global.jscam_x)
 	$org/right/cam/cam_y_spd/slide.set_value(global.jscam_y)
 	$org/right/cam/cam_mouse/slide.set_value(global.mouse_sens)
+	
+	if cam.is_visible() != true:
+		cam.set_visible(true)
+		back = funcref(self, '_cam')
+	else:
+		cam.set_visible(false)
 	
 	_hide_opts()
 	_grab_menu()
@@ -576,8 +573,8 @@ func _dbg():
 	var dbg = $org/right/dbg
 	var menu = $org/right/menuList
 	
-	$org/right/dbg/hlth_full/btn.set_text('Restore health to max')
-	$org/right/dbg/hlth_nil/btn.set_text('Drain all health')
+	$org/right/dbg/hlth_full/btn.set_text('Restore Full Health')
+	$org/right/dbg/hlth_nil/btn.set_text('Drain All Health')
 	
 	if $org/left/dbg.is_visible() != false:
 		$org/right/dbg/info/btn.set_text('On')
@@ -596,6 +593,7 @@ func _dbg():
 		
 	if dbg.is_visible() != true:
 		dbg.set_visible(true)
+		back = funcref(self, '_dbg')
 	else:
 		dbg.set_visible(false)
 		
@@ -603,6 +601,7 @@ func _dbg():
 		menu.set_visible(true)
 	else:
 		menu.set_visible(false)
+	
 #	_hide_opts()
 	_grab_menu()
 
