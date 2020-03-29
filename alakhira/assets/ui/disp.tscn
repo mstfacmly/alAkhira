@@ -1,38 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/ui/menufont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/ui/submenufont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://scripts/disp.gd" type="Script" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-bg_color = Color( 0.6, 0.6, 0.6, 1 )
-draw_center = true
-border_width_left = 0
-border_width_top = 0
-border_width_right = 0
-border_width_bottom = 0
-border_color = Color( 0.8, 0.8, 0.8, 1 )
-border_blend = false
-corner_radius_top_left = 0
-corner_radius_top_right = 0
-corner_radius_bottom_right = 0
-corner_radius_bottom_left = 0
-corner_detail = 8
-expand_margin_left = 0.0
-expand_margin_right = 0.0
-expand_margin_top = 0.0
-expand_margin_bottom = 0.0
-shadow_color = Color( 0, 0, 0, 0.6 )
-shadow_size = 0
-anti_aliasing = true
-anti_aliasing_size = 1
-
 [sub_resource type="Theme" id=2]
-
 default_font = ExtResource( 2 )
 CheckButton/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 CheckButton/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
@@ -76,431 +50,185 @@ OptionButton/styles/focus = null
 OptionButton/styles/hover = null
 OptionButton/styles/normal = null
 OptionButton/styles/pressed = null
-_sections_unfolded = [ "Dialogs/constants", "ItemList", "ItemList/styles", "OptionButton/styles" ]
 
-[node name="disp" type="VBoxContainer" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="disp" type="VBoxContainer"]
 margin_left = 124.0
 margin_top = 117.0
 margin_right = 444.0
 margin_bottom = 350.0
 rect_min_size = Vector2( 320, 0 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 11
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="sep_top" type="CenterContainer" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="sep_top" type="CenterContainer" parent="."]
 margin_right = 320.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-use_top_left = false
 
-[node name="ratio" type="HBoxContainer" parent="." index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="ratio" type="HBoxContainer" parent="."]
 margin_top = 11.0
 margin_right = 320.0
 margin_bottom = 38.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Focus", "Size Flags" ]
 
-[node name="RATIO" type="Label" parent="ratio" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="RATIO" type="Label" parent="ratio"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Screen Ratio"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="ratio" type="OptionButton" parent="ratio" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="ratio" type="OptionButton" parent="ratio"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
 custom_fonts/font = ExtResource( 2 )
 toggle_mode = false
-action_mode = 0
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-items = [  ]
-selected = -1
-_sections_unfolded = [ "Focus", "Theme", "custom_fonts" ]
 
-[node name="res" type="HBoxContainer" parent="." index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="res" type="HBoxContainer" parent="."]
 margin_top = 49.0
 margin_right = 320.0
 margin_bottom = 76.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Focus", "Size Flags" ]
 
-[node name="RES" type="Label" parent="res" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="RES" type="Label" parent="res"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Resolution"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="res" type="OptionButton" parent="res" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="res" type="OptionButton" parent="res"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
 custom_fonts/font = ExtResource( 2 )
 toggle_mode = false
-action_mode = 0
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-items = [  ]
-selected = -1
-_sections_unfolded = [ "Focus", "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="fsaa" type="HBoxContainer" parent="." index="3"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="fsaa" type="HBoxContainer" parent="."]
 margin_top = 87.0
 margin_right = 320.0
 margin_bottom = 114.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Focus", "Margin", "Size Flags" ]
 
-[node name="FSAA" type="Label" parent="fsaa" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="FSAA" type="Label" parent="fsaa"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 custom_constants/line_spacing = 4
 text = "FSAA"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="aa" type="OptionButton" parent="fsaa" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="aa" type="OptionButton" parent="fsaa"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
 custom_fonts/font = ExtResource( 2 )
 toggle_mode = false
-action_mode = 0
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-items = [  ]
-selected = -1
-_sections_unfolded = [ "Columns", "Focus", "Theme", "custom_fonts" ]
 
-[node name="vsync" type="HBoxContainer" parent="." index="4"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="vsync" type="HBoxContainer" parent="."]
 margin_top = 125.0
 margin_right = 320.0
 margin_bottom = 152.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags", "custom_constants" ]
 
-[node name="VSYNC" type="Label" parent="vsync" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="VSYNC" type="Label" parent="vsync"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 5
 custom_fonts/font = ExtResource( 1 )
 custom_constants/line_spacing = 4
 text = "VSync"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Margin", "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="vsync" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="vsync"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
 
-[node name="fs" type="HBoxContainer" parent="." index="5"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="fs" type="HBoxContainer" parent="."]
 margin_top = 163.0
 margin_right = 320.0
 margin_bottom = 190.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags", "custom_constants" ]
 
-[node name="FS" type="Label" parent="fs" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="FS" type="Label" parent="fs"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 5
 custom_fonts/font = ExtResource( 1 )
 custom_constants/line_spacing = 4
 text = "Fullscreen"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Margin", "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="fs" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="fs"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Margin", "Theme", "custom_fonts" ]
 
-[node name="sep_bot" type="CenterContainer" parent="." index="6"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="sep_bot" type="CenterContainer" parent="."]
 margin_top = 201.0
 margin_right = 320.0
 margin_bottom = 201.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-use_top_left = false
 
-[node name="disp_b" type="Button" parent="." index="7"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="disp_b" type="Button" parent="."]
 margin_top = 212.0
 margin_right = 320.0
 margin_bottom = 245.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 text = "Back"
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "custom_colors" ]
-
-

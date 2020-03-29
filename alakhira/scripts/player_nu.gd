@@ -5,7 +5,7 @@ signal hlth_chng
 signal died
 signal az_ready
 signal peek
-signal shift
+signal shifting
 
 # Health
 export var max_hlth = 100
@@ -13,11 +13,11 @@ var hlth = max_hlth
 var hlth_drn = true
 
 enum states {ALIVE, DEAD, GONE}
-var state = ALIVE
+var state = states.ALIVE
 
 onready var chkpt = $'/root/scene/chkpt'
 onready var ui = $ui
-var shifter = shift
+var shifter = shift_script
 
 # Environment
 var g = Vector3(0,-9.8,0)
@@ -35,12 +35,8 @@ onready var cam = $cam
 
 # Input
 var mv
-#var mv_z
-#var mv_x
-var mv_f
-var mv_b
-var mv_l
-var mv_r
+var mv_z
+var mv_x
 var jmp_att
 #var hop_att
 var act
@@ -96,7 +92,7 @@ func _ready():
 	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
 		
-	shifter.state = ALIVE
+	shifter.state = states.DEAD
 	
 	if cam.has_method('set_enabled'):
 		cam.set_enabled(true)
@@ -104,65 +100,55 @@ func _ready():
 	chkpt()
 
 func _input(event):
-	Input.add_joy_mapping('030000005e040000ea02000001030000,Xbox One Wireless Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,', true)
-	
-	mv_f = Input.is_action_pressed('mv_f')
-	mv_b = Input.is_action_pressed('mv_b')
-	mv_l = Input.is_action_pressed('mv_l')
-	mv_r = Input.is_action_pressed('mv_r')
-	
-	## Prep work for Godot 3.1
-#	mv_x = Input.get_action_axis_value("mv_x")
-#	mv_z = Input.get_action_axis_value("mv_z")
+	mv_x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
+	mv_z = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
 	
 	jmp_att = Input.is_action_just_pressed('feet')
 	act = Input.is_action_just_pressed('act')
 	
 	cast = Input.is_action_pressed('cast')
 
-func js_input(delta):
-	joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
-
-	if (abs(joy_vec.length()) < DEADZONE):
-		joy_vec = 0
-	else:
-		joy_vec = joy_vec.normalized() * ((joy_vec.length() - DEADZONE) / (1 - DEADZONE))
-		if joy_vec.length() >= DEADZONE && joy_vec.length() <= JOY_VAL:
-			mv_spd = walk
+#func js_input(delta):
+#	joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
+#
+#	if (abs(joy_vec.length()) < DEADZONE):
+#		joy_vec = 0
+#	else:
+#		joy_vec = joy_vec.normalized() * ((joy_vec.length() - DEADZONE) / (1 - DEADZONE))
+#		if joy_vec.length() >= DEADZONE && joy_vec.length() <= JOY_VAL:
+#			mv_spd = walk
 
 func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
-        var n = p_target # Normal
-        var t = n.cross(current_gn).normalized()
+		var n = p_target # Normal
+		var t = n.cross(current_gn).normalized()
 
-        var x = n.dot(p_facing)
-        var y = t.dot(p_facing)
+		var x = n.dot(p_facing)
+		var y = t.dot(p_facing)
 
-        var ang = atan2(y,x)
+		var ang = atan2(y,x)
 
-        if (abs(ang) < 0.001): # Too small
-                return p_facing
+		if (abs(ang) < 0.001): # Too small
+				return p_facing
 
-        var s = sign(ang)
-        ang = ang*s
-        var turn = ang * p_adjust_rate * p_step
-        var a
-        if (ang < turn):
-                a = ang
-        else:
-                a = turn
-        ang = (ang - a)*s
+		var s = sign(ang)
+		ang = ang*s
+		var turn = ang * p_adjust_rate * p_step
+		var a
+		if (ang < turn):
+				a = ang
+		else:
+				a = turn
+		ang = (ang - a)*s
 
-        return (n*cos(ang) + t*sin(ang)) * p_facing.length()
+		return (n*cos(ang) + t*sin(ang)) * p_facing.length()
 
 func _process(delta):
-	if state != DEAD and hlth_drn != false:
+	if state != states.DEAD and hlth_drn != false:
 #		hlth_drn(delta)
 		dmg(delta)
 
 func _physics_process(delta):
-	js_input(delta)
-	
-	if state !=DEAD and hlth_drn != false:
+	if state != states.DEAD and hlth_drn != false:
 		hlth_drn(delta)
 
 	var cam_node = $cam/cam
@@ -185,20 +171,11 @@ func _physics_process(delta):
 	var dir = Vector3()
 	var cam_xform = cam_node.get_global_transform()
 
-	if mv_f:
-		dir += -cam_xform.basis[2]
-	if mv_b:
-		dir += cam_xform.basis[2]
-	if mv_l:
-		dir += -cam_xform.basis[0]
-	if mv_r:
-		dir += cam_xform.basis[0]
-		
-	## Prep for Godot 3.1
-#	if mv_x:
-#		dir += -cam_xform.basis[0]
-#	if mv_z:
-#		dir += -cam_xform.basis[2]
+	if mv_z:
+		print(mv_z)
+		dir += -cam_xform.basis[2] * mv_z
+	if mv_x:
+		dir += cam_xform.basis[0] * mv_x
 
 	var target_dir = (dir - up * dir.dot(up)).normalized()
 	var mesh_xform = mesh.get_transform()
@@ -213,7 +190,7 @@ func _physics_process(delta):
 		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
 	
 		if attempts == 0:
-			attempts = 1
+			attempts += 1
 	
 		if dir.length() > 0.1 and !sharp_turn:
 			if hspeed >= walk -1: # 0.001:
@@ -542,21 +519,21 @@ func hlth_drn(delta):
 		emit_signal('hlth_chng', hlth)
 
 func heal(tch):
-	if state == GONE:
+	if state == states.GONE:
 		return
 		
 	hlth += tch
 
 func dmg(hit):
-	if state == DEAD:
+	if state == 1:
 		return
 	
 	hlth -= hit
 	
 	if hlth <= 0:
 		hlth = 0
-		state = DEAD
-		shifter.state = DEAD
+		state = 1
+		shifter.state = states.DEAD
 		emit_signal('died')
 	
 		emit_signal('hlth_chng', hlth)

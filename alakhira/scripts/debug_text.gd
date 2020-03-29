@@ -3,7 +3,7 @@ extends Label
 var az
 var cam
 var update = 0.0
-var shifter = shift
+var shifter = shift_script
 
 func _ready():
 	if get_parent().has_node('../../../../az'):

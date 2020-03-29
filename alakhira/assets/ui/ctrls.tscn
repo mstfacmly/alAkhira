@@ -1,769 +1,313 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/ui/menufont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/ui/submenufont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://scripts/ctrls.gd" type="Script" id=3]
 
-[node name="ctrls" type="VBoxContainer" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="ctrls" type="VBoxContainer"]
 margin_left = 124.0
 margin_top = 27.0
 margin_right = 444.0
 margin_bottom = 440.0
 rect_min_size = Vector2( 320, 0 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 11
-alignment = 0
-_sections_unfolded = [ "Grow Direction", "Margin" ]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="sep_top" type="CenterContainer" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="sep_top" type="CenterContainer" parent="."]
 margin_right = 320.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-use_top_left = false
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="mv_f" type="HBoxContainer" parent="." index="1"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="mv_f" type="HBoxContainer" parent="."]
 margin_top = 11.0
 margin_right = 320.0
 margin_bottom = 38.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="mv_f" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="mv_f"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Move Up"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="mv_f" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="mv_f"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="mv_b" type="HBoxContainer" parent="." index="2"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="mv_b" type="HBoxContainer" parent="."]
 margin_top = 49.0
 margin_right = 320.0
-margin_bottom = 82.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 76.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="mv_b" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="mv_b"]
 margin_right = 158.0
-margin_bottom = 33.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
+margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Move Down"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="mv_b" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="mv_b"]
 margin_left = 162.0
 margin_right = 320.0
-margin_bottom = 33.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
+margin_bottom = 27.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="mv_l" type="HBoxContainer" parent="." index="3"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 93.0
+[node name="mv_l" type="HBoxContainer" parent="."]
+margin_top = 87.0
 margin_right = 320.0
-margin_bottom = 120.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 114.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="mv_l" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="mv_l"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Move Left"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="mv_l" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="mv_l"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="mv_r" type="HBoxContainer" parent="." index="4"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 131.0
+[node name="mv_r" type="HBoxContainer" parent="."]
+margin_top = 125.0
 margin_right = 320.0
-margin_bottom = 158.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 152.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="mv_r" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="mv_r"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Move Right"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="mv_r" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="mv_r"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="arm_l" type="HBoxContainer" parent="." index="5"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 169.0
+[node name="arm_l" type="HBoxContainer" parent="."]
+margin_top = 163.0
 margin_right = 320.0
-margin_bottom = 196.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 190.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="arm_l" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="arm_l"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Arm Left"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="arm_l" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="arm_l"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="arm_r" type="HBoxContainer" parent="." index="6"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 207.0
+[node name="arm_r" type="HBoxContainer" parent="."]
+margin_top = 201.0
 margin_right = 320.0
-margin_bottom = 240.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 228.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="arm_r" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="arm_r"]
 margin_right = 158.0
-margin_bottom = 33.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
+margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Arm Right"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="arm_r" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="arm_r"]
 margin_left = 162.0
 margin_right = 320.0
-margin_bottom = 33.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
+margin_bottom = 27.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="head" type="HBoxContainer" parent="." index="7"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 251.0
+[node name="head" type="HBoxContainer" parent="."]
+margin_top = 239.0
 margin_right = 320.0
-margin_bottom = 278.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 266.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="head" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="head"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Head"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="head" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="head"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="feet" type="HBoxContainer" parent="." index="8"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 289.0
+[node name="feet" type="HBoxContainer" parent="."]
+margin_top = 277.0
 margin_right = 320.0
-margin_bottom = 316.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 304.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="feet" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="feet"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Feet"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="feet" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="feet"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="cast" type="HBoxContainer" parent="." index="9"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 327.0
+[node name="cast" type="HBoxContainer" parent="."]
+margin_top = 315.0
 margin_right = 320.0
-margin_bottom = 354.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 342.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="cast" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="cast"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Cast"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="cast" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="cast"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="act" type="HBoxContainer" parent="." index="10"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 365.0
+[node name="act" type="HBoxContainer" parent="."]
+margin_top = 353.0
 margin_right = 320.0
-margin_bottom = 392.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+margin_bottom = 380.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 0
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="NAME" type="Label" parent="act" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="NAME" type="Label" parent="act"]
 margin_right = 158.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 1 )
 text = "Action"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
 
-[node name="btn" type="Button" parent="act" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="btn" type="Button" parent="act"]
 margin_left = 162.0
 margin_right = 320.0
 margin_bottom = 27.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "Theme", "custom_constants", "custom_fonts" ]
 
-[node name="sep_bot" type="CenterContainer" parent="." index="11"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 403.0
+[node name="sep_bot" type="CenterContainer" parent="."]
+margin_top = 391.0
 margin_right = 320.0
-margin_bottom = 403.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
+margin_bottom = 391.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-use_top_left = false
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="ctrls_b" type="Button" parent="." index="12"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 414.0
+[node name="ctrls_b" type="Button" parent="."]
+margin_top = 402.0
 margin_right = 320.0
-margin_bottom = 447.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
+margin_bottom = 435.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
 text = "Back"
 flat = true
 align = 2
-_sections_unfolded = [ "Size Flags", "custom_fonts" ]
-
-
