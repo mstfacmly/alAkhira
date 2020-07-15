@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "StateMachine",
+"language": "GDScript",
+"path": "res://scripts/StateMachine.gd"
+} ]
 _global_script_class_icons={
-
+"StateMachine": ""
 }
 
 [application]
@@ -25,7 +30,7 @@ config/quit_on_go_back=false
 [autoload]
 
 global="*res://scripts/global.gd"
-shift_script="*res://scripts/shift.gd"
+shift_script="res://scripts/shift.gd"
 
 [debug]
 

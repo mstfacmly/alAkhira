@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://scripts/player_nu.gd" type="Script" id=1]
 [ext_resource path="res://player/nodes/body.tscn" type="PackedScene" id=2]
@@ -7,62 +7,171 @@
 [ext_resource path="res://addons/jigglebones/jigglebone.gd" type="Script" id=5]
 [ext_resource path="res://addons/jigglebones/icon.svg" type="Texture" id=6]
 [ext_resource path="res://player/nodes/animation.tscn" type="PackedScene" id=7]
-[ext_resource path="res://player/az/animationTree.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scripts/playerFSM.gd" type="Script" id=8]
 [ext_resource path="res://assets/script_nodes/cam.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/col.tscn" type="PackedScene" id=10]
 [ext_resource path="res://assets/ui/scripts.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/ui/ui.tscn" type="PackedScene" id=12]
 
-[node name="az" type="KinematicBody" index="0"]
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "05_stand_jump_fall"
 
-input_ray_pickable = true
-input_capture_on_drag = false
-collision_layer = 1
-collision_mask = 1
-axis_lock_linear_x = false
-axis_lock_linear_y = false
-axis_lock_linear_z = false
-axis_lock_angular_x = false
-axis_lock_angular_y = false
-axis_lock_angular_z = false
-collision/safe_margin = 0.001
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "06_run_jump_rise"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "07_run_jump_fall"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "21_wrun-f_slide"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "23-wrun-l"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "24-wrun-r"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "07_run_jump_air_2"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "04_stand_jump_rise"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "06_run_jump_air"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "06_run_jump_rise"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "07_run_jump_fall"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+switch_mode = 1
+xfade_time = 0.12
+
+[sub_resource type="AnimationNodeStateMachine" id=14]
+states/06_run_jump_air/node = SubResource( 9 )
+states/06_run_jump_air/position = Vector2( 448, 84 )
+states/06_run_jump_rise/node = SubResource( 10 )
+states/06_run_jump_rise/position = Vector2( 164, 84 )
+states/07_run_jump_fall/node = SubResource( 11 )
+states/07_run_jump_fall/position = Vector2( 740, 84 )
+transitions = [ "06_run_jump_rise", "06_run_jump_air", SubResource( 12 ), "06_run_jump_air", "07_run_jump_fall", SubResource( 13 ) ]
+start_node = "06_run_jump_rise"
+end_node = "07_run_jump_fall"
+graph_offset = Vector2( -233, -12 )
+
+[sub_resource type="AnimationNodeTimeScale" id=15]
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "00_idle-cycle"
+
+[sub_resource type="AnimationNodeAnimation" id=17]
+animation = "02_run-cycle"
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "03_sprint-cycle"
+
+[sub_resource type="AnimationNodeTransition" id=19]
+input_count = 13
+input_0/name = "0"
+input_0/auto_advance = false
+input_1/name = "1"
+input_1/auto_advance = false
+input_2/name = "2"
+input_2/auto_advance = false
+input_3/name = "3"
+input_3/auto_advance = false
+input_4/name = "4"
+input_4/auto_advance = false
+input_5/name = "5"
+input_5/auto_advance = false
+input_6/name = "6"
+input_6/auto_advance = false
+input_7/name = "7"
+input_7/auto_advance = false
+input_8/name = "8"
+input_8/auto_advance = false
+input_9/name = "9"
+input_9/auto_advance = false
+input_10/name = "10"
+input_10/auto_advance = false
+input_11/name = "11"
+input_11/auto_advance = false
+input_12/name = "12"
+input_12/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=20]
+animation = "01_walk-cycle"
+
+[sub_resource type="AnimationNodeBlendTree" id=21]
+graph_offset = Vector2( 454.396, -7.12965 )
+nodes/Animation/node = SubResource( 8 )
+nodes/Animation/position = Vector2( 1420, 120 )
+"nodes/Animation 2/node" = SubResource( 1 )
+"nodes/Animation 2/position" = Vector2( 1400, 220 )
+"nodes/Animation 3/node" = SubResource( 2 )
+"nodes/Animation 3/position" = Vector2( 1380, 340 )
+"nodes/Animation 4/node" = SubResource( 3 )
+"nodes/Animation 4/position" = Vector2( 1420, 560 )
+"nodes/Animation 5/node" = SubResource( 4 )
+"nodes/Animation 5/position" = Vector2( 1500, 680 )
+"nodes/Animation 6/node" = SubResource( 5 )
+"nodes/Animation 6/position" = Vector2( 1580, 800 )
+"nodes/Animation 7/node" = SubResource( 6 )
+"nodes/Animation 7/position" = Vector2( 1660, 920 )
+"nodes/Animation 8/node" = SubResource( 7 )
+"nodes/Animation 8/position" = Vector2( 1380, 460 )
+nodes/StateMachine/node = SubResource( 14 )
+nodes/StateMachine/position = Vector2( 1700, 400 )
+nodes/TimeScale/node = SubResource( 15 )
+nodes/TimeScale/position = Vector2( 2500, 160 )
+nodes/idle/node = SubResource( 16 )
+nodes/idle/position = Vector2( 1740, -400 )
+nodes/output/position = Vector2( 2780, 320 )
+nodes/run/node = SubResource( 17 )
+nodes/run/position = Vector2( 1580, -120 )
+nodes/sprint/node = SubResource( 18 )
+nodes/sprint/position = Vector2( 1500, 0 )
+nodes/state/node = SubResource( 19 )
+nodes/state/position = Vector2( 2200, 60 )
+nodes/walk/node = SubResource( 20 )
+nodes/walk/position = Vector2( 1640, -260 )
+node_connections = [ "output", 0, "TimeScale", "state", 0, "idle", "state", 1, "walk", "state", 2, "run", "state", 3, "sprint", "state", 4, "Animation", "state", 5, "Animation 2", "state", 6, "Animation 3", "state", 7, "StateMachine", "state", 9, "Animation 5", "state", 10, "Animation 6", "state", 11, "Animation 7", "TimeScale", 0, "state" ]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=22]
+
+[node name="az" type="KinematicBody"]
 script = ExtResource( 1 )
-max_hlth = 100
-run = 5.13
-attempts = 1
 
-[node name="body" parent="." index="0" instance=ExtResource( 2 )]
-
-_sections_unfolded = [ "Transform" ]
+[node name="body" parent="." instance=ExtResource( 2 )]
 
 [node name="Skeleton" parent="body" index="0"]
-
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="mesh" parent="body/Skeleton" index="0" instance=ExtResource( 3 )]
-
 transform = Transform( 1, 0, -3.55271e-15, 0, 1, 0, 3.55271e-15, 0, 1, 0, 0, 0 )
 
 [node name="bisht" parent="body/Skeleton/mesh" index="1"]
-
 visible = false
 
 [node name="kms" parent="body/Skeleton/mesh" index="13"]
-
 visible = false
 
 [node name="sash" parent="body/Skeleton/mesh" index="15"]
-
 visible = false
 
 [node name="targets" parent="body/Skeleton" index="1" instance=ExtResource( 4 )]
 
-editor/display_folded = true
+[node name="Sprite3D" parent="body/Skeleton/targets/ptarget" index="0"]
+visible = true
 
 [node name="sheath_dhu" type="Spatial" parent="body/Skeleton" index="2"]
-
-transform = Transform( 1, 2.73995e-06, -0.000463162, -0.000378866, -0.570142, -0.82155, -0.000266501, 0.821549, -0.570142, 0.230497, 3.49853, 0.617414 )
+transform = Transform( 0.923444, 2.51233e-06, 7.22931e-07, 1.72412e-06, -0.393308, -0.835498, -1.96515e-06, 0.835497, -0.393309, 0, 0, 0 )
 script = ExtResource( 5 )
 __meta__ = {
 "_editor_icon": ExtResource( 6 )
@@ -70,13 +179,10 @@ __meta__ = {
 bone_name = "sheath_dhu"
 stiffness = 1.5
 damping = 2.0
-use_gravity = false
-gravity = Vector3( 0, -9.81, 0 )
 forward_axis = 5
 
 [node name="sheath_dag" type="Spatial" parent="body/Skeleton" index="3"]
-
-transform = Transform( 0.997367, 0.0725245, 2.98023e-08, 3.8743e-07, -4.47035e-08, 1, 0.0725249, -0.997367, 2.23517e-07, -0.101953, 0.830109, 0.397492 )
+transform = Transform( 0.86888, 0.0663391, -0.305606, 0.307739, -0.0209103, 0.870407, 0.055609, -0.92082, -0.0417824, 0, 0, 0 )
 script = ExtResource( 5 )
 __meta__ = {
 "_editor_icon": ExtResource( 6 )
@@ -85,157 +191,44 @@ bone_name = "sheath_dag"
 stiffness = 0.7
 damping = 0.2
 use_gravity = true
-gravity = Vector3( 0, -9.81, 0 )
 forward_axis = 5
 
-[node name="animation" parent="." index="1" instance=ExtResource( 7 )]
-
-[node name="animationTree" parent="." index="2" instance=ExtResource( 8 )]
-
-data = {
-"active": false,
-"connections": [ "run", "scale", 0, "scale", "state", 0, "anim 3", "state", 1, "anim 4", "state", 2, "anim 5", "state", 3, "anim 6", "state", 4, "anim 7", "state", 5, "anim 8", "state", 6, "anim 9", "state", 7, "anim 10", "state", 8, "anim 2", "state", 9, "anim 11", "state", 10, "state", "out", 0, "anim", "run", 0, "ru", "run", 1 ],
-"master": NodePath("../animation"),
-"nodes": [ {
-"id": "scale",
-"position": Vector2( 308, 47 ),
-"scale": 1.2,
-"type": "timescale"
-}, {
-"id": "state",
-"position": Vector2( 821, 55 ),
-"transitions": [ {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-}, {
-"auto_advance": false
-} ],
-"type": "transition",
-"xfade": 0.18
-}, {
-"filter": [  ],
-"from": "00_idle-cycle",
-"id": "anim",
-"position": Vector2( 30, 56 ),
-"type": "animation"
-}, {
-"id": "out",
-"position": Vector2( 1023, 38 ),
-"type": "output"
-}, {
-"filter": [  ],
-"from": "21_wrun-f_slide",
-"id": "anim 10",
-"position": Vector2( 481, 491 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "24-wrun-r",
-"id": "anim 2",
-"position": Vector2( 612, 489 ),
-"type": "animation"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "run",
-"position": Vector2( 171, 62 ),
-"type": "blend2"
-}, {
-"filter": [  ],
-"from": "06_run_jump_rise",
-"id": "anim 7",
-"position": Vector2( 454, 262 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "04_stand_jump_rise",
-"id": "anim 5",
-"position": Vector2( 322, 168 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "30_ledge_idle-cycle",
-"id": "anim 9",
-"position": Vector2( 339, 417 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "07_run_jump_fall",
-"id": "anim 8",
-"position": Vector2( 459, 375 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "01_walk-cycle",
-"id": "anim 3",
-"position": Vector2( 448, 17 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "23-wrun-l",
-"id": "anim 11",
-"position": Vector2( 636, 649 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "02_run-cycle",
-"id": "ru",
-"position": Vector2( 22, 215 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "03_sprint-cycle",
-"id": "anim 4",
-"position": Vector2( 443, 132 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "05_stand_jump_fall",
-"id": "anim 6",
-"position": Vector2( 318, 286 ),
-"type": "animation"
-} ]
-}
-
-[node name="cam" parent="." index="3" instance=ExtResource( 9 )]
-
-editor/display_folded = true
+[node name="cam" parent="." instance=ExtResource( 9 )]
+cam = NodePath("")
+pivot = NodePath("")
 
 [node name="dirlight" parent="cam/cam" index="0"]
-
-light_cull_mask = -1048575
+light_cull_mask = 4293918721
 
 [node name="target" parent="cam" index="2"]
-
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -2.4 )
 
-[node name="col" parent="." index="4" instance=ExtResource( 10 )]
+[node name="animation" parent="." instance=ExtResource( 7 )]
 
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 21 )
+anim_player = NodePath("../animation")
+root_motion_track = NodePath("body/Skeleton:root")
+parameters/StateMachine/playback = SubResource( 22 )
+parameters/TimeScale/scale = 1.2
+parameters/state/current = 0
+
+[node name="col" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.001456, 1.3, 0.01732 )
 
-[node name="scripts" parent="." index="5" instance=ExtResource( 11 )]
+[node name="scripts" parent="." instance=ExtResource( 11 )]
 
-[node name="ui" parent="." index="6" instance=ExtResource( 12 )]
+[node name="ui" parent="." instance=ExtResource( 12 )]
 
+[node name="FSM" type="Node" parent="."]
+script = ExtResource( 8 )
 
 [editable path="body"]
+
 [editable path="body/Skeleton/mesh"]
+
 [editable path="body/Skeleton/targets"]
+
 [editable path="cam"]
+
+[editable path="scripts"]
