@@ -3,7 +3,7 @@ extends Label
 var az
 var cam
 var update = 0.0
-var shifter = shift_script
+#var shifter = shift_script
 
 func _ready():
 	if get_parent().has_node('../../../../az'):
@@ -38,15 +38,15 @@ func _physics_process(delta):
 		txt += str('\nWall Run: ', az.wrun)
 		txt += str('\nColliding: ', az.col_result)
 		txt += str('\nLedge: ', az.ledge_col)
-		txt += str('\nVelocity: ', az.hvel.length())
-		txt += str('\nVertical Velocity: ', az.vvel)
+		txt += str('\nVelocity: ', az.velocity.length())
+		txt += str('\nVertical Velocity: ', az.velocity.y)
 		txt += str('\nCam Enabled: ', cam.is_enabled)
 		txt += str('\nCam Radius: ', cam.cam_radius)
 		txt += str('\nCam FOV: ', cam.cam_fov)
 #		txt += str('\nTimer: ', timer.get_wait_time())
-		txt += str('\nChar State: ', az.state)
-		txt += str('\nWorld State: ', shifter.state)
-		txt += str('\nWorld: ', shifter.curr)
+#		txt += str('\nChar State: ', az.state)
+#		txt += str('\nWorld State: ', shifter.state)
+#		txt += str('\nWorld: ', shifter.curr)
 		txt += str('\nMouse Mode: ', Input.get_mouse_mode())
 		txt += str('\nJoystick Vector: ', Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1)).length_squared())
 

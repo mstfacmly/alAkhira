@@ -4,7 +4,7 @@ signal start
 signal quit
 
 # Onready
-onready var shifter = shift_script
+#onready var shifter = shift_script
 var bar
 var tween
 var t
@@ -78,16 +78,15 @@ func _get_input(bind):
 	set_process_input(true)
 
 func _gui_input(ev):
-	if !InputEventMouseMotion:
-		if ev.is_action_pressed('ui_down'):
-			focus_next
-			accept_event()
-		if ev.is_action_pressed('ui_up'):
-			focus_previous
-			accept_event()
-		if ev.is_action_pressed('ui_accept'):
-			_ui_btn_pressed(ev)
-			accept_event()
+	if ev.is_action_pressed('ui_down'):
+		focus_next
+		accept_event()
+	if ev.is_action_pressed('ui_up'):
+		focus_previous
+		accept_event()
+	if ev.is_action_pressed('ui_accept'):
+		_ui_btn_pressed(ev)
+		accept_event()
 
 func _on_timer_timeout():
 	get_tree().quit()
@@ -249,7 +248,7 @@ func _pause_menu():
 
 func _on_pause():
 	_pause_menu()
-	_pause_shift()
+#	_pause_shift()
 	paused = true
 	get_tree().set_pause(true)
 
@@ -259,13 +258,13 @@ func _on_unpause():
 	paused = false
 	Input.set_mouse_mode(2)
 	$org/right/menuList.hide()
-	_pause_shift()
+#	_pause_shift()
 	get_tree().set_pause(false)
 
-func _pause_shift():
-	if shifter.curr != 'spi':
-		envanim.play('shift', -1, spd, (spd < 0))
-		shifter.curr = 'spi'
-	elif shifter.curr != 'phys':
-		envanim.play('shift', -1, -spd, (-spd < 0))
-		shifter.curr = 'phys'
+#func _pause_shift():
+#	if shifter.curr != 'spi':
+#		envanim.play('shift', -1, spd, (spd < 0))
+#		shifter.curr = 'spi'
+#	elif shifter.curr != 'phys':
+#		envanim.play('shift', -1, -spd, (-spd < 0))
+#		shifter.curr = 'phys'

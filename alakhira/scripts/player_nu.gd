@@ -4,24 +4,22 @@ extends KinematicBody
 signal hlth_chng
 signal died
 signal az_ready
-signal peek
-signal shifting
+#signal peek
+#signal shifting
 
 # Health
 export var max_hlth = 100
 var hlth = max_hlth
 var hlth_drn = true
 
-enum states {ALIVE, DEAD, GONE}
-var state = states.ALIVE
-
 onready var chkpt = $'/root/scene/chkpt'
 onready var ui = $ui
-var shifter = shift_script
+onready var shifter = $scripts/shift
 
 # Environment
 var g = Vector3(0,-9.8,0)
 var up = -g.normalized()
+var lv = Vector3()
 
 var joy_vec
 const DEADZONE = 0.3
@@ -30,13 +28,11 @@ const JOY_VAL = 0.9
 # Camera
 var view_sensitivity = 0.2
 var focus_view_sensv = 0.1
-var curfov
 onready var cam = $cam
+onready var cam_node = $cam/cam
+signal camadjust
 
 # Input
-var mv
-var mv_z
-var mv_x
 var jmp_att
 #var hop_att
 var act
@@ -44,43 +40,37 @@ var cast
 
 #Movement
 var ppos
-var lin_vel = Vector3()
+#var lin_vel = Vector3()
 const ACCEL = 7.77
 const DEACCEL = ACCEL * 2.13
 const MAX_SLOPE = 57
-export var run = 5.13
+export var run = 6.16
 var fwalk = run / 2.25
 var walk = run / 1.33
-var sprint = run * 1.33 #2.12 #7.77
+var sprint = run * 1.72 #2.12 #7.77
 #var mv_dir = Vector3()
+var mv_z
+var mv_x
 var mv_spd = run
-var turn_speed = 42
-var sharp_turn_threshold = 130
+#var turn_speed = 42
+#var sharp_turn_threshold = 130
 #var climbspeed = 2
 var jmp_spd = Vector3(0,9.8,0) * 1.84 
-var hvel = Vector3()
-var hspeed
-var parkour_f = false
+var velocity = Vector3()
+#var hspeed
+#var parkour_f = false
 var jumping = false
 var falling = false
-var vvel
-var can_wrun
+#var vvel
+#var can_wrun
 var wrun = []
 var dist = 4
 var collision_exception = [ self ]
 var col_normal = Vector3()
 var col_result = []
-var col_basis
 var ledge_col = Vector3()
 var on_ledge = false
-var ptarget
-var ledgecol
 
-var anim
-var climb_platform = null
-var climbing_platform = false
-var hanging = false
-var facing_dir = Vector3(0, 0, 1)
 var result
 export var attempts = 1
 onready var mesh = $body/Skeleton
@@ -91,22 +81,21 @@ var modlv
 func _ready():
 	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
+	connect('camadjust', cam, 'cam_adjust' )
 		
-	shifter.state = states.DEAD
+	#shifter.state = 'dead'
 	
 	if cam.has_method('set_enabled'):
 		cam.set_enabled(true)
 	
+	$AnimationTree.active = 1
+	
 	chkpt()
 
 func _input(event):
-	mv_x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
 	mv_z = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
-	
-	jmp_att = Input.is_action_just_pressed('feet')
-	act = Input.is_action_just_pressed('act')
-	
-	cast = Input.is_action_pressed('cast')
+	mv_x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
+#	jmp_att = Input.is_action_just_pressed('feet')
 
 #func js_input(delta):
 #	joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
@@ -118,218 +107,137 @@ func _input(event):
 #		if joy_vec.length() >= DEADZONE && joy_vec.length() <= JOY_VAL:
 #			mv_spd = walk
 
-func adjust_facing(p_facing, p_target, p_step, p_adjust_rate, current_gn):
-		var n = p_target # Normal
-		var t = n.cross(current_gn).normalized()
-
-		var x = n.dot(p_facing)
-		var y = t.dot(p_facing)
-
-		var ang = atan2(y,x)
-
-		if (abs(ang) < 0.001): # Too small
-				return p_facing
-
-		var s = sign(ang)
-		ang = ang*s
-		var turn = ang * p_adjust_rate * p_step
-		var a
-		if (ang < turn):
-				a = ang
-		else:
-				a = turn
-		ang = (ang - a)*s
-
-		return (n*cos(ang) + t*sin(ang)) * p_facing.length()
-
-func _process(delta):
-	if state != states.DEAD and hlth_drn != false:
-#		hlth_drn(delta)
-		dmg(delta)
+func _apply_gravity(delta):
+#	lv = lin_vel
+	lv += g * (delta * 3)
+	velocity.y = up.dot(lv)
+#	var hvcalc = lv - up * velocity.y
+#	hvel = Vector3(hvcalc.x, 0 ,hvcalc.z)
 
 func _physics_process(delta):
-	if state != states.DEAD and hlth_drn != false:
+	if !$FSM.states.dead and hlth_drn != false:
 		hlth_drn(delta)
-
-	var cam_node = $cam/cam
-
-	# Velocity
-	var lv = lin_vel
-	lv += g * (delta * 3)
-	vvel = up.dot(lv)
-	var hvcalc = lv - up * vvel
-	hvel = Vector3(hvcalc.x, 0 ,hvcalc.z)
-
-	var hdir = hvel.normalized()
-	var hspeed = hvel.length()
 	
-	ppos = mesh.get_global_transform().origin
-	var ptarg = $body/Skeleton/targets/ptarget
-	ptarget = $body/Skeleton/targets/ptarget.get_global_transform().origin
-	ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform()
+	_move_floor(delta)
 
+func _move_floor(delta):
+	# Velocity
 	var dir = Vector3()
 	var cam_xform = cam_node.get_global_transform()
+	var is_moving = false
 
-	if mv_z:
-		print(mv_z)
-		dir += -cam_xform.basis[2] * mv_z
-	if mv_x:
-		dir += cam_xform.basis[0] * mv_x
+	dir += -cam_xform.basis[2] * mv_z
+	dir += cam_xform.basis[0] * mv_x
+	
+	if dir.length() != 0:
+		is_moving = true
 
-	var target_dir = (dir - up * dir.dot(up)).normalized()
-	var mesh_xform = mesh.get_transform()
-	var mesh_basis = mesh_xform.basis[0]
-	var facing_mesh = -mesh_basis.normalized()
-	facing_mesh = (facing_mesh - up * facing_mesh.dot(up)).normalized()	
-
-	if is_on_floor():# or on_ledge:# or (is_on_wall() && parkour_f):
-		wrun = []
-		falling = false
-		var can_wrun = true
-		var sharp_turn = hspeed > 0.1 and rad2deg(acos(target_dir.dot(hdir))) > sharp_turn_threshold
+	var hspeed = velocity.length()
 	
-		if attempts == 0:
-			attempts += 1
+	ppos = mesh.get_global_transform().origin
+	var hvel = velocity
+	hvel.y = 0
 	
-		if dir.length() > 0.1 and !sharp_turn:
-			if hspeed >= walk -1: # 0.001:
-				hdir = adjust_facing(hdir, target_dir, delta, 1.0 / hspeed * turn_speed, up)
-				facing_dir = hdir
-#			elif on_ledge:
-#				hdir = mesh_basis + Vector3(modlv.x,0,modlv.z)
-			else:
-				hdir = target_dir
+	var new_pos = dir * mv_spd
 	
-			if hspeed < mv_spd:
-				hspeed += ACCEL * delta
-		else:
-			hspeed -= DEACCEL * delta
-			if hspeed < 0:
-				hspeed = 0
-	
-		hvel = hdir * hspeed
+	if dir.dot(hvel) > 0:
+		ACCEL
 		
-		if hspeed > 0.01:# and is_on_floor():
-			facing_mesh = adjust_facing(facing_mesh, target_dir, delta, 1.0 / hspeed * turn_speed, up)
-		var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())
+	hvel = hvel.linear_interpolate(new_pos, ACCEL * delta)
 	
-		mesh.set_transform(Transform(m3, mesh_xform.origin))
+	velocity.x = hvel.x
+	velocity.z = hvel.z
 	
+	velocity = move_and_slide(velocity, up, 0, 4, deg2rad(MAX_SLOPE))
+	
+	if is_moving:
+		var angle = atan2(-hvel.x,-hvel.z)
+		var char_rot = get_rotation()
+		char_rot.y = angle
+		rotation = char_rot
+
+func jump(ptarget,hspeed):
+	if mv_spd >= run :
+		animate_char(6)
 	else:
-		if dir.length() > 0.1:
-			hvel += target_dir * (ACCEL * 0.2) * delta
-			if hvel.length() > mv_spd:
-				hvel = hvel.normalized() * mv_spd
-	
-	if Input.is_action_just_pressed('head'):
-#		translate(mesh_xform.basis.xform(Vector3(-2,0,0)))
-#		hvel = mesh_xform.basis.xform(Vector3(jmp_spd.y, jmp_spd.y ,0))
-		hvel += hvel + mesh_xform.basis.xform(Vector3(0.1,0,0))
-		pass
-	
-	if is_on_floor() && jmp_att && col_result != ['front', 'left', 'right']:
-		jumping = true
-		can_wrun = true
-		vvel = jmp_spd
-		lv = (hvel * 11.1) + up * vvel
-	elif is_on_wall() && jmp_att:
-		jumping = true
-	else:
-		jumping = false
-		lv = hvel + up * vvel
-	
+		animate_char(4)
+#	can_wrun = true
+	velocity.y = jmp_spd
+	lv = (velocity * 11.1) + up * velocity.y
+
 #	if is_on_floor() && mv_spd >= run && jmp_att:
 #		lv = (hvel * 11.1) + up * vvel
 #	else:
 #		lv = hvel + up * vvel
-	
-	parkour()
-	
+		
 #	col_feet.set_rotation_degrees(mesh.get_rotation_degrees())
-	
-	if !is_on_floor():
-		ledge()
-		if hspeed >= walk -1:
-			if col_result == ['front']:
-				wrun = ['vert']
-			elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
-				wrun = ['horz']
-			else:
-				col_result == []
-				wrun = []
-		if !jumping:
-			falling = true
-	
+	parkour(ppos,ptarget,ptarget - ppos)
+#	ledge(ptarget, ptarget - ppos)
+	if hspeed >= walk -1:
+		if col_result == ['front']:
+			wrun = ['vert']
+		elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
+			wrun = ['horz']
+		else:
+			col_result == []
+			wrun = []
+
+func fall(lv):
+	jumping = false
+	lv = velocity + up * velocity.y
+
+	if mv_spd >= run:# - 1:
+		animate_char(7)
+	else:
+		animate_char(5)
+
+func _walljump():
+#	elif is_on_wall() && jmp_att:
+#		jumping = true
+	pass
+
+func _wall(ptarget,mesh_xform,delta):
 #	var wjmp = jmp_spd + (hvel)# * 0.5)
 	var ledge_diff = ledge_col.y - ptarget.y
-	var TARGET_MOD = (hvel.length() * 0.84) / 2 + 1
+	var TARGET_MOD = (velocity.length() * 0.84) / 2 + 1
 	
-	if is_on_wall():
-		$body/Skeleton/targets/ptarget.translation.z = 0
-		walln = get_slide_collision(0).normal.abs()
-		modlv = lv.slide(up).slide(walln).abs()
-		var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, ((jmp_spd.y + hvel.length())) * 0.64, jmp_spd.y * 0))
-		var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y , jmp_spd.y * 6))
-		var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y, jmp_spd.y * 3))
-		
-#		if col_result == ['back']:
-#			wrun = ['vert']
-			
-		if wrun == ['vert']:
-			if col_result == ['front']:
-				#if !jmp_att :
-				#	lv = Vector3(0,0.0000001,0)
-				if jmp_att && attempts > 0:
-					lv += whop #* mv_spd * 0.72
-					attempts -= 1
-				else:
-					lv = Vector3(0,0.0000001,0)
-				if act:
-					mesh.rotate_y(179)
+	$body/Skeleton/targets/ptarget.translation.z = 0
+	walln = get_slide_collision(0).normal.abs()
+	modlv = lv.slide(up).slide(walln).abs()
+	var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, ((jmp_spd.y + velocity.length())) * 0.64, jmp_spd.y * 0))
+	var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y , jmp_spd.y * 6))
 	
-			elif col_result == ['back']:
-				wrun = ['vert']
-				if !jmp_att :
-					lv = Vector3(0,0.0000001,0)
-				elif jmp_att:
-					lv += -walln * wjmp
-					lv += up * wjmp
-					attempts = 1
+	ledge(ptarget, ptarget - ppos)
+	lv.y = 0.0000001
+	if col_result == ['front']:
+		animate_char(9)
+		#if !jmp_att :
+		if jmp_att && attempts > 0:
+			lv += whop * mv_spd * 0.48
+			attempts -= 1
+		if act:
+			mesh.rotate_y(179)
+			col_result = ['back']
+
+	if col_result == ['back']:
+		animate_char(8)
+#				wrun = ['vert']
+#	if !jmp_att :
+#		lv = Vector3(0,0.0000001,0)
+		if jmp_att:
+			animate_char(7)
+			lv += -walln * wjmp
+			lv += up * wjmp
+			attempts = 1
 	
-			if ledge_col.y > 3.33 && ledge_diff <= 2.2 && ledge_diff >= 0.2:
-				global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
-				on_ledge = true
-			else:
-				on_ledge = false
-#					!is_on_wall()
-	
-		if wrun == ['horz']:
-			facing_mesh = adjust_facing(facing_mesh, col_normal,delta,1.0 / (hspeed * 0.42),up)
-			var m3 = Basis(-facing_mesh, up, -facing_mesh.cross(up).normalized())
-			mesh.set_transform(Transform(m3, mesh_xform.origin))
-			lv += modlv * 0.33
-			if can_wrun == true:
-				lv.y -= lv.y + delta/(delta * 1.11)# * 0.9
-				if col_result == ['right']:
-					lv += -modlv * 0.33					
-					if jmp_att:
-						lv += (-walln / 2) * wrjmp
-						lv += -modlv * wrjmp
-						lv += up * wrjmp
-				if col_result == ['left']:
-					lv += -modlv * 0.33
-					if jmp_att:
-						lv += (walln / 2) * wrjmp
-						lv += -modlv * wrjmp
-						lv += up * wrjmp
-			if can_wrun == false:
-				wjmp = false
-		elif !wjmp:
-			lv.y += g.y * (delta *3)
-	elif !is_on_wall():
-		!on_ledge
-	
+	print('ledge_diff: ', ledge_diff)
+	if ledge_col.y > 3.33 && ledge_diff < 2.1 && ledge_diff > -4.4:
+		global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
+		on_ledge = true
+		animate_char(7)
+#		else:
+#			on_ledge = false
+#				!is_on_wall()
 	if on_ledge:
 		if col_result == ['front']:
 			wrun = []
@@ -342,127 +250,68 @@ func _physics_process(delta):
 				on_ledge = false
 		else:
 			!on_ledge
-	
-	elif !on_ledge:
+	else:
 		lv += g * (delta *3)
 	
 	$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
+
+func _wrun(mesh_xform,delta):
+	var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y, jmp_spd.y * 3))
+	if wrun == ['horz']:
+		lv += modlv * 0.33
+#			if can_wrun:
+		lv.y -= lv.y + delta/(delta * 1.11)# * 0.9
+		if col_result == ['right']:
+			animate_char(11)
+			lv += -modlv * 0.33
+			if jmp_att:
+				lv += (-walln / 2) * wrjmp
+				lv += -modlv * wrjmp
+				lv += up * wrjmp
+		if col_result == ['left']:
+			animate_char(10)
+			lv += -modlv * 0.33
+			if jmp_att:
+				lv += (walln / 2) * wrjmp
+				lv += -modlv * wrjmp
+				lv += up * wrjmp
+#			else:
+#				wjmp = false
+#	elif !wjmp:
+#		lv.y += g.y * (delta *3)
+#	elif !is_on_wall():
+#		!on_ledge
 	
-	lin_vel = move_and_slide(lv, up, 0.05, 4, deg2rad(MAX_SLOPE))
-	
-	player_fp(delta)
+#	player_fp(delta, hspeed)
 
-func player_fp(delta):
-	var animate = $animationTree
-
-	animate.set_active(true)
-
-	cam.add_collision_exception(self)
-	cam.cam_radius = 2.5
-	cam.cam_view_sensitivity = view_sensitivity
-	cam.cam_smooth_movement = true
-	
-	hspeed = lin_vel.length()
-	anim = 0
-
+func walk(hspeed,delta):
 	if Input.is_key_pressed(KEY_ALT):
 		if (hspeed > walk ):
 			mv_spd = max(min(mv_spd - (2 * delta),walk * 2.0),walk)
 		elif (hspeed <= walk):
 			mv_spd = walk
-		anim = 0
-		cam.cam_radius = 3.7
-		cam.cam_fov = 64
 	else:
-		cam.cam_radius = 3.1
-		cam.cam_fov = 64
 		mv_spd = max(min(mv_spd + (delta * 0.5),walk),run)
 
-	if hspeed >= run - 0.1 and hspeed <= sprint - 1 :
-		anim = 0
-		cam.cam_radius = 4.0
-		cam.cam_fov = 69
-	elif hspeed >= run + 1.3:
-		anim = 2
-		cam.cam_radius = 4.2
-		cam.cam_fov = 72
-	elif hspeed >= 0.1 && hspeed <= run:
-		anim = 1
-		cam.cam_radius = 3.7
-		cam.cam_fov = 64
-	else:
-		pass
+	animate_char(1)
+	emit_signal("camadjust",64, 3.1)
 
-	if jumping:
-		if hspeed >= run :
-			anim = 5
-		else:
-			anim = 3
-	elif falling: # && !is_on_floor():
-		if hspeed >= sprint:# - 1:
-			anim = 6
-		else:
-			anim = 4
-	else:
-		pass
+func idle():
+	animate_char(0)
 
-	if hspeed < 3 && jumping:
-		anim = 3
-	elif hspeed < 4 && jumping && !is_on_floor():
-		anim = 4
-	else:
-		pass
-		
-	if on_ledge:
-		anim = 7
+func animate_char(anim):
+	$AnimationTree.set('parameters/state/current', anim)
 
-	if wrun == ['vert']:
-		if col_result == ['front']:
-			anim = 8
-		else:
-			anim = 3
-	elif wrun == ['horz']:
-		if col_result == ['right']:
-			anim = 10
-		elif col_result == ['left']:
-			anim = 9
-
-	if is_on_floor():
-		animate.blend2_node_set_amount('run', hspeed / mv_spd)
-	animate.transition_node_set_current('state', anim)
-
-	if !is_on_floor() or (!col_result.empty() and col_result != ['back'] and hspeed >= run):
-		cam.cam_radius = 4.7
-		cam.cam_fov = 72
-
-	curfov = cam.cam_fov
-	var physfov
-	var spifov
-
-	if shifter.curr == 'spi' && shifter.shifting :
-		cam.cam_fov += 13
-	elif shifter.curr == 'phys' && shifter.shifting :
-		cam.cam_fov -= 13
-
-func parkour():
+func parkour(ppos,ptarget,delta):
 	var ds = get_world().get_direct_space_state()
 	var parkour_detect = 90
-	var delta = ptarget - ppos
 
 	var col_r = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
 	var col_f = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
 	var col_l = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 	var col_b = ds.intersect_ray(ppos,-ptarget + delta,collision_exception)
 
-	if (!col_l.empty() && col_r.empty()):
-		col_normal = col_l.normal
-		col_result = ['left']
-		return col_result
-	elif (!col_r.empty() && col_l.empty()):
-		col_normal = col_r.normal
-		col_result = ['right']
-		return col_result
-	elif (!col_f.empty() && !col_l.empty() && col_r.empty()):
+	if (!col_f.empty() && !col_l.empty() && col_r.empty()):
 		col_normal = col_l.normal
 		col_result = ['left']
 		return col_result
@@ -483,9 +332,9 @@ func parkour():
 		col_result = []
 		return col_result
 
-func ledge():
+func ledge(ptarget, delta):
+	var ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform()
 	var ds = get_world().get_direct_space_state()
-	var delta = ptarget - ppos
 	
 	if col_result == ['front']:
 		var col_top = ds.intersect_ray(ledgecol.origin,ptarget + delta,collision_exception)
@@ -500,16 +349,15 @@ func ledge():
 	else:
 		ledge_col = Vector3()
 		return ledge_col
-		
 
-func hlth_drn(delta):
+func hlth_drn(dt):
 	var div = 5
-	var rnd = delta * div
+	var rnd = dt * div
 	var curr = shifter.curr
 	
 	if hlth >= 0:
 		if curr != 'spi':
-			hlth -= delta / (div * 10)
+			hlth -= dt / (div * 10)
 		elif curr == 'spi':
 			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
 		
@@ -519,21 +367,19 @@ func hlth_drn(delta):
 		emit_signal('hlth_chng', hlth)
 
 func heal(tch):
-	if state == states.GONE:
-		return
-		
+#	if state == states.GONE:
+#		return
 	hlth += tch
 
 func dmg(hit):
-	if state == 1:
-		return
-	
+#	if state == 1:
+#		return
 	hlth -= hit
 	
 	if hlth <= 0:
 		hlth = 0
-		state = 1
-		shifter.state = states.DEAD
+#		state = 1
+#		shifter.state = 'dead'
 		emit_signal('died')
 	
 		emit_signal('hlth_chng', hlth)

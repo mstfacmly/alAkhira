@@ -1,6 +1,6 @@
 extends Node
 
-const version = '0.11.4'
+const version = '0.11.7'
 var mouse_sens = 0.3
 var jscam_x = 2.3
 var jscam_y = 1.3

@@ -1,6 +1,7 @@
 extends Spatial
 
-onready var target = get_parent().get_global_transform().origin
+onready var target = get_parent().get_node('body/Skeleton/targets/ptarget')
+#onready var target = get_parent().get_global_transform().origin
 
 var cam_pitch = 0.0
 var cam_yaw = 0.0
@@ -15,8 +16,8 @@ export var cam_fov = 45.0
 export var min_distance = 0.5
 export var max_distance = 7.2
 export var angle_v_adjust = 0.0
-export var autoturn_ray_aperture = 24
-export var autoturn_speed = 25
+#export var autoturn_ray_aperture = 24
+#export var autoturn_speed = 25
 var cam_view_sensitivity = 0.3
 var cam_smooth_lerp = 6.16
 var cam_pitch_minmax = Vector2(69, -28)
@@ -39,8 +40,15 @@ export(NodePath) onready var pivot = $pivot
 const DEADZONE = 0.1
 
 func _ready():
+	add_to_group('camera')
 	cam_fov = cam.get_fov()
 	ds = get_world().get_direct_space_state()
+
+
+func cam_adjust(fov,radius):
+	if !null:
+		cam_fov = fov
+		cam_radius = radius
 
 func set_enabled(enabled):
 	if enabled:
@@ -98,8 +106,9 @@ func js_input():
 
 
 func cam_update():
+	var target_pos = target.get_global_transform().origin
 	cam_pos = pivot.get_global_transform().origin
-	var delta = cam_pos - target #regular delta follow
+	var delta = cam_pos - target_pos #regular delta follow
 #	var ds = get_world().get_direct_space_state()
 
 	if cam_smooth_movement:
@@ -133,7 +142,7 @@ func cam_update():
 	cam.look_at_from_position(pos, pivot.get_global_transform().origin, up)
 
 
-func autoturn_cam(dt):
+"""func autoturn_cam(dt):
 	var delta = cam_pos - target #regular delta follow
 
 	var col_left = ds.intersect_ray(target,target+Basis(up,deg2rad(autoturn_ray_aperture)).xform(delta),collision_exception)
@@ -151,7 +160,7 @@ func autoturn_cam(dt):
 		delta = Basis(up,deg2rad(dt*autoturn_speed)).xform(delta)
 	else:
 		#do nothing otherwise, left and right are occluded but center is not, so do not autoturn
-		pass
+		pass"""
 
 func _physics_process(delta):
 	if !is_enabled:
@@ -173,4 +182,4 @@ func _physics_process(delta):
 
 	js_input()
 	cam_update()
-	autoturn_cam(delta)
+#	autoturn_cam(delta)

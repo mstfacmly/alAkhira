@@ -10,6 +10,8 @@ var ADD = SpatialMaterial.BLEND_MODE_ADD
 enum states {ALIVE,DEAD, GONE}
 var state
 
+signal camadjust
+
 var phys = {
 	'materials': [],
 	'nodes': []
@@ -23,23 +25,28 @@ var players = []
 var curr = 'phys'
 var overlay = 'none'
 onready var root = $'/root'
-
+onready var cam = get_node('../../cam')
 var showing = false
 var hiding = false
-var shifting = false
+#var shifting = false
 var transit
 
 var t
 var transition_time = 0.5
 
 func _ready():
-	traverse(root.get_children())
-	unique_materials(phys)
-	unique_materials(spi)
+	if get_parent().name!= 'scripts':
+		set_physics_process(0)
+	else:
+		connect('camadjust', cam, 'cam_adjust')
+#		print(is_connected('camadjust', cam, 'cam_adjust'))
+		traverse(root.get_children())
+		unique_materials(phys)
+		unique_materials(spi)
 	
 	#initialize on phys
-	peek(spi, true)
-	toggle(spi, phys)
+		peek(spi, true)
+		toggle(spi, phys)
 
 func _input(ev):
 	var cast = Input.is_action_pressed('cast')
@@ -49,7 +56,7 @@ func _input(ev):
 	
 	# NOTE: set shift to be a signal sent by player node
 
-	if shift && state != DEAD:
+	if shift && state != states.DEAD:
 #		shifting = true
 		if curr == 'phys':
 			toggle(phys, spi)
@@ -57,14 +64,14 @@ func _input(ev):
 			curr = 'spi'
 			env_transition(1)
 #			env_spir()
-			shifting = true
+#			emit_signal("camadjust",cam_node.get_fov() - 13, cam.cam_radius)
 		elif curr == 'spi':
 			toggle(spi, phys)
 			peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
 #			env_phys()
-			shifting = false
+#			emit_signal("camadjust",cam_node.get_fov() + 13, cam.cam_radius)
 	elif cast and curr == 'phys' and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
@@ -134,6 +141,11 @@ func post_toggle(a, b):
 	hiding = false
 
 func env_transition(speed):
+#	var cam_node = cam.get_child(0)
+#	if curr != 'spi':
+#		emit_signal("camadjust",cam.cam_fov - 13, cam.cam_radius)
+#	else:
+#		emit_signal("camadjust",cam.cam_fov + 13, cam.cam_radius)
 	for a in anim:
 		if(a.get_name() == 'shift'):
 			var animList = a.get_animation_list()

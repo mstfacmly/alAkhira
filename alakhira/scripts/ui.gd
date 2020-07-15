@@ -28,7 +28,7 @@ func _ready():
 	tween = $tween
 	t = $timer
 	
-	shifter.curr
+#	shifter.curr
 	_signals()
 	
 	if get_parent().get_name() == 'az':
@@ -47,7 +47,7 @@ func _input(ev):
 	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
 	var btn
 	
-	if get_parent().get_name() == 'az' && az.state != 1:
+	if get_parent().get_name() == 'az':# && az.state != 1:
 		if !paused && pause:
 			_on_pause()
 		elif paused && pause:
