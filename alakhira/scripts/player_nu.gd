@@ -55,7 +55,7 @@ var mv_spd = run
 #var turn_speed = 42
 #var sharp_turn_threshold = 130
 #var climbspeed = 2
-var jmp_spd = Vector3(0,9.8,0) * 1.84 
+var jmp_spd = 9.8 * 1.984 
 var velocity = Vector3()
 #var hspeed
 #var parkour_f = false
@@ -95,7 +95,6 @@ func _ready():
 func _input(event):
 	mv_z = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
 	mv_x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
-#	jmp_att = Input.is_action_just_pressed('feet')
 
 #func js_input(delta):
 #	joy_vec = Vector2(Input.get_joy_axis(0,0), Input.get_joy_axis(0,1))
@@ -108,7 +107,6 @@ func _input(event):
 #			mv_spd = walk
 
 func _apply_gravity(delta):
-#	lv = lin_vel
 	lv += g * (delta * 3)
 	velocity.y = up.dot(lv)
 #	var hvcalc = lv - up * velocity.y
@@ -117,20 +115,18 @@ func _apply_gravity(delta):
 func _physics_process(delta):
 	if !$FSM.states.dead and hlth_drn != false:
 		hlth_drn(delta)
-	
-	_move_floor(delta)
 
 func _move_floor(delta):
 	# Velocity
 	var dir = Vector3()
 	var cam_xform = cam_node.get_global_transform()
-	var is_moving = false
+	var moving = false
 
 	dir += -cam_xform.basis[2] * mv_z
 	dir += cam_xform.basis[0] * mv_x
 	
 	if dir.length() != 0:
-		is_moving = true
+		moving = true
 
 	var hspeed = velocity.length()
 	
@@ -148,28 +144,30 @@ func _move_floor(delta):
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	
-	velocity = move_and_slide(velocity, up, 0, 4, deg2rad(MAX_SLOPE))
+	velocity = move_and_slide(velocity - get_floor_normal(), Vector3.UP)
 	
-	if is_moving:
+	if moving:
 		var angle = atan2(-hvel.x,-hvel.z)
 		var char_rot = get_rotation()
 		char_rot.y = angle
 		rotation = char_rot
 
-func jump(ptarget,hspeed):
+func jump():
+	velocity.y = jmp_spd * 2
+	
 	if mv_spd >= run :
 		animate_char(6)
 	else:
 		animate_char(4)
 #	can_wrun = true
-	velocity.y = jmp_spd
-	lv = (velocity * 11.1) + up * velocity.y
+#	lv = (velocity * 11.1) + up * velocity.y
 
 #	if is_on_floor() && mv_spd >= run && jmp_att:
 #		lv = (hvel * 11.1) + up * vvel
 #	else:
 #		lv = hvel + up * vvel
-		
+
+func wallrunning(ppos,ptarget,hspeed):
 #	col_feet.set_rotation_degrees(mesh.get_rotation_degrees())
 	parkour(ppos,ptarget,ptarget - ppos)
 #	ledge(ptarget, ptarget - ppos)

@@ -24,14 +24,16 @@ func _input(ev):
 	parent.act = Input.is_action_just_pressed('act')
 	parent.cast = Input.is_action_pressed('cast')
 
-	if [states.idle,states.move,states.dash].has(state):
-		if ev.is_action_pressed('feet'):
-			parent.jmp_att = true
+	if parent.is_on_floor():
+		if [states.idle,states.move,states.dash].has(state):
+			if ev.is_action_pressed('feet'):
+				parent.jump()
+				_enter_state('jump', state)
 
 func _state_logic(dt):
 #	parent._move_input()
 	parent._apply_gravity(dt)
-#	parent._move_floor(dt)
+	parent._move_floor(dt)
 
 func _get_transition(dt):
 	return null
