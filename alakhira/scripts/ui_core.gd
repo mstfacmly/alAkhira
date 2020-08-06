@@ -7,7 +7,6 @@ signal quit
 #onready var shifter = shift_script
 var bar
 var tween
-var t
 
 # variables
 var az
@@ -37,7 +36,7 @@ const INPUT_CFG = [
 const dir = [ 'left', 'right' ]
 
 var acts
-var btn
+#var btn
 var ctrls_men = false
 const btns = []
 const CFG_FILE = 'user://config.cfg'
@@ -71,11 +70,11 @@ func _save_cfg(sect, key, val):
 		cfg.set_value(sect, key, val)
 		cfg.save(CFG_FILE)
 	
-func _get_input(bind):
+"""func _get_input(bind):
 	acts = bind
 	btn = $org/right/ctrls.get_node(acts).get_node('btn')
 	
-	set_process_input(true)
+	set_process_input(true)"""
 
 func _gui_input(ev):
 	if ev.is_action_pressed('ui_down'):
@@ -221,7 +220,7 @@ func _hide_menu():
 #				i.disabled = false
 
 func _grab_menu():
-	var menlist = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]
+	var menlistr = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]
 	var d = get_parent().name
 	if d == 'left':
 		for b in find_node('over').get_children():
@@ -230,14 +229,15 @@ func _grab_menu():
 				btns.append(b)
 				btns[0].grab_focus()
 	elif d == 'right':
-		for m in menlist:
-			var men = get_node(m)
-			if men != null && men.is_visible() != false:
-				btns.clear()
-				for b in men.get_children():
-					if b.is_visible() != false && b.get_focus_mode():
-						btns.append(b)
-						btns[0].grab_focus()
+		if !menlistr.has(name):
+			for m in menlistr:
+				var men = get_node(m)
+				if men != null && men.is_visible() != false:
+					btns.clear()
+					for b in men.get_children():
+						if b.is_visible() != false && b.get_focus_mode():
+							btns.append(b)
+							btns[0].grab_focus()
 
 func _pause_menu():
 	az.hide()

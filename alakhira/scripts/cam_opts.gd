@@ -1,16 +1,16 @@
 extends "res://scripts/ui_core.gd"
 
-var standard = 'Standard'
+var standard = 'Default'
 var invert = 'Inverted'
 var evil = 'The Devil\'s Configuration'
 
-func _set_sens(i,i):
+func _set_sens(m,i):
 	if i == 'x':
-		global.jscam_x = $cam_x_spd/slide.value
+		global.jscam_x = m
 	if i == 'y':
-		global.jscam_y = $cam_y_spd/slide.value
+		global.jscam_y = m
 	if i == 'm':
-		global.mouse_sens = $cam_mouse/slide.value
+		global.mouse_sens = m
 
 func _cam_btn(btn):
 	if btn == 'x':
@@ -35,6 +35,7 @@ func _showhide():
 	else:
 		set_visible(false)
 	
+	print(name)
 	_grab_menu()
 
 func _ready():

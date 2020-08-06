@@ -26,7 +26,6 @@ func _signals():
 func _ready():
 	bar = $org/right/hlth
 	tween = $tween
-	t = $timer
 	
 #	shifter.curr
 	_signals()
@@ -43,9 +42,8 @@ func _ready():
 
 func _input(ev):
 	var wait = 2
-	var timer = t.set_wait_time(wait)
 	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
-	var btn
+#	var btn
 	
 	if get_parent().get_name() == 'az':# && az.state != 1:
 		if !paused && pause:
@@ -54,11 +52,11 @@ func _input(ev):
 			_on_unpause()
 	
 	if ev.is_action_pressed('pause'):
-		t.start()
+		$timer.start()
 	elif ev.is_action('pause') && !ev.is_pressed():
-		t.stop()
+		$timer.stop()
 	else:
-		timer
+		$timer.set_wait_time(wait)
 	
 	if Input.is_key_pressed(KEY_F11):
 		OS.set_window_fullscreen(!OS.window_fullscreen)
@@ -139,7 +137,7 @@ func _updt_hlth(new_val):
 	if !tween.is_active():
 		tween.start()
 
-func _process(delta):
+func _process(_delta):
 	bar.value = anim_hlth
 
 func _ld_cplt():

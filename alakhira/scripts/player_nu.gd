@@ -17,9 +17,10 @@ onready var ui = $ui
 onready var shifter = $scripts/shift
 
 # Environment
-var g = Vector3(0,-9.8,0)
-var up = -g.normalized()
-var lv = Vector3()
+onready var g = ProjectSettings.get_setting("physics/3d/default_gravity")
+#var g = -9.8 #Vector3(0,-9.8,0)
+#var up = -g.normalized()
+#var lv = Vector3()
 
 var joy_vec
 const DEADZONE = 0.3
@@ -40,7 +41,6 @@ var cast
 
 #Movement
 var ppos
-#var lin_vel = Vector3()
 const ACCEL = 7.77
 const DEACCEL = ACCEL * 2.13
 const MAX_SLOPE = 57
@@ -55,10 +55,11 @@ var mv_spd = run
 #var turn_speed = 42
 #var sharp_turn_threshold = 130
 #var climbspeed = 2
-var jmp_spd = 9.8 * 1.984 
+onready var jmp_spd = g * 1.42
 var velocity = Vector3()
 #var hspeed
 #var parkour_f = false
+var moving = false
 var jumping = false
 var falling = false
 #var vvel
@@ -107,8 +108,11 @@ func _input(event):
 #			mv_spd = walk
 
 func _apply_gravity(delta):
-	lv += g * (delta * 3)
-	velocity.y = up.dot(lv)
+	#lv += g * (delta * 3)
+#	if !is_on_floor():
+	velocity.y -= g * (delta * 3)
+#	else:
+#		velocity.y = 0#up.dot(lv)
 #	var hvcalc = lv - up * velocity.y
 #	hvel = Vector3(hvcalc.x, 0 ,hvcalc.z)
 
@@ -117,27 +121,31 @@ func _physics_process(delta):
 		hlth_drn(delta)
 
 func _move_floor(delta):
+	ppos = mesh.get_global_transform().origin
 	# Velocity
 	var dir = Vector3()
 	var cam_xform = cam_node.get_global_transform()
-	var moving = false
 
 	dir += -cam_xform.basis[2] * mv_z
 	dir += cam_xform.basis[0] * mv_x
 	
 	if dir.length() != 0:
 		moving = true
+	else:
+		moving = false
 
-	var hspeed = velocity.length()
+	var hspeed = Vector2(velocity.x, velocity.z).length()
 	
-	ppos = mesh.get_global_transform().origin
 	var hvel = velocity
-	hvel.y = 0
+	if !jumping:
+		hvel.y = 0
 	
 	var new_pos = dir * mv_spd
 	
 	if dir.dot(hvel) > 0:
 		ACCEL
+	else:
+		DEACCEL
 		
 	hvel = hvel.linear_interpolate(new_pos, ACCEL * delta)
 	
@@ -151,21 +159,24 @@ func _move_floor(delta):
 		var char_rot = get_rotation()
 		char_rot.y = angle
 		rotation = char_rot
+#		animate_char(2)
 
-func jump():
-	velocity.y = jmp_spd * 2
+func _jump():
+	velocity.y = jmp_spd
+	jumping = true
 	
-	if mv_spd >= run :
-		animate_char(6)
-	else:
-		animate_char(4)
+#	if mv_spd >= run :
+#		animate_char(6)
+#	else:
+#		animate_char(4)
+
 #	can_wrun = true
 #	lv = (velocity * 11.1) + up * velocity.y
 
 #	if is_on_floor() && mv_spd >= run && jmp_att:
-#		lv = (hvel * 11.1) + up * vvel
+#		lv = (hvel * 11.1) + Vector3.UP * vvel
 #	else:
-#		lv = hvel + up * vvel
+#		lv = hvel + Vector3.UP * vvel
 
 func wallrunning(ppos,ptarget,hspeed):
 #	col_feet.set_rotation_degrees(mesh.get_rotation_degrees())
@@ -182,7 +193,7 @@ func wallrunning(ppos,ptarget,hspeed):
 
 func fall(lv):
 	jumping = false
-	lv = velocity + up * velocity.y
+	lv = velocity + Vector3.UP * velocity.y
 
 	if mv_spd >= run:# - 1:
 		animate_char(7)
@@ -201,17 +212,17 @@ func _wall(ptarget,mesh_xform,delta):
 	
 	$body/Skeleton/targets/ptarget.translation.z = 0
 	walln = get_slide_collision(0).normal.abs()
-	modlv = lv.slide(up).slide(walln).abs()
+	modlv = velocity.slide(Vector3.UP).slide(walln).abs()
 	var whop = mesh_xform.basis.xform(Vector3(jmp_spd.y * 0.01, ((jmp_spd.y + velocity.length())) * 0.64, jmp_spd.y * 0))
 	var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 6, jmp_spd.y , jmp_spd.y * 6))
 	
 	ledge(ptarget, ptarget - ppos)
-	lv.y = 0.0000001
+	velocity.y = 0.0000001
 	if col_result == ['front']:
 		animate_char(9)
 		#if !jmp_att :
 		if jmp_att && attempts > 0:
-			lv += whop * mv_spd * 0.48
+			velocity += whop * mv_spd * 0.48
 			attempts -= 1
 		if act:
 			mesh.rotate_y(179)
@@ -224,8 +235,8 @@ func _wall(ptarget,mesh_xform,delta):
 #		lv = Vector3(0,0.0000001,0)
 		if jmp_att:
 			animate_char(7)
-			lv += -walln * wjmp
-			lv += up * wjmp
+			velocity += -walln * wjmp
+			velocity += Vector3.UP * wjmp
 			attempts = 1
 	
 	print('ledge_diff: ', ledge_diff)
@@ -239,40 +250,40 @@ func _wall(ptarget,mesh_xform,delta):
 	if on_ledge:
 		if col_result == ['front']:
 			wrun = []
-			lv = mesh_xform.basis.xform(Vector3(0,0,0))
+			velocity = mesh_xform.basis.xform(Vector3(0,0,0))
 			if jmp_att:
 				on_ledge = false
 				translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
 			if act:
-				mesh.rotate(up, 185)
+				mesh.rotate(Vector3.UP, 185)
 				on_ledge = false
 		else:
 			!on_ledge
 	else:
-		lv += g * (delta *3)
+		velocity += g * (delta *3)
 	
 	$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
 
 func _wrun(mesh_xform,delta):
 	var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y, jmp_spd.y * 3))
 	if wrun == ['horz']:
-		lv += modlv * 0.33
+		velocity += modlv * 0.33
 #			if can_wrun:
-		lv.y -= lv.y + delta/(delta * 1.11)# * 0.9
+		velocity.y -= velocity.y + delta/(delta * 1.11)# * 0.9
 		if col_result == ['right']:
 			animate_char(11)
-			lv += -modlv * 0.33
+			velocity += -modlv * 0.33
 			if jmp_att:
-				lv += (-walln / 2) * wrjmp
-				lv += -modlv * wrjmp
-				lv += up * wrjmp
+				velocity += (-walln / 2) * wrjmp
+				velocity += -modlv * wrjmp
+				velocity += Vector3.UP * wrjmp
 		if col_result == ['left']:
 			animate_char(10)
-			lv += -modlv * 0.33
+			velocity += -modlv * 0.33
 			if jmp_att:
-				lv += (walln / 2) * wrjmp
-				lv += -modlv * wrjmp
-				lv += up * wrjmp
+				velocity += (walln / 2) * wrjmp
+				velocity += -modlv * wrjmp
+				velocity += Vector3.UP * wrjmp
 #			else:
 #				wjmp = false
 #	elif !wjmp:
@@ -304,9 +315,9 @@ func parkour(ppos,ptarget,delta):
 	var ds = get_world().get_direct_space_state()
 	var parkour_detect = 90
 
-	var col_r = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(parkour_detect)).xform(delta),collision_exception)
+	var col_r = ds.intersect_ray(ppos,ptarget+Basis(Vector3.UP,deg2rad(parkour_detect)).xform(delta),collision_exception)
 	var col_f = ds.intersect_ray(ppos,ptarget+delta,collision_exception)
-	var col_l = ds.intersect_ray(ppos,ptarget+Basis(up,deg2rad(-parkour_detect)).xform(delta),collision_exception)
+	var col_l = ds.intersect_ray(ppos,ptarget+Basis(Vector3.UP,deg2rad(-parkour_detect)).xform(delta),collision_exception)
 	var col_b = ds.intersect_ray(ppos,-ptarget + delta,collision_exception)
 
 	if (!col_f.empty() && !col_l.empty() && col_r.empty()):

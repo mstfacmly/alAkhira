@@ -11,18 +11,19 @@ func _showhide():
 
 
 func _input(ev):
+	var button
 	for acts in INPUT_CFG:
 		var input_ev = InputMap.get_action_list(acts)[ev_mod]
-		btn = get_node(acts).get_node('btn')
+		button = get_node(acts).get_node('btn')
 		if input_ev is InputEventJoypadButton:
-			btn.set_text(Input.get_joy_button_string(input_ev.button_index))
+			button.set_text(Input.get_joy_button_string(input_ev.button_index))
 		elif input_ev is InputEventJoypadMotion:
-			btn.set_text(Input.get_joy_axis_string(input_ev.axis))
+			button.set_text(Input.get_joy_axis_string(input_ev.axis))
 		elif input_ev is InputEventKey:
-			btn.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
+			button.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
 
-	if  btn.is_connected('pressed', self, '_get_input') != true:
-		btn.connect('pressed', self, '_get_input', [acts])
+	if  button.is_connected('pressed', self, '_get_input') != true:
+		button.connect('pressed', self, '_get_input', [acts])
 	else:
 		pass
 
