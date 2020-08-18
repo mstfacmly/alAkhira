@@ -1,7 +1,6 @@
 extends StateMachine
 
 func _ready():
-	parent.get_node('timer').start(0.2)
 	add_state('idle')
 	add_state('move')
 #	add_state('run')
@@ -23,7 +22,7 @@ func _ready():
 	call_deferred('set_state', states.idle)
 
 func _input(ev):
-#	parent.get_node('inputtext').text = str(Input)
+#	parent.get_node('dbgtxt').text = str(Input)
 	
 	parent.act = Input.is_action_just_pressed('act')
 	parent.cast = Input.is_action_pressed('cast')
@@ -31,38 +30,47 @@ func _input(ev):
 	if parent.is_on_floor():
 		parent.mv_z = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
 		parent.mv_x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
-		if [states.idle,states.move].has(state):
+		if [states.idle,states.move, states.dash].has(state):
+			if Input.is_action_just_pressed('act'):
+				parent._dodge()
+			if Input.is_action_pressed('act'): 
+				if ev.is_echo():
+					parent._dash()
+			if Input.is_action_just_released('act'):
+				parent.dashing = false
 			if Input.is_action_just_released('feet'):
 				parent._jump()
 	if [states.wall].has(state):
 		if Input.is_action_just_pressed('feet'):
 			parent._walljump()
-		if Input.is_action_pressed("act"):
+		if Input.is_action_pressed('act'):
 			parent.rotate_y(179)
+			parent.col_result = ['back']
 
 func _dbgtxt():
-	parent.get_node('veltext').text = str(parent.velocity.y)
-#	parent.get_node('inputtext').text = str("on ledge: ", parent.on_ledge).capitalize()
-#	parent.get_node('inputtext').text = str(parent.col_result)
-#	parent.get_node('inputtext').text = str(parent.get_node('timer').is_stopped())
-	
+	parent.get_node('dbgtxt4').text = str('velocity.xz',parent.velocity.length(), '\nvelocity.y ',parent.velocity.y)
+	parent.get_node('dbgtxt5').text = str('timer ',parent.timer.is_stopped(), '\n', parent.timer.wait_time)
+#	parent.get_node('dbgtxt').text = str("on ledge: ", parent.on_ledge).capitalize()
+#	parent.get_node('dbgtxt').text = str(parent.col_result)
+#	parent.get_node('dbgtxt').text = str(parent.timer.is_stopped())
 
 func _state_logic(dt):
 	parent._apply_velocity()
 #	parent._apply_gravity(dt)
-	if [states.move, states.jump, states.fall, states.walljump].has(state):
+	if [states.move, states.move, states.jump, states.fall, states.walljump].has(state):
 		parent.parkour_sensor()
+	if ![states.idle].has(state):
 		parent._ledge_detect()
-	if [states.wall, states.wallrun].has(state):# && parent.get_node('timer').wait_time != 0.0:
+	if [states.wall, states.wallrun].has(state):# && parent.timer.wait_time != 0.0:
 		parent._wallrun_gravity()
 	else:
 		parent._apply_gravity(dt)
 		parent._move_floor(dt)
-		
+	
+	if !states.dead and parent.hlth_drn != false:
+		parent.hlth_drn(dt)
+	
 	_dbgtxt()
-
-func set_fall():
-	return states.fall
 
 func _get_transition(dt):
 	match state:
@@ -80,50 +88,84 @@ func _get_transition(dt):
 					return states.jump
 				elif parent.velocity.y < 0:
 					return states.fall
-			if parent.moving == false:
+			if !parent.moving:
 				return states.idle
+			if parent.dashing:
+				return states.dash
+		states.dash:
+			if !parent.is_on_floor():
+				if parent.velocity.y > 0:
+					return states.jump
+				elif parent.velocity.y < 0:
+					return states.fall
+			if !parent.moving:
+				return states.idle
+			if !parent.dashing:
+				return states.move
 		states.jump:
 			if parent.is_on_floor():
 				return states.idle
 			elif parent.velocity.y <= 0:
 				return states.fall
+			if parent.ledge_col.y > 4.2 && parent.ledge_diff < 2.1 && parent.ledge_diff > -2.1:
+				return states.ledge
 		states.fall:
 			if parent.is_on_floor():
 				return states.idle
-			if parent.col_result == ['fcontact'] && parent.can_wall >= 0:
+			if parent.col_result == ['fcontact'] && parent.can_wall > 0 && parent.timer.is_stopped():
 				return states.wall
+			if parent.ledge_col.y > 4.2 && parent.ledge_diff < 2.1 && parent.ledge_diff > -2.1:
+				return states.ledge
 		states.wall:
 			if parent.is_on_floor():
 				return states.idle
-			if parent.col_result != ['fcontact']:
+			if parent.col_result != ['fcontact'] || parent.timer.is_stopped():
 				return states.fall
 			if parent.velocity.y > 0:
 				return states.walljump
 		states.walljump:
+#			parent.can_wall = 0
 			if parent.velocity.y <= 0:
 				return states.fall
+			if parent.ledge_col.y >= 4.2 && parent.ledge_diff < 2.1 && parent.ledge_diff > -2.1:
+				return states.ledge
+		states.ledge:
+			if parent.velocity.y <= 0:
+				return states.fall
+#			if Input.is_action_just_pressed('act'):
+#				return states.fall
 	return null
 
 func _enter_state(new_state, prev_state):
 	match new_state:
 		states.idle:
 			parent.animate_char(0)
-			parent.emit_signal('camadjust', 48, 4.2)
+			parent.emit_signal('camadjust', 64, 4.2)
 		states.move:
 			parent.animate_char(2)
-			parent.emit_signal("camadjust",64, 3.1)
+			parent.emit_signal("camadjust",64, 3.6)
+		states.dash:
+			parent.animate_char(3)
+			parent.emit_signal('camadjust', 56, 4.2)
 		states.jump:
 			parent.animate_char(4)
-			parent.emit_signal("camadjust",64, 3.1)
+			parent.emit_signal("camadjust",64, 4.2)
 		states.fall:
 			parent.animate_char(5)
-			parent.emit_signal("camadjust",68, 3.6)
+			parent.emit_signal("camadjust",64, 4.2)
 		states.wall:
+			parent._timer(0.42)
 			parent.animate_char(9)
 		states.walljump:
 			parent.animate_char(10)
 
-	parent.get_node('statetext').text = states.keys()[new_state].capitalize()
+	parent.get_node('dbgtxt').text = str('\n state ', states.keys()[new_state]).capitalize()
 
 func _exit_state(prev_state,new_state):
+	match prev_state:
+		states.wall:
+			parent.can_wall = 0
+#			parent.timer.stop()
+#			if parent.stopped():
+#				!states.wall
 	pass

@@ -15,6 +15,7 @@ var hlth_drn = true
 onready var chkpt = $'/root/scene/chkpt'
 onready var ui = $ui
 onready var shifter = $scripts/shift
+onready var timer = $timer
 
 # Environment
 onready var g = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -42,7 +43,7 @@ const MAX_SLOPE = 57
 export var run = 6.16
 var fwalk = run / 2.25
 var walk = run / 1.33
-var sprint = run * 1.72 #2.12 #7.77
+var dash = run * 3.33 #1.72 #2.12 #7.77
 #var mv_dir = Vector3()
 var mv_z
 var mv_x
@@ -55,9 +56,9 @@ var velocity = Vector3()
 #var hspeed
 #var parkour_f = false
 var moving = false
+var dashing = false
 #var jumping = false
 var falling = false
-#var vvel
 #var can_wrun
 var can_wall = 1
 var wrun = []
@@ -66,6 +67,7 @@ var collision_exception = [ self ]
 var col_normal = Vector3()
 var col_result
 var ledge_col = Vector3()
+var ledge_diff : float
 var on_ledge = false
 
 var result
@@ -108,7 +110,7 @@ func _input(event):
 				mv_spd = walk
 
 func _apply_gravity(delta):
-	velocity.y -= g * delta * 3.6
+	velocity.y -= g * delta * 3.69
 
 func _wallrun_gravity():
 	var MAX_VEL = 0.096
@@ -116,10 +118,6 @@ func _wallrun_gravity():
 #	if $timer.is_stopped():
 #		$timer.start(0.2)
 	velocity.y -= MAX_VEL
-
-func _physics_process(delta):
-	if !$FSM.states.dead and hlth_drn != false:
-		hlth_drn(delta)
 
 func _move_floor(delta):
 	ppos = mesh.get_global_transform().origin
@@ -160,6 +158,15 @@ func _move_floor(delta):
 		char_rot.y = angle
 		rotation = char_rot
 
+func _dodge():
+	var roll_magnitude = 2.1
+	velocity = (velocity - get_floor_normal()) * roll_magnitude
+
+func _dash():
+	if velocity.length() <= dash:
+		velocity = (velocity - get_floor_normal()) * 1.3
+		dashing = true
+
 func _apply_velocity():
 	velocity = move_and_slide(velocity - get_floor_normal(), Vector3.UP)
 
@@ -182,7 +189,7 @@ func _jump():
 
 func _walljump():
 	velocity.y = jmp_spd #* 1.964
-	can_wall -= 1
+	can_wall = 0
 
 """func fall(lv):
 	jumping = false
@@ -227,36 +234,40 @@ func _wall():
 
 func _ledge_detect():
 	var ptarget = ptarg.get_global_transform().origin
-	var ledge_diff = ledge_col.y - ptarget.y
 #
 #	print('ledge_diff: ', ledge_diff)
 	var delta = ppos - ptarget
-	var ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform()
+	var ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform().origin
 	var ds = get_world().get_direct_space_state()
 	
-#	if col_result == ['front']:
-	var col_top = ds.intersect_ray(ledgecol.origin,ptarget + delta,collision_exception)
+	var col_top = ds.intersect_ray(ledgecol,ptarget + delta, [self])
 	if !col_top.empty():
-		ledge_col = Vector3(0,col_top.position.y,0)
-		return ledge_col
-		ledgecol.translate(ledge_col)
-	"""elif col_result.empty():
-		ledgecol.translated(Vector3(-0, 5.5,3))
-		ledge_col = Vector3()
-		return ledge_col
+#		ledgecol.xform(col_top.position.y) #= col_top.position.y
+		ledge_col = col_top.position
+		ledge_diff = ledge_col.y - ptarget.y
+		$dbgtxt2.text = str('\nledge_col :', ledge_col.y, '\nledge diff :', ledge_diff)
+#		if ledge_diff < 2.1 && ledge_diff > -4.4:
+#			global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
+#		return ledge_col
+#	elif col_result.empty():
+#		ledgecol.translated(Vector3(-0, 5.5,3))
+#		ledge_col = Vector3()
+#		return ledge_col
 	else:
-		ledge_col = Vector3()
-		return ledge_col"""
+		ledge_diff = -5
+#		ledge_col = null
+#		return ledge_col
 	
-	if ledge_col.y > 3.33 && ledge_diff < 2.1 && ledge_diff > -4.4:
-		global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
-		on_ledge = true
-#		animate_char(7)
-#		else:
-#			on_ledge = false
-#				!is_on_wall()
-	
-	$inputtext.text = str(ledge_diff)
+	"""if !col_top.empty():
+		ledge_diff = ledge_col - ptarget.y
+		if ledge_col > 3.33 && ledge_diff < 2.1 && ledge_diff > -4.4:
+#		if ledge_diff < 2.1 && ledge_diff > -4.4:
+			global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
+			on_ledge = true
+#			animate_char(7)
+		else:
+			on_ledge = false
+#			!is_on_wall()"""
 
 func _on_ledge():
 	var mesh_xform = $body/Skeleton/mesh.get_transform()
@@ -369,7 +380,7 @@ func parkour_sensor():
 		return col_result
 	else:
 		col_normal = Vector3()
-		col_result = []
+		col_result = col_result.clear()
 		return col_result
 	
 	if !col_result.empty():
@@ -412,6 +423,11 @@ func dmg(hit):
 func chkpt():
 	if get_parent().has_node('chkpt'):
 		set_transform(chkpt.get_global_transform())
+
+func _timer(time):
+#	timer = Timer.new()
+	timer.one_shot = true
+	timer.start(time)
 
 func translateMove(dist):
 	var localTranslate = Vector3(0,0,dist)

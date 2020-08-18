@@ -35,6 +35,9 @@ shift_script="res://scripts/shift.gd"
 [debug]
 
 settings/fps/force_fps=45
+gdscript/warnings/unused_variable=false
+gdscript/warnings/unused_signal=false
+gdscript/warnings/return_value_discarded=false
 
 [display]
 
