@@ -1,5 +1,7 @@
 extends 'res://scripts/ui_core.gd'
 
+var thread = Thread.new()
+
 export (String, FILE) var test = 'res://env/test/testroom.tscn'
 
 func _signals():
@@ -24,21 +26,22 @@ func _signals():
 	$org/right/cam/cam_mouse/slide.connect('value_changed', $org/right/cam, '_set_sens', ['m'])
 
 func _ready():
-	bar = $org/right/hlth
-	tween = $tween
-	
-#	shifter.curr
-	_signals()
-	
+#	Input.add_joy_mapping("030000005e040000ea02000008040000,Controller (Xbox One) - Wired,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b8,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b9,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,",true)
+
 	if get_parent().get_name() == 'az':
+		bar = $org/right/hlth
+		set_process(1)
 		az = get_parent()
 		_gen_ui()
 		envanim = az.get_parent().get_node('env/AnimationPlayer')
 		az.set_physics_process(true)
 		az.get_node('cam').set_enabled(true)
 	else:
+		set_process(0)
 		_main_menu()
 		stage = ResourceLoader.load(test)
+	_signals()
+
 
 func _input(ev):
 	var wait = 2
@@ -95,13 +98,13 @@ func _gen_ui():
 	if az.request_ready() != true:
 		pass
 	else:
-		max_hlth = az.max_hlth
-		bar.max_value = max_hlth
-		_updt_hlth(max_hlth)
+	#	max_hlth = az.max_hlth
+		bar.max_value = az.max_hlth
+		_updt_hlth(az.max_hlth)
 		az.get_node('cam').set_enabled(true)
 		$org/right/dbg.call_deferred('_dbg')
 		
-	var menlist = ['dbg', 'opts' ,'rld', 'rsm', 'quit']
+#	var menlist = ['dbg', 'opts' ,'rld', 'rsm', 'quit']
 	
 	$org/left/dbg.hide()
 	$org/left/over.hide()
@@ -133,9 +136,9 @@ func _on_hlth_chng(hlth):
 	_updt_hlth(hlth)
 
 func _updt_hlth(new_val):
-	tween.interpolate_property(self, 'anim_hlth', anim_hlth, new_val, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
-	if !tween.is_active():
-		tween.start()
+	$tween.interpolate_property(self, 'anim_hlth', anim_hlth, new_val, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	if !$tween.is_active():
+		$tween.start()
 
 func _process(_delta):
 	bar.value = anim_hlth

@@ -6,17 +6,14 @@ signal quit
 # Onready
 #onready var shifter = shift_script
 var bar
-var tween
 
 # variables
 var az
 var envanim
-var max_hlth
 var paused = false
 var anim_hlth = 0
 var spd = 2
 var ev_mod = 0
-var thread = Thread.new()
 var stage
 var back = null
 
@@ -78,10 +75,10 @@ func _save_cfg(sect, key, val):
 
 func _gui_input(ev):
 	if ev.is_action_pressed('ui_down'):
-		focus_next
+#		focus_next
 		accept_event()
 	if ev.is_action_pressed('ui_up'):
-		focus_previous
+#		focus_previous
 		accept_event()
 	if ev.is_action_pressed('ui_accept'):
 		_ui_btn_pressed(ev)
@@ -90,48 +87,48 @@ func _gui_input(ev):
 func _on_timer_timeout():
 	get_tree().quit()
 
-func _ui_btn_pressed(btn):
-	if btn == 'start':
+func _ui_btn_pressed(press):
+	if press == 'start':
 		call_deferred('_ld_cplt')
 	
-	if btn == 'rld':
+	if press == 'rld':
 		get_tree().set_pause(false)
 		get_tree().reload_current_scene()
 	
-	if btn == 'opts' or btn == 'opts_b':
+	if press == 'opts' or press == 'opts_b':
 		_opts_menu()
-	if btn == 'langs' or btn == 'langs_b':
+	if press == 'langs' or press == 'langs_b':
 		$org/right/langs.call_deferred('_showhide')
 		_hide_opts()
-	if btn == 'disp' or btn == 'disp_b':
+	if press == 'disp' or press == 'disp_b':
 		$org/right/disp.call_deferred('_showhide')
 		_hide_opts()
-	if btn == 'ctrls' or btn == 'ctrls_b':
+	if press == 'ctrls' or press == 'ctrls_b':
 		$org/right/ctrls.call_deferred('_showhide')
 		_hide_opts()
-	if btn == 'cam' or btn == 'cam_b':
+	if press == 'cam' or press == 'cam_b':
 		$org/right/cam.call_deferred('_showhide')
 		_hide_opts()
-	if btn == 'dbg' or btn == 'dbg_b':
+	if press == 'dbg' or press == 'dbg_b':
 		$org/right/dbg.call_deferred('_showhide')
 		_hide_menu()
 	
-	if btn == 'quit':
+	if press == 'quit':
 		get_tree().quit()
-	if btn == 'rsm':
+	if press == 'rsm':
 		_on_unpause()
 		
-	if btn == 'site':
+	if press == 'site':
 		OS.shell_open('https://studioslune.com/')
 	
-	if btn == 'fs':
-		OS.window_fullscreen = !OS.window_fullscreen
-		if OS.is_window_fullscreen() == true:
+	if press == 'fs':
+		OS.set_window_fullscreen(!OS.window_fullscreen)
+		if OS.is_window_fullscreen():
 			$org/right/disp/fs/btn.text = 'On'
 		else:
 			$org/right/disp/fs/btn.text = 'Off'
 	
-	if btn == 'vsync':
+	if press == 'vsync':
 #		OS.vsync_enabled = !OS.vsync_enabled
 		if OS.is_vsync_enabled() != true:
 			OS.set_use_vsync(true)
@@ -140,34 +137,33 @@ func _ui_btn_pressed(btn):
 			OS.set_use_vsync(false)
 			$org/right/disp/vsync/btn.text = 'Off'
 			
-	if btn == 'info':
+	if press == 'info':
 		#_show_dbg()
 		if $org/left/dbg.is_visible() != true:
 			$org/right/dbg/info/btn.text = 'Off'
 		else:
 			$org/right/dbg/info/btn.text = 'On' 
 	
-	if btn == 'col_ind':
+	if press == 'col_ind':
 		#_show_col()
 		if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').is_visible() != true:
 			$org/right/dbg/col_ind/btn.text = 'Hide'
 		else:
 			$org/right/dbg/col_ind/btn.text = 'Show'
 	
-	if btn == 'hlth_drn':
-		if az.hlth_drn != false:
-			az.hlth_drn = false
+	if press == 'hlth_drn':
+		if az.hlth_drain != false:
+			az.hlth_drain = false
 			$org/right/dbg/hlth_drn/btn.text = 'Disabled'
 		else:
-			az.hlth_drn = true
+			az.hlth_drain = true
 			$org/right/dbg/hlth_drn/btn.text = 'Enabled'
 	
-	if btn == 'hlth_full':
+	if press == 'hlth_full':
 		az.hlth = az.max_hlth
 	
-	if btn == 'hlth_nil':
+	if press == 'hlth_nil':
 		az.hlth = 0
-		
 
 func _hide_opts():
 	var opts = $org/right/opts

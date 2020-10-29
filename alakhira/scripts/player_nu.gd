@@ -10,9 +10,9 @@ signal az_ready
 # Health
 export var max_hlth = 100
 var hlth = max_hlth
-var hlth_drn = true
+var hlth_drain = true
 
-onready var chkpt = $'/root/scene/chkpt'
+onready var checkpt = $'/root/scene/chkpt'
 onready var ui = $ui
 onready var shifter = $scripts/shift
 onready var timer = $timer
@@ -37,17 +37,18 @@ var cast
 
 #Movement
 var ppos
-const ACCEL = 7.77
-const DEACCEL = ACCEL * 2.13
+var ACCEL = 7.77
+var DEACCEL = ACCEL * 2.13
 const MAX_SLOPE = 57
 export var run = 6.16
 var fwalk = run / 2.25
 var walk = run / 1.33
-var dash = run * 3.33 #1.72 #2.12 #7.77
+var dash = run * 6.16 #1.72 #2.12 #7.77
 #var mv_dir = Vector3()
-var mv_z
-var mv_x
+var mv_z = 0
+var mv_x = 0
 var mv_spd = run
+var MAX_VEL = dash
 #var turn_speed = 42
 #var sharp_turn_threshold = 130
 #var climbspeed = 2
@@ -68,7 +69,6 @@ var col_normal = Vector3()
 var col_result
 var ledge_col = Vector3()
 var ledge_diff : float
-var on_ledge = false
 
 var result
 export var attempts = 1
@@ -82,7 +82,6 @@ func _ready():
 	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
 	connect('camadjust', cam, 'cam_adjust' )
-	$timer.connect('timeout', $FSM, 'set_fall' )
 	
 	#shifter.state = 'dead'
 	
@@ -109,17 +108,22 @@ func _input(event):
 			if joy_vec.length() >= DEADZONE && joy_vec.length() <= JOY_VAL:
 				mv_spd = walk
 
-func _apply_gravity(delta):
-	velocity.y -= g * delta * 3.69
+func _apply_gravity(delta,multiplier):
+	if delta == 0:
+		velocity.y = (g * delta) * multiplier
+	else:
+		velocity.y -= (g * delta) * multiplier
 
 func _wallrun_gravity():
-	var MAX_VEL = 0.096
+	var MAX_VVEL = 0.096
 #	$timer.wait_time = 0.2
 #	if $timer.is_stopped():
 #		$timer.start(0.2)
-	velocity.y -= MAX_VEL
+	velocity.y -= MAX_VVEL
 
 func _move_floor(delta):
+	var TARGET_MOD = (velocity.length() * 0.84) / 2 + 1
+	
 	ppos = mesh.get_global_transform().origin
 	# Velocity
 	var dir = Vector3()
@@ -143,9 +147,9 @@ func _move_floor(delta):
 	var new_pos = dir * mv_spd
 	
 	if dir.dot(hvel) > 0:
-		ACCEL
+		ACCEL = ACCEL
 	else:
-		DEACCEL
+		ACCEL = DEACCEL
 		
 	hvel = hvel.linear_interpolate(new_pos, ACCEL * delta)
 	
@@ -157,35 +161,29 @@ func _move_floor(delta):
 		var char_rot = get_rotation()
 		char_rot.y = angle
 		rotation = char_rot
+		$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
 
 func _dodge():
-	var roll_magnitude = 2.1
+	var roll_magnitude = 3.3
 	velocity = (velocity - get_floor_normal()) * roll_magnitude
 
-func _dash():
-	if velocity.length() <= dash:
-		velocity = (velocity - get_floor_normal()) * 1.3
-		dashing = true
+func _dash(toggle: bool):
+	if toggle == true:
+		if Vector2(velocity.x,velocity.z).length() <= MAX_VEL * 4:# - timer.get_wait_time()):
+			velocity = (velocity - get_floor_normal()) * 1.3
+#	dashing = false if dashing else true
+			dashing = true
+	else:
+		dashing = false
 
 func _apply_velocity():
 	velocity = move_and_slide(velocity - get_floor_normal(), Vector3.UP)
 
+func _increase_speed():
+	MAX_VEL = MAX_VEL + 1
+
 func _jump():
 	velocity.y = jmp_spd
-#	jumping = true
-	
-#	if mv_spd >= run :
-#		animate_char(6)
-#	else:
-#		animate_char(4)
-
-#	can_wrun = true
-#	lv = (velocity * 11.1) + up * velocity.y
-
-#	if is_on_floor() && mv_spd >= run && jmp_att:
-#		lv = (hvel * 11.1) + Vector3.UP * vvel
-#	else:
-#		lv = hvel + Vector3.UP * vvel
 
 func _walljump():
 	velocity.y = jmp_spd #* 1.964
@@ -234,58 +232,29 @@ func _wall():
 
 func _ledge_detect():
 	var ptarget = ptarg.get_global_transform().origin
-#
-#	print('ledge_diff: ', ledge_diff)
 	var delta = ppos - ptarget
 	var ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform().origin
-	var ds = get_world().get_direct_space_state()
+#	var ds = get_world().get_direct_space_state()
+	var col_top = get_world().get_direct_space_state().intersect_ray(ledgecol,ptarget + delta, [self])
 	
-	var col_top = ds.intersect_ray(ledgecol,ptarget + delta, [self])
 	if !col_top.empty():
 #		ledgecol.xform(col_top.position.y) #= col_top.position.y
 		ledge_col = col_top.position
 		ledge_diff = ledge_col.y - ptarget.y
 		$dbgtxt2.text = str('\nledge_col :', ledge_col.y, '\nledge diff :', ledge_diff)
-#		if ledge_diff < 2.1 && ledge_diff > -4.4:
-#			global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
-#		return ledge_col
-#	elif col_result.empty():
-#		ledgecol.translated(Vector3(-0, 5.5,3))
-#		ledge_col = Vector3()
-#		return ledge_col
 	else:
-		ledge_diff = -5
-#		ledge_col = null
-#		return ledge_col
-	
-	"""if !col_top.empty():
-		ledge_diff = ledge_col - ptarget.y
-		if ledge_col > 3.33 && ledge_diff < 2.1 && ledge_diff > -4.4:
-#		if ledge_diff < 2.1 && ledge_diff > -4.4:
-			global_translate(ledge_col - (ledge_col) + Vector3(0,0.1,0))# - facing_mesh.slide(Vector3(0,-1.2,0)))
-			on_ledge = true
-#			animate_char(7)
-		else:
-			on_ledge = false
-#			!is_on_wall()"""
+		ledge_col = ledge_col
+		ledge_diff = 20
 
-func _on_ledge():
-	var mesh_xform = $body/Skeleton/mesh.get_transform()
-	var TARGET_MOD = (velocity.length() * 0.84) / 2 + 1
-	
-	velocity = mesh_xform.basis.xform(Vector3(0,0,0))
-	if jmp_att:
-		on_ledge = false
-		translate(mesh_xform.basis.xform(Vector3(-0.91,3.36,0)))
-#			if act:
-#				mesh.rotate(Vector3.UP, 185)
-#				on_ledge = false
-#		else:
-#			!on_ledge
-#	else:
-#		velocity += g * (delta *3)
-	
-	$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
+func _ledge_calc():
+	ledge_col.y > 4.2 && ledge_diff < 2.1 && ledge_diff > -2.1
+
+func _ledge_grab():
+	set_translation(Vector3(col_normal.x + ledge_col.x, ledge_col.y -2.6, col_normal.z + ledge_col.z))
+	$FSM.state = $FSM.states.ledge
+
+func _ledge_climb():
+	set_translation(ledge_col)
 
 func wallrunning(hspeed):
 #	col_feet.set_rotation_degrees(mesh.get_rotation_degrees())
@@ -297,10 +266,10 @@ func wallrunning(hspeed):
 		elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
 			wrun = ['horz']
 		else:
-			col_result == []
+			col_result.clear()
 			wrun = []
 
-func wrun(mesh_xform,delta):
+func wallrun(mesh_xform,delta):
 	var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y, jmp_spd.y * 3))
 	if wrun == ['horz']:
 		velocity += modlv * 0.33
@@ -329,7 +298,7 @@ func wrun(mesh_xform,delta):
 	
 #	player_fp(delta, hspeed)
 
-func walk(hspeed,delta):
+func walking(hspeed,delta):
 	if Input.is_key_pressed(KEY_ALT):
 		if (hspeed > walk ):
 			mv_spd = max(min(mv_spd - (2 * delta),walk * 2.0),walk)
@@ -337,9 +306,6 @@ func walk(hspeed,delta):
 			mv_spd = walk
 	else:
 		mv_spd = max(min(mv_spd + (delta * 0.5),walk),run)
-
-#	animate_char(1)
-	emit_signal("camadjust",64, 3.1)
 
 func animate_char(anim):
 	$AnimationTree.set('parameters/state/current', anim)
@@ -350,6 +316,7 @@ func parkour_sensor():
 	var delta = ptarget - ppos
 	var ds = get_world().get_direct_space_state()
 	var parkour_detect = 90
+#	col_result = ['left','right','front','fcontact','back']
 
 	var col_b = ds.intersect_ray(ppos,-ptarget + delta, collision_exception)
 	var col_l = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(parkour_detect)).xform(delta), collision_exception)
@@ -359,7 +326,7 @@ func parkour_sensor():
 
 	if !col_l.empty() && fcontact.empty():# && !col_f.empty() && col_r.empty()):
 		col_normal = col_l.normal
-		#return col_result['left']
+#		return col_result.left
 		col_result = ['left']
 		return col_result
 	elif !col_r.empty() && fcontact.empty():# && !col_f.empty() && col_l.empty()):
@@ -383,8 +350,8 @@ func parkour_sensor():
 		col_result = col_result.clear()
 		return col_result
 	
-	if !col_result.empty():
-		emit_signal("camadjust",92, 4.2)
+#	if !col_result.empty():
+#		emit_signal("camadjust",92, 4.2)
 
 func hlth_drn(dt):
 	var div = 5
@@ -393,7 +360,7 @@ func hlth_drn(dt):
 	
 	if hlth >= 0:
 		if curr != 'spi':
-			hlth -= dt / (div * 10)
+			hlth -= rnd / 10#(div * 10)
 		elif curr == 'spi':
 			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
 		
@@ -422,13 +389,13 @@ func dmg(hit):
 
 func chkpt():
 	if get_parent().has_node('chkpt'):
-		set_transform(chkpt.get_global_transform())
+		set_transform(checkpt.get_global_transform())
 
 func _timer(time):
 #	timer = Timer.new()
 	timer.one_shot = true
 	timer.start(time)
 
-func translateMove(dist):
-	var localTranslate = Vector3(0,0,dist)
-	translate(get_transform().basis.xform(localTranslate))
+#func translateMove(distent):
+#	var localTranslate = Vector3(0,0,distent)
+#	translate(get_transform().basis.xform(localTranslate))
