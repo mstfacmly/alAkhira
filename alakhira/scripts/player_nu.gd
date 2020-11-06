@@ -40,10 +40,10 @@ var ppos
 var ACCEL = 7.77
 var DEACCEL = ACCEL * 2.13
 const MAX_SLOPE = 57
-export var run = 6.16
+export var run = 8.16
 var fwalk = run / 2.25
 var walk = run / 1.33
-var dash = run * 6.16 #1.72 #2.12 #7.77
+var dash = run * run #1.72 #2.12 #7.77
 #var mv_dir = Vector3()
 var mv_z = 0
 var mv_x = 0
@@ -64,16 +64,14 @@ var falling = false
 var can_wall = 1
 var wrun = []
 var dist = 4
-var collision_exception = [ self ]
 var col_normal = Vector3()
-var col_result
+var col_result = {}
 var ledge_col = Vector3()
 var ledge_diff : float
 
 var result
 export var attempts = 1
 onready var mesh = $body/Skeleton
-onready var ptarg = $body/Skeleton/targets/ptarget
 var walln
 var modlv
 #onready var col_feet = $col_feet
@@ -91,6 +89,12 @@ func _ready():
 	$AnimationTree.active = 1
 	
 	chkpt()
+	
+	add_cols('left')
+	add_cols('right')
+	add_cols('front')
+	add_cols('fcontact')
+	add_cols('back')
 
 func _input(event):
 	mv_z = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
@@ -114,12 +118,12 @@ func _apply_gravity(delta,multiplier):
 	else:
 		velocity.y -= (g * delta) * multiplier
 
-func _wallrun_gravity():
+"""func _wallrun_gravity():
 	var MAX_VVEL = 0.096
 #	$timer.wait_time = 0.2
 #	if $timer.is_stopped():
 #		$timer.start(0.2)
-	velocity.y -= MAX_VVEL
+	velocity.y -= MAX_VVEL"""
 
 func _move_floor(delta):
 	var TARGET_MOD = (velocity.length() * 0.84) / 2 + 1
@@ -156,20 +160,23 @@ func _move_floor(delta):
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	
+	$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
+
+func _move_rotate():
+	var hvel = velocity
+	var angle = atan2(-hvel.x,-hvel.z)
+	var char_rot = get_rotation()
 	if moving:
-		var angle = atan2(-hvel.x,-hvel.z)
-		var char_rot = get_rotation()
 		char_rot.y = angle
 		rotation = char_rot
-		$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
 
 func _dodge():
-	var roll_magnitude = 3.3
+	var roll_magnitude = 11.1
 	velocity = (velocity - get_floor_normal()) * roll_magnitude
 
 func _dash(toggle: bool):
 	if toggle == true:
-		if Vector2(velocity.x,velocity.z).length() <= MAX_VEL * 4:# - timer.get_wait_time()):
+		if Vector2(velocity.x,velocity.z).length() <= MAX_VEL * 7:# - timer.get_wait_time()):
 			velocity = (velocity - get_floor_normal()) * 1.3
 #	dashing = false if dashing else true
 			dashing = true
@@ -231,14 +238,12 @@ func _wall():
 			attempts = 1"""
 
 func _ledge_detect():
-	var ptarget = ptarg.get_global_transform().origin
+	var ptarget = $body/Skeleton/targets/ptarget.get_global_transform().origin
 	var delta = ppos - ptarget
 	var ledgecol = $body/Skeleton/targets/ledgecol.get_global_transform().origin
-#	var ds = get_world().get_direct_space_state()
 	var col_top = get_world().get_direct_space_state().intersect_ray(ledgecol,ptarget + delta, [self])
 	
 	if !col_top.empty():
-#		ledgecol.xform(col_top.position.y) #= col_top.position.y
 		ledge_col = col_top.position
 		ledge_diff = ledge_col.y - ptarget.y
 		$dbgtxt2.text = str('\nledge_col :', ledge_col.y, '\nledge diff :', ledge_diff)
@@ -247,7 +252,8 @@ func _ledge_detect():
 		ledge_diff = 20
 
 func _ledge_calc():
-	ledge_col.y > 4.2 && ledge_diff < 2.1 && ledge_diff > -2.1
+	if ledge_col.y > 4.2 && ledge_diff < 2.1 && ledge_diff > -2.1:
+		return true
 
 func _ledge_grab():
 	set_translation(Vector3(col_normal.x + ledge_col.x, ledge_col.y -2.6, col_normal.z + ledge_col.z))
@@ -263,7 +269,7 @@ func wallrunning(hspeed):
 	if hspeed >= walk -1:
 		if col_result == ['front']:
 			wrun = ['vert']
-		elif col_result == ['left'] or col_result == ['right']:# && hspeed > walk:
+		elif ['left','right'].has(col_result):# && hspeed > walk:
 			wrun = ['horz']
 		else:
 			col_result.clear()
@@ -310,45 +316,36 @@ func walking(hspeed,delta):
 func animate_char(anim):
 	$AnimationTree.set('parameters/state/current', anim)
 
-func parkour_sensor():
-	ppos = mesh.get_global_transform().origin
-	var ptarget = ptarg.get_global_transform().origin
-	var delta = ptarget - ppos
-	var ds = get_world().get_direct_space_state()
-	var parkour_detect = 90
-#	col_result = ['left','right','front','fcontact','back']
+func add_cols(new_col):
+	col_result[new_col] = col_result.size()
 
-	var col_b = ds.intersect_ray(ppos,-ptarget + delta, collision_exception)
-	var col_l = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(parkour_detect)).xform(delta), collision_exception)
-	var col_r = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(-parkour_detect)).xform(delta), collision_exception)
-	var col_f = ds.intersect_ray(ppos, ptarget + delta, collision_exception)
+func _parkour_sensor(ds):
+	var ptarget = $body/Skeleton/targets/ptarget.get_global_transform().origin
+	var delta = ptarget - ppos
+
+	var col_b = ds.intersect_ray(ppos,-ptarget + delta, [self])
+	var col_l = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self])
+	var col_r = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self])
+	var col_f = ds.intersect_ray(ppos, ptarget + delta, [self])
 	var fcontact = ds.intersect_ray(ppos, ptarget + (Vector3(0,1,0)), [col_f , self])
 
 	if !col_l.empty() && fcontact.empty():# && !col_f.empty() && col_r.empty()):
 		col_normal = col_l.normal
-#		return col_result.left
-		col_result = ['left']
-		return col_result
+		return col_result.left
 	elif !col_r.empty() && fcontact.empty():# && !col_f.empty() && col_l.empty()):
 		col_normal = col_r.normal
-		col_result = ['right']
-		return col_result
-	elif !col_f.empty() && fcontact.empty():# && col_left.empty() && col_right.empty()):
+		return col_result.right
+	elif !col_f.empty() && fcontact.empty():# && col_l.empty() && col_r.empty()):
 		col_normal = col_f.normal
-		col_result = ['front']
-		return col_result
-	elif !fcontact.empty():# && col_left.empty() && col_right.empty()):
+		return col_result.front
+	elif !fcontact.empty():# && [col_l.empty(),col_r.empty()]:
 		col_normal = fcontact.normal
-		col_result = ['fcontact']
-		return col_result
+		return col_result.fcontact
 	elif !col_b.empty():
 		col_normal = col_b.normal
-		col_result = ['back']
-		return col_result
+		return col_result.back
 	else:
-		col_normal = Vector3()
-		col_result = col_result.clear()
-		return col_result
+		return null
 	
 #	if !col_result.empty():
 #		emit_signal("camadjust",92, 4.2)
