@@ -72,8 +72,6 @@ var ledge_diff : float
 var result
 export var attempts = 1
 onready var mesh = $body/Skeleton
-var walln
-var modlv
 #onready var col_feet = $col_feet
 
 func _ready():
@@ -114,16 +112,9 @@ func _input(event):
 
 func _apply_gravity(delta,multiplier):
 	if delta == 0:
-		velocity.y = (g * delta) * multiplier
+		velocity.y = multiplier
 	else:
 		velocity.y -= (g * delta) * multiplier
-
-"""func _wallrun_gravity():
-	var MAX_VVEL = 0.096
-#	$timer.wait_time = 0.2
-#	if $timer.is_stopped():
-#		$timer.start(0.2)
-	velocity.y -= MAX_VVEL"""
 
 func _move_floor(delta):
 	var TARGET_MOD = (velocity.length() * 0.84) / 2 + 1
@@ -192,51 +183,6 @@ func _increase_speed():
 func _jump():
 	velocity.y = jmp_spd
 
-func _walljump():
-	velocity.y = jmp_spd #* 1.964
-	can_wall = 0
-
-"""func fall(lv):
-	jumping = false
-	lv = velocity + Vector3.UP * velocity.y
-
-	if mv_spd >= run:# - 1:
-		animate_char(7)
-	else:
-		animate_char(5)"""
-
-func _wall():
-	var mesh_xform = $body/Skeleton/mesh.get_transform()
-#	var wjmp = jmp_spd + (hvel)# * 0.5)
-#	$body/Skeleton/targets/ptarget.translation.z = 0
-	walln = get_slide_collision(0).normal.abs()
-	modlv = velocity.slide(Vector3.UP).slide(walln).abs()
-	var whop = mesh_xform.basis.xform(Vector3(jmp_spd * 0.01, ((jmp_spd.y + velocity.length())) * 0.64, jmp_spd.y * 0))
-	var wjmp = mesh_xform.basis.xform(Vector3(jmp_spd * 6, jmp_spd , jmp_spd * 6))
-	
-#	ledge(ptarget - ppos)
-	"""velocity.y = 0.0000001
-	if col_result == ['front']:
-		animate_char(9)
-		#if !jmp_att :
-		if jmp_att && attempts > 0:
-			velocity += whop * mv_spd * 0.48
-			attempts -= 1
-		if act:
-			mesh.rotate_y(179)
-			col_result = ['back']
-
-	if col_result == ['back']:
-		animate_char(8)
-#				wrun = ['vert']
-#	if !jmp_att :
-#		lv = Vector3(0,0.0000001,0)
-		if jmp_att:
-			animate_char(7)
-			velocity += -walln * wjmp
-			velocity += Vector3.UP * wjmp
-			attempts = 1"""
-
 func _ledge_detect():
 	var ptarget = $body/Skeleton/targets/ptarget.get_global_transform().origin
 	var delta = ppos - ptarget
@@ -262,47 +208,16 @@ func _ledge_grab():
 func _ledge_climb():
 	set_translation(ledge_col)
 
-func wallrunning(hspeed):
-#	col_feet.set_rotation_degrees(mesh.get_rotation_degrees())
-#	parkour(ptarget - ppos)
-#	ledge(ptarget, ptarget - ppos)
-	if hspeed >= walk -1:
-		if col_result == ['front']:
-			wrun = ['vert']
-		elif ['left','right'].has(col_result):# && hspeed > walk:
-			wrun = ['horz']
-		else:
-			col_result.clear()
-			wrun = []
+func _walljump():
+	velocity.y += jmp_spd
+	can_wall = 0
 
-func wallrun(mesh_xform,delta):
-	var wrjmp = mesh_xform.basis.xform(Vector3(jmp_spd.y * 3, jmp_spd.y, jmp_spd.y * 3))
-	if wrun == ['horz']:
-		velocity += modlv * 0.33
-#			if can_wrun:
-		velocity.y -= velocity.y + delta/(delta * 1.11)# * 0.9
-		if col_result == ['right']:
-			animate_char(11)
-			velocity += -modlv * 0.33
-			if jmp_att:
-				velocity += (-walln / 2) * wrjmp
-				velocity += -modlv * wrjmp
-				velocity += Vector3.UP * wrjmp
-		if col_result == ['left']:
-			animate_char(10)
-			velocity += -modlv * 0.33
-			if jmp_att:
-				velocity += (walln / 2) * wrjmp
-				velocity += -modlv * wrjmp
-				velocity += Vector3.UP * wrjmp
-#			else:
-#				wjmp = false
-#	elif !wjmp:
-#		lv.y += g.y * (delta *3)
-#	elif !is_on_wall():
-#		!on_ledge
-	
-#	player_fp(delta, hspeed)
+func _wallrunjump(dirmod):
+	var walln = get_slide_collision(0).normal.abs()
+	var modlv = velocity.slide(Vector3.UP).slide(walln).abs()
+	velocity += ((dirmod * -walln) / 2) * jmp_spd
+	velocity += (dirmod * modlv) * jmp_spd
+	velocity += Vector3.UP * (jmp_spd * 0.5)
 
 func walking(hspeed,delta):
 	if Input.is_key_pressed(KEY_ALT):
@@ -332,16 +247,16 @@ func _parkour_sensor(ds):
 	if !col_l.empty() && fcontact.empty():# && !col_f.empty() && col_r.empty()):
 		col_normal = col_l.normal
 		return col_result.left
-	elif !col_r.empty() && fcontact.empty():# && !col_f.empty() && col_l.empty()):
+	if !col_r.empty() && fcontact.empty():# && !col_f.empty() && col_l.empty()):
 		col_normal = col_r.normal
 		return col_result.right
-	elif !col_f.empty() && fcontact.empty():# && col_l.empty() && col_r.empty()):
+	if !col_f.empty() && fcontact.empty():# && col_l.empty() && col_r.empty()):
 		col_normal = col_f.normal
 		return col_result.front
-	elif !fcontact.empty():# && [col_l.empty(),col_r.empty()]:
+	if !fcontact.empty():# && [col_l.empty(),col_r.empty()]:
 		col_normal = fcontact.normal
 		return col_result.fcontact
-	elif !col_b.empty():
+	if !col_b.empty():
 		col_normal = col_b.normal
 		return col_result.back
 	else:

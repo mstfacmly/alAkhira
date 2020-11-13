@@ -57,6 +57,13 @@ func _input(ev):
 			parent.rotate_y(179)
 			return collisions.back
 	
+	if [states.wallrun].has(state):
+		if Input.is_action_pressed('feet'):
+			if [collisions.left].has(collision):
+				parent._wallrunjump(1)
+			else:
+				parent._wallrunjump(-1)
+	
 	if [states.fall,states.walljump,states.jump].has(state):
 		if Input.is_action_pressed("arm_l"):
 			if parent.ledge_col.y > 4.2 && parent.ledge_diff < 2.1 && parent.ledge_diff > -2.1:
@@ -129,22 +136,23 @@ func _get_transition(_dt):
 		states.jump:
 			if parent.velocity.y <= 0:
 				return states.fall
+			if parent.is_on_wall():
+				if [collisions.left,collisions.right].has(collision):
+					return states.wallrun
 		states.fall:
 			if parent.is_on_floor():
 				return states.idle
-			if [collisions.left,collisions.right].has(collision):# && !['fcontact'].has(collision):
-				return states.wall
 			if [collisions.fcontact].has(collision) && parent.can_wall > 0:
 				return states.wall
+			if parent.is_on_wall():
+				if [collisions.left,collisions.right].has(collision):
+					return states.wallrun
 		states.wall:
-			if [collisions.left,collisions.right].has(collision):# && !['fcontact'].has(collision):
-				return states.wallrun
 			if ![collisions.fcontact].has(collision) || parent.timer.is_stopped():
 				return states.fall
 			if parent.velocity.y > 0:
 				return states.walljump
 		states.walljump:
-#			parent.can_wall = 0
 			if parent.velocity.y <= 0:
 				return states.fall
 		states.wallrun:
