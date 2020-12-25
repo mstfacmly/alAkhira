@@ -1,185 +1,110 @@
 extends Spatial
 
-onready var target = get_parent().get_node('body/Skeleton/targets/ptarget')
-#onready var target = get_parent().get_global_transform().origin
+onready var ptarget = get_parent().get_node('body/Skeleton/targets/ptarget')
+onready var target = get_parent().get_global_transform().origin
 
-var cam_pitch = 0.0
-var cam_yaw = 0.0
-var cam_cpitch = 0.0
-var cam_cyaw = 0.0
-var cam_currentradius = 4.0
-var cam_radius = 4.0
-var cam_pos = Vector3()
-var cam_ray_result = {}
-var cam_smooth_movement = true
-export var cam_fov = 45.0
-export var min_distance = 0.5
-export var max_distance = 7.2
-export var angle_v_adjust = 0.0
-#export var autoturn_ray_aperture = 24
-#export var autoturn_speed = 25
-var cam_view_sensitivity = 0.3
-var cam_smooth_lerp = 6.16
-var cam_pitch_minmax = Vector2(69, -28)
-var turn = Vector2()
-
-var js_accel_x = global.jscam_x
-var js_accel_y = global.jscam_y
-#export var js_accel_x = 2.3
-#export var js_accel_y = 1.3
-
-var up = Vector3(0,1,0)
-var ds
-
-var is_enabled = false
-var collision_exception = []
-
-export(NodePath) onready var cam = $cam
-export(NodePath) onready var pivot = $pivot
+var pitch = 0.0
+var yaw = 0.0
+var cpitch = 0.0
+var cyaw = 0.0
+var currentradius = 4.0
+var radius = 4.0
+var pos = Vector3()
+var smooth_movement = false
+export var distance = Vector2(0.5,7.2)
+export var view_sensitivity = 1
+export var smooth_lerp = 6.16
+export var pitch_minmax = Vector2(-28, 69)
 
 const DEADZONE = 0.1
 
 func _ready():
 	add_to_group('camera')
-	cam_fov = cam.get_fov()
-	ds = get_world().get_direct_space_state()
+	smooth_movement = true
+	add_exception(get_parent())
+	add_exception(self)
 
-
-func cam_adjust(fov,radius):
+func cam_adjust(new_fov,new_radius):
 	if !null:
-		cam_fov = fov
-		cam_radius = radius
+		$cam.fov = new_fov
+		radius = new_radius
 
-func set_enabled(enabled):
+func set_enabled(enabled:bool):
 	if enabled:
 		Input.set_mouse_mode(2)
 		set_process(true)
-#		set_physics_process(true)
 		set_process_input(true)
-		is_enabled = true
+		$cam.make_current()
+		$cam.process_mode = 1
 	else:
 		Input.set_mouse_mode(0)
 		set_process(false)
-#		set_physics_process(false)
 		set_process_input(false)
-		is_enabled = false
 
 func clear_exception():
-	collision_exception.clear()
+	$cam.clear_exceptions()
 
-func add_collision_exception(node):
-	collision_exception.push_back(node)
+func add_exception(node):
+	$cam.add_exception(node)
 
 func _input(ev):
-	if !is_enabled:
-		return
-
 	if ev is InputEventMouseMotion:
-		cam_pitch = max(min(cam_pitch+(ev.relative.y * cam_view_sensitivity),cam_pitch_minmax.x),cam_pitch_minmax.y)
-		if cam_smooth_movement:
-			cam_yaw = cam_yaw-(ev.relative.x * cam_view_sensitivity)
+		pitch += clamp(ev.relative.y * view_sensitivity,pitch_minmax.x,pitch_minmax.y)
+		if smooth_movement:
+			yaw += ev.relative.x * view_sensitivity
 		else:
-			cam_yaw = fmod(cam_yaw-(ev.relative.x * cam_view_sensitivity),360)
-			cam_currentradius = cam_radius
+			yaw += fmod(ev.relative.x * view_sensitivity,360)
+			currentradius = radius
+	
+	if ev is InputEventJoypadMotion:
+		js_input()
 
 func js_input():
 	var Jx = Input.get_joy_axis(0,2)
 	var Jy = Input.get_joy_axis(0,3)
-	var invert_x = global.invert_x
-	var invert_y = global.invert_y
 
 	if abs(Jy) >= DEADZONE:
-		if invert_y != true:
-			cam_pitch = max(min(cam_pitch - (Jy * (cam_view_sensitivity * js_accel_y * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y)
-		else:
-			cam_pitch = max(min(cam_pitch + (Jy * (cam_view_sensitivity * js_accel_y * 10) ),cam_pitch_minmax.x),cam_pitch_minmax.y)
-
+		pitch -= max(min((Jy * (view_sensitivity * global.js_y) ),pitch_minmax.x),pitch_minmax.y)
+	
 	if abs(Jx) >= DEADZONE:
-		if cam_smooth_movement:
-			if invert_x != true:
-				cam_yaw = cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10))
-			else:
-				cam_yaw = cam_yaw + (Jx * (cam_view_sensitivity * js_accel_x * 10))
+		if smooth_movement:
+			yaw += (Jx * (view_sensitivity * global.js_x))
 		else:
-			cam_yaw = fmod(cam_yaw - (Jx * (cam_view_sensitivity * js_accel_x * 10)),360)
-			cam_currentradius = cam_radius
+			yaw += fmod((Jx * (view_sensitivity * global.js_x)),360)
+			currentradius = radius
 
+func update():
+	var target_pos = ptarget.get_global_transform().origin
+	pos = $pivot.get_global_transform().origin
+	var delta = pos - target_pos #regular delta follow
 
-func cam_update():
-	var target_pos = target.get_global_transform().origin
-	cam_pos = pivot.get_global_transform().origin
-	var delta = cam_pos - target_pos #regular delta follow
-#	var ds = get_world().get_direct_space_state()
-
-	if cam_smooth_movement:
-		cam_pos.x += cam_currentradius * sin(deg2rad(cam_cyaw)) * cos(deg2rad(cam_cpitch))
-		cam_pos.y += cam_currentradius * sin(deg2rad(cam_cpitch))
-		cam_pos.z += cam_currentradius * cos(deg2rad(cam_cyaw)) * cos(deg2rad(cam_cpitch))
+	if smooth_movement:
+		pos.x += currentradius * sin(deg2rad(cyaw)) * cos(deg2rad(cpitch))
+		pos.y += currentradius * sin(deg2rad(cpitch))
+		pos.z += currentradius * cos(deg2rad(cyaw)) * cos(deg2rad(cpitch))
 	else:
-		cam_pos.x += cam_currentradius * sin(deg2rad(cam_yaw)) * cos(deg2rad(cam_pitch))
-		cam_pos.y += cam_currentradius * sin(deg2rad(cam_pitch))
-		cam_pos.z += cam_currentradius * cos(deg2rad(cam_yaw)) * cos(deg2rad(cam_pitch))
+		pos.x += currentradius * sin(deg2rad(yaw)) * cos(deg2rad(pitch))
+		pos.y += currentradius * sin(deg2rad(pitch))
+		pos.z += currentradius * cos(deg2rad(yaw)) * cos(deg2rad(pitch))
 
-	var pos = Vector3()
-
-	if (delta.length() < min_distance):
-		delta = delta.normalized() * min_distance
-	elif (delta.length() > max_distance):
-		delta = delta.normalized() * max_distance
-
-	if cam_ray_result.size() != 0:
-		var a = (cam_ray_result.position - cam_pos).normalized()
-		var b = cam_pos.distance_to(cam_ray_result.position)
-		#pos = cam_ray_result.position
-		if a.length() < min_distance:
-			a = a.normalized * min_distance
-		elif a.length() > max_distance:
-			a = a.normalized() * max_distance
-		pos = cam_pos + a * max(b-0.5, 0)
-	else:
-		pos = cam_pos
-
-	cam.look_at_from_position(pos, pivot.get_global_transform().origin, up)
+	if (delta.length() < distance.x):
+		delta = delta.normalized() * distance.x
+	elif (delta.length() > distance.y):
+		delta = delta.normalized() * distance.y
+	
+	$cam.look_at_from_position(pos, $pivot.get_global_transform().origin, Vector3.UP)
 
 
-"""func autoturn_cam(dt):
-	var delta = cam_pos - target #regular delta follow
+func _process(delta):
+	if $cam.get_projection() == Camera.PROJECTION_PERSPECTIVE:
+		$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
 
-	var col_left = ds.intersect_ray(target,target+Basis(up,deg2rad(autoturn_ray_aperture)).xform(delta),collision_exception)
-	var col = ds.intersect_ray(target,target+delta,collision_exception)
-	var col_right = ds.intersect_ray(target,target+Basis(up,deg2rad(-autoturn_ray_aperture)).xform(delta),collision_exception)
+	if smooth_movement:
+		cpitch = lerp(cpitch, pitch, 10 * delta)
+		cyaw = lerp(cyaw, yaw, 10 * delta)
+		currentradius = lerp(currentradius, radius, 5 * delta)
 
-	if (!col.empty()):
-		#if main ray was occluded, get camera closer, this is the worst case scenario
-		delta = col.position - target
-	elif (!col_left.empty() and col_right.empty()):
-		#if only left ray is occluded, turn the camera around to the right
-		delta = Basis(up,deg2rad(-dt*autoturn_speed)).xform(delta)
-	elif (col_left.empty() and !col_right.empty()):
-		#if only right ray is occluded, turn the camera around to the left
-		delta = Basis(up,deg2rad(dt*autoturn_speed)).xform(delta)
-	else:
-		#do nothing otherwise, left and right are occluded but center is not, so do not autoturn
-		pass"""
+#	if ds != null:
+#		ray_result = ds.intersect_ray($cam.get_global_transform().origin, pos, collision_exception)
 
-func _physics_process(delta):
-	if !is_enabled:
-		return
-
-	if !cam.is_current():
-		cam.make_current()
-
-	if cam.get_projection() == Camera.PROJECTION_PERSPECTIVE:
-		cam.set_perspective(lerp(cam.get_fov(), cam_fov, cam_smooth_lerp * delta), cam.get_znear(), cam.get_zfar())
-
-	if cam_smooth_movement:
-		cam_cpitch = lerp(cam_cpitch, cam_pitch, 10 * delta)
-		cam_cyaw = lerp(cam_cyaw, cam_yaw, 10 * delta)
-		cam_currentradius = lerp(cam_currentradius, cam_radius, 5 * delta)
-
-	if ds != null:
-		cam_ray_result = ds.intersect_ray(pivot.get_global_transform().origin, cam_pos, collision_exception)
-
-	js_input()
-	cam_update()
-#	autoturn_cam(delta)
+	update()
