@@ -10,9 +10,12 @@ var cyaw = 0.0
 var currentradius = 4.0
 var radius = 4.0
 var pos = Vector3()
+
 var smooth_movement = false
+var invertmodx = 1
+var invertmody = 1
+
 export var distance = Vector2(0.5,7.2)
-export var view_sensitivity = 1
 export var smooth_lerp = 6.16
 export var pitch_minmax = Vector2(-28, 69)
 
@@ -47,33 +50,38 @@ func clear_exception():
 func add_exception(node):
 	$cam.add_exception(node)
 
-func _input(ev):
+func _invert_x(false:bool):
+	if !false:
+		invertmodx = -1
+
+func _invert_y(false:bool):
+	if !false:
+		invertmody = -1
+
+func _input(ev):	
+	if global.invert_x == true:
+		invertmodx = -1
+	if global.invert_y == true:
+		invertmody = -1
+	
 	if ev is InputEventMouseMotion:
-		pitch += clamp(ev.relative.y * view_sensitivity,pitch_minmax.x,pitch_minmax.y)
-		if smooth_movement:
-			yaw += ev.relative.x * view_sensitivity
-		else:
-			yaw += fmod(ev.relative.x * view_sensitivity,360)
-			currentradius = radius
-	
+		cam_input(Vector2(global.mouse_sens,global.mouse_sens),ev.relative.x,ev.relative.y)
+
 	if ev is InputEventJoypadMotion:
-		js_input()
+		cam_input(Vector2(global.js_x,global.js_y),Input.get_joy_axis(0,2),Input.get_joy_axis(0,3))
 
-func js_input():
-	var Jx = Input.get_joy_axis(0,2)
-	var Jy = Input.get_joy_axis(0,3)
-
-	if abs(Jy) >= DEADZONE:
-		pitch -= max(min((Jy * (view_sensitivity * global.js_y) ),pitch_minmax.x),pitch_minmax.y)
+func cam_input(view_sens,axis_x,axis_y):
+	if abs(view_sens.y) >= DEADZONE:
+		pitch = clamp(pitch + axis_y * view_sens.y,pitch_minmax.x,pitch_minmax.y) * invertmody
 	
-	if abs(Jx) >= DEADZONE:
+	if abs(view_sens.x) >= DEADZONE:
 		if smooth_movement:
-			yaw += (Jx * (view_sensitivity * global.js_x))
+			yaw += axis_x * view_sens.x * invertmodx
 		else:
-			yaw += fmod((Jx * (view_sensitivity * global.js_x)),360)
+			yaw += fmod(axis_x * view_sens.x,360) * invertmodx
 			currentradius = radius
 
-func update():
+func cam_motion():
 	var target_pos = ptarget.get_global_transform().origin
 	pos = $pivot.get_global_transform().origin
 	var delta = pos - target_pos #regular delta follow
@@ -94,17 +102,16 @@ func update():
 	
 	$cam.look_at_from_position(pos, $pivot.get_global_transform().origin, Vector3.UP)
 
-
 func _process(delta):
 	if $cam.get_projection() == Camera.PROJECTION_PERSPECTIVE:
 		$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
-
+	
+	cam_motion()
+	
 	if smooth_movement:
-		cpitch = lerp(cpitch, pitch, 10 * delta)
-		cyaw = lerp(cyaw, yaw, 10 * delta)
-		currentradius = lerp(currentradius, radius, 5 * delta)
+		_smoothcam(delta)
 
-#	if ds != null:
-#		ray_result = ds.intersect_ray($cam.get_global_transform().origin, pos, collision_exception)
-
-	update()
+func _smoothcam(delta):
+	cpitch = lerp(cpitch, pitch, 10 * delta)
+	cyaw = lerp(cyaw, yaw, 10 * delta)
+	currentradius = lerp(currentradius, radius, 5 * delta)
