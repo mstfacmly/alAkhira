@@ -6,13 +6,12 @@ var currentpitch = 0.0
 var currentyaw = 0.0
 var currentradius = 4.0
 var radius = 4.0
-var pos = Vector3()
 
-var smooth_movement = false
-var mod_x = 1
-var mod_y = 1
+var smooth_movement:bool = false
+var locked_on:bool = false
 
-export var distance = Vector2(0.5,7.2)
+var invert_mod = Vector2(1,1)
+
 export var smooth_lerp = 6.16
 export var pitch_minmax = Vector2(-28, 69)
 
@@ -51,19 +50,12 @@ func set_enabled(enabled:bool):
 		set_process(false)
 		set_process_input(false)
 
-# warning-ignore:unused_argument
-func _invert_x(false):
-	if !false:
-		mod_x = -1
-	else:
-		mod_x = 1
-
-# warning-ignore:unused_argument
-func _invert_y(false):
-	if !false:
-		mod_y = -1
-	else:
-		mod_y = 1
+func _invert_cam(x:bool=false,y:bool=false):
+	if x != false:
+		invert_mod.x = -1
+	
+	if y != false:
+		invert_mod.y = -1
 
 func _input(ev):
 	if ev is InputEventMouseMotion:
@@ -74,21 +66,27 @@ func _input(ev):
 
 func cam_input(view_sens,axis_x,axis_y):
 	if abs(view_sens.y) >= DEADZONE:
-		pitch = clamp(pitch - axis_y * view_sens.y,pitch_minmax.x,pitch_minmax.y) * mod_y
+		pitch = clamp(pitch - axis_y * view_sens.y * invert_mod.y,pitch_minmax.x,pitch_minmax.y)
 	
 	if abs(view_sens.x) >= DEADZONE:
 		if smooth_movement:
-			yaw += axis_x * view_sens.x * mod_x
+			yaw += axis_x * view_sens.x * invert_mod.x
 		else:
-			yaw += fmod(axis_x * view_sens.x,360) * mod_x
+			yaw += fmod(axis_x * view_sens.x,360) * invert_mod.x
 			currentradius = radius
 
 func target_pos(target):
 	$target.global_transform.origin = target
 
 func cam_motion():
-	pos = $pivot.get_global_transform().origin
+	var position = $pivot.get_global_transform().origin
+	
+	if !locked_on:
+		position = rotatecam(position)
+	
+	$cam.look_at_from_position(position, $target.get_global_transform().origin, Vector3.UP)
 
+func rotatecam(pos):
 	if smooth_movement:
 		pos.x += currentradius * sin(deg2rad(currentyaw)) * cos(deg2rad(currentpitch))
 		pos.y += currentradius * sin(deg2rad(currentpitch))
@@ -97,8 +95,8 @@ func cam_motion():
 		pos.x += currentradius * sin(deg2rad(yaw)) * cos(deg2rad(pitch))
 		pos.y += currentradius * sin(deg2rad(pitch))
 		pos.z += currentradius * cos(deg2rad(yaw)) * cos(deg2rad(pitch))
-	
-	$cam.look_at_from_position(pos, $target.get_global_transform().origin, Vector3.UP)
+		
+	return pos
 
 func _smoothcam(delta):
 	currentpitch = lerp(currentpitch, pitch, 10 * delta)
