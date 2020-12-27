@@ -6,6 +6,7 @@ signal died
 signal az_ready
 #signal peek
 #signal shifting
+signal camadjust
 
 # Health
 export var max_hlth = 100
@@ -22,13 +23,6 @@ onready var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 # Joystick Input
 const DEADZONE = 0.3
 const JOY_VAL = 0.9
-
-# Camera
-var view_sensitivity = 0.2
-var focus_view_sensv = 0.1
-onready var cam = $cam
-onready var cam_node = $cam/cam
-signal camadjust
 
 # Input
 var jmp_att
@@ -58,9 +52,6 @@ var velocity = Vector3()
 #var parkour_f = false
 var moving = false
 var dashing = false
-#var jumping = false
-var falling = false
-#var can_wrun
 var can_wall = 1
 var wrun = []
 var dist = 4
@@ -77,12 +68,12 @@ onready var mesh = $body/Skeleton
 func _ready():
 	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
-	connect('camadjust', cam, 'cam_adjust' )
+	connect('camadjust', $cam, 'cam_adjust' )
 	
 	#shifter.state = 'dead'
 	
-	if cam.has_method('set_enabled'):
-		cam.set_enabled(true)
+	if $cam.has_method('set_enabled'):
+		$cam.set_enabled(true)
 	
 	$AnimationTree.active = 1
 	
@@ -122,7 +113,7 @@ func _move_floor(delta):
 	ppos = mesh.get_global_transform().origin
 	# Velocity
 	var dir = Vector3()
-	var cam_xform = cam_node.get_global_transform()
+	var cam_xform = $cam/cam.get_global_transform()
 
 	dir += -cam_xform.basis[2] * mv_z
 	dir += cam_xform.basis[0] * mv_x
@@ -212,12 +203,11 @@ func _walljump():
 	velocity.y += jmp_spd
 	can_wall = 0
 
-func _wallrunjump(dirmod):
-	var walln = get_slide_collision(0).normal.abs()
+func _wallrunjump(walln):
+	var wrjmp = $body/Skeleton.get_transform().basis.xform(Vector3(jmp_spd * 4, jmp_spd * 4, jmp_spd * 4))
 	var modlv = velocity.slide(Vector3.UP).slide(walln).abs()
-	velocity += ((dirmod * -walln) / 2) * jmp_spd
-	velocity += (dirmod * modlv) * jmp_spd
-	velocity += Vector3.UP * (jmp_spd * 0.5)
+#	velocity += modlv * wrjmp
+	velocity += walln * wrjmp
 
 func walking(hspeed,delta):
 	if Input.is_key_pressed(KEY_ALT):
@@ -242,12 +232,15 @@ func _parkour_sensor(ds):
 	var col_l = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self])
 	var col_r = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self])
 	var col_f = ds.intersect_ray(ppos, ptarget + delta, [self])
-	var fcontact = ds.intersect_ray(ppos, ptarget + (Vector3(0,1,0)), [col_f , self])
+	var fcontact = ds.intersect_ray(ppos, ptarget + Vector3.UP, [col_f , self])
+	var lcontact = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_l, self])
+	var rcontact = ds.intersect_ray(ppos, ptarget + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_r, self])
 
-	if !col_l.empty() && fcontact.empty():# && !col_f.empty() && col_r.empty()):
+
+	if !col_l.empty() && !lcontact.empty() && fcontact.empty():# && !col_f.empty() && col_r.empty():
 		col_normal = col_l.normal
 		return col_result.left
-	if !col_r.empty() && fcontact.empty():# && !col_f.empty() && col_l.empty()):
+	if !col_r.empty() && !rcontact.empty() && fcontact.empty():# && !col_f.empty() && col_l.empty()):
 		col_normal = col_r.normal
 		return col_result.right
 	if !col_f.empty() && fcontact.empty():# && col_l.empty() && col_r.empty()):
@@ -261,9 +254,6 @@ func _parkour_sensor(ds):
 		return col_result.back
 	else:
 		return null
-	
-#	if !col_result.empty():
-#		emit_signal("camadjust",92, 4.2)
 
 func hlth_drn(dt):
 	var div = 5

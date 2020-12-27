@@ -1,19 +1,16 @@
 extends Spatial
 
-onready var ptarget = get_parent().get_node('body/Skeleton/targets/ptarget')
-onready var target = get_parent().get_global_transform().origin
-
 var pitch = 0.0
 var yaw = 0.0
-var cpitch = 0.0
-var cyaw = 0.0
+var currentpitch = 0.0
+var currentyaw = 0.0
 var currentradius = 4.0
 var radius = 4.0
 var pos = Vector3()
 
 var smooth_movement = false
-var invertmodx = 1
-var invertmody = 1
+var mod_x = 1
+var mod_y = 1
 
 export var distance = Vector2(0.5,7.2)
 export var smooth_lerp = 6.16
@@ -24,8 +21,18 @@ const DEADZONE = 0.1
 func _ready():
 	add_to_group('camera')
 	smooth_movement = true
-	add_exception(get_parent())
-	add_exception(self)
+	$cam.add_exception(get_parent())
+	$cam.add_exception(self)
+	target_pos($pivot.get_global_transform().origin)
+
+func _process(delta):
+	if $cam.projection == Camera.PROJECTION_PERSPECTIVE:
+		$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
+	
+	cam_motion()
+	
+	if smooth_movement:
+		_smoothcam(delta)
 
 func cam_adjust(new_fov,new_radius):
 	if !null:
@@ -44,26 +51,21 @@ func set_enabled(enabled:bool):
 		set_process(false)
 		set_process_input(false)
 
-func clear_exception():
-	$cam.clear_exceptions()
-
-func add_exception(node):
-	$cam.add_exception(node)
-
-func _invert_x(false:bool):
+# warning-ignore:unused_argument
+func _invert_x(false):
 	if !false:
-		invertmodx = -1
+		mod_x = -1
+	else:
+		mod_x = 1
 
-func _invert_y(false:bool):
+# warning-ignore:unused_argument
+func _invert_y(false):
 	if !false:
-		invertmody = -1
+		mod_y = -1
+	else:
+		mod_y = 1
 
-func _input(ev):	
-	if global.invert_x == true:
-		invertmodx = -1
-	if global.invert_y == true:
-		invertmody = -1
-	
+func _input(ev):
 	if ev is InputEventMouseMotion:
 		cam_input(Vector2(global.mouse_sens,global.mouse_sens),ev.relative.x,ev.relative.y)
 
@@ -72,46 +74,33 @@ func _input(ev):
 
 func cam_input(view_sens,axis_x,axis_y):
 	if abs(view_sens.y) >= DEADZONE:
-		pitch = clamp(pitch + axis_y * view_sens.y,pitch_minmax.x,pitch_minmax.y) * invertmody
+		pitch = clamp(pitch - axis_y * view_sens.y,pitch_minmax.x,pitch_minmax.y) * mod_y
 	
 	if abs(view_sens.x) >= DEADZONE:
 		if smooth_movement:
-			yaw += axis_x * view_sens.x * invertmodx
+			yaw += axis_x * view_sens.x * mod_x
 		else:
-			yaw += fmod(axis_x * view_sens.x,360) * invertmodx
+			yaw += fmod(axis_x * view_sens.x,360) * mod_x
 			currentradius = radius
 
+func target_pos(target):
+	$target.global_transform.origin = target
+
 func cam_motion():
-	var target_pos = ptarget.get_global_transform().origin
 	pos = $pivot.get_global_transform().origin
-	var delta = pos - target_pos #regular delta follow
 
 	if smooth_movement:
-		pos.x += currentradius * sin(deg2rad(cyaw)) * cos(deg2rad(cpitch))
-		pos.y += currentradius * sin(deg2rad(cpitch))
-		pos.z += currentradius * cos(deg2rad(cyaw)) * cos(deg2rad(cpitch))
+		pos.x += currentradius * sin(deg2rad(currentyaw)) * cos(deg2rad(currentpitch))
+		pos.y += currentradius * sin(deg2rad(currentpitch))
+		pos.z += currentradius * cos(deg2rad(currentyaw)) * cos(deg2rad(currentpitch))
 	else:
 		pos.x += currentradius * sin(deg2rad(yaw)) * cos(deg2rad(pitch))
 		pos.y += currentradius * sin(deg2rad(pitch))
 		pos.z += currentradius * cos(deg2rad(yaw)) * cos(deg2rad(pitch))
-
-	if (delta.length() < distance.x):
-		delta = delta.normalized() * distance.x
-	elif (delta.length() > distance.y):
-		delta = delta.normalized() * distance.y
 	
-	$cam.look_at_from_position(pos, $pivot.get_global_transform().origin, Vector3.UP)
-
-func _process(delta):
-	if $cam.get_projection() == Camera.PROJECTION_PERSPECTIVE:
-		$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
-	
-	cam_motion()
-	
-	if smooth_movement:
-		_smoothcam(delta)
+	$cam.look_at_from_position(pos, $target.get_global_transform().origin, Vector3.UP)
 
 func _smoothcam(delta):
-	cpitch = lerp(cpitch, pitch, 10 * delta)
-	cyaw = lerp(cyaw, yaw, 10 * delta)
+	currentpitch = lerp(currentpitch, pitch, 10 * delta)
+	currentyaw = lerp(currentyaw, yaw, 10 * delta)
 	currentradius = lerp(currentradius, radius, 5 * delta)
