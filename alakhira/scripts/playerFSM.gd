@@ -1,7 +1,7 @@
 extends StateMachine
 
 var dash_toggle: bool = false
-var collisions = {}
+onready var collisions = parent.col_result
 var collision = null #setget set_collision
 
 func _ready():
@@ -22,20 +22,15 @@ func _ready():
 #	add_state('gone')
 	
 	call_deferred('set_state', states.idle)
-	collisions = parent.col_result
 
 func _input(ev):
-
-	parent.act = Input.is_action_pressed('act')
-	parent.cast = Input.is_action_pressed('cast')
 	
 	if Input.is_key_pressed(KEY_1):
 		dash_toggle = false if dash_toggle else true
-		print(dash_toggle)
 	
 	if parent.is_on_floor():
-		parent.mv_z = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
-		parent.mv_x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
+		parent.mv.y = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
+		parent.mv.x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
 		if [states.idle,states.move, states.dash].has(state):
 			if Input.is_action_just_pressed('act'):
 				parent._dodge()
@@ -57,12 +52,11 @@ func _input(ev):
 			parent.rotate_y(179)
 			return collisions.back
 	
+#	if parent.is_on_wall():
 	if [states.wallrun].has(state):
-		if Input.is_action_pressed('feet'):
-			if [collisions.left].has(collision):
-				parent._wallrunjump(1)
-			else:
-				parent._wallrunjump(-1)
+		if Input.is_action_just_pressed('feet'):
+			parent._wallrunjump(parent.col_normal.abs())
+#			parent._wallrunjump(parent.get_slide_collision(0).normal.abs())
 	
 	if [states.fall,states.walljump,states.jump].has(state):
 		if Input.is_action_pressed("arm_l"):
@@ -72,17 +66,17 @@ func _input(ev):
 func _dbgtxt():
 	parent.get_node('dbgtxt4').text = str('velocity.xz',Vector2(parent.velocity.x,parent.velocity.z).length(), '\nvelocity.y ',parent.velocity.y)
 	parent.get_node('dbgtxt2').text = str('collision ',collision,'\nhas collision ',[collisions.left,collisions.right,collisions.fcontact].has(collision))
+	parent.get_node('dbgtxt5').text = str('collisions ',collisions.front)
 #	parent.get_node('dbgtxt5').text = str('timer ',parent.timer.is_stopped(), '\n', parent.timer.wait_time)
 #	parent.get_node('dbgtxt').text = str("on ledge: ", parent.on_ledge).capitalize()
 #	parent.get_node('dbgtxt').text = str(collision)
 #	parent.get_node('dbgtxt').text = str(parent.timer.is_stopped())
 
 func _state_logic(dt):
-	var ds = parent.get_world().get_direct_space_state()
 	parent._apply_velocity()
 		
-	if [states.move, states.dash, states.jump, states.fall, states.walljump,states.wallrun].has(state):
-		parent._parkour_sensor(ds)
+	if [states.move, states.dash, states.jump, states.fall, states.walljump].has(state):
+		parent._parkour_sensor()
 	if [states.move,states.dash].has(state):
 		parent._move_rotate()
 	if [states.jump, states.fall, states.wall, states.walljump].has(state):
@@ -95,8 +89,8 @@ func _state_logic(dt):
 		parent._apply_gravity(dt,3.69)
 		parent._move_floor(dt)
 
-	collision = parent._parkour_sensor(ds)
-	
+	collision = parent._parkour_sensor()
+
 	_dbgtxt()
 
 func _process(dt):
@@ -136,9 +130,8 @@ func _get_transition(_dt):
 		states.jump:
 			if parent.velocity.y <= 0:
 				return states.fall
-			if parent.is_on_wall():
-				if [collisions.left,collisions.right].has(collision):
-					return states.wallrun
+			if [collisions.left,collisions.right].has(collision):
+				return states.wallrun
 		states.fall:
 			if parent.is_on_floor():
 				return states.idle
@@ -156,8 +149,10 @@ func _get_transition(_dt):
 			if parent.velocity.y <= 0:
 				return states.fall
 		states.wallrun:
-			if parent.velocity.y <= -9.8*2:
+			if parent.velocity.y <= -9.8*4:
 				return states.fall
+			if parent.velocity.y > 2:
+				return states.jump
 			if ['fcontact'].has(collision):
 				return states.wall
 			if parent.is_on_floor():

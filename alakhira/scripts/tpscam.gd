@@ -19,13 +19,13 @@ const DEADZONE = 0.1
 
 func _ready():
 	add_to_group('camera')
-	smooth_movement = true
+	smooth_movement = false
 	$cam.add_exception(get_parent())
 	$cam.add_exception(self)
 	target_pos($pivot.get_global_transform().origin)
 
 func _process(delta):
-	if $cam.projection == Camera.PROJECTION_PERSPECTIVE:
+	if $cam.PROJECTION_PERSPECTIVE:
 		$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
 	
 	cam_motion()
@@ -59,24 +59,24 @@ func _invert_cam(x:bool=false,y:bool=false):
 
 func _input(ev):
 	if ev is InputEventMouseMotion:
-		cam_input(Vector2(global.mouse_sens,global.mouse_sens),ev.relative.x,ev.relative.y)
+		cam_input(Vector2(global.mouse_sens,global.mouse_sens),ev.relative)
 
 	if ev is InputEventJoypadMotion:
-		cam_input(Vector2(global.js_x,global.js_y),Input.get_joy_axis(0,2),Input.get_joy_axis(0,3))
+		cam_input(Vector2(global.js_x,global.js_y),Vector2(Input.get_joy_axis(0,2),Input.get_joy_axis(0,3)))
 
-func cam_input(view_sens,axis_x,axis_y):
+func cam_input(view_sens,axis):
 	if abs(view_sens.y) >= DEADZONE:
-		pitch = clamp(pitch - axis_y * view_sens.y * invert_mod.y,pitch_minmax.x,pitch_minmax.y)
+		pitch = clamp(pitch - axis.y * view_sens.y * invert_mod.y,pitch_minmax.x,pitch_minmax.y)
 	
 	if abs(view_sens.x) >= DEADZONE:
 		if smooth_movement:
-			yaw += axis_x * view_sens.x * invert_mod.x
+			yaw += axis.x * view_sens.x * invert_mod.x
 		else:
-			yaw += fmod(axis_x * view_sens.x,360) * invert_mod.x
+			yaw += fmod(axis.x * view_sens.x,360) * invert_mod.x
 			currentradius = radius
 
-func target_pos(target):
-	$target.global_transform.origin = target
+func target_pos(new_target):
+	$target.global_transform.origin = new_target
 
 func cam_motion():
 	var position = $pivot.get_global_transform().origin
