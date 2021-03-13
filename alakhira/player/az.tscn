@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://scripts/player_nu.gd" type="Script" id=1]
 [ext_resource path="res://player/nodes/body.tscn" type="PackedScene" id=2]
@@ -16,72 +16,75 @@
 [ext_resource path="res://tile_tex.png" type="Texture" id=14]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
-animation = "05_stand_jump_fall"
+animation = "30_ledge_idle-cycle"
 
 [sub_resource type="AnimationNodeAnimation" id=2]
-animation = "06_run_jump_rise"
+animation = "05_stand_jump_fall"
 
 [sub_resource type="AnimationNodeAnimation" id=3]
-animation = "07_run_jump_fall"
+animation = "06_run_jump_rise"
 
 [sub_resource type="AnimationNodeAnimation" id=4]
-animation = "21_wrun-f_slide"
-
-[sub_resource type="AnimationNodeAnimation" id=5]
-animation = "23-wrun-l"
-
-[sub_resource type="AnimationNodeAnimation" id=6]
-animation = "24-wrun-r"
-
-[sub_resource type="AnimationNodeAnimation" id=7]
-animation = "07_run_jump_air_2"
-
-[sub_resource type="AnimationNodeAnimation" id=8]
-animation = "22_wrun-jmp"
-
-[sub_resource type="AnimationNodeAnimation" id=9]
-animation = "06_run_jump_rise"
-
-[sub_resource type="AnimationNodeAnimation" id=10]
-animation = "06_run_jump_air"
-
-[sub_resource type="AnimationNodeAnimation" id=11]
-animation = "06_run_jump_rise"
-
-[sub_resource type="AnimationNodeAnimation" id=12]
 animation = "07_run_jump_fall"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=13]
-switch_mode = 1
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "21_wrun-f_slide"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "23-wrun-l"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "24-wrun-r"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "07_run_jump_air_2"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "22_wrun-jmp"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "06_run_jump_rise"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "06_run_jump_air"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "06_run_jump_rise"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "07_run_jump_fall"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=14]
 switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+switch_mode = 1
 xfade_time = 0.12
 
-[sub_resource type="AnimationNodeStateMachine" id=15]
-states/06_run_jump_air/node = SubResource( 10 )
+[sub_resource type="AnimationNodeStateMachine" id=16]
+states/06_run_jump_air/node = SubResource( 11 )
 states/06_run_jump_air/position = Vector2( 448, 84 )
-states/06_run_jump_rise/node = SubResource( 11 )
+states/06_run_jump_rise/node = SubResource( 12 )
 states/06_run_jump_rise/position = Vector2( 164, 84 )
-states/07_run_jump_fall/node = SubResource( 12 )
+states/07_run_jump_fall/node = SubResource( 13 )
 states/07_run_jump_fall/position = Vector2( 740, 84 )
-transitions = [ "06_run_jump_rise", "06_run_jump_air", SubResource( 13 ), "06_run_jump_air", "07_run_jump_fall", SubResource( 14 ) ]
+transitions = [ "06_run_jump_rise", "06_run_jump_air", SubResource( 14 ), "06_run_jump_air", "07_run_jump_fall", SubResource( 15 ) ]
 start_node = "06_run_jump_rise"
 end_node = "07_run_jump_fall"
 graph_offset = Vector2( -233, -12 )
 
-[sub_resource type="AnimationNodeTimeScale" id=16]
-
-[sub_resource type="AnimationNodeAnimation" id=17]
-animation = "00_idle-cycle"
+[sub_resource type="AnimationNodeTimeScale" id=17]
 
 [sub_resource type="AnimationNodeAnimation" id=18]
-animation = "02_run-cycle"
+animation = "00_idle-cycle"
 
 [sub_resource type="AnimationNodeAnimation" id=19]
+animation = "02_run-cycle"
+
+[sub_resource type="AnimationNodeAnimation" id=20]
 animation = "03_sprint-cycle"
 
-[sub_resource type="AnimationNodeTransition" id=20]
+[sub_resource type="AnimationNodeTransition" id=21]
 input_count = 13
 input_0/name = "0"
 input_0/auto_advance = false
@@ -110,51 +113,56 @@ input_11/auto_advance = false
 input_12/name = "12"
 input_12/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=21]
+[sub_resource type="AnimationNodeAnimation" id=22]
 animation = "01_walk-cycle"
 
-[sub_resource type="AnimationNodeBlendTree" id=22]
-graph_offset = Vector2( 941, 147 )
-nodes/Animation/node = SubResource( 9 )
+[sub_resource type="AnimationNodeBlendTree" id=23]
+graph_offset = Vector2( 1003, 533.214 )
+nodes/Animation/node = SubResource( 10 )
 nodes/Animation/position = Vector2( 1420, 120 )
-"nodes/Animation 2/node" = SubResource( 1 )
+"nodes/Animation 10/node" = SubResource( 1 )
+"nodes/Animation 10/position" = Vector2( 1383, 804.214 )
+"nodes/Animation 2/node" = SubResource( 2 )
 "nodes/Animation 2/position" = Vector2( 1400, 220 )
-"nodes/Animation 3/node" = SubResource( 2 )
+"nodes/Animation 3/node" = SubResource( 3 )
 "nodes/Animation 3/position" = Vector2( 1380, 340 )
-"nodes/Animation 4/node" = SubResource( 3 )
+"nodes/Animation 4/node" = SubResource( 4 )
 "nodes/Animation 4/position" = Vector2( 1420, 560 )
-"nodes/Animation 5/node" = SubResource( 4 )
+"nodes/Animation 5/node" = SubResource( 5 )
 "nodes/Animation 5/position" = Vector2( 1500, 680 )
-"nodes/Animation 6/node" = SubResource( 5 )
+"nodes/Animation 6/node" = SubResource( 6 )
 "nodes/Animation 6/position" = Vector2( 1600, 940 )
-"nodes/Animation 7/node" = SubResource( 6 )
+"nodes/Animation 7/node" = SubResource( 7 )
 "nodes/Animation 7/position" = Vector2( 1740, 1080 )
-"nodes/Animation 8/node" = SubResource( 7 )
+"nodes/Animation 8/node" = SubResource( 8 )
 "nodes/Animation 8/position" = Vector2( 1380, 460 )
-"nodes/Animation 9/node" = SubResource( 8 )
+"nodes/Animation 9/node" = SubResource( 9 )
 "nodes/Animation 9/position" = Vector2( 1560, 820 )
-nodes/StateMachine/node = SubResource( 15 )
-nodes/StateMachine/position = Vector2( 1700, 400 )
-nodes/TimeScale/node = SubResource( 16 )
+nodes/StateMachine/node = SubResource( 16 )
+nodes/StateMachine/position = Vector2( 1720, 320 )
+nodes/TimeScale/node = SubResource( 17 )
 nodes/TimeScale/position = Vector2( 2500, 160 )
-nodes/idle/node = SubResource( 17 )
+nodes/idle/node = SubResource( 18 )
 nodes/idle/position = Vector2( 1740, -400 )
 nodes/output/position = Vector2( 2780, 320 )
-nodes/run/node = SubResource( 18 )
+nodes/run/node = SubResource( 19 )
 nodes/run/position = Vector2( 1580, -120 )
-nodes/sprint/node = SubResource( 19 )
+nodes/sprint/node = SubResource( 20 )
 nodes/sprint/position = Vector2( 1500, 0 )
-nodes/state/node = SubResource( 20 )
+nodes/state/node = SubResource( 21 )
 nodes/state/position = Vector2( 2200, 60 )
-nodes/walk/node = SubResource( 21 )
+nodes/walk/node = SubResource( 22 )
 nodes/walk/position = Vector2( 1640, -260 )
-node_connections = [ "output", 0, "TimeScale", "state", 0, "idle", "state", 1, "walk", "state", 2, "run", "state", 3, "sprint", "state", 4, "Animation", "state", 5, "Animation 2", "state", 7, "StateMachine", "state", 9, "Animation 5", "state", 10, "Animation 9", "state", 11, "Animation 6", "state", 12, "Animation 7", "TimeScale", 0, "state" ]
+node_connections = [ "output", 0, "TimeScale", "state", 0, "idle", "state", 1, "walk", "state", 2, "run", "state", 3, "sprint", "state", 4, "Animation", "state", 5, "Animation 2", "state", 7, "StateMachine", "state", 8, "Animation 10", "state", 9, "Animation 5", "state", 10, "Animation 9", "state", 11, "Animation 6", "state", 12, "Animation 7", "TimeScale", 0, "state" ]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=23]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=24]
 
-[sub_resource type="DynamicFont" id=24]
+[sub_resource type="DynamicFont" id=25]
 size = 42
 font_data = ExtResource( 13 )
+
+[sub_resource type="BoxShape" id=26]
+extents = Vector3( 1, 0.5, 1 )
 
 [node name="az" type="KinematicBody"]
 script = ExtResource( 1 )
@@ -185,7 +193,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2 )
 visible = true
 
 [node name="ledgecol" parent="body/Skeleton/targets" index="1"]
-transform = Transform( 1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, -1.13687e-13, 10, 3 )
+transform = Transform( 1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, 12, 2 )
 
 [node name="Sprite3D" type="Sprite3D" parent="body/Skeleton/targets/ledgecol" index="0"]
 transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
@@ -216,11 +224,9 @@ use_gravity = true
 forward_axis = 5
 
 [node name="cam" parent="." instance=ExtResource( 9 )]
-cam = NodePath("")
-pivot = NodePath("")
 
-[node name="dirlight" parent="cam/cam" index="0"]
-light_cull_mask = 4293918721
+[node name="pivot" parent="cam" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.13271, 0 )
 
 [node name="target" parent="cam" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -2.4 )
@@ -228,10 +234,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -2.4 )
 [node name="animation" parent="." instance=ExtResource( 7 )]
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 22 )
+tree_root = SubResource( 23 )
 anim_player = NodePath("../animation")
 root_motion_track = NodePath("body/Skeleton:root")
-parameters/StateMachine/playback = SubResource( 23 )
+parameters/StateMachine/playback = SubResource( 24 )
 parameters/TimeScale/scale = 1.2
 parameters/state/current = 0
 
@@ -246,6 +252,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00145
 script = ExtResource( 8 )
 
 [node name="dbgtxt" type="Label" parent="."]
+visible = false
 anchor_left = 0.653
 anchor_top = 0.201
 anchor_right = 0.792
@@ -254,7 +261,7 @@ margin_left = -18.0441
 margin_top = -100.211
 margin_right = 195.62
 margin_bottom = -1.21128
-custom_fonts/font = SubResource( 24 )
+custom_fonts/font = SubResource( 25 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -268,12 +275,13 @@ margin_left = -26.395
 margin_top = 11.6913
 margin_right = 187.269
 margin_bottom = 110.691
-custom_fonts/font = SubResource( 24 )
+custom_fonts/font = SubResource( 25 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="dbgtxt4" type="Label" parent="."]
+visible = false
 anchor_left = 0.653
 anchor_top = 0.054
 anchor_right = 0.792
@@ -282,12 +290,13 @@ margin_left = -26.395
 margin_top = 225.475
 margin_right = 187.269
 margin_bottom = 324.475
-custom_fonts/font = SubResource( 24 )
+custom_fonts/font = SubResource( 25 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="dbgtxt5" type="Label" parent="."]
+visible = false
 anchor_left = 0.653
 anchor_top = 0.201
 anchor_right = 0.792
@@ -296,7 +305,8 @@ margin_left = -31.4055
 margin_top = 334.038
 margin_right = 182.258
 margin_bottom = 433.038
-custom_fonts/font = SubResource( 24 )
+custom_fonts/font = SubResource( 25 )
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -304,6 +314,13 @@ __meta__ = {
 [node name="timer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+
+[node name="parkourcollision" type="Area" parent="."]
+input_ray_pickable = false
+
+[node name="parkourcollider" type="CollisionShape" parent="parkourcollision"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0 )
+shape = SubResource( 26 )
 
 [editable path="body"]
 

@@ -55,7 +55,8 @@ func _input(ev):
 #	if parent.is_on_wall():
 	if [states.wallrun].has(state):
 		if Input.is_action_just_pressed('feet'):
-			parent._wallrunjump(parent.col_normal.abs())
+			parent._wallrunjump()
+#			parent._wallrunjump(parent.col_normal.abs())
 #			parent._wallrunjump(parent.get_slide_collision(0).normal.abs())
 	
 	if [states.fall,states.walljump,states.jump].has(state):
@@ -66,7 +67,7 @@ func _input(ev):
 func _dbgtxt():
 	parent.get_node('dbgtxt4').text = str('velocity.xz',Vector2(parent.velocity.x,parent.velocity.z).length(), '\nvelocity.y ',parent.velocity.y)
 	parent.get_node('dbgtxt2').text = str('collision ',collision,'\nhas collision ',[collisions.left,collisions.right,collisions.fcontact].has(collision))
-	parent.get_node('dbgtxt5').text = str('collisions ',collisions.front)
+#	parent.get_node('dbgtxt5').text = str('collisions ',collisions.front)
 #	parent.get_node('dbgtxt5').text = str('timer ',parent.timer.is_stopped(), '\n', parent.timer.wait_time)
 #	parent.get_node('dbgtxt').text = str("on ledge: ", parent.on_ledge).capitalize()
 #	parent.get_node('dbgtxt').text = str(collision)

@@ -56,6 +56,7 @@ func _ready():
 	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
 	connect('camadjust', $cam, 'cam_adjust' )
+	$parkourcollision.connect('body_entered', self,'_parkour_new')
 	
 	if $cam.has_method('set_enabled'):
 		$cam.set_enabled(true)
@@ -69,7 +70,11 @@ func _ready():
 	add_cols('front')
 	add_cols('fcontact')
 	add_cols('back')
-
+	
+#	$parkourcollision.add_collision_exception_with(self)
+#	$parkourcollision.add_collision_exception_with($col)
+	add_collision_exception_with($parkourcollision)
+	
 func _input(event):
 	mv.y = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
 	mv.x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
@@ -214,16 +219,20 @@ func animate_char(anim):
 func add_cols(new_col):
 	col_result[new_col] = col_result.size()
 
+func _parkour_new(body):
+#	print(to_local(body.global_transform.origin))
+	return to_local(body.global_transform.origin.normalized()).normalized().round()
+
 func _parkour_sensor():
 	var ds = get_world().get_direct_space_state()
 	var delta = _ptarget() - _ppos()
-	col_result.back = ds.intersect_ray(_ppos(),-_ptarget() + delta, [self])
-	col_result.left = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self])
-	col_result.right = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self])
-	col_result.front = ds.intersect_ray(_ppos(), _ptarget() + delta, [self])
-	col_result.fcontact = ds.intersect_ray(_ppos(), _ptarget() + Vector3.UP, [col_result.front , self])
-	col_result.lcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_result.left, self])
-	col_result.rcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_result.right, self])
+	col_result.back = ds.intersect_ray(_ppos(),-_ptarget() + delta, [self,$parkourcollision])
+	col_result.left = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self,$parkourcollision])
+	col_result.right = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self,$parkourcollision])
+	col_result.front = ds.intersect_ray(_ppos(), _ptarget() + delta, [self,$parkourcollision])
+	col_result.fcontact = ds.intersect_ray(_ppos(), _ptarget() + Vector3.UP, [col_result.front , self,$parkourcollision])
+	col_result.lcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_result.left, self,$parkourcollision])
+	col_result.rcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_result.right, self,$parkourcollision])
 	
 	if !col_result.left.empty() && !col_result.lcontact.empty() && col_result.fcontact.empty():# && !col_f.empty() && col_r.empty():
 #		col_normal = col_result.left.normal
