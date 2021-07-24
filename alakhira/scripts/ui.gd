@@ -11,31 +11,36 @@ func _signals():
 			if m.get_class() == 'VBoxContainer':
 				for i in m.get_children():
 					if i.get_class() == 'Button':
+#						i.connect('pressed', self, i.name+'_btn')
 						i.connect('pressed', self, '_ui_btn_pressed', [i.get_name()])
 					else:
 						for l in i.get_children():
+							#if i.name == 'cam_*':
+							#	l.connect('pressed', $org/right/cam, '_'+i.name+'_'+l.name)
 							if l.get_class() == 'Button':
+#								l.connect('pressed', i, i.name+'_'+l.name)
 								l.connect('pressed', self, '_ui_btn_pressed', [l.get_parent().get_name()])
 							elif l.get_class() == 'OptionButton':
 								l.get_popup().connect('id_pressed', i.get_parent(), '_'+i.get_name()+'_select')
 							
-	$org/right/cam/cam_x/btn.connect('pressed', $org/right/cam, '_cam_btn', ['x'])
-	$org/right/cam/cam_y/btn.connect('pressed', $org/right/cam, '_cam_btn', ['y'])
+	$org/right/cam/cam_x/btn.connect('pressed', $org/right/cam, '_cam_x_btn')
+	$org/right/cam/cam_y/btn.connect('pressed', $org/right/cam, '_cam_y_btn')
 	$org/right/cam/cam_x_spd/slide.connect('value_changed', $org/right/cam, '_set_sens', ['x'])
 	$org/right/cam/cam_y_spd/slide.connect('value_changed', $org/right/cam, '_set_sens', ['y'])
 	$org/right/cam/cam_mouse/slide.connect('value_changed', $org/right/cam, '_set_sens', ['m'])
 
 func _ready():
 #	Input.add_joy_mapping("030000005e040000ea02000008040000,Controller (Xbox One) - Wired,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b8,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b9,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,",true)
-
-	if get_parent().get_name() == 'az':
+#	print(get_children(),' , ',get_child_count())
+	
+	if get_parent().name == 'az':
+		az = get_parent()
 		bar = $org/right/hlth
 		set_process(1)
-		az = get_parent()
 		_gen_ui()
-		envanim = az.get_parent().get_node('env/AnimationPlayer')
-		az.set_physics_process(true)
-		az.get_node('cam').set_enabled(true)
+		envanim = get_parent().get_parent().get_node('env/AnimationPlayer')
+		get_parent().set_physics_process(true)
+		get_parent().get_node('cam').set_enabled(true)
 	else:
 		set_process(0)
 		_main_menu()
@@ -50,9 +55,9 @@ func _input(ev):
 	
 	if get_parent().get_name() == 'az':# && az.state != 1:
 		if !paused && pause:
-			_on_pause()
+			_pause()
 		elif paused && pause:
-			_on_unpause()
+			_unpause()
 	
 	if ev.is_action_pressed('pause'):
 		$timer.start()
@@ -70,6 +75,7 @@ func _input(ev):
 		ev_mod = 1
 
 func _main_menu():
+	_populate($org/right/menuList)
 	# Show/Hide Menu Items
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
@@ -86,7 +92,7 @@ func _main_menu():
 	$org/right/cam.hide()
 	$org/right/dbg.hide()
 	
-	$org/left/dbg.hide()
+	$org/left/dbg_print.hide()
 	$org/left/over/thanks.hide()
 	$org/left/over/rld.hide()
 	$org/left/over/quit.hide()
@@ -106,7 +112,7 @@ func _gen_ui():
 		
 #	var menlist = ['dbg', 'opts' ,'rld', 'rsm', 'quit']
 	
-	$org/left/dbg.hide()
+	$org/left/dbg_print.hide()
 	$org/left/over.hide()
 	
 	$org/right/opts.hide()

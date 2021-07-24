@@ -8,6 +8,7 @@
 pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_vertical = 0
 custom_constants/margin_right = 42
 custom_constants/margin_top = 21
 custom_constants/margin_left = 42
@@ -17,110 +18,45 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="tween" type="Tween" parent="."]
-
 [node name="org" type="HBoxContainer" parent="."]
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 982.0
-margin_bottom = 2020.0
+margin_bottom = 1976.0
+size_flags_vertical = 11
 
 [node name="left" parent="org" instance=ExtResource( 2 )]
 margin_left = 0.0
 margin_top = 0.0
-margin_right = 616.0
-margin_bottom = 1999.0
-size_flags_stretch_ratio = 2.0
+margin_right = 468.0
+margin_bottom = 1955.0
 
-[node name="dbg" parent="org/left" index="0"]
-margin_top = 992.0
-margin_right = 292.0
-margin_bottom = 1006.0
+[node name="dbg_print" parent="org/left" index="0"]
+margin_top = 970.0
+margin_right = 144.0
+margin_bottom = 984.0
 
 [node name="over" parent="org/left" index="1"]
-margin_left = 296.0
-margin_top = 927.0
-margin_right = 616.0
-margin_bottom = 1072.0
+margin_left = 148.0
+margin_top = 892.0
+margin_right = 468.0
+margin_bottom = 1062.0
 
 [node name="right" parent="org" instance=ExtResource( 3 )]
-margin_left = 620.0
+margin_left = 472.0
 margin_right = 940.0
-margin_bottom = 1999.0
+margin_bottom = 1955.0
 
-[node name="sep_top" parent="org/right" index="1"]
-margin_bottom = 99.0
-
-[node name="menuList" parent="org/right" index="2"]
-margin_top = 99.0
-margin_bottom = 198.0
-
-[node name="dbg" parent="org/right/menuList" index="0"]
-visible = false
-
-[node name="contd" parent="org/right/menuList" index="1"]
-visible = false
-margin_top = 0.0
-margin_bottom = 33.0
-
-[node name="start" parent="org/right/menuList" index="2"]
-visible = false
-margin_top = 0.0
-margin_bottom = 33.0
-
-[node name="rsm" parent="org/right/menuList" index="3"]
-visible = false
-margin_top = 0.0
-margin_bottom = 33.0
-
-[node name="opts" parent="org/right/menuList" index="4"]
-visible = false
-margin_top = 0.0
-margin_bottom = 33.0
-
-[node name="rld" parent="org/right/menuList" index="5"]
-visible = false
-margin_top = 11.0
-margin_bottom = 44.0
-
-[node name="quit" parent="org/right/menuList" index="6"]
-visible = false
-margin_top = 33.0
-margin_bottom = 66.0
-
-[node name="dbg" parent="org/right" index="3"]
-margin_top = 198.0
-margin_bottom = 481.0
-
-[node name="opts" parent="org/right" index="4"]
-margin_top = 481.0
-margin_bottom = 712.0
-
-[node name="langs" parent="org/right" index="5"]
-margin_top = 712.0
-margin_bottom = 899.0
-
-[node name="disp" parent="org/right" index="6"]
-margin_top = 899.0
-margin_bottom = 1144.0
-
-[node name="ctrls" parent="org/right" index="7"]
-margin_top = 1144.0
-margin_bottom = 1579.0
-
-[node name="cam" parent="org/right" index="8"]
-margin_top = 1579.0
-margin_bottom = 1884.0
-
-[node name="sep_bot" parent="org/right" index="9"]
-margin_top = 1884.0
-
-[node name="hlth" parent="org/right" index="11"]
-value = 0.0
+[node name="tween" type="Tween" parent="."]
 
 [node name="timer" type="Timer" parent="."]
+
+[node name="viewport" type="ViewportContainer" parent="."]
+visible = false
+margin_left = 42.0
+margin_top = 21.0
+margin_right = 982.0
+margin_bottom = 1976.0
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 [editable path="org/left"]
-
-[editable path="org/right"]

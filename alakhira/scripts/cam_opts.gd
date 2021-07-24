@@ -1,50 +1,35 @@
 extends "res://scripts/ui_core.gd"
 
-var standard = 'Default'
-var invert = 'Inverted'
-var evil = 'The Devil\'s Configuration'
+export var standard = 'Default'
+export var invert = 'Inverted'
+export var evil = 'The Devil\'s Configuration'
 
 func _set_sens(m,i):
 	if i == 'x':
-		global.jscam_x = m
+		global.js_x = m
 	if i == 'y':
-		global.jscam_y = m
+		global.js_y = m
 	if i == 'm':
 		global.mouse_sens = m
 
-func _cam_btn(btn):
-	if btn == 'x':
-		if global.invert_x != true:
-			$cam_x/btn.set_text(invert)
-			global.invert_x = true
-		elif global.invert_x != false:
-			$cam_x/btn.set_text(standard)
-			global.invert_x = false
-	if btn == 'y':
-		if global.invert_y != true:
-			$cam_y/btn.set_text(evil)
-			global.invert_y = true
-		elif global.invert_y != false:
-			$cam_y/btn.set_text(standard)
-			global.invert_y = false
-
-func _showhide():
-	if is_visible() != true:
-		set_visible(true)
-		back = funcref(self, '_showhide')
-	else:
-		set_visible(false)
+func _cam_x_btn():
+	global.invert_x = false if global.invert_x else true
+	_cam_txt()
 	
-	print(name)
-	_grab_menu()
+func _cam_y_btn():
+	global.invert_y = false if global.invert_y else true
+	_cam_txt()
+	
+func _cam_txt():
+	if global.invert_x == true:
+		$cam_x/btn.set_text(invert)
+	else:
+		$cam_x/btn.set_text(standard)
+	
+	if global.invert_y == true:
+		$cam_y/btn.set_text(evil)
+	else:
+		$cam_y/btn.set_text(standard)
 
 func _ready():
-	if global.invert_x != true:
-		$cam_x/btn.set_text(standard)
-	else:
-		$cam_x/btn.set_text(invert)
-
-	if global.invert_y != true:
-		$cam_y/btn.set_text(standard)
-	else:
-		$cam_y/btn.set_text(evil)
+	_cam_txt()

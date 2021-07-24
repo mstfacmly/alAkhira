@@ -1,26 +1,40 @@
 extends 'res://scripts/ui_core.gd'
 
+onready var dbg_txt = find_parent('org').get_node('left/dbg_print')
+
+var draining:bool = false
+
 func _dbg():
-	var dbg_txt = get_node('../../left/dbg')
 	$hlth_full/btn.set_text('Restore Full Health')
 	$hlth_nil/btn.set_text('Drain All Health')
 	
-	if dbg_txt.is_visible() != false:
-		$info/btn.set_text('On')
-	else:
-		$info/btn.set_text('Off')
+	_health_drain()
+	_show_collision(false)
 	
-	if az.hlth_drn != false:
+	if !dbg_txt.is_visible():
+		$info/btn.set_text('Off')
+	else:
+		$info/btn.set_text('On')
+	
+# warning-ignore:unused_argument
+func _health_drain():
+#	if az.hlth_drn != false:
+	draining = false if draining else true
+	print(draining)
+	if draining:
 		$hlth_drn/btn.set_text('Enabled')
 	else:
 		$hlth_drn/btn.set_text('Disabled')
 	
-	if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').is_visible() != true:
+# warning-ignore:unused_argument
+func _show_collision(false:bool):
+	if false:
 		$col_ind/btn.set_text('Hide')
 	else:
 		$col_ind/btn.set_text('Show')
+		#az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible
 
-func _show_col():
+func old_show_col():
 	var col_ind = az.get_node('body/Skeleton/targets/ptarget/Sprite3D')
 	
 	if col_ind.is_visible() != true:
@@ -28,15 +42,11 @@ func _show_col():
 	else:
 		col_ind.set_visible(false)
 
-func _showhide():
-	if is_visible() != true:
-		set_visible(true)
-		back = funcref(self, '_showhide')
-	else:
-		set_visible(false)
-
 func _ready():
-	if get_parent().get_node('menuList/dbg').visible:
-		_dbg()
-	else:
-		pass
+	_dbg()
+	_populate(self)
+#	if az != null:
+#	if get_parent().get_node('menuList/dbg').is_visible():
+#		_health_drain()
+#	else:
+#		pass

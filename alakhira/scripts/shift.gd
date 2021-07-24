@@ -7,8 +7,10 @@ var DIFFUSE = SpatialMaterial.DIFFUSE_TOON
 var MIX = SpatialMaterial.BLEND_MODE_MIX
 var ADD = SpatialMaterial.BLEND_MODE_ADD
 
-enum states {ALIVE,DEAD, GONE}
+enum states {alive,dead,gone}
 var state
+
+enum world {phys,spi}
 
 signal camadjust
 
@@ -24,31 +26,28 @@ var anim = []
 var players = []
 var curr = 'phys'
 var overlay = 'none'
-onready var root = $'/root'
-onready var cam = get_node('../../cam')
 var showing = false
 var hiding = false
-#var shifting = false
 var transit
 
 var t
 var transition_time = 0.5
 
 func _ready():
-	if get_parent().name!= 'scripts':
+	_initialize()
+
+func _initialize():
+	if !find_parent('az'):
 		set_physics_process(0)
 	else:
-		connect('camadjust', cam, 'cam_adjust')
-#		print(is_connected('camadjust', cam, 'cam_adjust'))
-		traverse(root.get_children())
+		traverse(get_tree().root.get_children())
 		unique_materials(phys)
 		unique_materials(spi)
-	
 	#initialize on phys
 		peek(spi, true)
 		toggle(spi, phys)
 
-func _input(ev):
+func _input(_ev):
 	var cast = Input.is_action_pressed('cast')
 	var attack = Input.is_action_just_pressed('arm_l')
 	var shift = cast && attack
@@ -56,22 +55,17 @@ func _input(ev):
 	
 	# NOTE: set shift to be a signal sent by player node
 
-	if shift && state != states.DEAD:
-#		shifting = true
+	if shift && state != states.dead:
 		if curr == 'phys':
 			toggle(phys, spi)
 			peek(spi, false)
 			curr = 'spi'
 			env_transition(1)
-#			env_spir()
-#			emit_signal("camadjust",cam_node.get_fov() - 13, cam.cam_radius)
 		elif curr == 'spi':
 			toggle(spi, phys)
 			peek(spi, true)
 			curr = 'phys'
 			env_transition(-1)
-#			env_phys()
-#			emit_signal("camadjust",cam_node.get_fov() + 13, cam.cam_radius)
 	elif cast and curr == 'phys' and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
@@ -132,7 +126,7 @@ func toggle(a, b):
 	t = 0
 
 
-func post_toggle(a, b):
+func post_toggle(a, _b):
 	if a:
 		for obj in a.nodes:
 			obj.set_physics_process(false)
@@ -141,11 +135,6 @@ func post_toggle(a, b):
 	hiding = false
 
 func env_transition(speed):
-#	var cam_node = cam.get_child(0)
-#	if curr != 'spi':
-#		emit_signal("camadjust",cam.cam_fov - 13, cam.cam_radius)
-#	else:
-#		emit_signal("camadjust",cam.cam_fov + 13, cam.cam_radius)
 	for a in anim:
 		if(a.get_name() == 'shift'):
 			var animList = a.get_animation_list()
@@ -155,19 +144,14 @@ func env_transition(speed):
 			a.play('shift', -1, speed, (speed < 0))
 
 func traverse(nodes):
-	var nm = ''
-	var ng
 	var materials
 	for node in nodes:
-		nm = node.get_name()
-		ng = node.get_groups()
+		var nm = node.get_name()
+		var ng = node.get_groups()
 
 #		if nm.matchn('*_phys') or nm.matchn('*_spi') or ng.has('spi'):
 		if ng.has('spi'):
 			materials = get_materials(node)
-#			print('materials: ', materials)
-
-#			if nm.matchn('*_phys') or !ng.has('spi'):
 			if !ng.has('spi'):
 				phys['nodes'].push_back(node)
 				phys['materials'] += materials
@@ -182,42 +166,39 @@ func traverse(nodes):
 		elif node.get_child_count():
 			traverse(node.get_children())
 
-func get_next_material(root):
+"""func get_next_material(next_mat):
 	var res = []
 	var surfaces
 	var mesh
 	
-	if root.is_class('MeshInstance'):
-		mesh = root.get_mesh()
+	if next_mat.is_class('MeshInstance'):
+		mesh = next_mat.get_mesh()
 		surfaces = mesh.get_surface_count()
 		for i in range(surfaces):
 			res.push_back(mesh.surface_get_material(i))
 
-	var nodes = root.get_children()
+	var nodes = next_mat.get_children()
 	for node in nodes :
 		res.append(get_materials(node))
-	return res
+	return res"""
 
-func get_materials(root):
+func get_materials(mats):
 	var res = []
-	var nm = int(str(root))
+	var nm = int(str(mats))
+	var mat
 	
-	if root.is_class('MeshInstance'):
-		var mat = root.get_surface_material(nm)
+	if mats.is_class('MeshInstance'):
 		if mat == null:
-			var mesh = root.get_mesh()
-			var surfaces = mesh.get_surface_count()
-#			print('get_materials mesh: ', mesh)
-#			print('get_materials surfaces: ', surfaces)
-			
-			for i in surfaces:
-#				print('i :', i)
+			var mesh = mats.get_mesh()
+		
+			for i in mesh.get_surface_count():
 				res.push_back(mesh.surface_get_material(i))
+		else:
+			mat = mats.get_surface_material(nm)
 			res.push_back(mat)
 
-	var nodes = root.get_children()
-	for node in nodes :
-		res += get_materials(node)
+	for node in mats.get_children() :
+		res.append(get_materials(node))
 	return res
 
 func unique_materials(store):
@@ -231,17 +212,3 @@ func unique_materials(store):
 			new.push_back(resource)
 			record.push_back(resource.get_rid())
 	store['materials'] = new
-
-#func env_phys():
-#		env.set_fog_enabled(false)
-#		env.set_glow_enabled(false) 
-#		env.adjustment_brightness = 1
-#		env.adjustment_contrast = 0.84
-#		env.adjustment_saturation = 0.84
-
-#func env_spir():
-#		env.set_fog_enabled(true)
-#		env.set_glow_enabled(true)
-#		env.adjustment_brightness = 0.9
-#		env.adjustment_contrast = 1.1
-#		env.adjustment_saturation = 0.11

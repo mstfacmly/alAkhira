@@ -19,34 +19,14 @@ __meta__ = {
 
 [node name="sep_top" type="CenterContainer" parent="."]
 margin_right = 320.0
-margin_bottom = 12.0
+margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="btn0" type="Button" parent="."]
-margin_top = 23.0
+margin_top = 59.0
 margin_right = 320.0
-margin_bottom = 56.0
-custom_fonts/font = ExtResource( 1 )
-custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
-custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-flat = true
-align = 2
-
-[node name="btn1" type="Button" parent="."]
-margin_top = 67.0
-margin_right = 320.0
-margin_bottom = 100.0
-custom_fonts/font = ExtResource( 1 )
-custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
-custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-flat = true
-align = 2
-
-[node name="btn2" type="Button" parent="."]
-margin_top = 111.0
-margin_right = 320.0
-margin_bottom = 144.0
+margin_bottom = 92.0
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -54,14 +34,14 @@ flat = true
 align = 2
 
 [node name="sep_bot" type="CenterContainer" parent="."]
-margin_top = 155.0
+margin_top = 103.0
 margin_right = 320.0
-margin_bottom = 167.0
+margin_bottom = 151.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="langs_b" type="Button" parent="."]
-margin_top = 178.0
+margin_top = 162.0
 margin_right = 320.0
 margin_bottom = 211.0
 size_flags_horizontal = 3

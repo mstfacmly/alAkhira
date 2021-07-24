@@ -19,7 +19,7 @@ const disp_rez = [
 ]
 
 func _fs_set():
-	if OS.is_window_fullscreen() != false:
+	if !OS.is_window_fullscreen():
 		$fs/btn.text = 'On'
 	else:
 		$fs/btn.text = 'Off'
@@ -56,7 +56,7 @@ func _res_select(ID):
 		OS.set_window_fullscreen(false)
 		OS.set_window_fullscreen(true)
 
-func _aa_select(ID):
+func _fsaa_select(ID):
 	get_viewport().msaa = ID
 
 func _ready():
@@ -70,12 +70,3 @@ func _ready():
 		$fsaa/aa.add_item(i)
 		
 #	$res/res.connect('selected', self, '_res_calc')
-
-func _showhide():
-	if is_visible() != true:
-		set_visible(true)
-		back = funcref(self, '_showhide')
-	else:
-		set_visible(false)
-	
-	_grab_menu()

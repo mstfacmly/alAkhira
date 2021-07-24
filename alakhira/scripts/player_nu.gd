@@ -3,7 +3,7 @@ extends KinematicBody
 # Signals
 signal hlth_chng
 signal died
-signal az_ready
+#signal az_ready
 signal camadjust
 
 # Health
@@ -39,7 +39,8 @@ var MAX_VEL = dash
 #var climbspeed = 2
 onready var jmp_spd = g * 1.64
 var velocity = Vector3()
-var moving = false
+var dir
+#var moving = false
 var dashing = false
 var can_wall = 1
 var wrun = []
@@ -62,6 +63,8 @@ func _ready():
 		$cam.set_enabled(true)
 	
 	$AnimationTree.active = 1
+	
+	$ui/org/right/dbg.az = self
 	
 	chkpt()
 	
@@ -97,16 +100,16 @@ func _move_floor(delta):
 	var TARGET_MOD = (velocity.length() * 0.84) / 2 + 1
 	
 	# Velocity
-	var dir = Vector3()
+	dir = Vector3()
 	var cam_xform = $cam/cam.get_global_transform()
 
 	dir += -cam_xform.basis[2] * mv.y
 	dir += cam_xform.basis[0] * mv.x
 	
-	if dir.length() != 0:
-		moving = true
-	else:
-		moving = false
+#	if dir.length() != 0:
+#		moving = true
+#	else:
+#		moving = false
 
 	var hspeed = Vector2(velocity.x, velocity.z).length()
 	
@@ -133,9 +136,9 @@ func _move_rotate():
 	var hvel = velocity
 	var angle = atan2(-hvel.x,-hvel.z)
 	var char_rot = get_rotation()
-	if moving:
-		char_rot.y = angle
-		rotation = char_rot
+#	if moving:
+	char_rot.y = angle
+	rotation = char_rot
 
 func _dodge():
 	var roll_magnitude = 11.1
@@ -173,7 +176,7 @@ func _ledge_detect():
 	if !col_top.empty():
 		ledge_col = col_top.position
 		ledge_diff = ledge_col.y - _ptarget().y
-		$dbgtxt2.text = str('\nledge_col :', ledge_col.y, '\nledge diff :', ledge_diff)
+#		$dbgtxt2.text = str('\nledge_col :', ledge_col.y, '\nledge diff :', ledge_diff)
 	else:
 		ledge_col = ledge_col
 		ledge_diff = 20
@@ -257,10 +260,10 @@ func hlth_drn(dt):
 	var rnd = dt * div
 	
 	if hlth >= 0:
-		if !worldstate[1]:
+		if worldstate[0]:
 			hlth -= rnd / 10#(div * 10)
-		elif worldstate[1]:
-			hlth += rand_range(-rnd,rnd * (1.001 * 1.33))
+		else:
+			hlth += rand_range(-rnd,rnd * rand_range(1.001,1.33))
 		
 		if Input.is_action_pressed('cast') && Input.is_action_just_pressed('arm_l'):
 			hlth -= 7

@@ -31,7 +31,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="NAME" type="Label" parent="info"]
-margin_right = 158.0
+margin_right = 167.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -41,7 +41,7 @@ text = "Show Debug Info"
 valign = 1
 
 [node name="btn" type="Button" parent="info"]
-margin_left = 162.0
+margin_left = 171.0
 margin_right = 320.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
@@ -60,7 +60,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="NAME" type="Label" parent="col_ind"]
-margin_right = 193.0
+margin_right = 212.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -70,7 +70,7 @@ text = "Show Collision Range"
 valign = 1
 
 [node name="btn" type="Button" parent="col_ind"]
-margin_left = 197.0
+margin_left = 216.0
 margin_right = 320.0
 margin_bottom = 27.0
 size_flags_horizontal = 3

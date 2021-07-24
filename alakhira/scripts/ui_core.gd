@@ -16,6 +16,7 @@ var spd = 2
 var ev_mod = 0
 var stage
 var back = null
+var pressed = {}
 
 const INPUT_CFG = [
 	'mv_f', 
@@ -87,6 +88,12 @@ func _gui_input(ev):
 func _on_timer_timeout():
 	get_tree().quit()
 
+func _populate(menu):
+#	print(menu.name)
+	for i in menu.get_children():
+#		print(i.name)
+		pressed[i.name] = pressed.size()
+
 func _ui_btn_pressed(press):
 	if press == 'start':
 		call_deferred('_ld_cplt')
@@ -94,29 +101,35 @@ func _ui_btn_pressed(press):
 	if press == 'rld':
 		get_tree().set_pause(false)
 		get_tree().reload_current_scene()
-	
+		
+	print(press)#ed.keys())
+#	match press:
+#		pressed.opts:
+#			_opts_menu()
+#		menu_childer.opts:
 	if press == 'opts' or press == 'opts_b':
 		_opts_menu()
 	if press == 'langs' or press == 'langs_b':
-		$org/right/langs.call_deferred('_showhide')
+		$org/right/langs._showhide()
 		_hide_opts()
 	if press == 'disp' or press == 'disp_b':
-		$org/right/disp.call_deferred('_showhide')
+		$org/right/disp._showhide()
 		_hide_opts()
 	if press == 'ctrls' or press == 'ctrls_b':
-		$org/right/ctrls.call_deferred('_showhide')
+		$org/right/ctrls._showhide()
 		_hide_opts()
 	if press == 'cam' or press == 'cam_b':
-		$org/right/cam.call_deferred('_showhide')
+		$org/right/cam._showhide()
 		_hide_opts()
 	if press == 'dbg' or press == 'dbg_b':
-		$org/right/dbg.call_deferred('_showhide')
+		$org/right/dbg._showhide()
 		_hide_menu()
+#		_hide_opts()
 	
 	if press == 'quit':
 		get_tree().quit()
 	if press == 'rsm':
-		_on_unpause()
+		_unpause()
 		
 	if press == 'site':
 		OS.shell_open('https://studioslune.com/')
@@ -139,25 +152,31 @@ func _ui_btn_pressed(press):
 			
 	if press == 'info':
 		#_show_dbg()
-		if $org/left/dbg.is_visible() != true:
+		$org/left/dbg_print.visible = false if $org/left/dbg_print.visible else true
+		
+		if $org/left/dbg_print.is_visible() != true:
 			$org/right/dbg/info/btn.text = 'Off'
 		else:
 			$org/right/dbg/info/btn.text = 'On' 
 	
 	if press == 'col_ind':
 		#_show_col()
-		if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').is_visible() != true:
+		az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible = false if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible else true
+		
+		if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible != true:
 			$org/right/dbg/col_ind/btn.text = 'Hide'
 		else:
 			$org/right/dbg/col_ind/btn.text = 'Show'
 	
 	if press == 'hlth_drn':
-		if az.hlth_drain != false:
+		$org/right/dbg._health_drain()
+#		az.hlth_drain = !az.hlth_drain
+		"""if az.hlth_drain != false:
 			az.hlth_drain = false
 			$org/right/dbg/hlth_drn/btn.text = 'Disabled'
 		else:
 			az.hlth_drain = true
-			$org/right/dbg/hlth_drn/btn.text = 'Enabled'
+			$org/right/dbg/hlth_drn/btn.text = 'Enabled'"""
 	
 	if press == 'hlth_full':
 		az.hlth = az.max_hlth
@@ -180,7 +199,7 @@ func _opts_menu():
 	var opts = $org/right/opts
 	var menu = $org/right/menuList
 	
-	if opts.is_visible() != true:
+	if !opts.is_visible():
 		opts.set_visible(true)
 		back = funcref(self, '_opts_menu')
 	else:
@@ -242,18 +261,19 @@ func _pause_menu():
 	$org/right/menuList.show()
 	_grab_menu()
 
-func _on_pause():
+func _pause():
 	_pause_menu()
 #	_pause_shift()
 	paused = true
 	get_tree().set_pause(true)
 
-func _on_unpause():
+func _unpause():
 	az.show()
 	bar.show()
 	paused = false
 	Input.set_mouse_mode(2)
-	$org/right/menuList.hide()
+	for i in [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
+		$org/right.get_node(i).hide()
 #	_pause_shift()
 	get_tree().set_pause(false)
 
@@ -264,3 +284,12 @@ func _on_unpause():
 #	elif shifter.curr != 'phys':
 #		envanim.play('shift', -1, -spd, (-spd < 0))
 #		shifter.curr = 'phys'
+
+func _showhide():
+	if is_visible() != true:
+		set_visible(true)
+		back = funcref(self, '_showhide')
+	else:
+		set_visible(false)
+	
+	_grab_menu()

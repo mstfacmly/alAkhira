@@ -1,25 +1,16 @@
 extends "res://scripts/ui_core.gd"
 
-func _showhide():
-	if is_visible() != true:
-		set_visible(true)
-		back = funcref(self, '_showhide')
-	else:
-		set_visible(false)
-	
-	_grab_menu()
-
-
 func _input(ev):
+#	for i in InputMap.get_actions():
+#		INPUT_CFG.append(i)
 	var button
 	for acts in INPUT_CFG:
 		var input_ev = InputMap.get_action_list(acts)[ev_mod]
 		button = get_node(acts).get_node('btn')
-		if input_ev is InputEventJoypadButton:
+		if input_ev is InputEventJoypadButton || input_ev is InputEventJoypadMotion:
 			button.set_text(Input.get_joy_button_string(input_ev.button_index))
-		elif input_ev is InputEventJoypadMotion:
 			button.set_text(Input.get_joy_axis_string(input_ev.axis))
-		elif input_ev is InputEventKey:
+		elif input_ev is InputEventKey || input_ev is InputEventMouse:
 			button.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
 
 	if  button.is_connected('pressed', self, '_get_input') != true:

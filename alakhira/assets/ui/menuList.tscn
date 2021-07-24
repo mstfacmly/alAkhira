@@ -32,10 +32,10 @@ shadow_size = 3
 
 [node name="right" type="VBoxContainer"]
 margin_left = 694.0
-margin_right = 784.0
-margin_bottom = 440.0
+margin_right = 1014.0
+margin_bottom = 1815.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 15
 custom_constants/separation = 0
 script = ExtResource( 11 )
 __meta__ = {
@@ -45,7 +45,7 @@ __meta__ = {
 [node name="logo" type="TextureRect" parent="."]
 visible = false
 margin_right = 320.0
-margin_bottom = 384.0
+margin_bottom = 64.0
 rect_min_size = Vector2( 128, 64 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -60,13 +60,14 @@ size_flags_vertical = 3
 
 [node name="menuList" type="VBoxContainer" parent="."]
 margin_right = 320.0
-margin_bottom = 297.0
+margin_bottom = 253.0
 size_flags_horizontal = 3
 size_flags_vertical = 11
 custom_constants/separation = 11
 alignment = 1
 
 [node name="dbg" type="Button" parent="menuList"]
+visible = false
 margin_right = 320.0
 margin_bottom = 33.0
 custom_fonts/font = ExtResource( 2 )
@@ -77,9 +78,8 @@ flat = true
 align = 2
 
 [node name="contd" type="Button" parent="menuList"]
-margin_top = 44.0
 margin_right = 320.0
-margin_bottom = 77.0
+margin_bottom = 33.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -88,9 +88,9 @@ flat = true
 align = 2
 
 [node name="start" type="Button" parent="menuList"]
-margin_top = 88.0
+margin_top = 44.0
 margin_right = 320.0
-margin_bottom = 121.0
+margin_bottom = 77.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -99,9 +99,9 @@ flat = true
 align = 2
 
 [node name="rsm" type="Button" parent="menuList"]
-margin_top = 132.0
+margin_top = 88.0
 margin_right = 320.0
-margin_bottom = 165.0
+margin_bottom = 121.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -110,9 +110,9 @@ flat = true
 align = 2
 
 [node name="opts" type="Button" parent="menuList"]
-margin_top = 176.0
+margin_top = 132.0
 margin_right = 320.0
-margin_bottom = 209.0
+margin_bottom = 165.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -121,9 +121,9 @@ flat = true
 align = 2
 
 [node name="rld" type="Button" parent="menuList"]
-margin_top = 220.0
+margin_top = 176.0
 margin_right = 320.0
-margin_bottom = 253.0
+margin_bottom = 209.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -132,9 +132,9 @@ flat = true
 align = 2
 
 [node name="quit" type="Button" parent="menuList"]
-margin_top = 264.0
+margin_top = 220.0
 margin_right = 320.0
-margin_bottom = 297.0
+margin_bottom = 253.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
@@ -144,59 +144,59 @@ align = 2
 
 [node name="dbg" parent="." instance=ExtResource( 3 )]
 margin_left = 0.0
-margin_top = 297.0
+margin_top = 253.0
 margin_right = 320.0
-margin_bottom = 580.0
+margin_bottom = 536.0
 
 [node name="opts" parent="." instance=ExtResource( 4 )]
 margin_left = 0.0
-margin_top = 580.0
+margin_top = 536.0
 margin_right = 320.0
-margin_bottom = 811.0
+margin_bottom = 767.0
 
 [node name="langs" parent="." instance=ExtResource( 5 )]
 margin_left = 0.0
-margin_top = 811.0
+margin_top = 767.0
 margin_right = 320.0
-margin_bottom = 998.0
+margin_bottom = 954.0
 
 [node name="disp" parent="." instance=ExtResource( 6 )]
 margin_left = 0.0
-margin_top = 998.0
+margin_top = 954.0
 margin_right = 320.0
-margin_bottom = 1243.0
+margin_bottom = 1199.0
 
 [node name="ctrls" parent="." instance=ExtResource( 7 )]
 margin_left = 0.0
-margin_top = 1243.0
+margin_top = 1199.0
 margin_right = 320.0
-margin_bottom = 1678.0
+margin_bottom = 1634.0
 
 [node name="cam" parent="." instance=ExtResource( 8 )]
 margin_left = 0.0
-margin_top = 1678.0
+margin_top = 1634.0
 margin_right = 320.0
-margin_bottom = 1983.0
+margin_bottom = 1939.0
 
 [node name="sep_bot" type="CenterContainer" parent="."]
-margin_top = 1983.0
+margin_top = 1939.0
 margin_right = 320.0
-margin_bottom = 1983.0
+margin_bottom = 1939.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="version" type="Label" parent="."]
-margin_top = 1983.0
+margin_top = 1939.0
 margin_right = 320.0
-margin_bottom = 1996.0
+margin_bottom = 1952.0
 custom_fonts/font = ExtResource( 9 )
 align = 2
 script = ExtResource( 10 )
 
 [node name="hlth" type="ProgressBar" parent="."]
-margin_top = 1996.0
+margin_top = 1952.0
 margin_right = 320.0
-margin_bottom = 1999.5
+margin_bottom = 1955.5
 rect_min_size = Vector2( 0, 3.5 )
 mouse_filter = 2
 size_flags_horizontal = 3

@@ -92,10 +92,15 @@ func _state_logic(dt):
 
 	collision = parent._parkour_sensor()
 
-	_dbgtxt()
+#	_dbgtxt()
+
+func _health_drain() -> bool:
+	return false if true else true
 
 func _process(dt):
-	if parent.hlth_drain != false:
+#	if parent.get_node('ui/org/right/dbg')._health_drain(true):
+	if parent.hlth_drain == true:
+#	if _health_drain():
 		parent.hlth_drn(dt)
 
 func _get_transition(_dt):
@@ -106,7 +111,7 @@ func _get_transition(_dt):
 					return states.jump
 				else:
 					return states.fall
-			if parent.moving == true:
+			if parent.dir.length() != 0:
 				return states.move
 		states.move:
 			if !parent.is_on_floor():
@@ -114,7 +119,7 @@ func _get_transition(_dt):
 					return states.jump
 				else:
 					return states.fall
-			if !parent.moving:
+			if !parent.dir.length() > 0:
 				return states.idle
 			if parent.dashing:
 				return states.dash
@@ -196,7 +201,7 @@ func _enter_state(new_state, _prev_state):
 		states.ledge:
 			parent.animate_char(8)
 
-	parent.get_node('dbgtxt').text = str('\n state ', states.keys()[new_state]).capitalize()
+#	parent.get_node('dbgtxt').text = str('\n state ', states.keys()[new_state]).capitalize()
 
 func _exit_state(prev_state,_new_state):
 	match prev_state:
