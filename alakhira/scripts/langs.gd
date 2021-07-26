@@ -25,11 +25,9 @@ var langs = {
 
 func _lang_select(loc):
 	TranslationServer.set_locale(loc)
-	print(loc)
 
 func _resize_scroll(mu):
 	$scroll.rect_min_size.y = $scroll/list/btn0.rect_size.y * mu
-	print($scroll.rect_min_size)
 
 func _ready():
 	var index = langs.keys()
