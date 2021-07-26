@@ -9,8 +9,8 @@ margin_top = 128.0
 margin_right = 444.0
 margin_bottom = 339.0
 rect_min_size = Vector2( 320, 0 )
+rect_clip_content = true
 size_flags_horizontal = 3
-size_flags_vertical = 3
 custom_constants/separation = 11
 script = ExtResource( 2 )
 __meta__ = {
@@ -19,29 +19,46 @@ __meta__ = {
 
 [node name="sep_top" type="CenterContainer" parent="."]
 margin_right = 320.0
-margin_bottom = 48.0
+margin_bottom = 23.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="btn0" type="Button" parent="."]
-margin_top = 59.0
+[node name="scroll" type="ScrollContainer" parent="."]
+margin_left = 320.0
+margin_top = 34.0
 margin_right = 320.0
-margin_bottom = 92.0
+margin_bottom = 133.0
+rect_min_size = Vector2( 0, 99 )
+size_flags_horizontal = 10
+scroll_horizontal_enabled = false
+
+[node name="list" type="VBoxContainer" parent="scroll"]
+custom_constants/separation = 11
+alignment = 2
+
+[node name="btn0" type="Button" parent="scroll/list"]
+visible = false
+margin_right = 12.0
+margin_bottom = 33.0
+size_flags_vertical = 0
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
 custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 flat = true
 align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sep_bot" type="CenterContainer" parent="."]
-margin_top = 103.0
+margin_top = 144.0
 margin_right = 320.0
-margin_bottom = 151.0
+margin_bottom = 167.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="langs_b" type="Button" parent="."]
-margin_top = 162.0
+margin_top = 178.0
 margin_right = 320.0
 margin_bottom = 211.0
 size_flags_horizontal = 3

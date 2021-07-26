@@ -5,21 +5,41 @@ var langs = {
 	'fr': 'français',
 	'ar': 'العربية',
 	'afr': 'afrikaans',
-	'ojb': 'ojibwe',
+	'ojb': 'ojibweᐊᓂᐦᔑᓈᐯᒧᐎᓐᐊᓂᐦᔑᓈᐯᒧᐎᓐᐊᓂᐦᔑᓈᐯᒧᐎᓐᐊᓂᐦᔑᓈᐯᒧᐎ',
 	'crm': 'creole (_mauritius)',
-	'crh': 'creole (_haiti)'
+	'crh': 'creole (_haiti)',
+	'jp' : '日本語',
+	'cn' : 'chinese',
+	'pr' : 'portuguese',
+	'prbr' : 'brazillian protuguese',
+	'amz' : 'amazigh',
+	'fn' : 'finnish',
+	'ru' : 'русский',
+	'po' : 'polish',
+	'fa' : 'فارسی',
+	'in' : 'indian',
+	'vt' : 'vietnamese',
+	'sp' : 'spanish',
+	'it' : 'italian'
 }
 
 func _lang_select(loc):
 	TranslationServer.set_locale(loc)
+	print(loc)
+
+func _resize_scroll(mu):
+	$scroll.rect_min_size.y = $scroll/list/btn0.rect_size.y * mu
+	print($scroll.rect_min_size)
 
 func _ready():
 	var index = langs.keys()
 	index.sort()
-	index.invert()
 	for l in range(index.size()):
-		var btn = get_child(1).duplicate(l)
+		var btn = $scroll/list.get_child(0).duplicate(l)
 		btn.name = index[l]
 		btn.text = langs[index[l]].capitalize()
-		add_child_below_node($sep_bot,btn,true)
 		btn.connect('pressed', self, '_lang_select', [btn.name])
+		btn.show()
+		$scroll/list.add_child(btn)
+
+	_resize_scroll(7)
