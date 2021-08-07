@@ -153,50 +153,51 @@ margin_left = 0.0
 margin_top = 536.0
 margin_right = 320.0
 margin_bottom = 767.0
+script = ExtResource( 11 )
 
 [node name="langs" parent="." instance=ExtResource( 5 )]
 margin_left = 0.0
 margin_top = 767.0
 margin_right = 320.0
-margin_bottom = 954.0
+margin_bottom = 932.0
 
 [node name="disp" parent="." instance=ExtResource( 6 )]
 margin_left = 0.0
-margin_top = 954.0
+margin_top = 932.0
 margin_right = 320.0
-margin_bottom = 1199.0
+margin_bottom = 1177.0
 
 [node name="ctrls" parent="." instance=ExtResource( 7 )]
 margin_left = 0.0
-margin_top = 1199.0
+margin_top = 1177.0
 margin_right = 320.0
-margin_bottom = 1634.0
+margin_bottom = 1612.0
 
 [node name="cam" parent="." instance=ExtResource( 8 )]
 margin_left = 0.0
-margin_top = 1634.0
+margin_top = 1612.0
 margin_right = 320.0
-margin_bottom = 1939.0
+margin_bottom = 1917.0
 
 [node name="sep_bot" type="CenterContainer" parent="."]
-margin_top = 1939.0
+margin_top = 1917.0
 margin_right = 320.0
-margin_bottom = 1939.0
+margin_bottom = 1917.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="version" type="Label" parent="."]
-margin_top = 1939.0
+margin_top = 1917.0
 margin_right = 320.0
-margin_bottom = 1952.0
+margin_bottom = 1930.0
 custom_fonts/font = ExtResource( 9 )
 align = 2
 script = ExtResource( 10 )
 
 [node name="hlth" type="ProgressBar" parent="."]
-margin_top = 1952.0
+margin_top = 1930.0
 margin_right = 320.0
-margin_bottom = 1955.5
+margin_bottom = 1933.5
 rect_min_size = Vector2( 0, 3.5 )
 mouse_filter = 2
 size_flags_horizontal = 3

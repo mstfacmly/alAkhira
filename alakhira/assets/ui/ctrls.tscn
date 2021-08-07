@@ -300,7 +300,7 @@ margin_bottom = 391.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ctrls_b" type="Button" parent="."]
+[node name="back" type="Button" parent="."]
 margin_top = 402.0
 margin_right = 320.0
 margin_bottom = 435.0

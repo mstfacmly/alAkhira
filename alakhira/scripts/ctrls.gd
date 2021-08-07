@@ -24,7 +24,7 @@ func _input(ev):
 				pass
 			else:
 				accept_event()
-				_opts_menu()
+				$org/right/opts._opts_menu()
 		
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()

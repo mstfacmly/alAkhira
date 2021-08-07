@@ -158,7 +158,7 @@ margin_bottom = 369.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="cam_b" type="Button" parent="."]
+[node name="back" type="Button" parent="."]
 margin_top = 380.0
 margin_right = 320.0
 margin_bottom = 413.0

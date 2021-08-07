@@ -12,16 +12,18 @@ func _signals():
 				for i in m.get_children():
 					if i.get_class() == 'Button':
 #						i.connect('pressed', self, i.name+'_btn')
-						i.connect('pressed', self, '_ui_btn_pressed', [i.get_name()])
+						i.connect('pressed', self, '_ui_btn_pressed', [i])
+						pressed[i.name] = pressed.size()
 					else:
 						for l in i.get_children():
+							pressed[l.name] = pressed.size()
 							#if i.name == 'cam_*':
 							#	l.connect('pressed', $org/right/cam, '_'+i.name+'_'+l.name)
 							if l.get_class() == 'Button':
 #								l.connect('pressed', i, i.name+'_'+l.name)
-								l.connect('pressed', self, '_ui_btn_pressed', [l.get_parent().get_name()])
+								l.connect('pressed', l, '_ui_btn_pressed', [l.get_parent()])
 							elif l.get_class() == 'OptionButton':
-								l.get_popup().connect('id_pressed', i.get_parent(), '_'+i.get_name()+'_select')
+								l.get_popup().connect('id_pressed', i.get_parent(), '_'+i.name+'_select')
 							
 	$org/right/cam/cam_x/btn.connect('pressed', $org/right/cam, '_cam_x_btn')
 	$org/right/cam/cam_y/btn.connect('pressed', $org/right/cam, '_cam_y_btn')
@@ -46,6 +48,7 @@ func _ready():
 		_main_menu()
 		stage = ResourceLoader.load(test)
 	_signals()
+	print(pressed)
 
 
 func _input(ev):
@@ -53,7 +56,7 @@ func _input(ev):
 	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
 #	var btn
 	
-	if get_parent().get_name() == 'az':# && az.state != 1:
+	if get_parent().name == 'az':# && az.state != 1:
 		if !paused && pause:
 			_pause()
 		elif paused && pause:

@@ -76,10 +76,10 @@ func _save_cfg(sect, key, val):
 
 func _gui_input(ev):
 	if ev.is_action_pressed('ui_down'):
-#		focus_next
+		focus_next
 		accept_event()
 	if ev.is_action_pressed('ui_up'):
-#		focus_previous
+		focus_previous
 		accept_event()
 	if ev.is_action_pressed('ui_accept'):
 		_ui_btn_pressed(ev)
@@ -91,98 +91,96 @@ func _on_timer_timeout():
 func _populate(menu):
 #	print(menu.name)
 	for i in menu.get_children():
-#		print(i.name)
 		pressed[i.name] = pressed.size()
 
 func _ui_btn_pressed(press):
-	if press == 'start':
+	if press.name == 'start':
 		call_deferred('_ld_cplt')
 	
-	if press == 'rld':
+	if press.name == 'rld':
 		get_tree().set_pause(false)
 		get_tree().reload_current_scene()
 		
-	print(press)#ed.keys())
-#	match press:
-#		pressed.opts:
-#			_opts_menu()
-#		menu_childer.opts:
-	if press == 'opts' or press == 'opts_b':
-		_opts_menu()
-	if press == 'langs' or press == 'langs_b':
-		$org/right/langs._showhide()
-		_hide_opts()
-	if press == 'disp' or press == 'disp_b':
-		$org/right/disp._showhide()
-		_hide_opts()
-	if press == 'ctrls' or press == 'ctrls_b':
-		$org/right/ctrls._showhide()
-		_hide_opts()
-	if press == 'cam' or press == 'cam_b':
-		$org/right/cam._showhide()
-		_hide_opts()
-	if press == 'dbg' or press == 'dbg_b':
-		$org/right/dbg._showhide()
-		_hide_menu()
-#		_hide_opts()
+	match press.name:
+		'opts':
+			$org/right/opts/._opts_menu()
+		'langs':
+			$org/right/langs._showhide()
+			_hide_opts()
+		'disp':
+			$org/right/disp._showhide()
+			_hide_opts()
+		'ctrls':
+			$org/right/ctrls._showhide()
+			_hide_opts()
+		'cam':
+			$org/right/cam._showhide()
+			_hide_opts()
+		'dbg':
+			$org/right/dbg._showhide()
+			_hide_menu()
+		'back':
+			get_node('org/right/'+press.get_parent().name)._showhide()
+			_hide_opts()
 	
-	if press == 'quit':
-		get_tree().quit()
-	if press == 'rsm':
-		_unpause()
+		'quit':
+			get_tree().quit()
+		'rsm':
+			_unpause()
 		
-	if press == 'site':
-		OS.shell_open('https://studioslune.com/')
+		'site':
+			OS.shell_open('https://studioslune.com/')
 	
-	if press == 'fs':
-		OS.set_window_fullscreen(!OS.window_fullscreen)
-		if OS.is_window_fullscreen():
-			$org/right/disp/fs/btn.text = 'On'
-		else:
-			$org/right/disp/fs/btn.text = 'Off'
+		'fs':
+			OS.set_window_fullscreen(!OS.window_fullscreen)
+			if OS.is_window_fullscreen():
+				$org/right/disp/fs/btn.text = 'On'
+			else:
+				$org/right/disp/fs/btn.text = 'Off'
 	
-	if press == 'vsync':
+		'vsync':
 #		OS.vsync_enabled = !OS.vsync_enabled
-		if OS.is_vsync_enabled() != true:
-			OS.set_use_vsync(true)
-			$org/right/disp/vsync/btn.text = 'On'
-		else:
-			OS.set_use_vsync(false)
-			$org/right/disp/vsync/btn.text = 'Off'
+			if OS.is_vsync_enabled() != true:
+				OS.set_use_vsync(true)
+				$org/right/disp/vsync/btn.text = 'On'
+			else:
+				OS.set_use_vsync(false)
+				$org/right/disp/vsync/btn.text = 'Off'
 			
-	if press == 'info':
-		#_show_dbg()
-		$org/left/dbg_print.visible = false if $org/left/dbg_print.visible else true
-		
-		if $org/left/dbg_print.is_visible() != true:
-			$org/right/dbg/info/btn.text = 'Off'
-		else:
-			$org/right/dbg/info/btn.text = 'On' 
+		'info':
+			#_show_dbg()
+			$org/left/dbg_print.visible = false if $org/left/dbg_print.visible else true
+			if $org/left/dbg_print.is_visible() != true:
+				$org/right/dbg/info/btn.text = 'Off'
+			else:
+				$org/right/dbg/info/btn.text = 'On' 
 	
-	if press == 'col_ind':
-		#_show_col()
-		az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible = false if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible else true
+		'col_ind':
+			#_show_col()
+			az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible = false if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible else true
 		
-		if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible != true:
-			$org/right/dbg/col_ind/btn.text = 'Hide'
-		else:
-			$org/right/dbg/col_ind/btn.text = 'Show'
+			if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible != true:
+				$org/right/dbg/col_ind/btn.text = 'Hide'
+			else:
+				$org/right/dbg/col_ind/btn.text = 'Show'
 	
-	if press == 'hlth_drn':
-		$org/right/dbg._health_drain()
-#		az.hlth_drain = !az.hlth_drain
-		"""if az.hlth_drain != false:
+		'hlth_drn':
+			$org/right/dbg._health_drain()
+#			az.hlth_drain = !az.hlth_drain
+
+		'hlth_full':
+			az.hlth = az.max_hlth
+	
+		'hlth_nil':
+			az.hlth = 0
+	"""
+		if az.hlth_drain != false:
 			az.hlth_drain = false
 			$org/right/dbg/hlth_drn/btn.text = 'Disabled'
 		else:
 			az.hlth_drain = true
-			$org/right/dbg/hlth_drn/btn.text = 'Enabled'"""
-	
-	if press == 'hlth_full':
-		az.hlth = az.max_hlth
-	
-	if press == 'hlth_nil':
-		az.hlth = 0
+			$org/right/dbg/hlth_drn/btn.text = 'Enabled'
+	"""
 
 func _hide_opts():
 	var opts = $org/right/opts
@@ -192,28 +190,6 @@ func _hide_opts():
 		back = funcref(self, '_opts_menu')
 	else:
 		opts.set_visible(false)
-	
-	_grab_menu()
-
-func _opts_menu():
-	var opts = $org/right/opts
-	var menu = $org/right/menuList
-	
-	if !opts.is_visible():
-		opts.set_visible(true)
-		back = funcref(self, '_opts_menu')
-	else:
-		opts.set_visible(false)
-		if az != null:
-			back = funcref(self, '_pause_menu')
-		else:
-			back = funcref(self, '_main_menu')
-	
-	if menu.is_visible() != true:	
-		menu.set_visible(true)
-		back = funcref(self, '_opts_menu')
-	else:
-		menu.set_visible(false)
 	
 	_grab_menu()
 
