@@ -94,14 +94,17 @@ func _on_timer_timeout():
 		pressed[i.name] = pressed.size()"""
 
 func _ui_btn_pressed(press):
-	if press.name == 'start':
-		call_deferred('_ld_cplt')
-	
-	if press.name == 'rld':
-		get_tree().set_pause(false)
-		get_tree().reload_current_scene()
-		
 	match press.name:
+		'start':
+			call_deferred('_ld_cplt')
+		'rld':
+			get_tree().set_pause(false)
+			get_tree().reload_current_scene()
+		'quit':
+			get_tree().quit()
+		'rsm':
+			_unpause()
+		
 		'opts':
 			$org/right/opts/._opts_menu()
 		'langs':
@@ -123,18 +126,12 @@ func _ui_btn_pressed(press):
 			get_node('org/right/'+press.get_parent().name)._showhide()
 			_hide_opts()
 	
-		'quit':
-			get_tree().quit()
-		'rsm':
-			_unpause()
-		
 		'site':
 			OS.shell_open('https://studioslune.com/')
 	
 		'fs':
 			OS.set_window_fullscreen(!OS.window_fullscreen)
 			$org/right/disp._fs_set()
-	
 		'vsync':
 			OS.set_use_vsync(!OS.vsync_enabled)
 			$org/right/disp._vsync_set()
@@ -142,17 +139,13 @@ func _ui_btn_pressed(press):
 		'info':
 			$org/left/dbg_print.set_visible(!$org/left/dbg_print.visible)
 			$org/right/dbg._dbg_set()
-		
 		'col_ind':
 			$org/right/dbg._show_collision(!$org/right/dbg.col_show)
 			az.get_node('body/Skeleton/targets/ptarget/Sprite3D').set_visible(!$org/right/dbg.col_show)
-		
 		'hlth_drn':
 			$org/right/dbg.set_draining(!$org/right/dbg.draining)
-		
 		'hlth_full':
 			az.hlth = az.max_hlth
-		
 		'hlth_nil':
 			az.hlth = 0
 
