@@ -1,6 +1,6 @@
 extends "res://scripts/ui_core.gd"
 
-export var standard = 'Default'
+export var default = 'Default'
 export var invert = 'Inverted'
 export var evil = 'The Devil\'s Configuration'
 
@@ -24,12 +24,12 @@ func _cam_txt():
 	if global.invert_x == true:
 		$cam_x/btn.set_text(invert)
 	else:
-		$cam_x/btn.set_text(standard)
+		$cam_x/btn.set_text(default)
 	
 	if global.invert_y == true:
 		$cam_y/btn.set_text(evil)
 	else:
-		$cam_y/btn.set_text(standard)
+		$cam_y/btn.set_text(default)
 
 func _ready():
 	_cam_txt()

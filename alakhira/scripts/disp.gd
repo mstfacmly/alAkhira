@@ -20,9 +20,9 @@ const disp_rez = [
 
 func _fs_set():
 	if !OS.is_window_fullscreen():
-		$fs/btn.text = 'On'
-	else:
 		$fs/btn.text = 'Off'
+	else:
+		$fs/btn.text = 'On'
 
 func _vsync_set():
 	if OS.is_vsync_enabled() == true:

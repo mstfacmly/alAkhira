@@ -13,15 +13,13 @@ func _signals():
 					if i.get_class() == 'Button':
 #						i.connect('pressed', self, i.name+'_btn')
 						i.connect('pressed', self, '_ui_btn_pressed', [i])
-						pressed[i.name] = pressed.size()
 					else:
 						for l in i.get_children():
-							pressed[l.name] = pressed.size()
 							#if i.name == 'cam_*':
 							#	l.connect('pressed', $org/right/cam, '_'+i.name+'_'+l.name)
 							if l.get_class() == 'Button':
 #								l.connect('pressed', i, i.name+'_'+l.name)
-								l.connect('pressed', l, '_ui_btn_pressed', [l.get_parent()])
+								l.connect('pressed', self, '_ui_btn_pressed', [l.get_parent()])
 							elif l.get_class() == 'OptionButton':
 								l.get_popup().connect('id_pressed', i.get_parent(), '_'+i.name+'_select')
 							
@@ -37,7 +35,7 @@ func _ready():
 	
 	if get_parent().name == 'az':
 		az = get_parent()
-		bar = $org/right/hlth
+#		bar = $org/right/hlth
 		set_process(1)
 		_gen_ui()
 		envanim = get_parent().get_parent().get_node('env/AnimationPlayer')
@@ -48,8 +46,6 @@ func _ready():
 		_main_menu()
 		stage = ResourceLoader.load(test)
 	_signals()
-	print(pressed)
-
 
 func _input(ev):
 	var wait = 2
@@ -78,7 +74,7 @@ func _input(ev):
 		ev_mod = 1
 
 func _main_menu():
-	_populate($org/right/menuList)
+#	_populate($org/right/menuList)
 	# Show/Hide Menu Items
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
@@ -108,7 +104,7 @@ func _gen_ui():
 		pass
 	else:
 	#	max_hlth = az.max_hlth
-		bar.max_value = az.max_hlth
+		$org/right/hlth.max_value = az.max_hlth
 		_updt_hlth(az.max_hlth)
 		az.get_node('cam').set_enabled(true)
 		$org/right/dbg.call_deferred('_dbg')
@@ -150,7 +146,7 @@ func _updt_hlth(new_val):
 		$tween.start()
 
 func _process(_delta):
-	bar.value = anim_hlth
+	$org/right/hlth.value = anim_hlth
 
 func _ld_cplt():
 	stage = thread.wait_to_finish()

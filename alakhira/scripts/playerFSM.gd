@@ -94,13 +94,11 @@ func _state_logic(dt):
 
 #	_dbgtxt()
 
-func _health_drain() -> bool:
-	return false if true else true
+"""func _health_drain() -> bool:
+	return false if true else true"""
 
 func _process(dt):
-#	if parent.get_node('ui/org/right/dbg')._health_drain(true):
-	if parent.hlth_drain == true:
-#	if _health_drain():
+	if parent.get_node('ui/org/right/dbg').draining:
 		parent.hlth_drn(dt)
 
 func _get_transition(_dt):

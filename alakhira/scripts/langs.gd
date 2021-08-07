@@ -4,22 +4,22 @@ var langs = {
 	'en': 'english',
 	'fr': 'français',
 	'ar': 'العربية',
-	'afr': 'afrikaans',
+#	'afr': 'afrikaans',
 	'ojb': 'ojibweᐊᓂᐦᔑᓈᐯᒧᐎᓐᐊᓂᐦᔑᓈᐯᒧᐎᓐᐊᓂᐦᔑᓈᐯᒧᐎᓐᐊᓂᐦᔑᓈᐯᒧᐎ',
-	'crm': 'creole (_mauritius_)',
-	'crh': 'creole (_haiti_)',
+#	'crm': 'creole (_mauritius_)',
+#	'crh': 'creole (_haiti_)',
 	'jp' : '日本語',
-	'cn' : 'chinese',
+	'cn' : '汉语',
 	'pr' : 'portuguese',
 	'tmz' : 'tamazight',
 	'fn' : 'finnish',
 	'ru' : 'русский',
-	'po' : 'polish',
+#	'po' : 'polish',
 	'fa' : 'فارسی',
 	'in' : 'indian',
 	'vt' : '㗂越',
 	'sp' : 'spanish',
-	'it' : 'italian'
+#	'it' : 'italian'
 }
 
 func _lang_select(loc):

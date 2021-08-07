@@ -5,7 +5,7 @@ signal quit
 
 # Onready
 #onready var shifter = shift_script
-var bar
+#var bar
 
 # variables
 var az
@@ -16,7 +16,7 @@ var spd = 2
 var ev_mod = 0
 var stage
 var back = null
-var pressed = {}
+#var pressed = {}
 
 const INPUT_CFG = [
 	'mv_f', 
@@ -76,10 +76,10 @@ func _save_cfg(sect, key, val):
 
 func _gui_input(ev):
 	if ev.is_action_pressed('ui_down'):
-		focus_next
+		#focus_next
 		accept_event()
 	if ev.is_action_pressed('ui_up'):
-		focus_previous
+		#focus_previous
 		accept_event()
 	if ev.is_action_pressed('ui_accept'):
 		_ui_btn_pressed(ev)
@@ -88,10 +88,10 @@ func _gui_input(ev):
 func _on_timer_timeout():
 	get_tree().quit()
 
-func _populate(menu):
+"""func _populate(menu):
 #	print(menu.name)
 	for i in menu.get_children():
-		pressed[i.name] = pressed.size()
+		pressed[i.name] = pressed.size()"""
 
 func _ui_btn_pressed(press):
 	if press.name == 'start':
@@ -133,82 +133,44 @@ func _ui_btn_pressed(press):
 	
 		'fs':
 			OS.set_window_fullscreen(!OS.window_fullscreen)
-			if OS.is_window_fullscreen():
-				$org/right/disp/fs/btn.text = 'On'
-			else:
-				$org/right/disp/fs/btn.text = 'Off'
+			$org/right/disp._fs_set()
 	
 		'vsync':
-#		OS.vsync_enabled = !OS.vsync_enabled
-			if OS.is_vsync_enabled() != true:
-				OS.set_use_vsync(true)
-				$org/right/disp/vsync/btn.text = 'On'
-			else:
-				OS.set_use_vsync(false)
-				$org/right/disp/vsync/btn.text = 'Off'
-			
-		'info':
-			#_show_dbg()
-			$org/left/dbg_print.visible = false if $org/left/dbg_print.visible else true
-			if $org/left/dbg_print.is_visible() != true:
-				$org/right/dbg/info/btn.text = 'Off'
-			else:
-				$org/right/dbg/info/btn.text = 'On' 
-	
-		'col_ind':
-			#_show_col()
-			az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible = false if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible else true
+			OS.set_use_vsync(!OS.vsync_enabled)
+			$org/right/disp._vsync_set()
 		
-			if az.get_node('body/Skeleton/targets/ptarget/Sprite3D').visible != true:
-				$org/right/dbg/col_ind/btn.text = 'Hide'
-			else:
-				$org/right/dbg/col_ind/btn.text = 'Show'
-	
+		'info':
+			$org/left/dbg_print.set_visible(!$org/left/dbg_print.visible)
+			$org/right/dbg._dbg_set()
+		
+		'col_ind':
+			$org/right/dbg._show_collision(!$org/right/dbg.col_show)
+			az.get_node('body/Skeleton/targets/ptarget/Sprite3D').set_visible(!$org/right/dbg.col_show)
+		
 		'hlth_drn':
-			$org/right/dbg._health_drain()
-#			az.hlth_drain = !az.hlth_drain
-
+			$org/right/dbg.set_draining(!$org/right/dbg.draining)
+		
 		'hlth_full':
 			az.hlth = az.max_hlth
-	
+		
 		'hlth_nil':
 			az.hlth = 0
-	"""
-		if az.hlth_drain != false:
-			az.hlth_drain = false
-			$org/right/dbg/hlth_drn/btn.text = 'Disabled'
-		else:
-			az.hlth_drain = true
-			$org/right/dbg/hlth_drn/btn.text = 'Enabled'
-	"""
 
 func _hide_opts():
-	var opts = $org/right/opts
-	
-	if opts.is_visible() != true:
-		opts.set_visible(true)
-		back = funcref(self, '_opts_menu')
-	else:
-		opts.set_visible(false)
-	
+	$org/right/opts.set_visible(!$org/right/opts.is_visible())
 	_grab_menu()
-
+	
 func _hide_menu():
-	var menu = $org/right/menuList
-	if menu.is_visible() != true:
-		menu.set_visible(true)
-	else:
-		menu.set_visible(false)
-	
+	$org/right/menuList.set_visible(!$org/right/menuList.is_visible())
 	_grab_menu()
-
-#	var type = $org/right/menuList.get_children()
-#	for i in type:
-#		if i.get_class() == 'Button':
-#			if i.disabled != true:
-#				i.disabled = true
-#			else:
-#				i.disabled = false
+	
+	"""var type = $org/right/menuList.get_children()
+	for i in type:
+		if i.get_class() == 'Button':
+			if i.disabled != true:
+				i.disabled = true
+			else:
+				i.disabled = false"""
 
 func _grab_menu():
 	var menlistr = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]
@@ -232,7 +194,7 @@ func _grab_menu():
 
 func _pause_menu():
 	az.hide()
-	bar.hide()
+	$org/right/hlth.hide()
 	Input.set_mouse_mode(0)
 	$org/right/menuList.show()
 	_grab_menu()
@@ -245,7 +207,7 @@ func _pause():
 
 func _unpause():
 	az.show()
-	bar.show()
+	$org/right/hlth.show()
 	paused = false
 	Input.set_mouse_mode(2)
 	for i in [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
@@ -253,19 +215,14 @@ func _unpause():
 #	_pause_shift()
 	get_tree().set_pause(false)
 
-#func _pause_shift():
-#	if shifter.curr != 'spi':
-#		envanim.play('shift', -1, spd, (spd < 0))
-#		shifter.curr = 'spi'
-#	elif shifter.curr != 'phys':
-#		envanim.play('shift', -1, -spd, (-spd < 0))
-#		shifter.curr = 'phys'
+"""func _pause_shift():
+	if shifter.curr != 'spi':
+		envanim.play('shift', -1, spd, (spd < 0))
+		shifter.curr = 'spi'
+	elif shifter.curr != 'phys':
+		envanim.play('shift', -1, -spd, (-spd < 0))
+		shifter.curr = 'phys'"""
 
 func _showhide():
-	if is_visible() != true:
-		set_visible(true)
-		back = funcref(self, '_showhide')
-	else:
-		set_visible(false)
-	
+	set_visible(!is_visible())	
 	_grab_menu()
