@@ -125,12 +125,12 @@ func _ui_btn_pressed(press):
 		
 		'info':
 			$org/left/dbg_print.set_visible(!$org/left/dbg_print.visible)
-			$org/right/dbg._dbg_set()
+			$org/right/dbg._dbg_txt_set()
 		'col_ind':
 			$org/right/dbg._show_collision(!$org/right/dbg.col_show)
-			az.get_node('body/Skeleton/targets/ptarget/Sprite3D').set_visible(!$org/right/dbg.col_show)
+			get_parent().get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
 		'hlth_drn':
-			$org/right/dbg.set_draining(!$org/right/dbg.draining)
+			$org/right/dbg._set_draining(!$org/right/dbg.draining)
 		'hlth_full':
 			az.hlth = az.max_hlth
 		'hlth_nil':
@@ -172,28 +172,25 @@ func _grab_menu():
 							btns.append(b)
 							btns[0].grab_focus()
 
-func _pause_menu():
-	get_parent().hide()
-	$org/right/hlth.hide()
-	Input.set_mouse_mode(0)
-	$org/right/menuList.show()
+func _pause_menu(mode):
+	get_parent().set_visible(!get_parent().visible)
+	$org/right/hlth.set_visible(!$org/right/hlth.visible)
+	Input.set_mouse_mode(mode)
+	$org/right/menuList.set_visible(!$org/right/menuList.visible)
+	paused = !paused
+	get_tree().set_pause(paused)
+	
 	_grab_menu()
 
 func _pause():
-	_pause_menu()
-#	_pause_shift()
-	paused = true
-	get_tree().set_pause(true)
+	_pause_menu(0)
 
 func _unpause():
-	get_parent().show()
-	$org/right/hlth.show()
-	paused = false
-	Input.set_mouse_mode(2)
-	for i in [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
+	_pause_menu(2)
+	
+	for i in [ 'menuList' ,'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
 		$org/right.get_node(i).hide()
 #	_pause_shift()
-	get_tree().set_pause(false)
 
 """func _pause_shift():
 	if shifter.curr != 'spi':

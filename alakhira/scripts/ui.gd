@@ -15,7 +15,7 @@ func _signals():
 						i.connect('pressed', self, '_ui_btn_pressed', [i])
 					else:
 						for l in i.get_children():
-							#if i.name == 'cam_*':
+							#if i.name == 'cam_'+['x','y']:
 							#	l.connect('pressed', $org/right/cam, '_'+i.name+'_'+l.name)
 							if l.get_class() == 'Button':
 #								l.connect('pressed', i, i.name+'_'+l.name)
@@ -37,10 +37,11 @@ func _ready():
 #		az = get_parent()
 #		bar = $org/right/hlth
 		set_process(1)
-		_gen_ui(['dbg', 'opts' ,'rld', 'rsm', 'quit'],['dbg','opts','langs','disp','ctrls','cam','hlth'])
+		_gen_ui(['dbg', 'opts' ,'rld', 'rsm', 'quit'],['dbg','opts','langs','disp','ctrls','cam','version'])
 		envanim = get_parent().get_parent().get_node('env/AnimationPlayer')
 		get_parent().set_physics_process(true)
 		get_parent().get_node('cam').set_enabled(true)
+		get_parent().get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
 	else:
 		set_process(0)
 		_main_menu(['start','opts','quit'],['dbg','opts','langs','disp','ctrls','cam','hlth'])
@@ -104,7 +105,7 @@ func _gen_ui(show,hide):
 	for i in $org/right.get_children():
 		if hide.has(i.name):
 			i.hide()
-	_hide_left()	
+	_hide_left()
 	_grab_menu()
 
 func _hide_left():

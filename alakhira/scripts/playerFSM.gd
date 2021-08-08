@@ -22,6 +22,7 @@ func _ready():
 #	add_state('gone')
 	
 	call_deferred('set_state', states.idle)
+#	parent.get_node('ui/org/right/dbg')._show_collision(0)
 
 func _input(ev):
 	
