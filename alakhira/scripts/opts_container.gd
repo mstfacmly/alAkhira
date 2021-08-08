@@ -18,11 +18,11 @@ func _opts_menu():
 		else:
 			back = funcref(self, '_main_menu')
 	
-	if menu.is_visible() != true:	
-		menu.set_visible(true)
+#	if !menu.is_visible():
+	menu.set_visible(!menu.visible)
 #		back = funcref(self, '_opts_menu')
-	else:
-		menu.set_visible(false)
+#	else:
+#		menu.set_visible(false)
 	
 	_grab_menu()
 

@@ -1,8 +1,6 @@
 extends "res://scripts/ui_core.gd"
 
 func _input(ev):
-#	for i in InputMap.get_actions():
-#		INPUT_CFG.append(i)
 	var button
 	for acts in INPUT_CFG:
 		var input_ev = InputMap.get_action_list(acts)[ev_mod]
@@ -13,10 +11,8 @@ func _input(ev):
 		elif input_ev is InputEventKey || input_ev is InputEventMouse:
 			button.set_text(OS.get_scancode_string(input_ev.scancode))# + ' , ' + str(InputEventMouseButton.get_button_index()))
 
-	if  button.is_connected('pressed', self, '_get_input') != true:
-		button.connect('pressed', self, '_get_input', [acts])
-	else:
-		pass
+#	if  !button.is_connected('pressed', self, '_get_input'):
+#		button.connect('pressed', self, '_get_input', [acts])
 
 	if ev.is_action_pressed('ui_cancel'):
 		if back != null:
@@ -36,3 +32,17 @@ func _input(ev):
 #				InputMap.action_erase_event(acts, old_ev)
 #			InputMap.action_add_event(acts, ev)
 #			_save_cfg('input', acts, scancode)
+
+func _ready():
+	INPUT_CFG = [
+	'mv_f', 
+	'mv_b',
+	'mv_l',
+	'mv_r',
+	'arm_l',
+	'arm_r',
+	'head',
+	'feet',
+	'cast',
+	'act',
+]

@@ -34,16 +34,16 @@ func _ready():
 #	print(get_children(),' , ',get_child_count())
 	
 	if get_parent().name == 'az':
-		az = get_parent()
+#		az = get_parent()
 #		bar = $org/right/hlth
 		set_process(1)
-		_gen_ui()
+		_gen_ui(['dbg', 'opts' ,'rld', 'rsm', 'quit'],['dbg','opts','langs','disp','ctrls','cam','hlth'])
 		envanim = get_parent().get_parent().get_node('env/AnimationPlayer')
 		get_parent().set_physics_process(true)
 		get_parent().get_node('cam').set_enabled(true)
 	else:
 		set_process(0)
-		_main_menu()
+		_main_menu(['start','opts','quit'],['dbg','opts','langs','disp','ctrls','cam','hlth'])
 		stage = ResourceLoader.load(test)
 	_signals()
 
@@ -60,9 +60,8 @@ func _input(ev):
 	
 	if ev.is_action_pressed('pause'):
 		$timer.start()
-	elif ev.is_action('pause') && !ev.is_pressed():
-		$timer.stop()
 	else:
+		$timer.stop()
 		$timer.set_wait_time(wait)
 	
 	if Input.is_key_pressed(KEY_F11):
@@ -73,66 +72,44 @@ func _input(ev):
 	elif ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
 		ev_mod = 1
 
-func _main_menu():
-#	_populate($org/right/menuList)
+func _main_menu(show,hide):
 	# Show/Hide Menu Items
-	$org/right/menuList/dbg.hide()
-	$org/right/menuList/contd.hide()
-	$org/right/menuList/rld.hide()
-	$org/right/menuList/start.show()
-	$org/right/menuList/rsm.hide()
-	$org/right/menuList/opts.show()
-	$org/right/menuList/quit.show()
-	$org/right/hlth.hide()
-	$org/right/opts.hide()
-	$org/right/disp.hide()
-	$org/right/ctrls.hide()
-	$org/right/langs.hide()
-	$org/right/cam.hide()
-	$org/right/dbg.hide()
+	for i in $org/right/menuList.get_children():
+		if !show.has(i.name):
+			i.hide()
+		else:
+			i.show()
 	
-	$org/left/dbg_print.hide()
-	$org/left/over/thanks.hide()
-	$org/left/over/rld.hide()
-	$org/left/over/quit.hide()
-	$org/left/over/site.hide()
+	for i in $org/right.get_children():
+		if hide.has(i.name):
+			i.hide()
 	
+	_hide_left()
 	_grab_menu()
 
-func _gen_ui():
-	if az.request_ready() != true:
-		pass
-	else:
-	#	max_hlth = az.max_hlth
-		$org/right/hlth.max_value = az.max_hlth
-		_updt_hlth(az.max_hlth)
-		az.get_node('cam').set_enabled(true)
-		$org/right/dbg.call_deferred('_dbg')
-		
-#	var menlist = ['dbg', 'opts' ,'rld', 'rsm', 'quit']
+func _gen_ui(show,hide):
+	_updt_hlth(get_parent().max_hlth)
+	get_parent().get_node('cam').set_enabled(1)
+	$org/right/dbg.call_deferred('_dbg')
 	
+	for i in $org/right/menuList.get_children():
+		if !show.has(i.name):
+			i.hide()
+		else:
+			i.show()
+
+	$org/right/menuList.move_child(find_node('opts'),1)
+	$org/right/menuList.hide()
+	
+	for i in $org/right.get_children():
+		if hide.has(i.name):
+			i.hide()
+	_hide_left()	
+	_grab_menu()
+
+func _hide_left():
 	$org/left/dbg_print.hide()
 	$org/left/over.hide()
-	
-	$org/right/opts.hide()
-	$org/right/disp.hide()
-	$org/right/ctrls.hide()
-	$org/right/langs.hide()
-	$org/right/cam.hide()
-	$org/right/dbg.hide()
-
-	$org/right/menuList.hide()
-	$org/right/version.hide()
-	$org/right/menuList/dbg.show()
-	$org/right/menuList/opts.show()
-	$org/right/menuList.move_child(find_node('opts'),1)
-	$org/right/menuList/contd.hide()
-	$org/right/menuList/rld.show()
-	$org/right/menuList/start.hide()
-	$org/right/menuList/rsm.show()
-	$org/right/menuList/quit.show()
-	
-	_grab_menu()
 
 func _on_timer_timeout():
 	get_tree().quit()
@@ -141,6 +118,7 @@ func _on_hlth_chng(hlth):
 	_updt_hlth(hlth)
 
 func _updt_hlth(new_val):
+	$org/right/hlth.max_value = new_val
 	$tween.interpolate_property(self, 'anim_hlth', anim_hlth, new_val, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	if !$tween.is_active():
 		$tween.start()

@@ -18,24 +18,12 @@ var stage
 var back = null
 #var pressed = {}
 
-const INPUT_CFG = [
-	'mv_f', 
-	'mv_b',
-	'mv_l',
-	'mv_r',
-	'arm_l',
-	'arm_r',
-	'head',
-	'feet',
-	'cast',
-	'act',
-]
+var INPUT_CFG = []
 
 const dir = [ 'left', 'right' ]
 
-var acts
+#var acts
 #var btn
-var ctrls_men = false
 const btns = []
 const CFG_FILE = 'user://config.cfg'
 
@@ -75,15 +63,14 @@ func _save_cfg(sect, key, val):
 	set_process_input(true)"""
 
 func _gui_input(ev):
-	if ev.is_action_pressed('ui_down'):
-		#focus_next
-		accept_event()
-	if ev.is_action_pressed('ui_up'):
-		#focus_previous
-		accept_event()
-	if ev.is_action_pressed('ui_accept'):
-		_ui_btn_pressed(ev)
-		accept_event()
+	match ev:
+		'ui_down':
+			focus_next
+			accept_event()
+		'ui_up':
+			accept_event()
+		'ui_accept':
+			accept_event()
 
 func _on_timer_timeout():
 	get_tree().quit()
@@ -186,7 +173,7 @@ func _grab_menu():
 							btns[0].grab_focus()
 
 func _pause_menu():
-	az.hide()
+	get_parent().hide()
 	$org/right/hlth.hide()
 	Input.set_mouse_mode(0)
 	$org/right/menuList.show()
@@ -199,7 +186,7 @@ func _pause():
 	get_tree().set_pause(true)
 
 func _unpause():
-	az.show()
+	get_parent().show()
 	$org/right/hlth.show()
 	paused = false
 	Input.set_mouse_mode(2)
