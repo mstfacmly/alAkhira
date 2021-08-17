@@ -1,11 +1,14 @@
-extends MarginContainer
+extends 'res://scripts/ui_core.gd'
 
-signal start
-signal quit
+#signal start
+#signal quit
 
 export (String, FILE) var test = 'res://env/test/testroom.tscn'
 
-func menu():
+func _ready():
+	connect("draw",self,"_grab_menu")
+
+"""func menu():
 	# Show/Hide Menu Items
 	$org/right/menuList/dbg.hide()
 	$org/right/menuList/contd.hide()
@@ -115,4 +118,4 @@ func _ready():
 
 func _input(ev):
 	if Input.is_key_pressed(KEY_F11):
-		OS.set_window_fullscreen(!OS.window_fullscreen)
+		OS.set_window_fullscreen(!OS.window_fullscreen)"""

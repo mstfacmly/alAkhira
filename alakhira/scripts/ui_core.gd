@@ -55,22 +55,6 @@ func _save_cfg(sect, key, val):
 	else:
 		cfg.set_value(sect, key, val)
 		cfg.save(CFG_FILE)
-	
-"""func _get_input(bind):
-	acts = bind
-	btn = $org/right/ctrls.get_node(acts).get_node('btn')
-	
-	set_process_input(true)"""
-
-func _gui_input(ev):
-	match ev:
-		'ui_down':
-			focus_next
-			accept_event()
-		'ui_up':
-			accept_event()
-		'ui_accept':
-			accept_event()
 
 func _on_timer_timeout():
 	get_tree().quit()
@@ -93,7 +77,8 @@ func _ui_btn_pressed(press):
 			_unpause()
 		
 		'opts':
-			$org/right/opts/._opts_menu()
+			$org/right/opts/._showhide()
+			_hide_menu()
 		'langs':
 			$org/right/langs._showhide()
 			_hide_opts()
@@ -138,39 +123,19 @@ func _ui_btn_pressed(press):
 
 func _hide_opts():
 	$org/right/opts.set_visible(!$org/right/opts.is_visible())
-	_grab_menu()
+#	_grab_menu()
 	
 func _hide_menu():
 	$org/right/menuList.set_visible(!$org/right/menuList.is_visible())
-	_grab_menu()
-	
-	"""var type = $org/right/menuList.get_children()
-	for i in type:
-		if i.get_class() == 'Button':
-			if i.disabled != true:
-				i.disabled = true
-			else:
-				i.disabled = false"""
+#	_grab_menu()
 
 func _grab_menu():
-	var menlistr = [ 'menuList', 'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]
-	var d = get_parent().name
-	if d == 'left':
-		for b in find_node('over').get_children():
-			btns.clear()
-			if b.is_visible() != false && b.get_focus_mode():
-				btns.append(b)
-				btns[0].grab_focus()
-	elif d == 'right':
-		if !menlistr.has(name):
-			for m in menlistr:
-				var men = get_node(m)
-				if men != null && men.is_visible() != false:
-					btns.clear()
-					for b in men.get_children():
-						if b.is_visible() != false && b.get_focus_mode():
-							btns.append(b)
-							btns[0].grab_focus()
+#	print(get_children())
+	var menu = []
+	for i in get_children():
+		if i.get_class() == 'Button' && i.visible:
+			menu.append(i)
+	menu[0].grab_focus()
 
 func _pause_menu(mode):
 	get_parent().set_visible(!get_parent().visible)
@@ -180,7 +145,7 @@ func _pause_menu(mode):
 	paused = !paused
 	get_tree().set_pause(paused)
 	
-	_grab_menu()
+#	_grab_menu()
 
 func _pause():
 	_pause_menu(0)
@@ -201,5 +166,6 @@ func _unpause():
 		shifter.curr = 'phys'"""
 
 func _showhide():
+	connect("draw",self,"_grab_menu")
 	set_visible(!is_visible())	
-	_grab_menu()
+#	_grab_menu()

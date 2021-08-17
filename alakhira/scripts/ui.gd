@@ -85,8 +85,9 @@ func _main_menu(show,hide):
 		if hide.has(i.name):
 			i.hide()
 	
+#	get_node("org/right/menuList/"+show[0]).grab_focus()
 	_hide_left()
-	_grab_menu()
+#	_grab_menu("org/right/menuList/")
 
 func _gen_ui(show,hide):
 	_updt_hlth(get_parent().max_hlth)
@@ -98,15 +99,17 @@ func _gen_ui(show,hide):
 			i.hide()
 		else:
 			i.show()
-
+	
 	$org/right/menuList.move_child(find_node('opts'),1)
 	$org/right/menuList.hide()
 	
 	for i in $org/right.get_children():
 		if hide.has(i.name):
 			i.hide()
+
+	get_node("org/right/menuList/"+show[0]).grab_focus()
 	_hide_left()
-	_grab_menu()
+#	_grab_menu()
 
 func _hide_left():
 	$org/left/dbg_print.hide()
