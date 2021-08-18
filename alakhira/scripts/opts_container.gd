@@ -5,7 +5,6 @@ func _opts_container():
 	pass
 
 func _opts_menu():
-	#var opts = self
 	var menu = get_parent().get_node('menuList')
 	
 	if !is_visible():
@@ -13,9 +12,9 @@ func _opts_menu():
 #		back = funcref(self, '_opts_menu')
 	else:
 		set_visible(false)
-		if az != null:
-			back = funcref(self, '_pause_menu')
-		else:
-			back = funcref(self, '_main_menu')
+#		if az != null:
+#			back = funcref(self, '_pause_menu')
+#		else:
+#			back = funcref(self, '_main_menu')
 	
 	menu.set_visible(!menu.visible)

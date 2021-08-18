@@ -14,13 +14,13 @@ func _input(ev):
 #	if  !button.is_connected('pressed', self, '_get_input'):
 #		button.connect('pressed', self, '_get_input', [acts])
 
-	if ev.is_action_pressed('ui_cancel'):
+	"""if ev.is_action_pressed('ui_cancel'):
 		if back != null:
 			if back.call_func() == '_main_menu' or back.call_func() == '_pause_menu':
 				pass
 			else:
 				accept_event()
-				$org/right/opts._opts_menu()
+				$org/right/opts._opts_menu()"""
 		
 #	if ev is InputEventKey:
 #		get_tree().set_input_as_handled()

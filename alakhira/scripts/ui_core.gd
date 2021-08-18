@@ -10,13 +10,10 @@ signal quit
 # variables
 var az
 var envanim
-var paused = false
 var anim_hlth = 0
 var spd = 2
 var ev_mod = 0
 var stage
-var back = null
-#var pressed = {}
 
 var INPUT_CFG = []
 
@@ -74,7 +71,7 @@ func _ui_btn_pressed(press):
 		'quit':
 			get_tree().quit()
 		'rsm':
-			_unpause()
+			_pause_menu(2)
 		
 		'opts':
 			$org/right/opts/._showhide()
@@ -121,38 +118,47 @@ func _ui_btn_pressed(press):
 		'hlth_nil':
 			az.hlth = 0
 
+func _main_menu(show,hide):
+	# Show/Hide Menu Items
+	for i in $org/right/menuList.get_children():
+		if !show.has(i.name):
+			i.hide()
+		else:
+			i.show()
+	
+	for i in $org/right.get_children():
+		if hide.has(i.name):
+			i.hide()
+
+func _hide_left():
+	$org/left/dbg_print.hide()
+	$org/left/over.hide()
+
 func _hide_opts():
 	$org/right/opts.set_visible(!$org/right/opts.is_visible())
-#	_grab_menu()
 	
 func _hide_menu():
 	$org/right/menuList.set_visible(!$org/right/menuList.is_visible())
-#	_grab_menu()
 
 func _grab_menu():
-#	print(get_children())
 	var menu = []
 	for i in get_children():
-		if i.get_class() == 'Button' && i.visible:
+		if i.get_class() == 'HBoxContainer':#i.get_class() == 'ScrollContainer':
+			menu.append(i.get_child(1))
+		if i.get_focus_mode() == 2 && i.visible:
 			menu.append(i)
 	menu[0].grab_focus()
+	menu.clear()
 
 func _pause_menu(mode):
+	Input.set_mouse_mode(mode)
 	get_parent().set_visible(!get_parent().visible)
 	$org/right/hlth.set_visible(!$org/right/hlth.visible)
-	Input.set_mouse_mode(mode)
 	$org/right/menuList.set_visible(!$org/right/menuList.visible)
-	paused = !paused
-	get_tree().set_pause(paused)
-	
-#	_grab_menu()
-
-func _pause():
-	_pause_menu(0)
+	get_tree().set_pause(!get_tree().paused)
 
 func _unpause():
 	_pause_menu(2)
-	
 	for i in [ 'menuList' ,'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
 		$org/right.get_node(i).hide()
 #	_pause_shift()
@@ -166,6 +172,6 @@ func _unpause():
 		shifter.curr = 'phys'"""
 
 func _showhide():
-	connect("draw",self,"_grab_menu")
+	if !is_connected("draw",self,"_grab_menu"):
+		connect("draw",self,"_grab_menu")
 	set_visible(!is_visible())	
-#	_grab_menu()

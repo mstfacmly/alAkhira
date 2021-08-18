@@ -34,32 +34,33 @@ func _ready():
 #	print(get_children(),' , ',get_child_count())
 	
 	if get_parent().name == 'az':
-#		az = get_parent()
-#		bar = $org/right/hlth
+		get_parent().get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
 		set_process(1)
-		_gen_ui(['dbg', 'opts' ,'rld', 'rsm', 'quit'],['dbg','opts','langs','disp','ctrls','cam','version'])
+		_updt_hlth(get_parent().max_hlth)
+		_main_menu(['dbg', 'opts' ,'rld', 'rsm', 'quit'],['menuList','dbg','opts','langs','disp','ctrls','cam','version'])
+		_hide_left()
 		envanim = get_parent().get_parent().get_node('env/AnimationPlayer')
 		get_parent().set_physics_process(true)
 		get_parent().get_node('cam').set_enabled(true)
-		get_parent().get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
+		$org/right/dbg.call_deferred('_dbg')
 	else:
 		set_process(0)
 		_main_menu(['start','opts','quit'],['dbg','opts','langs','disp','ctrls','cam','hlth'])
+		_hide_left()
 		stage = ResourceLoader.load(test)
 	_signals()
 
 func _input(ev):
 	var wait = 2
-	var pause = ev.is_action_pressed('pause') && !ev.is_echo()
-#	var btn
+	var pause = ev.is_action_pressed('pause')
 	
 	if get_parent().name == 'az':# && az.state != 1:
-		if !paused && pause:
-			_pause()
-		elif paused && pause:
+		if !get_tree().paused && pause:
+			_pause_menu(0)
+		elif get_tree().paused && pause:
 			_unpause()
 	
-	if ev.is_action_pressed('pause'):
+	if ev.is_action_pressed('pause')  && ev.is_echo():
 		$timer.start()
 	else:
 		$timer.stop()
@@ -72,48 +73,6 @@ func _input(ev):
 		ev_mod = 0
 	elif ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
 		ev_mod = 1
-
-func _main_menu(show,hide):
-	# Show/Hide Menu Items
-	for i in $org/right/menuList.get_children():
-		if !show.has(i.name):
-			i.hide()
-		else:
-			i.show()
-	
-	for i in $org/right.get_children():
-		if hide.has(i.name):
-			i.hide()
-	
-#	get_node("org/right/menuList/"+show[0]).grab_focus()
-	_hide_left()
-#	_grab_menu("org/right/menuList/")
-
-func _gen_ui(show,hide):
-	_updt_hlth(get_parent().max_hlth)
-	get_parent().get_node('cam').set_enabled(1)
-	$org/right/dbg.call_deferred('_dbg')
-	
-	for i in $org/right/menuList.get_children():
-		if !show.has(i.name):
-			i.hide()
-		else:
-			i.show()
-	
-	$org/right/menuList.move_child(find_node('opts'),1)
-	$org/right/menuList.hide()
-	
-	for i in $org/right.get_children():
-		if hide.has(i.name):
-			i.hide()
-
-	get_node("org/right/menuList/"+show[0]).grab_focus()
-	_hide_left()
-#	_grab_menu()
-
-func _hide_left():
-	$org/left/dbg_print.hide()
-	$org/left/over.hide()
 
 func _on_timer_timeout():
 	get_tree().quit()
