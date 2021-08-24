@@ -1,6 +1,6 @@
 extends "res://scripts/ui_core.gd"
 
-func _input(ev):
+func _input(_ev):
 	var button
 	for acts in INPUT_CFG:
 		var input_ev = InputMap.get_action_list(acts)[ev_mod]

@@ -3,9 +3,10 @@ extends Container
 signal start
 signal quit
 
-# Onready
 #onready var shifter = shift_script
-#var bar
+
+var back setget _set_back , _get_back
+var parentnode
 
 # variables
 var az
@@ -19,10 +20,15 @@ var INPUT_CFG = []
 
 const dir = [ 'left', 'right' ]
 
-#var acts
-#var btn
 const btns = []
 const CFG_FILE = 'user://config.cfg'
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		if _get_back() != null:
+			print(_get_back().name)
+#			_ui_btn_pressed(_get_back())
+#			pass
 
 func _load_cfg():
 	var cfg = ConfigFile.new()
@@ -62,6 +68,7 @@ func _on_timer_timeout():
 		pressed[i.name] = pressed.size()"""
 
 func _ui_btn_pressed(press):
+#	press.get_parent()
 	match press.name:
 		'start':
 			call_deferred('_ld_cplt')
@@ -142,13 +149,24 @@ func _hide_menu():
 
 func _grab_menu():
 	var menu = []
+	menu.clear()
 	for i in get_children():
 		if i.get_class() == 'HBoxContainer':#i.get_class() == 'ScrollContainer':
 			menu.append(i.get_child(1))
-		if i.get_focus_mode() == 2 && i.visible:
+		if i.get_class() == 'Button' && i.visible:
 			menu.append(i)
 	menu[0].grab_focus()
-	menu.clear()
+	back = menu[menu.size()-1]
+#	_set_back(menu.back())
+#	menu.clear()
+#	return menu
+
+func _set_back(menu):
+	back = menu
+#	print('back: ',back.name)#,'\nmenu: ',menu[0].name)
+
+func _get_back():
+	return back
 
 func _pause_menu(mode):
 	Input.set_mouse_mode(mode)
@@ -174,4 +192,6 @@ func _unpause():
 func _showhide():
 	if !is_connected("draw",self,"_grab_menu"):
 		connect("draw",self,"_grab_menu")
-	set_visible(!is_visible())	
+#	_set_back(_grab_menu().back())
+#	print(_get_back().name)
+	set_visible(!is_visible())

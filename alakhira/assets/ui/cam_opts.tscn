@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/ui/menufont.tres" type="DynamicFont" id=1]
-[ext_resource path="res://assets/ui/submenufont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://scripts/cam_opts.gd" type="Script" id=3]
+
+[sub_resource type="ImageTexture" id=1]
+
+[sub_resource type="ImageTexture" id=2]
+flags = 0
+flags = 0
 
 [node name="cam" type="VBoxContainer"]
 margin_left = 124.0
@@ -31,29 +36,47 @@ margin_bottom = 92.0
 size_flags_horizontal = 3
 
 [node name="NAME" type="Label" parent="cam_x"]
-margin_right = 158.0
+margin_right = 292.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
-text = "X Axis"
 valign = 1
 
-[node name="btn" type="Button" parent="cam_x"]
-margin_left = 162.0
+[node name="btn" type="CheckBox" parent="cam_x"]
+margin_left = 296.0
 margin_right = 320.0
 margin_bottom = 27.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
-custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_icons/checked = SubResource( 1 )
+custom_icons/unchecked = SubResource( 2 )
 flat = true
-align = 2
 
-[node name="cam_x_spd" type="VBoxContainer" parent="."]
+[node name="cam_y" type="HBoxContainer" parent="."]
 margin_top = 103.0
 margin_right = 320.0
-margin_bottom = 150.0
+margin_bottom = 130.0
+size_flags_horizontal = 3
+
+[node name="NAME" type="Label" parent="cam_y"]
+margin_right = 292.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 1 )
+valign = 1
+
+[node name="btn" type="CheckBox" parent="cam_y"]
+margin_left = 296.0
+margin_right = 320.0
+margin_bottom = 27.0
+custom_icons/checked = SubResource( 1 )
+custom_icons/unchecked = SubResource( 2 )
+flat = true
+
+[node name="cam_x_spd" type="VBoxContainer" parent="."]
+margin_top = 141.0
+margin_right = 320.0
+margin_bottom = 188.0
 size_flags_horizontal = 3
 
 [node name="NAME" type="Label" parent="cam_x_spd"]
@@ -74,32 +97,6 @@ min_value = 0.1
 max_value = 3.0
 step = 0.02
 value = 0.1
-
-[node name="cam_y" type="HBoxContainer" parent="."]
-margin_top = 161.0
-margin_right = 320.0
-margin_bottom = 188.0
-size_flags_horizontal = 3
-
-[node name="NAME" type="Label" parent="cam_y"]
-margin_right = 158.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-custom_fonts/font = ExtResource( 1 )
-text = "Y Axis"
-valign = 1
-
-[node name="btn" type="Button" parent="cam_y"]
-margin_left = 162.0
-margin_right = 320.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color = Color( 0.764706, 0.764706, 0.764706, 1 )
-custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
-flat = true
-align = 2
 
 [node name="cam_y_spd" type="VBoxContainer" parent="."]
 margin_top = 199.0

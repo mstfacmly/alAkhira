@@ -50,12 +50,12 @@ func set_enabled(enabled:bool):
 		set_process(false)
 		set_process_input(false)
 
-func _invert_cam(x:bool=false,y:bool=false):
+"""func _invert_cam(x:bool=false,y:bool=false):
 	if x != false:
 		invert_mod.x = -1
 	
 	if y != false:
-		invert_mod.y = -1
+		invert_mod.y = -1"""
 
 func _input(ev):
 	if ev is InputEventMouseMotion:
@@ -66,13 +66,13 @@ func _input(ev):
 
 func cam_input(view_sens,axis):
 	if abs(view_sens.y) >= DEADZONE:
-		pitch = clamp(pitch - axis.y * view_sens.y * invert_mod.y,pitch_minmax.x,pitch_minmax.y)
+		pitch = clamp(pitch - axis.y * view_sens.y * (-1 if global.invert_y else 1),pitch_minmax.x,pitch_minmax.y)
 	
 	if abs(view_sens.x) >= DEADZONE:
 		if smooth_movement:
-			yaw += axis.x * view_sens.x * invert_mod.x
+			yaw += axis.x * view_sens.x * (-1 if global.invert_x else 1)
 		else:
-			yaw += fmod(axis.x * view_sens.x,360) * invert_mod.x
+			yaw += fmod(axis.x * view_sens.x,360) * (-1 if global.invert_x else 1)
 			currentradius = radius
 
 func target_pos(new_target):
