@@ -130,8 +130,8 @@ func _get_transition(_dt):
 					return states.fall
 			if !parent.dashing:
 				return states.move
-			if !parent.moving:
-				return states.idle
+#			if !parent.moving:
+#				return states.idle
 		states.jump:
 			if parent.velocity.y <= 0:
 				return states.fall

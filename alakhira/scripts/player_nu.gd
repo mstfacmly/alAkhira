@@ -224,6 +224,9 @@ func add_cols(new_col):
 
 func _parkour_new(body):
 #	print(to_local(body.global_transform.origin))
+	"""POSSIBLE WAY OF PRIORITIZING COLLISION ANGLE DETETECTION
+	if abs(body.direction_to_vector(body).angle_to(velocity)) < PI * 0.3:
+		return direction"""
 	return to_local(body.global_transform.origin.normalized()).normalized().round()
 
 func _parkour_sensor():

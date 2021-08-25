@@ -25,9 +25,9 @@ func _signals():
 							
 	#$org/right/cam/cam_x/btn.connect('pressed', $org/right/cam, '_cam_x_btn')
 	#$org/right/cam/cam_y/btn.connect('pressed', $org/right/cam, '_cam_y_btn')
-	$org/right/cam/cam_x_spd/slide.connect('value_changed', $org/right/cam, '_set_sens', ['x'])
-	$org/right/cam/cam_y_spd/slide.connect('value_changed', $org/right/cam, '_set_sens', ['y'])
-	$org/right/cam/cam_mouse/slide.connect('value_changed', $org/right/cam, '_set_sens', ['m'])
+	$org/right/cam/cam_spd/js_x/slide.connect('value_changed', $org/right/cam, '_set_sens', ['x'])
+	$org/right/cam/cam_spd/js_y/slide.connect('value_changed', $org/right/cam, '_set_sens', ['y'])
+	$org/right/cam/cam_spd/mouse/slide.connect('value_changed', $org/right/cam, '_set_sens', ['m'])
 
 func _ready():
 #	Input.add_joy_mapping("030000005e040000ea02000008040000,Controller (Xbox One) - Wired,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b8,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b9,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,",true)

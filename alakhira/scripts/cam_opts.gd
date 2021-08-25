@@ -36,9 +36,9 @@ func _cam_txt():
 func _ready():
 	$cam_x/NAME.text = xaxis
 	$cam_y/NAME.text = yaxis
-	$cam_x_spd/NAME.text = xaxis+' Acceleration'
-	$cam_y_spd/NAME.text = yaxis+' Acceleration'
-	$cam_mouse/NAME.text = 'Mouse Acceleration'
+	$cam_spd/js_x/NAME.text = xaxis+' Acceleration'
+	$cam_spd/js_y/NAME.text = yaxis+' Acceleration'
+	$cam_spd/mouse/NAME.text = 'Mouse Sensitivity'
 	_cam_txt()
 	$cam_x/btn.connect('toggled',self,'_cam_x_btn')
 	$cam_y/btn.connect('toggled',self,'_cam_y_btn')

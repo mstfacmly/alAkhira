@@ -25,14 +25,14 @@ __meta__ = {
 
 [node name="sep_top" type="CenterContainer" parent="."]
 margin_right = 320.0
-margin_bottom = 54.0
+margin_bottom = 61.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="cam_x" type="HBoxContainer" parent="."]
-margin_top = 65.0
+margin_top = 72.0
 margin_right = 320.0
-margin_bottom = 92.0
+margin_bottom = 99.0
 size_flags_horizontal = 3
 
 [node name="NAME" type="Label" parent="cam_x"]
@@ -52,9 +52,9 @@ custom_icons/unchecked = SubResource( 2 )
 flat = true
 
 [node name="cam_y" type="HBoxContainer" parent="."]
-margin_top = 103.0
+margin_top = 110.0
 margin_right = 320.0
-margin_bottom = 130.0
+margin_bottom = 137.0
 size_flags_horizontal = 3
 
 [node name="NAME" type="Label" parent="cam_y"]
@@ -73,22 +73,37 @@ custom_icons/checked = SubResource( 1 )
 custom_icons/unchecked = SubResource( 2 )
 flat = true
 
-[node name="cam_x_spd" type="VBoxContainer" parent="."]
-margin_top = 141.0
+[node name="cam_tree" type="Tree" parent="."]
+visible = false
+margin_top = 124.0
 margin_right = 320.0
-margin_bottom = 188.0
+margin_bottom = 161.0
 size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
 
-[node name="NAME" type="Label" parent="cam_x_spd"]
+[node name="cam_spd" type="VBoxContainer" parent="."]
+margin_top = 148.0
+margin_right = 320.0
+margin_bottom = 297.0
+
+[node name="js_x" type="VBoxContainer" parent="cam_spd"]
+margin_right = 320.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NAME" type="Label" parent="cam_spd/js_x"]
 margin_right = 320.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
-text = "X Acceleration"
 valign = 1
 
-[node name="slide" type="HSlider" parent="cam_x_spd"]
+[node name="slide" type="HSlider" parent="cam_spd/js_x"]
 margin_top = 31.0
 margin_right = 320.0
 margin_bottom = 47.0
@@ -98,22 +113,24 @@ max_value = 3.0
 step = 0.02
 value = 0.1
 
-[node name="cam_y_spd" type="VBoxContainer" parent="."]
-margin_top = 199.0
+[node name="js_y" type="VBoxContainer" parent="cam_spd"]
+margin_top = 51.0
 margin_right = 320.0
-margin_bottom = 246.0
+margin_bottom = 98.0
 size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="NAME" type="Label" parent="cam_y_spd"]
+[node name="NAME" type="Label" parent="cam_spd/js_y"]
 margin_right = 320.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
-text = "Y Acceleration"
 valign = 1
 
-[node name="slide" type="HSlider" parent="cam_y_spd"]
+[node name="slide" type="HSlider" parent="cam_spd/js_y"]
 margin_top = 31.0
 margin_right = 320.0
 margin_bottom = 47.0
@@ -123,22 +140,21 @@ max_value = 3.0
 step = 0.02
 value = 0.1
 
-[node name="cam_mouse" type="VBoxContainer" parent="."]
-margin_top = 257.0
+[node name="mouse" type="VBoxContainer" parent="cam_spd"]
+margin_top = 102.0
 margin_right = 320.0
-margin_bottom = 304.0
+margin_bottom = 149.0
 size_flags_horizontal = 3
 
-[node name="NAME" type="Label" parent="cam_mouse"]
+[node name="NAME" type="Label" parent="cam_spd/mouse"]
 margin_right = 320.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
-text = "Mouse Acceleration"
 valign = 1
 
-[node name="slide" type="HSlider" parent="cam_mouse"]
+[node name="slide" type="HSlider" parent="cam_spd/mouse"]
 margin_top = 31.0
 margin_right = 320.0
 margin_bottom = 47.0
@@ -149,7 +165,7 @@ step = 0.02
 value = 0.1
 
 [node name="sep_bot" type="CenterContainer" parent="."]
-margin_top = 315.0
+margin_top = 308.0
 margin_right = 320.0
 margin_bottom = 369.0
 size_flags_horizontal = 3

@@ -21,31 +21,31 @@ __meta__ = {
 [node name="org" type="HBoxContainer" parent="."]
 margin_left = 42.0
 margin_top = 21.0
-margin_right = 982.0
-margin_bottom = 1998.0
+margin_right = 1238.0
+margin_bottom = 1984.0
 size_flags_vertical = 11
 
 [node name="left" parent="org" instance=ExtResource( 2 )]
 margin_left = 0.0
 margin_top = 0.0
-margin_right = 468.0
-margin_bottom = 1977.0
+margin_right = 596.0
+margin_bottom = 1963.0
 
 [node name="dbg_print" parent="org/left" index="0"]
-margin_top = 981.0
-margin_right = 144.0
-margin_bottom = 995.0
+margin_top = 974.0
+margin_right = 272.0
+margin_bottom = 988.0
 
 [node name="over" parent="org/left" index="1"]
-margin_left = 148.0
-margin_top = 903.0
-margin_right = 468.0
-margin_bottom = 1073.0
+margin_left = 276.0
+margin_top = 896.0
+margin_right = 596.0
+margin_bottom = 1066.0
 
 [node name="right" parent="org" instance=ExtResource( 3 )]
-margin_left = 472.0
-margin_right = 940.0
-margin_bottom = 1977.0
+margin_left = 600.0
+margin_right = 1196.0
+margin_bottom = 1963.0
 
 [node name="tween" type="Tween" parent="."]
 
@@ -55,8 +55,9 @@ margin_bottom = 1977.0
 visible = false
 margin_left = 42.0
 margin_top = 21.0
-margin_right = 982.0
-margin_bottom = 1998.0
+margin_right = 1238.0
+margin_bottom = 1984.0
+
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 [editable path="org/left"]

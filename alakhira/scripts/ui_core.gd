@@ -108,6 +108,9 @@ func _ui_btn_pressed(press):
 		'fs':
 			OS.set_window_fullscreen(!OS.window_fullscreen)
 			$org/right/disp._fs_set()
+		'fxaa':
+			get_viewport().set_use_fxaa(!get_viewport().fxaa)
+			$org/right/disp._fxaa_set()
 		'vsync':
 			OS.set_use_vsync(!OS.vsync_enabled)
 			$org/right/disp._vsync_set()
