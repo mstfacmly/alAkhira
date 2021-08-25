@@ -1,18 +1,21 @@
 extends "res://scripts/ui_core.gd"
 
-var default = 'Default'
-var invert = 'Inverted'
-var evil = 'The Devil\'s Configuration'
-var xaxis = 'X Axis'
-var yaxis = 'Y Axis'
+export var default = 'Default'
+export var invert = 'Inverted'
+export var evil = 'The Devil\'s Configuration'
+export var xaxis = 'X Axis'
+export var yaxis = 'Y Axis'
 
-func _set_sens(m,i):
-	if i == 'x':
-		global.js_x = m
-	if i == 'y':
-		global.js_y = m
-	if i == 'm':
-		global.mouse_sens = m
+var cam_text = [default,evil]
+
+func _set_sens_x(x):
+	global.js_x = x
+
+func _set_sens_y(y):
+	global.js_y = y
+
+func _set_sens_mouse(m):
+	global.mouse_sens = m
 
 func _cam_x_btn(toggle):
 	global.invert_x = toggle
@@ -23,15 +26,8 @@ func _cam_y_btn(toggle):
 	_cam_txt()
 	
 func _cam_txt():
-	if global.invert_x == true:
-		$cam_x/btn.set_text(invert)
-	else:
-		$cam_x/btn.set_text(default)
-	
-	if global.invert_y == true:
-		$cam_y/btn.set_text(evil)
-	else:
-		$cam_y/btn.set_text(default)
+	$cam_x/btn.set_text(cam_text[int(global.invert_x)])
+	$cam_y/btn.set_text(cam_text[int(global.invert_y)])
 
 func _ready():
 	$cam_x/NAME.text = xaxis
@@ -39,6 +35,10 @@ func _ready():
 	$cam_spd/js_x/NAME.text = xaxis+' Acceleration'
 	$cam_spd/js_y/NAME.text = yaxis+' Acceleration'
 	$cam_spd/mouse/NAME.text = 'Mouse Sensitivity'
+	$cam_spd/js_x/slide.value = global.js_x
+	$cam_spd/js_y/slide.value = global.js_y
+	$cam_spd/mouse/slide.value = global.mouse_sens
+
 	_cam_txt()
 	$cam_x/btn.connect('toggled',self,'_cam_x_btn')
 	$cam_y/btn.connect('toggled',self,'_cam_y_btn')

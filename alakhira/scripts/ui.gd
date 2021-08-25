@@ -11,7 +11,7 @@ func _signals():
 			if m.get_class() == 'VBoxContainer':
 				for i in m.get_children():
 					if i.get_class() == 'Button':
-#						i.connect('pressed', self, i.name+'_btn')
+#						i.connect('pressed', i, i.name+'_btn')
 						i.connect('pressed', self, '_ui_btn_pressed', [i])
 					else:
 						for l in i.get_children():
@@ -23,16 +23,13 @@ func _signals():
 							elif l.get_class() == 'OptionButton':
 								l.get_popup().connect('id_pressed', i.get_parent(), '_'+i.name+'_select')
 							
-	#$org/right/cam/cam_x/btn.connect('pressed', $org/right/cam, '_cam_x_btn')
-	#$org/right/cam/cam_y/btn.connect('pressed', $org/right/cam, '_cam_y_btn')
-	$org/right/cam/cam_spd/js_x/slide.connect('value_changed', $org/right/cam, '_set_sens', ['x'])
-	$org/right/cam/cam_spd/js_y/slide.connect('value_changed', $org/right/cam, '_set_sens', ['y'])
-	$org/right/cam/cam_spd/mouse/slide.connect('value_changed', $org/right/cam, '_set_sens', ['m'])
+	$org/right/cam/cam_spd/js_x/slide.connect('value_changed', $org/right/cam, '_set_sens_x')
+	$org/right/cam/cam_spd/js_y/slide.connect('value_changed', $org/right/cam, '_set_sens_y')
+	$org/right/cam/cam_spd/mouse/slide.connect('value_changed', $org/right/cam, '_set_sens_mouse')
 
 func _ready():
 #	Input.add_joy_mapping("030000005e040000ea02000008040000,Controller (Xbox One) - Wired,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b8,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b9,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,",true)
-#	print(get_children(),' , ',get_child_count())
-		
+	
 	if get_parent().name == 'az':
 		get_parent().get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
 		set_process(1)

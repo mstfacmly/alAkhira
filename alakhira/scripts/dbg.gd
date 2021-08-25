@@ -20,23 +20,16 @@ func _dbg():
 	_show_collision(1)
 
 func _dbg_txt_set():
-	if !dbg_txt.visible:
-		$info/btn.set_text('Off')
-	else:
-		$info/btn.set_text('On')
-	
+	$info/btn.set_text(onOff[int(dbg_txt.visible)])
+
 func _health_drain():
-	if draining == true:
-		$hlth_drn/btn.set_text('Enabled')
-	else:
-		$hlth_drn/btn.set_text('Disabled')
+	var status = [ 'Disabled' , 'Enabled' ]
+	$hlth_drn/btn.set_text(status[int(draining)])
 	
 func _show_collision(hide:bool):
+	var showHide = [ 'Show' , 'Hide' ]
 	col_show = hide
-	if hide:
-		$col_ind/btn.set_text('Hide')
-	else:
-		$col_ind/btn.set_text('Show')
+	$col_ind/btn.set_text(showHide[int(hide)])
 
 func _ready():
 	az = get_parent().get_parent().get_parent().get_parent()

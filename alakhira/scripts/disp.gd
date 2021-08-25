@@ -10,16 +10,13 @@ const disp_rez = [
 	2560, 3200, 3840 ]
 
 func _fs_set():
-	if !OS.is_window_fullscreen():
-		$fs/btn.text = 'Off'
-	else:
-		$fs/btn.text = 'On'
+	$fs/btn.set_text(onOff[int(OS.window_fullscreen)])
 
 func _vsync_set():
-	if !OS.is_vsync_enabled():
-		$vsync/btn.text = 'Off'
-	else:
-		$vsync/btn.text = 'On'
+	$vsync/btn.set_text(onOff[int(OS.vsync_enabled)])
+
+func _fxaa_set():
+	$fxaa/btn.set_text(onOff[int(get_viewport().fxaa)])
 
 func _ratio_select(ID):
 	_res_calc(ratio[ratio.keys()[ID]])
@@ -35,12 +32,6 @@ func _res_select(ID):
 
 func _msaa_select(ID):
 	get_viewport().msaa = ID
-
-func _fxaa_set():
-	if !get_viewport().fxaa:
-		$fxaa/btn.text = 'Off'
-	else:
-		$fxaa/btn.text = 'On'
 
 func _list_AA():
 	for i in aalist:

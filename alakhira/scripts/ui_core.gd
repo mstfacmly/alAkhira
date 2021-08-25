@@ -18,6 +18,7 @@ var stage
 
 var INPUT_CFG = []
 
+var onOff = ['Off', 'On']
 const dir = [ 'left', 'right' ]
 
 const btns = []
