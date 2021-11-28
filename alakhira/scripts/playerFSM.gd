@@ -80,7 +80,7 @@ func _state_logic(dt):
 	if [states.move, states.dash, states.jump, states.fall, states.walljump].has(state):
 		parent._parkour_sensor()
 	if [states.move,states.dash].has(state):
-		parent._move_rotate()
+		parent._move_rotate(parent.velocity)
 	if [states.jump, states.fall, states.wall, states.walljump].has(state):
 		parent._ledge_detect()
 	if [states.wall, states.wallrun].has(state):
@@ -176,14 +176,14 @@ func _enter_state(new_state, _prev_state):
 	match new_state:
 		states.idle:
 			parent.animate_char(0)
-			parent.emit_signal('camadjust', 48, 4.2)
+			parent.emit_signal('camadjust', 52, 3.3)
 		states.move:
 			parent.animate_char(2)
-			parent.emit_signal("camadjust",64, 3.6)
+			parent.emit_signal("camadjust",60, 3.6)
 		states.dash:
 			parent.animate_char(3)
 			parent.timer.start(3)
-			parent.emit_signal('camadjust', 60, 4.2)
+			parent.emit_signal('camadjust', 68, 3.3)
 		states.jump:
 			parent.animate_char(4)
 			parent.emit_signal("camadjust",64, 4.2)
@@ -193,6 +193,7 @@ func _enter_state(new_state, _prev_state):
 		states.wall:
 			parent._timer(0.42)
 			parent.animate_char(9)
+			parent.emit_signal('camadjust', 68, 4.8)
 		states.walljump:
 			parent.animate_char(10)
 		states.wallrun:

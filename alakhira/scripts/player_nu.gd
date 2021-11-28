@@ -52,32 +52,22 @@ var ledge_diff : float
 
 export var attempts = 1
 #onready var col_feet = $col_feet
+export (NodePath) var campath
 
 func _ready():
+#	get_node(campath).set_enabled(1)
+#	get_node(campath).set_pivot_height(($col.shape.height+$col.global_transform.origin.y) * 0.8)
 	connect('hlth_chng', ui, '_on_hlth_chng')
 	connect('died', ui, '_over')
-	connect('camadjust', $cam, 'cam_adjust' )
-	$parkourcollision.connect('body_entered', self,'_parkour_new')
-	
-	if $cam.has_method('set_enabled'):
-		$cam.set_enabled(true)
-	
+	connect('camadjust', get_node(campath), '_cam_adjust' )
+	add_cols(['left','right','front','fcontact','back'])
+#	add_collision_exception_with($parkourcollision)
+#	$parkourcollision.connect('body_entered', self,'_parkour_new')
 	$AnimationTree.active = 1
-	
 	$ui/org/right/dbg.az = self
 	
 	chkpt()
-	
-	add_cols('left')
-	add_cols('right')
-	add_cols('front')
-	add_cols('fcontact')
-	add_cols('back')
-	
-#	$parkourcollision.add_collision_exception_with(self)
-#	$parkourcollision.add_collision_exception_with($col)
-	add_collision_exception_with($parkourcollision)
-	
+
 func _input(event):
 	mv.y = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
 	mv.x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
@@ -101,7 +91,7 @@ func _move_floor(delta):
 	
 	# Velocity
 	dir = Vector3()
-	var cam_xform = $cam/cam.get_global_transform()
+	var cam_xform = get_node(campath).get_child(0).get_global_transform()
 
 	dir += -cam_xform.basis[2] * mv.y
 	dir += cam_xform.basis[0] * mv.x
@@ -132,13 +122,10 @@ func _move_floor(delta):
 	
 	$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
 
-func _move_rotate():
-	var hvel = velocity
+func _move_rotate(hvel):
+#	var hvel = velocity
 	var angle = atan2(-hvel.x,-hvel.z)
-	var char_rot = get_rotation()
-#	if moving:
-	char_rot.y = angle
-	rotation = char_rot
+	rotation.y = angle
 
 func _dodge():
 	var roll_magnitude = 11.1
@@ -197,7 +184,8 @@ func _walljump():
 	can_wall = 0
 
 func _wallrun():
-	return null
+	var wallnormal = get_slide_collision(0).normal
+	rotation.y = 90 * wallnormal
 
 func _wallrunjump():
 	var walln = get_slide_collision(0).normal
@@ -232,13 +220,13 @@ func _parkour_new(body):
 func _parkour_sensor():
 	var ds = get_world().get_direct_space_state()
 	var delta = _ptarget() - _ppos()
-	col_result.back = ds.intersect_ray(_ppos(),-_ptarget() + delta, [self,$parkourcollision])
-	col_result.left = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self,$parkourcollision])
-	col_result.right = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self,$parkourcollision])
-	col_result.front = ds.intersect_ray(_ppos(), _ptarget() + delta, [self,$parkourcollision])
-	col_result.fcontact = ds.intersect_ray(_ppos(), _ptarget() + Vector3.UP, [col_result.front , self,$parkourcollision])
-	col_result.lcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_result.left, self,$parkourcollision])
-	col_result.rcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_result.right, self,$parkourcollision])
+	col_result.back = ds.intersect_ray(_ppos(),-_ptarget() + delta, [self])
+	col_result.left = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self])
+	col_result.right = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self])
+	col_result.front = ds.intersect_ray(_ppos(), _ptarget() + delta, [self])
+	col_result.fcontact = ds.intersect_ray(_ppos(), _ptarget() + Vector3.UP, [col_result.front , self])
+	col_result.lcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_result.left, self])
+	col_result.rcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_result.right, self])
 	
 	if !col_result.left.empty() && !col_result.lcontact.empty() && col_result.fcontact.empty():# && !col_f.empty() && col_r.empty():
 #		col_normal = col_result.left.normal
@@ -292,8 +280,8 @@ func dmg(hit):
 		emit_signal('hlth_chng', hlth)
 
 func chkpt():
-	if get_parent().has_node('chkpt'):
-		set_transform(checkpt.get_global_transform())
+#	if get_parent().has_node('chkpt'):
+	set_transform(checkpt.get_global_transform())
 
 func _timer(time):
 #	timer = Timer.new()
