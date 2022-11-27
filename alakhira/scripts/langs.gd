@@ -32,9 +32,6 @@ func _ready():
 	var index = langs.keys()
 	index.sort()
 	for l in range(index.size()):
-		#set_enabled_focus_mode: BaseButton's Enabled Focus Mode property has been deprecated 
-		#due to redundancy and will be removed in Godot 4.0. 
-		#Please use Control.set_focus_mode instead.
 		var btn = $scroll/list.get_child(0).duplicate(l)
 		btn.name = index[l]
 		btn.text = langs[index[l]].capitalize()

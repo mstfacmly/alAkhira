@@ -28,17 +28,19 @@ func _signals():
 	$org/right/cam/cam_spd/mouse/slide.connect('value_changed', $org/right/cam, '_set_sens_mouse')
 
 func _ready():
-#	Input.add_joy_mapping("030000005e040000ea02000008040000,Controller (Xbox One) - Wired,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b8,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b9,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,",true)
+	var scene_dict = {}
+	env =  get_tree().current_scene.find_node('WorldEnv')
+	if env != null:
+		for i in env.environment.get_property_list():
+			scene_dict[i] = scene_dict.size()
 	
-	if get_parent().name == 'az':
-		get_parent().get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
-		set_process(1)
-		_updt_hlth(get_parent().max_hlth)
+	if get_tree().current_scene.has_node('az'):
 		_main_menu(['dbg', 'opts' ,'rld', 'rsm', 'quit'],['menuList','dbg','opts','langs','disp','ctrls','cam','version'])
 		_hide_left()
-		envanim = get_parent().get_parent().get_node('env/AnimationPlayer')
-		get_parent().set_physics_process(true)
-		get_parent().get_node('cam').set_enabled(true)
+		set_process(1)
+		get_tree().current_scene.find_node('az').get_node('body/Skeleton/targets').set_visible(!$org/right/dbg.col_show)
+		_update_health(get_tree().current_scene.find_node('az').max_hlth)
+		get_tree().current_scene.find_node('az').set_physics_process(true)
 		$org/right/dbg.call_deferred('_dbg')
 	else:
 		set_process(0)
@@ -53,8 +55,10 @@ func _input(ev):
 	if get_parent().name == 'az':# && az.state != 1:
 		if !get_tree().paused && ev.is_action_pressed('pause'):
 			_pause_menu(0)
+			_pause_shift(env, 0.5,0,0.11,0.33)
 		elif get_tree().paused && ev.is_action_pressed('pause'):
 			_unpause()
+			_pause_shift(env,1,1,0,0.11)
 	
 	if ev.is_action_pressed('pause')  && ev.is_echo():
 		$timer.start()
@@ -64,19 +68,14 @@ func _input(ev):
 	
 	if Input.is_key_pressed(KEY_F11):
 		OS.set_window_fullscreen(!OS.window_fullscreen)
-	
-	if ev is InputEventKey or ev is InputEventMouse:
-		ev_mod = 0
-	elif ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
-		ev_mod = 1
 
 func _on_timer_timeout():
 	get_tree().quit()
 
 func _on_hlth_chng(hlth):
-	_updt_hlth(hlth)
+	_update_health(hlth)
 
-func _updt_hlth(new_val):
+func _update_health(new_val):
 	$org/right/hlth.max_value = new_val
 	$tween.interpolate_property(self, 'anim_hlth', anim_hlth, new_val, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	if !$tween.is_active():
@@ -85,6 +84,7 @@ func _updt_hlth(new_val):
 func _process(_delta):
 	$org/right/hlth.value = anim_hlth
 
-func _ld_cplt():
-	stage = thread.wait_to_finish()
+func _load_complete():
+#	stage = thread.wait_to_finish()
 	global.load_scene(test)
+

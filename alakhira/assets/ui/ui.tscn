@@ -22,30 +22,84 @@ __meta__ = {
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 1238.0
-margin_bottom = 1984.0
+margin_bottom = 2022.0
 size_flags_vertical = 11
 
 [node name="left" parent="org" instance=ExtResource( 2 )]
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 596.0
-margin_bottom = 1963.0
+margin_bottom = 2001.0
 
 [node name="dbg_print" parent="org/left" index="0"]
-margin_top = 974.0
+margin_top = 993.0
 margin_right = 272.0
-margin_bottom = 988.0
+margin_bottom = 1007.0
 
 [node name="over" parent="org/left" index="1"]
 margin_left = 276.0
-margin_top = 896.0
+margin_top = 915.0
 margin_right = 596.0
-margin_bottom = 1066.0
+margin_bottom = 1085.0
 
 [node name="right" parent="org" instance=ExtResource( 3 )]
 margin_left = 600.0
 margin_right = 1196.0
-margin_bottom = 1963.0
+margin_bottom = 2001.0
+
+[node name="sep_top" parent="org/right" index="1"]
+margin_right = 596.0
+
+[node name="menuList" parent="org/right" index="2"]
+margin_right = 596.0
+
+[node name="dbg" parent="org/right/menuList" index="0"]
+margin_right = 596.0
+
+[node name="contd" parent="org/right/menuList" index="1"]
+margin_right = 596.0
+
+[node name="start" parent="org/right/menuList" index="2"]
+margin_right = 596.0
+
+[node name="rsm" parent="org/right/menuList" index="3"]
+margin_right = 596.0
+
+[node name="opts" parent="org/right/menuList" index="4"]
+margin_right = 596.0
+
+[node name="rld" parent="org/right/menuList" index="5"]
+margin_right = 596.0
+
+[node name="quit" parent="org/right/menuList" index="6"]
+margin_right = 596.0
+
+[node name="dbg" parent="org/right" index="3"]
+margin_right = 596.0
+
+[node name="opts" parent="org/right" index="4"]
+margin_right = 596.0
+
+[node name="langs" parent="org/right" index="5"]
+margin_right = 596.0
+
+[node name="disp" parent="org/right" index="6"]
+margin_right = 596.0
+
+[node name="ctrls" parent="org/right" index="7"]
+margin_right = 596.0
+
+[node name="cam" parent="org/right" index="8"]
+margin_right = 596.0
+
+[node name="sep_bot" parent="org/right" index="9"]
+margin_right = 596.0
+
+[node name="version" parent="org/right" index="10"]
+margin_right = 596.0
+
+[node name="hlth" parent="org/right" index="11"]
+margin_right = 596.0
 
 [node name="tween" type="Tween" parent="."]
 
@@ -56,8 +110,9 @@ visible = false
 margin_left = 42.0
 margin_top = 21.0
 margin_right = 1238.0
-margin_bottom = 1984.0
+margin_bottom = 2022.0
 
 [connection signal="timeout" from="timer" to="." method="_on_timer_timeout"]
 
 [editable path="org/left"]
+[editable path="org/right"]

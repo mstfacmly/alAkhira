@@ -8,7 +8,7 @@ var update = 0.0
 func _ready():
 	if find_parent('scene') && find_parent('scene').has_node('az'):
 		az = find_parent('scene').get_node('az')
-		cam = az.get_node('cam')
+#		cam = az.get_node('cam')
 		if self.is_visible():
 			set_physics_process(true)
 		else:

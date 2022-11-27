@@ -1,20 +1,20 @@
-extends Container
+extends Control
 
 signal start
 signal quit
 
 #onready var shifter = shift_script
 
-var back setget _set_back , _get_back
+var back : Object setget _set_back , _get_back
 var parentnode
 
 # variables
 var az
 var envanim
 var anim_hlth = 0
-var spd = 2
-var ev_mod = 0
 var stage
+var env
+var menu:Array
 
 var INPUT_CFG = []
 
@@ -24,12 +24,9 @@ const dir = [ 'left', 'right' ]
 const btns = []
 const CFG_FILE = 'user://config.cfg'
 
-func _input(event):
-	if event.is_action_pressed("ui_cancel"):
-		if _get_back() != null:
-			print(_get_back().name)
-#			_ui_btn_pressed(_get_back())
-#			pass
+func _input(_event):
+	if Input.is_action_just_pressed("ui_cancel") && _get_back() != null:
+		_back_btn_pressed(_get_back())
 
 func _load_cfg():
 	var cfg = ConfigFile.new()
@@ -68,19 +65,29 @@ func _on_timer_timeout():
 	for i in menu.get_children():
 		pressed[i.name] = pressed.size()"""
 
+func _back_btn_pressed(press):
+	match press.name:
+		'opts':
+			_showhide()
+			get_parent().get_node('menuList')._showhide()
+		'back':
+			_showhide()
+			get_parent().get_node('opts')._showhide()
+
 func _ui_btn_pressed(press):
-#	press.get_parent()
 	match press.name:
 		'start':
-			call_deferred('_ld_cplt')
+			call_deferred('_load_complete')
 		'rld':
-			get_tree().set_pause(false)
+			_unpause()
 			get_tree().reload_current_scene()
 		'quit':
 			get_tree().quit()
 		'rsm':
 			_pause_menu(2)
+			_pause_shift(env,1,1,0,0.11)
 		
+		# Menu Options
 		'opts':
 			$org/right/opts/._showhide()
 			_hide_menu()
@@ -100,12 +107,12 @@ func _ui_btn_pressed(press):
 			$org/right/dbg._showhide()
 			_hide_menu()
 		'back':
-			get_node('org/right/'+press.get_parent().name)._showhide()
-			_hide_opts()
+			_ui_btn_pressed(get_node('org/right/'+press.get_parent().name))
 	
 		'site':
 			OS.shell_open('https://studioslune.com/')
-	
+		
+		#Display Options
 		'fs':
 			OS.set_window_fullscreen(!OS.window_fullscreen)
 			$org/right/disp._fs_set()
@@ -146,28 +153,23 @@ func _hide_left():
 	$org/left/over.hide()
 
 func _hide_opts():
-	$org/right/opts.set_visible(!$org/right/opts.is_visible())
+	$org/right/opts._showhide()
 	
 func _hide_menu():
-	$org/right/menuList.set_visible(!$org/right/menuList.is_visible())
+	$org/right/menuList._showhide()
 
 func _grab_menu():
-	var menu = []
-	menu.clear()
 	for i in get_children():
-		if i.get_class() == 'HBoxContainer':#i.get_class() == 'ScrollContainer':
-			menu.append(i.get_child(1))
+		"""if i.get_class() == 'HBoxContainer':#i.get_class() == 'ScrollContainer':
+			menu.append(i.get_child(1))"""
 		if i.get_class() == 'Button' && i.visible:
 			menu.append(i)
 	menu[0].grab_focus()
-	back = menu[menu.size()-1]
-#	_set_back(menu.back())
-#	menu.clear()
-#	return menu
+	_set_back(menu.back())
+	return menu.clear()
 
-func _set_back(menu):
-	back = menu
-#	print('back: ',back.name)#,'\nmenu: ',menu[0].name)
+func _set_back(back_item):
+	back = back_item
 
 func _get_back():
 	return back
@@ -181,21 +183,30 @@ func _pause_menu(mode):
 
 func _unpause():
 	_pause_menu(2)
+	
 	for i in [ 'menuList' ,'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
 		$org/right.get_node(i).hide()
-#	_pause_shift()
 
-"""func _pause_shift():
-	if shifter.curr != 'spi':
-		envanim.play('shift', -1, spd, (spd < 0))
-		shifter.curr = 'spi'
-	elif shifter.curr != 'phys':
-		envanim.play('shift', -1, -spd, (-spd < 0))
-		shifter.curr = 'phys'"""
+func _pause_shift(environment, new_value, new_saturation, new_dof, duration):
+	environment.environment.dof_blur_far_enabled = 1 if new_dof > 0 else 0
+
+	$tween.interpolate_property(environment.environment, 'adjustment_brightness', environment.environment.get_adjustment_brightness(), new_value, duration, Tween.TRANS_CIRC )
+	$tween.interpolate_property(environment.environment, 'adjustment_saturation', environment.environment.get_adjustment_saturation(), new_saturation, duration, Tween.TRANS_CUBIC )
+	$tween.interpolate_property(environment.environment, 'dof_blur_far_amount', environment.environment.get_dof_blur_far_amount(), new_dof, duration, Tween.TRANS_QUAD )
+
+func _clear_menu():
+	menu.clear()
 
 func _showhide():
-	if !is_connected("draw",self,"_grab_menu"):
+	"""if !is_connected("draw",self,"_grab_menu"):
 		connect("draw",self,"_grab_menu")
-#	_set_back(_grab_menu().back())
-#	print(_get_back().name)
-	set_visible(!is_visible())
+	if !is_connected("hide",self,'_clear_menu'):
+		connect("hide",self,'_clear_menu')"""
+	set_visible(!visible)
+	set_process(visible)
+	if visible:
+		_grab_menu() 
+	else:
+		_set_back(menu.clear())
+#	connect("draw", self, "_grab_menu") #if is_visible() else disconnect("draw",self, '_grab_menu')
+#	_set_back(_grab_menu()) if is_visible() else _set_back(null)

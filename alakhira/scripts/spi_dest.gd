@@ -2,10 +2,10 @@ extends Spatial
 
 #var shifter = 
 onready var dest = get_children()
-onready var room = $'/root/scene/testroom'
+onready var room = $'/root/scene'
 #onready var anim = find_node('AnimationPlayer')
 var anim
-var spd = 2
+#var spd = 2
 var transdiv
 
 func _physics_process(_dt):

@@ -1,7 +1,7 @@
 extends 'res://scripts/ui_core.gd'
 
 func _over():
-	_grab_menu()
+#	_grab_menu()
 	$org/right/menuList.hide()
 	$org/left/dbg.hide()
 	$org/left/over.show()

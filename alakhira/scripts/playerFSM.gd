@@ -66,13 +66,14 @@ func _input(ev):
 				parent._ledge_grab()
 
 func _dbgtxt():
-	parent.get_node('dbgtxt4').text = str('velocity.xz',Vector2(parent.velocity.x,parent.velocity.z).length(), '\nvelocity.y ',parent.velocity.y)
-	parent.get_node('dbgtxt2').text = str('collision ',collision,'\nhas collision ',[collisions.left,collisions.right,collisions.fcontact].has(collision))
+#	parent.get_node('dbgtxt4').text = str('velocity.xz',Vector2(parent.velocity.x,parent.velocity.z).length(), '\nvelocity.y ',parent.velocity.y)
+#	parent.get_node('dbgtxt2').text = str('collision ',collision,'\nhas collision ',[collisions.left,collisions.right,collisions.fcontact].has(collision))
 #	parent.get_node('dbgtxt5').text = str('collisions ',collisions.front)
 #	parent.get_node('dbgtxt5').text = str('timer ',parent.timer.is_stopped(), '\n', parent.timer.wait_time)
 #	parent.get_node('dbgtxt').text = str("on ledge: ", parent.on_ledge).capitalize()
 #	parent.get_node('dbgtxt').text = str(collision)
 #	parent.get_node('dbgtxt').text = str(parent.timer.is_stopped())
+	return
 
 func _state_logic(dt):
 	parent._apply_velocity()

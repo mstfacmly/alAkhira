@@ -1,6 +1,9 @@
 extends "res://scripts/ui_core.gd"
 
-func _input(_ev):
+func _input(ev):
+	var ev_mod
+	ev_mod = 1 if ev == InputEventJoypadButton || ev == InputEventJoypadMotion else 0
+
 	var button
 	for acts in INPUT_CFG:
 		var input_ev = InputMap.get_action_list(acts)[ev_mod]
@@ -33,7 +36,9 @@ func _input(_ev):
 #			InputMap.action_add_event(acts, ev)
 #			_save_cfg('input', acts, scancode)
 
+
 func _ready():
+#	Input.add_joy_mapping("030000005e040000ea02000008040000,Controller (Xbox One) - Wired,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b8,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b9,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,platform:Linux,",true)
 	INPUT_CFG = [
 	'mv_f', 
 	'mv_b',

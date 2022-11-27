@@ -99,7 +99,6 @@ func _tween_param(target,parameter):
 	
 func _physics_process(delta):
 	_set_pivot_position(get_node(pivot_target))
-	_look_target_position()
 #	$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
 	$cam.transform.origin = _cam_motion($cam_position.transform.origin, delta)
 	$cam.look_at(_look_target_position(), Vector3.UP)
