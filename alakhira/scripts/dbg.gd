@@ -2,15 +2,15 @@ extends 'res://scripts/ui_core.gd'
 
 onready var dbg_txt = find_parent('org').get_node('left/dbg_print')
 
-var draining setget _set_draining
+var draining setget _set_draining , _get_draining
 var col_show setget _show_collision
 
 func _set_draining(active:bool):
 	draining = active
-	_health_drain()
+	_health_drain(active)
 
-"""func get_draining():
-	return draining"""
+func _get_draining():
+	return draining
 
 func _dbg():
 	$hlth_full/btn.set_text('Restore Full Health')
@@ -22,8 +22,8 @@ func _dbg():
 func _dbg_txt_set():
 	$info/btn.set_text(onOff[int(dbg_txt.visible)])
 
-func _health_drain():
-	var status = [ 'Disabled' , 'Enabled' ]
+func _health_drain(status):
+	status = [ 'Disabled' , 'Enabled' ]
 	$hlth_drn/btn.set_text(status[int(draining)])
 	
 func _show_collision(hide:bool):

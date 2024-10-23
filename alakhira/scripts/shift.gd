@@ -11,6 +11,8 @@ enum states {alive,dead,gone}
 var state
 
 enum world {phys,spi}
+var worldstates = ['phys','spi']
+var worldstate = worldstates[0]
 
 signal camadjust
 
@@ -28,7 +30,6 @@ var curr = 'phys'
 var overlay = 'none'
 var showing = false
 var hiding = false
-var transit
 
 var t
 var transition_time = 0.5
@@ -37,39 +38,38 @@ func _ready():
 	_initialize()
 
 func _initialize():
-	if !find_parent('az'):
-		set_physics_process(0)
-	else:
-		traverse(get_tree().root.get_children())
-		unique_materials(phys)
-		unique_materials(spi)
+	traverse(get_tree().root.get_children())
+	unique_materials(phys)
+	unique_materials(spi)
 	#initialize on phys
-		peek(spi, true)
-		toggle(spi, phys)
+#	peek(spi, true)
+	toggle(spi, phys)
 
 func _input(_ev):
-	var cast = Input.is_action_pressed('cast')
-	var attack = Input.is_action_just_pressed('arm_l')
-	var shift = cast && attack
-	transit = shift
+#	var cast = Input.is_action_pressed('cast')
+#	var attack = Input.is_action_just_pressed('arm_l')
+	var shift = Input.is_action_pressed('cast') && Input.is_action_just_pressed('arm_l')
 	
 	# NOTE: set shift to be a signal sent by player node
 
-	if shift && state != states.dead:
-		if curr == 'phys':
-			toggle(phys, spi)
-			peek(spi, false)
-			curr = 'spi'
-			env_transition(1)
-		elif curr == 'spi':
-			toggle(spi, phys)
-			peek(spi, true)
-			curr = 'phys'
-			env_transition(-1)
-	elif cast and curr == 'phys' and overlay != 'spi':
+	if shift:
+		match worldstate:
+			'phys':
+				toggle(phys, spi)
+				peek(spi, false)
+				worldstate = worldstates[1]
+				env_transition(1)
+			'spi':
+				toggle(spi, phys)
+				peek(spi, true)
+				worldstate = worldstates[0]
+				env_transition(-1)
+	
+	if Input.is_action_pressed('cast') and worldstate[0] and overlay != 'spi':
 		toggle(false, spi) #just show spi
 		overlay = 'spi'
-	elif !hiding and curr == 'phys' and overlay == 'spi' and not cast :
+#	elif !hiding and worldstate[0] and overlay == 'spi' and not cast :
+	else:
 		toggle(spi, false) #just hide spi
 		overlay = 'none'
 
@@ -117,6 +117,7 @@ func peek(store, activate):
 
 #switch from a to b
 func toggle(a, b):
+	set_physics_process(true)
 	if b:
 		for obj in b.nodes:
 			obj.set_physics_process(true)
@@ -127,6 +128,7 @@ func toggle(a, b):
 
 
 func post_toggle(a, _b):
+	set_physics_process(false)
 	if a:
 		for obj in a.nodes:
 			obj.set_physics_process(false)

@@ -57,10 +57,15 @@ func _input(ev):
 			_pause_menu(0)
 			_pause_shift(env, 0.5,0,0.11,0.33)
 		elif get_tree().paused && ev.is_action_pressed('pause'):
-			_unpause()
-			_pause_shift(env,1,1,0,0.11)
+			if _get_back() != null:
+				_back_btn_pressed(_get_back())
+				return
+			else:
+				_unpause()
+				_pause_shift(env,1,1,0,0.11)
+
 	
-	if ev.is_action_pressed('pause')  && ev.is_echo():
+	if ev.is_action_pressed('pause') && ev.is_echo():
 		$timer.start()
 	else:
 		$timer.stop()
@@ -76,7 +81,7 @@ func _on_hlth_chng(hlth):
 	_update_health(hlth)
 
 func _update_health(new_val):
-	$org/right/hlth.max_value = new_val
+	$org/right/hlth.value = new_val
 	$tween.interpolate_property(self, 'anim_hlth', anim_hlth, new_val, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	if !$tween.is_active():
 		$tween.start()
@@ -87,4 +92,3 @@ func _process(_delta):
 func _load_complete():
 #	stage = thread.wait_to_finish()
 	global.load_scene(test)
-

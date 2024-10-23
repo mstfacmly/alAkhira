@@ -25,7 +25,7 @@ const btns = []
 const CFG_FILE = 'user://config.cfg'
 
 func _input(_event):
-	if Input.is_action_just_pressed("ui_cancel") && _get_back() != null:
+	if (Input.is_action_just_pressed("ui_cancel")||Input.is_action_just_pressed("pause")) && _get_back() != null:
 		_back_btn_pressed(_get_back())
 
 func _load_cfg():
@@ -35,7 +35,7 @@ func _load_cfg():
 	if err:
 		for act_name in INPUT_CFG:
 			var act_list = InputMap.get_action_list(act_name)
-			var scancode = OS.get_scancode_string(act_list[0].scancode)
+			var scancode = OS.get_scancode_string(act_list[0].optsscancode)
 			cfg.set_value('input', act_name, scancode)
 		cfg.save(CFG_FILE)
 	else:
@@ -132,9 +132,9 @@ func _ui_btn_pressed(press):
 		'hlth_drn':
 			$org/right/dbg._set_draining(!$org/right/dbg.draining)
 		'hlth_full':
-			az.hlth = az.max_hlth
+			get_parent().hlth = get_parent().max_hlth
 		'hlth_nil':
-			az.hlth = 0
+			get_parent().hlth = 0
 
 func _main_menu(show,hide):
 	# Show/Hide Menu Items
@@ -183,6 +183,7 @@ func _pause_menu(mode):
 
 func _unpause():
 	_pause_menu(2)
+	_set_back(menu.clear())
 	
 	for i in [ 'menuList' ,'opts', 'langs', 'disp', 'ctrls', 'cam', 'dbg' ]:
 		$org/right.get_node(i).hide()
@@ -198,15 +199,9 @@ func _clear_menu():
 	menu.clear()
 
 func _showhide():
-	"""if !is_connected("draw",self,"_grab_menu"):
-		connect("draw",self,"_grab_menu")
-	if !is_connected("hide",self,'_clear_menu'):
-		connect("hide",self,'_clear_menu')"""
 	set_visible(!visible)
-	set_process(visible)
+#	set_process(visible)
 	if visible:
 		_grab_menu() 
 	else:
 		_set_back(menu.clear())
-#	connect("draw", self, "_grab_menu") #if is_visible() else disconnect("draw",self, '_grab_menu')
-#	_set_back(_grab_menu()) if is_visible() else _set_back(null)

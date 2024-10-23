@@ -11,7 +11,7 @@ onready var currentradius = radius
 export (NodePath) var pivot_target #setget set_pivot_position
 export (NodePath) var look_target #setget set_look_target
 var old_target
-var target_player
+#var target_player
 export (NodePath) var target_height
 var smooth_movement:bool = true
 var locked_on:bool = false setget _set_locked_on
@@ -24,7 +24,7 @@ export var pitch_minmax = Vector2(-28, 69)
 const DEADZONE = 0.1
 
 func _ready():
-	target_player = look_target
+#	target_player = look_target
 	$cam.add_exception(get_node(look_target))
 	_set_look_target(get_node(look_target))
 	Input.set_mouse_mode(2)
@@ -75,7 +75,7 @@ func _set_pivot_position(new_pivot):
 	$cam_position.global_transform.origin.y = _set_height(new_pivot)
 
 func _set_height(height):
-	return height.global_transform.origin.y + height.get_node('collision').shape.height
+	return height.get_node('collision').global_transform.origin.y + (height.get_node('collision').shape.height * 0.4)
 
 func _cam_motion(position,delta):
 	if smooth_movement:
@@ -101,4 +101,4 @@ func _physics_process(delta):
 	_set_pivot_position(get_node(pivot_target))
 #	$cam.set_perspective(lerp($cam.get_fov(), $cam.fov, smooth_lerp * delta), $cam.get_znear(), $cam.get_zfar())
 	$cam.transform.origin = _cam_motion($cam_position.transform.origin, delta)
-	$cam.look_at(_look_target_position(), Vector3.UP)
+	$cam.look_at(_look_target_position() - Vector3(0,0,-0.000001), Vector3.UP)

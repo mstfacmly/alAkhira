@@ -9,10 +9,10 @@ signal camadjust
 # Health
 export var max_hlth = 100
 var hlth = max_hlth
-var hlth_drain = true
+#var hlth_drain = true
 
 onready var checkpt = $'/root/scene/chkpt'
-onready var ui = $ui
+#onready var ui = $ui
 onready var timer = $timer
 
 # Environment
@@ -39,14 +39,19 @@ var MAX_VEL = dash
 #var climbspeed = 2
 onready var jmp_spd = g * 1.64
 var velocity = Vector3()
+var modlv
+
 var dir
 #var moving = false
 var dashing = false
 var can_wall = 1
+
 var wrun = []
 var dist = 4
+
 var col_normal = Vector3()
 var col_result = {}
+
 var ledge_col = Vector3()
 var ledge_diff : float
 
@@ -57,27 +62,26 @@ export (NodePath) var campath
 func _ready():
 #	get_node(campath).set_enabled(1)
 #	get_node(campath).set_pivot_height(($col.shape.height+$col.global_transform.origin.y) * 0.8)
-	connect('hlth_chng', ui, '_on_hlth_chng')
-	connect('died', ui, '_over')
+	connect('hlth_chng', $ui, '_on_hlth_chng')
+	connect('died', $ui, '_over')
 	connect('camadjust', get_node(campath), '_cam_adjust' )
 	add_cols(['left','right','front','fcontact','back'])
 #	add_collision_exception_with($parkourcollision)
-#	$parkourcollision.connect('body_entered', self,'_parkour_new')
+	$parkourcollision.connect('body_entered', self,'_parkour_new')
 	$AnimationTree.active = 1
-	$ui/org/right/dbg.az = self
+#	$ui/org/right/dbg.az = self
 	
 	chkpt()
 
 func _input(event):
-	mv.y = Input.get_action_strength('mv_f') - Input.get_action_strength('mv_b')
-	mv.x = Input.get_action_strength('mv_r') - Input.get_action_strength('mv_l')
+	mv = Vector2(Input.get_axis("mv_l","mv_r"),Input.get_axis('mv_b','mv_f'))
 
 	if event == InputEventJoypadMotion:
-		if (abs(mv.length()) < DEADZONE):
-			mv = Vector2(0,0)
+		if mv.length() < DEADZONE:
+			mv = Vector2.ZERO
 		else:
 			mv = mv.normalized() * ((mv.length() - DEADZONE) / (1 - DEADZONE))
-			if mv.length() >= DEADZONE && mv.length() <= JOY_VAL:
+			if mv.length() <= JOY_VAL:
 				mv_spd = walk
 
 func _apply_gravity(delta,multiplier):
@@ -95,35 +99,28 @@ func _move_floor(delta):
 
 	dir += -cam_xform.basis[2] * mv.y
 	dir += cam_xform.basis[0] * mv.x
-	
-#	if dir.length() != 0:
-#		moving = true
-#	else:
-#		moving = false
 
-	var hspeed = Vector2(velocity.x, velocity.z).length()
+#	var hspeed = Vector2(velocity.x, velocity.z).length_squared()
 	
 	var hvel = velocity
 	if is_on_floor():
 		hvel.y = 0
 		can_wall = 1
 	
-	var new_pos = dir * mv_spd
-	
-	if dir.dot(hvel) > 0:
-		ACCEL = ACCEL
-	else:
-		ACCEL = DEACCEL
+		var new_pos = dir * mv_spd
 		
-	hvel = hvel.linear_interpolate(new_pos, ACCEL * delta)
-	
-	velocity.x = hvel.x
-	velocity.z = hvel.z
-	
-	$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
+		if dir.dot(hvel) > 0:
+			ACCEL = ACCEL
+		else:
+			ACCEL = DEACCEL
+			
+		hvel = hvel.linear_interpolate(new_pos, ACCEL * delta)
+		
+		velocity = Vector3(hvel.x,hvel.y,hvel.z)
+		
+		$body/Skeleton/targets/ptarget.translation.z = TARGET_MOD
 
 func _move_rotate(hvel):
-#	var hvel = velocity
 	var angle = atan2(-hvel.x,-hvel.z)
 	rotation.y = angle
 
@@ -184,15 +181,18 @@ func _walljump():
 	can_wall = 0
 
 func _wallrun():
-	var wallnormal = get_slide_collision(0).normal
-	rotation.y = 90 * wallnormal
+#	var wallnormal = get_slide_collision(0).normal
+#	rotation.y = 90 * wallnormal
+	if is_on_wall():
+		return get_slide_collision(0).normal
 
 func _wallrunjump():
-	var walln = get_slide_collision(0).normal
-#	var wrjmp = $body/Skeleton.get_transform().basis.xform(Vector3(jmp_spd * 4, jmp_spd * 4, jmp_spd * 4))
-	var modlv = velocity.slide(Vector3.UP).slide(walln).abs()
-#	velocity += modlv * wrjmp
-	velocity += walln * modlv# * wrjmp
+	if is_on_wall():
+	#	var wrjmp = $body/Skeleton.get_transform().basis.xform(Vector3(jmp_spd * 4, jmp_spd * 4, jmp_spd * 4))
+		modlv = velocity.slide(Vector3.UP).slide(_wallrun()).normalized()#.abs()
+	#	velocity += modlv * wrjmp
+		velocity += _wallrun() * modlv# * wrjmp
+	
 # https://godotengine.org/qa/27565/3d-directional-jumping
 
 func walking(hspeed,delta):
@@ -211,22 +211,24 @@ func add_cols(new_col):
 	col_result[new_col] = col_result.size()
 
 func _parkour_new(body):
+	var direction = Vector3().direction_to(body.translation).signed_angle_to(translation,Vector3.FORWARD)
+	print(body,direction)
 #	print(to_local(body.global_transform.origin))
-	"""POSSIBLE WAY OF PRIORITIZING COLLISION ANGLE DETETECTION
-	if abs(body.direction_to_vector(body).angle_to(velocity)) < PI * 0.3:
-		return direction"""
-	return to_local(body.global_transform.origin.normalized()).normalized().round()
+#	POSSIBLE WAY OF PRIORITIZING COLLISION ANGLE DETETECTION
+#	if direction > PI * 0.3:
+	return direction
+#	return to_local(body.global_transform.origin.normalized()).normalized().round()
 
 func _parkour_sensor():
-	var ds = get_world().get_direct_space_state()
 	var delta = _ptarget() - _ppos()
-	col_result.back = ds.intersect_ray(_ppos(),-_ptarget() + delta, [self])
-	col_result.left = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self])
-	col_result.right = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self])
-	col_result.front = ds.intersect_ray(_ppos(), _ptarget() + delta, [self])
-	col_result.fcontact = ds.intersect_ray(_ppos(), _ptarget() + Vector3.UP, [col_result.front , self])
-	col_result.lcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_result.left, self])
-	col_result.rcontact = ds.intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_result.right, self])
+	
+	col_result.back = get_world().get_direct_space_state().intersect_ray(_ppos(),-_ptarget() + delta, [self])
+	col_result.left = get_world().get_direct_space_state().intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta), [self])
+	col_result.right = get_world().get_direct_space_state().intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta), [self])
+	col_result.front = get_world().get_direct_space_state().intersect_ray(_ppos(), _ptarget() + delta, [self])
+	col_result.fcontact = get_world().get_direct_space_state().intersect_ray(_ppos(), _ptarget() + Vector3.UP, [col_result.front , self])
+	col_result.lcontact = get_world().get_direct_space_state().intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(90)).xform(delta/5), [col_result.left, self])
+	col_result.rcontact = get_world().get_direct_space_state().intersect_ray(_ppos(), _ptarget() + Basis(Vector3.UP,deg2rad(-90)).xform(delta/5), [col_result.right, self])
 	
 	if !col_result.left.empty() && !col_result.lcontact.empty() && col_result.fcontact.empty():# && !col_f.empty() && col_r.empty():
 #		col_normal = col_result.left.normal
@@ -246,20 +248,24 @@ func _parkour_sensor():
 	else:
 		return null
 
-func hlth_drn(dt):
+func hlth_drain(dt):
 	var div = 5
 	var rnd = dt * div
-	
-	if hlth >= 0:
-		if worldstate[0]:
-			hlth -= rnd / 10#(div * 10)
-		else:
-			hlth += rand_range(-rnd,rnd * rand_range(1.001,1.33))
+
+	if $scripts/shift.worldstate == 'phys':
+		hlth -= rnd / 10 #(div * 10)
+	elif $scripts/shift.worldstate == 'spi':
+		hlth += rand_range(-rnd , rnd * 1.33)
 		
-		if Input.is_action_pressed('cast') && Input.is_action_just_pressed('arm_l'):
-			hlth -= 7
+	if Input.is_action_pressed('cast') && Input.is_action_just_pressed('arm_l'):
+		hlth -= 7
 	
-		emit_signal('hlth_chng', hlth)
+	if hlth <= 0:
+		hlth = 0
+		emit_signal('died')
+		$ui/org/right/dbg._set_draining(0)
+	
+	emit_signal('hlth_chng', hlth)
 
 func heal(tch):
 #	if state == states.GONE:

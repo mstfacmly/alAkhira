@@ -78,16 +78,24 @@ func _dbgtxt():
 func _state_logic(dt):
 	parent._apply_velocity()
 		
-	if [states.move, states.dash, states.jump, states.fall, states.walljump].has(state):
+	if ![states.idle].has(state):
 		parent._parkour_sensor()
+		parent.get_node('parkourcollision').set_monitoring(true)
+	else:
+		parent.get_node('parkourcollision').set_monitoring(false)
+	
 	if [states.move,states.dash].has(state):
 		parent._move_rotate(parent.velocity)
+	
 	if [states.jump, states.fall, states.wall, states.walljump].has(state):
 		parent._ledge_detect()
+	
 	if [states.wall, states.wallrun].has(state):
 		parent._apply_gravity(0.00000096, 0)
+	
 	if [states.ledge].has(state):
 		parent._apply_gravity(0,0)
+		parent._move_floor(0)
 	else:
 		parent._apply_gravity(dt,3.69)
 		parent._move_floor(dt)
@@ -101,7 +109,7 @@ func _state_logic(dt):
 
 func _process(dt):
 	if parent.get_node('ui/org/right/dbg').draining:
-		parent.hlth_drn(dt)
+		parent.hlth_drain(dt)
 
 func _get_transition(_dt):
 	match state:
@@ -155,6 +163,7 @@ func _get_transition(_dt):
 			if parent.velocity.y <= 0:
 				return states.fall
 		states.wallrun:
+			parent._wallrun()
 			if parent.velocity.y <= -9.8*4:
 				return states.fall
 			if parent.velocity.y > 2:

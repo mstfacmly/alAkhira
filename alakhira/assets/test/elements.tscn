@@ -11,6 +11,8 @@
 [ext_resource path="res://assets/test/ledge_l.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/test/p_floor.dae" type="PackedScene" id=10]
 
+
+
 [sub_resource type="ProceduralSky" id=1]
 
 radiance_size = 4
